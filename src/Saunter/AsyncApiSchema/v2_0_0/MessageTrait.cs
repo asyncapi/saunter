@@ -1,15 +1,15 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
-using Saunter.AsyncApiSchema.Utils;
 
-namespace Saunter.AsyncApiSchema.v2_0_0 {
+namespace Saunter.AsyncApiSchema.v2_0_0
+{
     public class MessageTrait
     {
         [JsonProperty("headers")]
-        public OneOf<Schema, Reference> Headers { get; set; }
+        public Schema Headers { get; set; }
 
         [JsonProperty("correlationId")]
-        public OneOf<CorrelationId, Reference> CorrelationId { get; set; }
+        public CorrelationId CorrelationId { get; set; }
 
         [JsonProperty("schemaFormat")]
         public string SchemaFormat { get; set; }
@@ -37,6 +37,5 @@ namespace Saunter.AsyncApiSchema.v2_0_0 {
 
         [JsonProperty("examples")]
         public IDictionary<string, object> Examples { get; set; }
-
     }
 }

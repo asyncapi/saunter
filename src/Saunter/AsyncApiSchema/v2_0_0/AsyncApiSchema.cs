@@ -1,28 +1,26 @@
-using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace Saunter.AsyncApiSchema.v2_0_0
 {
     public class AsyncApiSchema
     {
-        public AsyncApiSchema(AsyncApiVersionString asyncapi, Info info, Channels channels)
+        public AsyncApiSchema()
         {
-            AsyncApi = asyncapi ?? throw new ArgumentNullException(nameof(asyncapi));
-            Info = info ?? throw new ArgumentNullException(nameof(info));
-            Channels = channels ?? throw new ArgumentNullException(nameof(channels));
+            AsyncApi = AsyncApiVersionString.V2_0_0;
         }
-
+        
         [JsonProperty("asyncapi")]
-        [JsonConverter(typeof(AsyncApiVersionString.JsonConverter))]
-        public AsyncApiVersionString AsyncApi { get; }
+        [JsonConverter(typeof(StringEnumConverter))]
+        public AsyncApiVersionString AsyncApi { get; set; }
         
         [JsonProperty("id")]
         [JsonConverter(typeof(Identifier.JsonConverter))]
         public Identifier Id { get; set; }
 
         [JsonProperty("info")]
-        public Info Info { get; }
+        public Info Info { get; set; }
 
         [JsonProperty("servers")]
         public Servers Servers { get; set; }

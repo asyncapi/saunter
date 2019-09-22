@@ -1,18 +1,18 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
-using Saunter.AsyncApiSchema.Utils;
 
-namespace Saunter.AsyncApiSchema.v2_0_0 {
+namespace Saunter.AsyncApiSchema.v2_0_0
+{
     public class Message
     {
         [JsonProperty("headers")]
-        public OneOf<Schema, Reference> Headers { get; set; }
+        public Schema Headers { get; set; }
 
         [JsonProperty("payload")]
         public Schema Payload { get; set; } // todo: It can be of any type but defaults to Schema object.
 
         [JsonProperty("correlationId")]
-        public OneOf<CorrelationId, Reference> CorrelationId { get; set; }
+        public CorrelationId CorrelationId { get; set; }
 
         [JsonProperty("schemaFormat")]
         public string SchemaFormat { get; set; }

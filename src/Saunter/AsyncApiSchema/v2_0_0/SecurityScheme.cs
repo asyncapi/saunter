@@ -1,14 +1,15 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace Saunter.AsyncApiSchema.v2_0_0 {
+namespace Saunter.AsyncApiSchema.v2_0_0
+{
     public class SecurityScheme
     {
         public SecurityScheme(SecuritySchemeType type)
         {
             Type = type;
         }
-        
+
         [JsonProperty("type")]
         [JsonConverter(typeof(StringEnumConverter))]
         public SecuritySchemeType Type { get; }

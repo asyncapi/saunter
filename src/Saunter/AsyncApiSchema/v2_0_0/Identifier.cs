@@ -1,7 +1,8 @@
 using System;
 using Newtonsoft.Json;
 
-namespace Saunter.AsyncApiSchema.v2_0_0 {
+namespace Saunter.AsyncApiSchema.v2_0_0 
+{
     public class Identifier
     {
         private readonly Uri value;
