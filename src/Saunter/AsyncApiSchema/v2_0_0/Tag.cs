@@ -18,5 +18,10 @@ namespace Saunter.AsyncApiSchema.v2_0_0 {
         [JsonProperty("externalDocs")]
         public ExternalDocumentation ExternalDocs { get; set; }
 
+        public static implicit operator Tag(string s)
+        {
+            return new Tag(s);
+        }
+
     }
 }

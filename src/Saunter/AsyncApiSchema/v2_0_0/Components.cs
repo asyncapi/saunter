@@ -6,7 +6,7 @@ namespace Saunter.AsyncApiSchema.v2_0_0
     public class Components
     {
         [JsonProperty("schemas")]
-        public IDictionary<ComponentFieldName, Schema> Schemas { get; set; }
+        public IDictionary<ComponentFieldName, NJsonSchema.JsonSchema> Schemas { get; set; }
 
         [JsonProperty("messages")]
         public IDictionary<ComponentFieldName, Message> Messages { get; set; }

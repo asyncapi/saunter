@@ -6,7 +6,7 @@ namespace Saunter.AsyncApiSchema.v2_0_0
     public class MessageTrait
     {
         [JsonProperty("headers")]
-        public Schema Headers { get; set; }
+        public NJsonSchema.JsonSchema Headers { get; set; }
 
         [JsonProperty("correlationId")]
         public CorrelationId CorrelationId { get; set; }

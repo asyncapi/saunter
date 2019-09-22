@@ -6,14 +6,9 @@ namespace Saunter.AsyncApiSchema.v2_0_0
 {
     public class AsyncApiSchema
     {
-        public AsyncApiSchema()
-        {
-            AsyncApi = AsyncApiVersionString.V2_0_0;
-        }
-        
         [JsonProperty("asyncapi")]
         [JsonConverter(typeof(StringEnumConverter))]
-        public AsyncApiVersionString AsyncApi { get; set; }
+        public AsyncApiVersionString AsyncApi { get; } = AsyncApiVersionString.V2_0_0;
         
         [JsonProperty("id")]
         [JsonConverter(typeof(Identifier.JsonConverter))]
@@ -23,19 +18,19 @@ namespace Saunter.AsyncApiSchema.v2_0_0
         public Info Info { get; set; }
 
         [JsonProperty("servers")]
-        public Servers Servers { get; set; }
+        public Servers Servers { get; } = new Servers();
 
         [JsonProperty("defaultContentType")]
-        public string DefaultContentType { get; set; }
+        public string DefaultContentType { get; set; } = "application/json"; // todo: too presumptuous??
 
         [JsonProperty("channels")]
-        public Channels Channels { get; }
+        public Channels Channels { get; } = new Channels();
 
         [JsonProperty("components")]
-        public Components Components { get; set; }
+        public Components Components { get; } = new Components();
 
         [JsonProperty("tags")]
-        public ISet<Tag> Tags { get; set; }
+        public ISet<Tag> Tags { get; } = new HashSet<Tag>();
 
         [JsonProperty("externalDocs")]
         public ExternalDocumentation ExternalDocs { get; set; }

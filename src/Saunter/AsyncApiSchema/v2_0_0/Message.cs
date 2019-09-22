@@ -6,10 +6,10 @@ namespace Saunter.AsyncApiSchema.v2_0_0
     public class Message
     {
         [JsonProperty("headers")]
-        public Schema Headers { get; set; }
+        public NJsonSchema.JsonSchema Headers { get; set; }
 
         [JsonProperty("payload")]
-        public Schema Payload { get; set; } // todo: It can be of any type but defaults to Schema object.
+        public NJsonSchema.JsonSchema Payload { get; set; } // todo: It can be of any type but defaults to Schema object.
 
         [JsonProperty("correlationId")]
         public CorrelationId CorrelationId { get; set; }

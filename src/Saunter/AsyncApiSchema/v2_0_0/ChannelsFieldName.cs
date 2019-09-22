@@ -1,15 +1,16 @@
 using System;
 
-namespace Saunter.AsyncApiSchema.v2_0_0 {
+namespace Saunter.AsyncApiSchema.v2_0_0
+{
     public class ChannelsFieldName
     {
-        private Uri value;
+        private readonly Uri value;
 
         public ChannelsFieldName(string fieldName)
         {
             if (fieldName == null) throw new ArgumentNullException(nameof(fieldName));
 
-            value = new Uri(fieldName);
+            value = new Uri(fieldName, UriKind.Relative);
         }
 
         public override string ToString()
@@ -26,6 +27,11 @@ namespace Saunter.AsyncApiSchema.v2_0_0 {
         {
             var channelsFieldName = obj as ChannelsFieldName;
             return channelsFieldName != null && value.Equals(channelsFieldName.value);
+        }
+
+        public static implicit operator ChannelsFieldName(string s)
+        {
+            return new ChannelsFieldName(s);
         }
     }
 }

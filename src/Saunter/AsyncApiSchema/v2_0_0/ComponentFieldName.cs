@@ -32,5 +32,10 @@ namespace Saunter.AsyncApiSchema.v2_0_0
             var componentFieldName = obj as ComponentFieldName;
             return componentFieldName != null && value.Equals(componentFieldName.value);
         }
+
+        public static implicit operator ComponentFieldName(string s)
+        {
+            return new ComponentFieldName(s);
+        }
     }
 }

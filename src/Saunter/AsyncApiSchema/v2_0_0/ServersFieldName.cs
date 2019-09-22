@@ -31,5 +31,10 @@ namespace Saunter.AsyncApiSchema.v2_0_0 {
             var serversFieldName = obj as ServersFieldName;
             return serversFieldName != null && value.Equals(serversFieldName.value);
         }
+
+        public static implicit operator ServersFieldName(string s)
+        {
+            return new ServersFieldName(s);
+        }
     }
 }
