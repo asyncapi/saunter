@@ -33,7 +33,7 @@ namespace Saunter
 
                 foreach (var type in asyncapiTypes)
                 {
-                    var amqpTopicAttribute = type.GetCustomAttribute<AmqpTopicAttribute>();
+                    var amqpTopicAttribute = type.GetCustomAttribute<AmqpChannelBindingAttribute>();
                     
                     var methods = type.DeclaredMethods;
 
@@ -69,7 +69,7 @@ namespace Saunter
                                         Is = AmqpChannelIs.RoutingKey,
                                         Exchange = new AmqpChannelExchange
                                         {
-                                            Name = amqpTopicAttribute.Topic,
+                                            Name = amqpTopicAttribute.ExchangeName,
                                             Type = AmqpExchangeType.Topic,
                                         },
                                     };

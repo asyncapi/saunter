@@ -1,14 +1,15 @@
 using System;
 using Newtonsoft.Json;
 
-namespace Saunter.AsyncApiSchema.v2_0_0 {
+namespace Saunter.AsyncApiSchema.v2_0_0
+{
     public class Tag
     {
         public Tag(string name)
         {
             Name = name ?? throw new ArgumentNullException(nameof(name));
         }
-        
+
         [JsonProperty("name")]
         public string Name { get; }
 
@@ -22,6 +23,5 @@ namespace Saunter.AsyncApiSchema.v2_0_0 {
         {
             return new Tag(s);
         }
-
     }
 }

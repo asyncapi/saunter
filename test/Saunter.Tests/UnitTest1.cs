@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using Saunter.AsyncApiSchema.v2_0_0;
+using Saunter.AsyncApiSchema.v2_0_0.Bindings.Amqp;
 using Saunter.Attributes;
 using Saunter.Attributes.Bindings.Amqp;
 using Saunter.Microsoft.Extensions.DependencyInjection;
@@ -121,7 +122,6 @@ namespace Saunter.Tests
     }
     
     [AsyncApi] // todo: this kind of sucks, and is easy to forget to do
-    [AmqpTopic("exampleTopic")] // todo: while this lets you write less code, it's also confusing as this is a channelbinding, but not attached to the channel which is on each method  
     public class MessagePublisher
     {
         private readonly IAmqpClient amqp;
@@ -132,10 +132,11 @@ namespace Saunter.Tests
         }
 
         [Channel("exampleRoutingKey", Description = "This is an example message channel")]
+        [AmqpChannelBinding(AmqpChannelIs.RoutingKey, ExchangeType = AmqpExchangeType.Topic, ExchangeName = "exampleTopic")]
         [Publish(PayloadType = typeof(ExampleMessage), HeadersType = typeof(ExampleHeaders), ContentType = "application/json")]
         public void PublishExampleMessage()
         {
-            var topic = this.GetType().GetCustomAttribute<AmqpTopicAttribute>().Topic;
+            var topic = this.GetType().GetCustomAttribute<AmqpChannelBindingAttribute>().ExchangeName;
             var routingKey = MethodBase.GetCurrentMethod().GetCustomAttribute<ChannelAttribute>().Name;
             
             var message = new ExampleMessage();
