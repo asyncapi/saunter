@@ -86,6 +86,10 @@ namespace Saunter.Tests
                 {
                     options.AsyncApiSchema = new AsyncApiSchema.v2_0_0.AsyncApiSchema();
                     options.AssemblyMarkerTypes.Add(this.GetType());
+
+                    AmqpDefaults.ChannelBinding.Is = AmqpChannelBindingIs.RoutingKey;
+                    AmqpDefaults.ChannelBinding.Name = "accounts";
+                    AmqpDefaults.ChannelBinding.ExchangeType = "topic";
                 });
 
             var sp = services.BuildServiceProvider();
@@ -121,7 +125,7 @@ namespace Saunter.Tests
         void Publish(string topic, string routingKey, object payload);
     }
     
-    [AsyncApi] // todo: this kind of sucks, and is easy to forget to do
+    [AsyncApi]
     public class MessagePublisher
     {
         private readonly IAmqpClient amqp;
@@ -131,18 +135,19 @@ namespace Saunter.Tests
             this.amqp = amqp;
         }
 
-        [Channel("exampleRoutingKey", Description = "This is an example message channel")]
-        [AmqpChannelBinding(AmqpChannelIs.RoutingKey, ExchangeType = AmqpExchangeType.Topic, ExchangeName = "exampleTopic")]
-        [Publish(PayloadType = typeof(ExampleMessage), HeadersType = typeof(ExampleHeaders), ContentType = "application/json")]
-        public void PublishExampleMessage()
+    
+        /// <summary>
+        /// Should be able to pull this description for the channel
+        /// </summary>
+        [Channel("example.routing.key")]
+        [AmqpChannelBinding]
+        [Publish]
+        public void PublishExampleMessage2([Payload] ExampleMessage payload)
         {
-            var topic = this.GetType().GetCustomAttribute<AmqpChannelBindingAttribute>().ExchangeName;
+            var exchangeName = MethodBase.GetCurrentMethod().GetCustomAttribute<AmqpChannelBindingAttribute>().Name;
             var routingKey = MethodBase.GetCurrentMethod().GetCustomAttribute<ChannelAttribute>().Name;
             
-            var message = new ExampleMessage();
-            var payload = JsonConvert.SerializeObject(message);
-            
-            amqp.Publish(topic, routingKey, payload);
+            amqp.Publish(exchangeName, routingKey, payload);
         }
     }
 }

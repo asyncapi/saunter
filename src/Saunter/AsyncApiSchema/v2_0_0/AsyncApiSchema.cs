@@ -21,7 +21,7 @@ namespace Saunter.AsyncApiSchema.v2_0_0
         public Servers Servers { get; } = new Servers();
 
         [JsonProperty("defaultContentType")]
-        public string DefaultContentType { get; set; } = "application/json"; // todo: too presumptuous??
+        public string DefaultContentType { get; set; } = "application/json";
 
         [JsonProperty("channels")]
         public Channels Channels { get; } = new Channels();
