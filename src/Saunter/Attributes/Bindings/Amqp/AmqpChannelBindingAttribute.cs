@@ -7,54 +7,18 @@ namespace Saunter.Attributes.Bindings.Amqp
     public class AmqpChannelBindingAttribute : Attribute
     {
         // common properties
-        public AmqpChannelBindingIs Is { get; set; } = AmqpDefaults.ChannelBinding.Is;
+        public AmqpChannelBindingIs? Is { get; set; }
 
-        public string Name { get; set; } = AmqpDefaults.ChannelBinding.Name;
+        public string Name { get; set; }
         
-        public bool? AutoDelete { get; set; } = AmqpDefaults.ChannelBinding.AutoDelete;
+        public bool? AutoDelete { get; set; }
 
-        public bool? Durable { get; set; } = AmqpDefaults.ChannelBinding.Durable;
+        public bool? Durable { get; set; }
         
         // exchange only
-        public string ExchangeType { get; set; } = AmqpDefaults.ChannelBinding.ExchangeType;
+        public string ExchangeType { get; set; }
         
         // queue only
-        public bool? Exclusive { get; set; } = AmqpDefaults.ChannelBinding.Exclusive;
-        
-        public AmqpChannelBinding ToChannelBinding()
-        {
-            var binding = new AmqpChannelBinding
-            {
-                Is = Is,
-            };
-
-            switch (Is)
-            {
-                case AmqpChannelBindingIs.RoutingKey:
-                    binding.Exchange = new AmqpChannelBindingExchange
-                    {
-                        Name = Name,
-                        Type = ExchangeType,
-                        AutoDelete = AutoDelete,
-                        Durable = Durable,
-                    };
-                    break;
-
-                case AmqpChannelBindingIs.Queue:
-                    binding.Queue = new AmqpChannelBindingQueue
-                    {
-                        Name = Name,
-                        Durable = Durable,
-                        AutoDelete = AutoDelete,
-                        Exclusive = Exclusive,
-                    };
-                    break;
-                
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-
-            return binding;
-        }
+        public bool? Exclusive { get; set; }
     }
 }
