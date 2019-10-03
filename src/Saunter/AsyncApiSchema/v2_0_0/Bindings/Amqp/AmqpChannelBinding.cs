@@ -52,13 +52,13 @@ namespace Saunter.AsyncApiSchema.v2_0_0.Bindings.Amqp
         [JsonProperty("autoDelete")]
         public bool? AutoDelete { get; set; }
     }
-    
+
 
     public enum AmqpChannelBindingIs
     {
         [EnumMember(Value = "routingKey")]
         RoutingKey,
-        
+
         [EnumMember(Value = "queue")]
         Queue,
     }
