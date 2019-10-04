@@ -1,11 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using Saunter.AsyncApiSchema.v2_0_0;
+using Saunter.Microsoft.Extensions.DependencyInjection;
 
 namespace StreetlightsAPI
 {
@@ -18,9 +17,10 @@ namespace StreetlightsAPI
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
+                .ConfigureWebHostDefaults(builder =>
                 {
-                    webBuilder.UseStartup<Startup>();
+                    builder.UseStartup<Startup>();
+                    builder.UseUrls("http://localhost:5000");
                 });
     }
     
@@ -36,23 +36,39 @@ namespace StreetlightsAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Add Saunter to the application services. 
+            services.AddSaunter(options =>
+            {
+                options.AssemblyMarkerTypes = new[] {typeof(StreetlightMessageBus)};
+
+                options.AsyncApiSchema = new AsyncApiSchema
+                {
+                    Info = new Info("Streetlights API", "1.0.0")
+                    {
+                        Description = "The Smartylighting Streetlights API allows you\nto remotely manage the city lights.",
+                        License = new License("Apache 2.0")
+                        {
+                            Url = "https://www.apache.org/licenses/LICENSE-2.0"
+                        }
+                    },
+                    Servers =
+                    {
+                        { "mosquitto", new Server("test.mosquitto.org", "mqtt") }
+                    }
+                };
+            });
+            
+            
+            services.AddScoped<IStreetlightMessageBus, StreetlightMessageBus>();
             services.AddControllers();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-
-            app.UseHttpsRedirection();
-
+            app.UseDeveloperExceptionPage();
+            
             app.UseRouting();
-
-            app.UseAuthorization();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

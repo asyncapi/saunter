@@ -141,7 +141,7 @@ namespace Saunter.Tests
         /// </summary>
         [Channel("example.routing.key")]
         [AmqpChannelBinding]
-        [Publish]
+//        [PublishOperation]
         public void PublishExampleMessage2([Payload] ExampleMessage payload)
         {
             var exchangeName = MethodBase.GetCurrentMethod().GetCustomAttribute<AmqpChannelBindingAttribute>().Name;

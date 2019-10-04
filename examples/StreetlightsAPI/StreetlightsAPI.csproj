@@ -8,4 +8,8 @@
     <_ContentIncludedByDefault Remove="Properties\launchSettings.json" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Saunter\Saunter.csproj" />
+  </ItemGroup>
+
 </Project>

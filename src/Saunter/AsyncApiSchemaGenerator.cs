@@ -63,7 +63,7 @@ namespace Saunter
                 foreach (var method in methods)
                 {
                     var channelAttribute = method.GetCustomAttribute<ChannelAttribute>();
-                    var publishAttribute = method.GetCustomAttribute<PublishAttribute>();
+                    var publishAttribute = method.GetCustomAttribute<PublishOperationAttribute>();
 
                     if (channelAttribute != null)
                     {
@@ -80,8 +80,8 @@ namespace Saunter
                                 Message = new Message
                                 {
                                     Payload = NJsonSchema.JsonSchema.FromType(publishAttribute.PayloadType),
-                                    Headers = publishAttribute.HeadersType == null ? null : NJsonSchema.JsonSchema.FromType(publishAttribute.HeadersType),
-                                    ContentType = publishAttribute.ContentType,
+//                                    Headers = publishAttribute.HeadersType == null ? null : NJsonSchema.JsonSchema.FromType(publishAttribute.HeadersType),
+//                                    ContentType = publishAttribute.ContentType,
                                 }
                             };
                             

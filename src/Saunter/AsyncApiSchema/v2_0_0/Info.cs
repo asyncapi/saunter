@@ -17,7 +17,7 @@ namespace Saunter.AsyncApiSchema.v2_0_0 {
         public string Version { get; set; }
 
         [JsonProperty("description")]
-        public string Description { get; }
+        public string Description { get; set; }
 
         [JsonProperty("termsOfService")]
         public string TermsOfService { get; set; }
