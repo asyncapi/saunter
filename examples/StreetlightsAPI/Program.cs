@@ -69,8 +69,9 @@ namespace StreetlightsAPI
         {
             app.UseDeveloperExceptionPage();
             
-            
             app.UseRouting();
+            app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyMethod());
+
             app.UseMiddleware<AsyncApiMiddleware>();
             app.UseEndpoints(endpoints =>
             {
