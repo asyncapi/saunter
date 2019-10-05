@@ -1,6 +1,6 @@
 # Streetlights API Example
 
-This is an example implementation of the (Streetlights API from the asyncapi tutorial)[https://www.asyncapi.com/docs/tutorials/streetlights/].
+This is an example implementation of the [Streetlights API from the asyncapi tutorial](https://www.asyncapi.com/docs/tutorials/streetlights/).
 
 The generated AsyncAPI documentation should look like this:
 
@@ -81,5 +81,69 @@ info: Streetlight[0]
       
 # Get the AsyncAPI Schema document
 $ Invoke-WebRequest -Method GET -Uri "http://localhost:5000/asyncapi/asyncapi.json"
+```
 
+The generated schema, not idential to the one above, as schemas are moved to the `components` section of the document.
+
+```json
+{
+  "asyncapi": "2.0.0",
+  "info": {
+    "title": "Streetlights API",
+    "version": "1.0.0",
+    "description": "The Smartylighting Streetlights API allows you\nto remotely manage the city lights.",
+    "license": {
+      "name": "Apache 2.0",
+      "url": "https://www.apache.org/licenses/LICENSE-2.0"
+    }
+  },
+  "servers": {
+    "mosquitto": {
+      "url": "test.mosquitto.org",
+      "protocol": "mqtt"
+    }
+  },
+  "defaultContentType": "application/json",
+  "channels": {
+    "light/measured": {
+      "publish": {
+        "operationId": "PublishLightMeasuredEvent",
+        "summary": "Inform about environmental lighting conditions for a particular streetlight.",
+        "message": {
+          "payload": {
+            "$ref": "#/components/schemas/LightMeasuredEvent"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "LightMeasuredEvent": {
+        "title": "LightMeasuredEvent",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Id of the streetlight.",
+            "format": "int32"
+          },
+          "lumens": {
+            "type": "integer",
+            "description": "Light intensity measured in lumens.",
+            "format": "int32"
+          },
+          "sentAt": {
+            "type": "string",
+            "description": "Light intensity measured in lumens.",
+            "format": "date-time"
+          }
+        }
+      }
+    }
+  },
+  "tags": [
+    
+  ]
+}
 ```

@@ -103,7 +103,7 @@ namespace Saunter.Generation
             {
                 OperationId = publishOperationAttribute.OperationId ?? method.Name,
                 Summary = publishOperationAttribute.Summary ?? method.GetXmlDocsSummary(),
-                Description = publishOperationAttribute.Description ?? method.GetXmlDocsRemarks(),
+                Description = publishOperationAttribute.Description ?? (method.GetXmlDocsRemarks() != "" ? method.GetXmlDocsRemarks() : null),
                 Message = GenerateMessage(method, publishOperationAttribute, schemaRepository),
             };
 

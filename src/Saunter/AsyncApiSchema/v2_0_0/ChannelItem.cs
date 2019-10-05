@@ -16,6 +16,6 @@ namespace Saunter.AsyncApiSchema.v2_0_0 {
         public string Parameters { get; set; }
 
         [JsonProperty("bindings")]
-        public ChannelBindings Bindings { get; set; } = new ChannelBindings();
+        public ChannelBindings Bindings { get; set; }
     }
 }
