@@ -3,9 +3,6 @@ using Newtonsoft.Json;
 namespace Saunter.AsyncApiSchema.v2_0_0 {
     public class ChannelItem
     {
-        [JsonProperty("$ref")]
-        public string Ref { get; set; }
-
         [JsonProperty("description")]
         public string Description { get; set; }
 

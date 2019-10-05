@@ -3,8 +3,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Saunter;
 using Saunter.AsyncApiSchema.v2_0_0;
-using Saunter.Microsoft.Extensions.DependencyInjection;
+using Saunter.Generation;
 
 namespace StreetlightsAPI
 {
@@ -37,7 +38,7 @@ namespace StreetlightsAPI
         public void ConfigureServices(IServiceCollection services)
         {
             // Add Saunter to the application services. 
-            services.AddSaunter(options =>
+            services.AddAsyncApiSchemaGeneration(options =>
             {
                 options.AssemblyMarkerTypes = new[] {typeof(StreetlightMessageBus)};
 
@@ -64,11 +65,13 @@ namespace StreetlightsAPI
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app)
         {
             app.UseDeveloperExceptionPage();
             
+            
             app.UseRouting();
+            app.UseMiddleware<AsyncApiMiddleware>();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

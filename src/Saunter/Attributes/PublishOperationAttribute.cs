@@ -5,13 +5,17 @@ namespace Saunter.Attributes
     [AttributeUsage(AttributeTargets.Method)]
     public class PublishOperationAttribute : Attribute
     {
-        public PublishOperationAttribute(Type payloadType)
+        public PublishOperationAttribute(Type messagePayloadType)
         {
-            PayloadType = payloadType;
+            MessagePayloadType = messagePayloadType;
         }
         
         public string Summary { get; set; }
 
-        public Type PayloadType { get; }
+        public Type MessagePayloadType { get; }
+
+        public string OperationId { get; set; }
+        
+        public string Description { get; set; }
     }
 }

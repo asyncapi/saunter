@@ -78,5 +78,8 @@ StatusCode
 
 info: Streetlight[0]
       Publishing message {"Id":1,"Lumens":425,"SentAt":"2019-10-04T22:22:08.884346+13:00"} to light/measured
+      
+# Get the AsyncAPI Schema document
+$ Invoke-WebRequest -Method GET -Uri "http://localhost:5000/asyncapi/asyncapi.json"
 
 ```

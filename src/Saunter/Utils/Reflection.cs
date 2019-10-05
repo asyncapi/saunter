@@ -9,5 +9,10 @@ namespace Saunter.Utils
         {
             return typeInfo.GetCustomAttribute<T>() != null;
         }
+
+        public static bool HasCustomAttribute<T>(this MethodInfo methodInfo) where T : Attribute
+        {
+            return methodInfo.GetCustomAttribute<T>() != null;
+        }
     }
 }

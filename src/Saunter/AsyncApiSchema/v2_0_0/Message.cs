@@ -9,7 +9,7 @@ namespace Saunter.AsyncApiSchema.v2_0_0
         public NJsonSchema.JsonSchema Headers { get; set; }
 
         [JsonProperty("payload")]
-        public NJsonSchema.JsonSchema Payload { get; set; } // todo: It can be of any type but defaults to Schema object.
+        public Reference Payload { get; set; }
 
         [JsonProperty("correlationId")]
         public CorrelationId CorrelationId { get; set; }
