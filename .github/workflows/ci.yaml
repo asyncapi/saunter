@@ -1,0 +1,18 @@
+name: CI
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v1
+    - uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '3.0.100' # SDK Version to use.
+    - name: Run dotnet build
+      run: dotnet build
+    - name: Run dotnet test
+      run: dotnet test --no-build
