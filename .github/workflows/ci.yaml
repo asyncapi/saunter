@@ -18,9 +18,9 @@ jobs:
       run: dotnet test --no-build
     - name: Create Nuget package
       run: dotnet pack ./src/Saunter/Saunter.csproj --configuration Release --version-suffix "$(git rev-list --count HEAD)+$(git rev-parse --short=10 HEAD)" --output ./build
-    - name: Push Nuget package to Github Package Registry
+    - name: Push Nuget package to Nuget.org
       if: github.ref == 'refs/heads/master'
       env:
         NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }} 
-      run: dotnet nuget push ./build/*.nupkg --api-key $NUGET_API_KEY
+      run: dotnet nuget push ./build/*.nupkg --api-key $NUGET_API_KEY --source "https://api.nuget.org/v3/index.json"
 
