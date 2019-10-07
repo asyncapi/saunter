@@ -17,9 +17,10 @@ jobs:
     - name: Run dotnet test
       run: dotnet test --no-build
     - name: Create Nuget package
-      run: dotnet pack ./src/Saunter/Saunter.csproj --configuration Release --version-suffix "g$(git rev-parse --short=10 HEAD)" --output ./build
+      run: dotnet pack ./src/Saunter/Saunter.csproj --configuration Release --version-suffix "$(git rev-list --count HEAD)+$(git rev-parse --short=10 HEAD)" --output ./build
     - name: Push Nuget package to Github Package Registry
+      if: github.ref == 'master'
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
-      run: dotnet nuget push ./build/*.nupkg --source "https://nuget.pkg.github.com/tehmantra/index.json" --api-key $GITHUB_TOKEN
+        NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }} 
+      run: dotnet nuget push ./build/*.nupkg --api-key $GITHUB_TOKEN
 
