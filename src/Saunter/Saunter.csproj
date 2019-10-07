@@ -6,14 +6,19 @@
     <IsPackable>true</IsPackable>
     <PackageId>Saunter</PackageId>
     <Title>Saunter</Title>
+    <PackageIcon>logo.png</PackageIcon>
     <Authors>tehmantra</Authors>
     <Description>Code-first AsyncAPI documentation</Description>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageTags>asyncapi;aspnetcore;openapi;documentation;amqp</PackageTags>
     <RepositoryUrl>https://github.com/tehmantra/saunter</RepositoryUrl>
     <PackageProjectUrl>https://github.com/tehmantra/saunter</PackageProjectUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\assets\logo.png" Pack="true" PackagePath="\"/>
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
