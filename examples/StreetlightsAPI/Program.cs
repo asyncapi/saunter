@@ -4,7 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Saunter;
-using Saunter.AsyncApiSchema.v2_0_0;
+using Saunter.AsyncApiSchema.v2;
 using Saunter.Generation;
 
 namespace StreetlightsAPI

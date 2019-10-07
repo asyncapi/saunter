@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using NJsonSchema;
 using NJsonSchema.Generation;
-using Saunter.AsyncApiSchema.v2_0_0;
+using Saunter.AsyncApiSchema.v2;
 
 namespace Saunter.Generation
 {
@@ -25,6 +25,7 @@ namespace Saunter.Generation
             },
             // otherwise each schema has a property `"additionalProperties": false` which seems to break the current version of the AsyncAPI Playground
             AlwaysAllowAdditionalObjectProperties = true, 
+            
         };
         
         public Reference GenerateSchema(Type type, ISchemaRepository schemaRepository)

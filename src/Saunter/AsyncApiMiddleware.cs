@@ -31,7 +31,7 @@ namespace Saunter
             await RespondWithAsyncApiSchemaJson(context.Response, asyncApiSchema);
         }
 
-        private async Task RespondWithAsyncApiSchemaJson(HttpResponse response, AsyncApiSchema.v2_0_0.AsyncApiSchema asyncApiSchema)
+        private async Task RespondWithAsyncApiSchemaJson(HttpResponse response, AsyncApiSchema.v2.AsyncApiSchema asyncApiSchema)
         {
             var asyncApiSchemaJson = JsonConvert.SerializeObject(
                 asyncApiSchema, 

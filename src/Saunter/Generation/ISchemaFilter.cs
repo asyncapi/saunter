@@ -5,7 +5,7 @@ namespace Saunter.Generation
 {
     public interface ISchemaFilter
     {
-        void Apply(AsyncApiSchema.v2_0_0.AsyncApiSchema schema, SchemaFilterContext context);
+        void Apply(AsyncApiSchema.v2.AsyncApiSchema schema, SchemaFilterContext context);
     }
 
     public class SchemaFilterContext

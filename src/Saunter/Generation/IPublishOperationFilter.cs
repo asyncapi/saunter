@@ -1,5 +1,5 @@
 using System.Reflection;
-using Saunter.AsyncApiSchema.v2_0_0;
+using Saunter.AsyncApiSchema.v2;
 using Saunter.Attributes;
 
 namespace Saunter.Generation

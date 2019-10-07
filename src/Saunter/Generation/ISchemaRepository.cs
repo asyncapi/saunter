@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using NJsonSchema;
-using Saunter.AsyncApiSchema.v2_0_0;
+using Saunter.AsyncApiSchema.v2;
 
 namespace Saunter.Generation
 {

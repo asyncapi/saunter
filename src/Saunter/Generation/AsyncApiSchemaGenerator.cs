@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using Microsoft.Extensions.Options;
 using Namotion.Reflection;
-using Saunter.AsyncApiSchema.v2_0_0;
+using Saunter.AsyncApiSchema.v2;
 using Saunter.Attributes;
 using Saunter.Utils;
 
@@ -21,7 +21,7 @@ namespace Saunter.Generation
             _options = options?.Value ?? throw new ArgumentNullException(nameof(options));
         }
         
-        public AsyncApiSchema.v2_0_0.AsyncApiSchema GetSchema()
+        public AsyncApiSchema.v2.AsyncApiSchema GetSchema()
         {
             var schemaRepository = new SchemaRepository();
 
