@@ -13,6 +13,13 @@ jobs:
       with:
         dotnet-version: '3.0.100' # SDK Version to use.
     - name: Run dotnet build
-      run: dotnet build
+      run: dotnet build --configuration Debug
     - name: Run dotnet test
       run: dotnet test --no-build
+    - name: Create Nuget package
+      run: dotnet pack ./src/Saunter/Saunter.csproj --configuration Release --version-suffix "g$(git rev-parse --short=10 HEAD)" --output ./build
+    - name: Push Nuget package to Github Package Registry
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
+      run: dotnet nuget push ./build/*.nupkg --source "https://nuget.pkg.github.com/tehmantra/index.json" --api-key $GITHUB_TOKEN
+
