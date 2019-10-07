@@ -2,6 +2,17 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <VersionPrefix>0.1.0</VersionPrefix>
+    <IsPackable>true</IsPackable>
+    <PackageId>Saunter</PackageId>
+    <Title>Saunter</Title>
+    <Authors>tehmantra</Authors>
+    <Description>Code-first AsyncAPI documentation</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageTags>asyncapi;aspnetcore;openapi;documentation;amqp</PackageTags>
+    <RepositoryUrl>https://github.com/tehmantra/saunter</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/tehmantra/saunter</PackageProjectUrl>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
   </PropertyGroup>
 
   <ItemGroup>
