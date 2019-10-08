@@ -23,7 +23,7 @@ namespace Saunter.Tests
             services.AddAsyncApiSchemaGeneration(
                 options =>
                 {
-                    options.AsyncApiSchema = new AsyncApiSchema.v2.AsyncApiSchema
+                    options.AsyncApi = new AsyncApiSchema.v2.AsyncApiDocument
                     {
                         Id = new Identifier("urn:com:example:example-events"),
                         Info = new Info("Example API", "An example API with events")
@@ -61,11 +61,11 @@ namespace Saunter.Tests
 
             var sp = services.BuildServiceProvider();
 
-            var provider = sp.GetRequiredService<IAsyncApiSchemaProvider>();
+            var provider = sp.GetRequiredService<IAsyncApiDocumentProvider>();
 
-            var schema = provider.GetSchema();
+            var document = provider.GetDocument();
 
-            Assert.That(schema, Is.Not.Null);
+            Assert.That(document, Is.Not.Null);
         }
     }
 }

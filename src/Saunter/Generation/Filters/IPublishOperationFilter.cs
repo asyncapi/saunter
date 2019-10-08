@@ -1,8 +1,9 @@
 using System.Reflection;
 using Saunter.AsyncApiSchema.v2;
 using Saunter.Attributes;
+using Saunter.Generation.SchemaGeneration;
 
-namespace Saunter.Generation
+namespace Saunter.Generation.Filters
 {
     public interface IPublishOperationFilter
     {

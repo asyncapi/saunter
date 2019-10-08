@@ -7,7 +7,7 @@ namespace Saunter.AsyncApiSchema.v2 {
         public string Description { get; set; }
 
         [JsonProperty("schema")]
-        public NJsonSchema.JsonSchema Schema { get; set; }
+        public Schema Schema { get; set; }
 
         [JsonProperty("location")]
         public string Location { get; set; }

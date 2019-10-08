@@ -23,9 +23,6 @@ namespace Saunter.AsyncApiSchema.v2
         [JsonProperty("bindings")]
         public IDictionary<string, OperationBindings> Bindings { get; set; }
 
-        [JsonProperty("traits")]
-        public IList<OperationTrait> Traits { get; set; }
-
         [JsonProperty("message")]
         public Message Message { get; set; }
     }

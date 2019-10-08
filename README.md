@@ -19,5 +19,6 @@ Feel free to get involved in the project by opening issues.
 ## Thanks
 
 * This project is heavily inspired by [Swashbuckle](https://github.com/domaindrivendev/Swashbuckle.AspNetCore).
-* We use [NJsonSchema](https://github.com/RicoSuter/NJsonSchema) for generating type schemas.
+* We use [Namotion.Reflection](https://github.com/RicoSuter/Namotion.Reflection) for pulling xml documentation.
+* And [Newtonsoft.Json](https://github.com/JamesNK/Newtonsoft.Json) for serialization.
 

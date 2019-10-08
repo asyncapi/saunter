@@ -1,25 +1,17 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using NJsonSchema;
 using Saunter.AsyncApiSchema.v2;
 
-namespace Saunter.Generation
+namespace Saunter.Generation.SchemaGeneration
 {
-    public interface ISchemaRepository
-    {
-        IDictionary<ComponentFieldName, JsonSchema> Schemas { get; }
-
-        Reference GetOrAdd(Type type, string schemaId, Func<JsonSchema> factory);
-    }
-    
     public class SchemaRepository : ISchemaRepository
     {
         private Dictionary<Type, string> _reservedIds = new Dictionary<Type, string>();
-        
-        public IDictionary<ComponentFieldName, JsonSchema> Schemas { get; } = new Dictionary<ComponentFieldName, JsonSchema>();
-        
-        public Reference GetOrAdd(Type type, string schemaId, Func<JsonSchema> factory)
+
+        public IDictionary<ComponentFieldName, Schema> Schemas { get; } = new Dictionary<ComponentFieldName, Schema>();
+
+        public Reference GetOrAdd(Type type, string schemaId, Func<Schema> factory)
         {
             if (!_reservedIds.TryGetValue(type, out var reservedId))
             {
@@ -33,7 +25,7 @@ namespace Saunter.Generation
             {
                 schemaId = reservedId;
             }
-            
+
             return new Reference(schemaId, ReferenceType.Schema);
         }
 
@@ -42,11 +34,12 @@ namespace Saunter.Generation
             if (_reservedIds.ContainsValue(schemaId))
             {
                 var reservedType = _reservedIds.First(entry => entry.Value == schemaId).Key;
-                
-                throw new InvalidOperationException($"Can't use schemaId '{schemaId}' for type {type}'." +
-                                                    $" The same schemaId is already used by type '{reservedType}'");
+
+                throw new InvalidOperationException(
+                    $"Can't use schemaId '{schemaId}' for type {type}'." +
+                    $" The same schemaId is already used by type '{reservedType}'");
             }
-            
+
             _reservedIds.Add(type, schemaId);
         }
     }

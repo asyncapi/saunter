@@ -6,34 +6,36 @@ using Microsoft.Extensions.Options;
 using Namotion.Reflection;
 using Saunter.AsyncApiSchema.v2;
 using Saunter.Attributes;
+using Saunter.Generation.Filters;
+using Saunter.Generation.SchemaGeneration;
 using Saunter.Utils;
 
 namespace Saunter.Generation
 {
-    public class AsyncApiSchemaGenerator : IAsyncApiSchemaProvider
+    public class AsyncApiDocumentGenerator : IAsyncApiDocumentProvider
     {
         private readonly ISchemaGenerator _schemaGenerator;
-        private readonly AsyncApiGeneratorOptions _options;
+        private readonly AsyncApiDocumentGeneratorOptions _options;
 
-        public AsyncApiSchemaGenerator(IOptions<AsyncApiGeneratorOptions> options, ISchemaGenerator schemaGenerator)
+        public AsyncApiDocumentGenerator(IOptions<AsyncApiDocumentGeneratorOptions> options, ISchemaGenerator schemaGenerator)
         {
             _schemaGenerator = schemaGenerator;
             _options = options?.Value ?? throw new ArgumentNullException(nameof(options));
         }
         
-        public AsyncApiSchema.v2.AsyncApiSchema GetSchema()
+        public AsyncApiSchema.v2.AsyncApiDocument GetDocument()
         {
             var schemaRepository = new SchemaRepository();
 
             var asyncApiTypes = GetAsyncApiTypes();
             
-            var asyncApiSchema = _options.AsyncApiSchema;
+            var asyncApiSchema = _options.AsyncApi;
             
             asyncApiSchema.Channels = GenerateChannels(asyncApiTypes, schemaRepository);
             asyncApiSchema.Components.Schemas = schemaRepository.Schemas;
 
-            var filterContext = new SchemaFilterContext(asyncApiTypes, schemaRepository);
-            foreach (var filter in _options.SchemaFilters)
+            var filterContext = new DocumentFilterContext(asyncApiTypes, schemaRepository);
+            foreach (var filter in _options.DocumentFilters)
             {
                 filter.Apply(asyncApiSchema, filterContext);
             }
@@ -42,7 +44,7 @@ namespace Saunter.Generation
         }
 
         /// <summary>
-        /// Get all types with an <see cref="AsyncApiAttribute"/> from assemblies containing <see cref="AsyncApiGeneratorOptions.AssemblyMarkerTypes"/>.
+        /// Get all types with an <see cref="AsyncApiAttribute"/> from assemblies containing <see cref="AsyncApiDocumentGeneratorOptions.AssemblyMarkerTypes"/>.
         /// </summary>
         private TypeInfo[] GetAsyncApiTypes()
         {

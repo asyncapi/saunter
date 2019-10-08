@@ -40,8 +40,5 @@ namespace Saunter.AsyncApiSchema.v2
 
         [JsonProperty("examples")]
         public IDictionary<string, object> Examples { get; set; }
-
-        [JsonProperty("traits")]
-        public IList<MessageTrait> Traits { get; set; }
     }
 }

@@ -6,7 +6,7 @@ namespace Saunter.AsyncApiSchema.v2
     public class Components
     {
         [JsonProperty("schemas")]
-        public IDictionary<ComponentFieldName, NJsonSchema.JsonSchema> Schemas { get; set; }
+        public IDictionary<ComponentFieldName, Schema> Schemas { get; set; }
 
         [JsonProperty("messages")]
         public IDictionary<ComponentFieldName, Message> Messages { get; set; }
@@ -19,12 +19,6 @@ namespace Saunter.AsyncApiSchema.v2
 
         [JsonProperty("correlationIds")]
         public IDictionary<ComponentFieldName, CorrelationId> CorrelationIds { get; set; }
-
-        [JsonProperty("operationTraits")]
-        public IDictionary<ComponentFieldName, OperationTrait> OperationTraits { get; set; }
-
-        [JsonProperty("messageTraits")]
-        public IDictionary<ComponentFieldName, MessageTrait> MessageTraits { get; set; }
 
         [JsonProperty("serverBindings")]
         public IDictionary<ComponentFieldName, IServerBinding> ServerBindings { get; set; }

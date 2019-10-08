@@ -4,7 +4,7 @@ using Newtonsoft.Json.Converters;
 
 namespace Saunter.AsyncApiSchema.v2
 {
-    public class AsyncApiSchema
+    public class AsyncApiDocument
     {
         [JsonProperty("asyncapi")]
         [JsonConverter(typeof(StringEnumConverter))]
