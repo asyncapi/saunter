@@ -33,6 +33,11 @@ namespace Saunter.Generation
         /// A list of filters that will be applied to the generated AsyncAPI document.
         /// </summary>
         public IList<IDocumentFilter> DocumentFilters { get; } = new List<IDocumentFilter>();
+
+        /// <summary>
+        /// A list of filters that will be applies to any generated channels.
+        /// </summary>
+        public IList<IChannelItemFilter> ChannelItemFilters { get; } = new List<IChannelItemFilter>();
         
         /// <summary>
         /// A list of filters that will be applied to any generated Publish operations.
