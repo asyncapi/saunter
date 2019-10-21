@@ -1,8 +1,9 @@
 using System.Collections.Generic;
 using Microsoft.Extensions.DependencyInjection;
-using NUnit.Framework;
 using Saunter.AsyncApiSchema.v2;
 using Saunter.Generation;
+using Shouldly;
+using Xunit;
 
 namespace Saunter.Tests
 {
@@ -11,12 +12,8 @@ namespace Saunter.Tests
     /// </remarks>
     public class Tests
     {
-        [SetUp]
-        public void Setup()
-        {
-        }
 
-        [Test]
+        [Fact]
         public void Test1()
         {
             var services = new ServiceCollection() as IServiceCollection;
@@ -65,7 +62,7 @@ namespace Saunter.Tests
 
             var document = provider.GetDocument();
 
-            Assert.That(document, Is.Not.Null);
+            document.ShouldNotBeNull();
         }
     }
 }

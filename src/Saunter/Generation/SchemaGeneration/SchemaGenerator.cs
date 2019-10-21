@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Reflection;
 using System.Runtime.Serialization;
 using Microsoft.Extensions.Options;
@@ -47,6 +48,7 @@ namespace Saunter.Generation.SchemaGeneration
             };
             
             var properties = type.GetProperties();
+            var requiredProperties = new HashSet<string>();
             foreach (var prop in properties)
             {
                 var propName = GetPropName(prop);
@@ -57,6 +59,13 @@ namespace Saunter.Generation.SchemaGeneration
                 if (propSchema == null)
                 {
                     propSchema = GetSchemaIfEnumerable(propType, schemaRepository);
+                    if (propSchema != null && propSchema is Schema s1) // todo: this better
+                    {
+                        s1.MinItems = prop.GetMinItems();
+                        s1.MaxItems = prop.GetMaxItems();
+                        s1.UniqueItems = prop.GetIsUniqueItems();
+                    }
+
 
                     if (propSchema == null)
                     {
@@ -64,7 +73,29 @@ namespace Saunter.Generation.SchemaGeneration
                     }
                 }
 
+                if (propSchema is Schema s2) // todo: this means we won't get anything on reference types.... is this okay???
+                {
+                    s2.Title = prop.GetTitle();
+                    s2.Description = prop.GetDescription();
+                    s2.Minimum = prop.GetMinimum();
+                    s2.Maximum = prop.GetMaximum();
+                    s2.MinLength = prop.GetMinLength();
+                    s2.MaxLength = prop.GetMaxLength();
+                    s2.Pattern = prop.GetPattern();
+                    s2.Example = prop.GetExample();
+                    
+                    if (prop.GetIsRequired())
+                    {
+                        requiredProperties.Add(_options.PropertyNameSelector(prop));
+                    }
+                }
+
                 schema.Properties.Add(propName, propSchema);
+            }
+
+            if (requiredProperties.Count > 0)
+            {
+                schema.Required = requiredProperties;
             }
 
             return schema;
@@ -140,7 +171,7 @@ namespace Saunter.Generation.SchemaGeneration
                     Type = "array",
                     Items = GenerateSchema(elementType, schemaRepository),
                 };
-
+                
                 return schema;
             }
 

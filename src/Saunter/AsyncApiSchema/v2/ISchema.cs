@@ -29,14 +29,8 @@ namespace Saunter.AsyncApiSchema.v2
         [JsonProperty("minimum")]
         public decimal? Minimum { get; set; }
         
-        [JsonProperty("exclusiveMinimum")]
-        public int? ExclusiveMinimum { get; set; }
-        
         [JsonProperty("maximum")]
         public decimal? Maximum { get; set; }
-        
-        [JsonProperty("exclusiveMaximum")]
-        public int? ExclusiveMaximum { get; set; }
         
         [JsonProperty("maxLength")]
         public int? MaxLength { get; set; }
