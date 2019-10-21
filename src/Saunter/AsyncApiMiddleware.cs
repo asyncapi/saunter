@@ -18,7 +18,7 @@ namespace Saunter
             _asyncApiOptionsAccessor = asyncApiOptionsAccessor;
         }
 
-        public async Task Invoke(HttpContext context, IAsyncApiSchemaProvider asyncApiSchemaProvider)
+        public async Task Invoke(HttpContext context, IAsyncApiDocumentProvider asyncApiDocumentProvider)
         {
             if (!IsRequestingAsyncApiSchema(context.Request))
             {
@@ -26,12 +26,12 @@ namespace Saunter
                 return;
             }
             
-            var asyncApiSchema = asyncApiSchemaProvider.GetSchema();
+            var asyncApiSchema = asyncApiDocumentProvider.GetDocument();
 
             await RespondWithAsyncApiSchemaJson(context.Response, asyncApiSchema);
         }
 
-        private async Task RespondWithAsyncApiSchemaJson(HttpResponse response, AsyncApiSchema.v2_0_0.AsyncApiSchema asyncApiSchema)
+        private async Task RespondWithAsyncApiSchemaJson(HttpResponse response, AsyncApiSchema.v2.AsyncApiDocument asyncApiSchema)
         {
             var asyncApiSchemaJson = JsonConvert.SerializeObject(
                 asyncApiSchema, 

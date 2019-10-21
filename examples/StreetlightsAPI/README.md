@@ -83,7 +83,7 @@ info: Streetlight[0]
 $ Invoke-WebRequest -Method GET -Uri "http://localhost:5000/asyncapi/asyncapi.json"
 ```
 
-The generated schema, not idential to the one above, as schemas are moved to the `components` section of the document.
+The generated asyncapi document, not identical to the one above, as schemas are moved to the `components` section of the document.
 
 ```json
 {

@@ -4,7 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Saunter;
-using Saunter.AsyncApiSchema.v2_0_0;
+using Saunter.AsyncApiSchema.v2;
 using Saunter.Generation;
 
 namespace StreetlightsAPI
@@ -42,7 +42,7 @@ namespace StreetlightsAPI
             {
                 options.AssemblyMarkerTypes = new[] {typeof(StreetlightMessageBus)};
 
-                options.AsyncApiSchema = new AsyncApiSchema
+                options.AsyncApi = new AsyncApiDocument
                 {
                     Info = new Info("Streetlights API", "1.0.0")
                     {
