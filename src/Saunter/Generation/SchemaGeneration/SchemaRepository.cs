@@ -11,7 +11,7 @@ namespace Saunter.Generation.SchemaGeneration
 
         public IDictionary<ComponentFieldName, Schema> Schemas { get; } = new Dictionary<ComponentFieldName, Schema>();
 
-        public Reference GetOrAdd(Type type, string schemaId, Func<Schema> factory)
+        public ISchema GetOrAdd(Type type, string schemaId, Func<Schema> factory)
         {
             if (!_reservedIds.TryGetValue(type, out var reservedId))
             {

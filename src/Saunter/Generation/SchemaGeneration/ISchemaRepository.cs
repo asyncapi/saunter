@@ -8,6 +8,6 @@ namespace Saunter.Generation.SchemaGeneration
     {
         IDictionary<ComponentFieldName, Schema> Schemas { get; }
 
-        Reference GetOrAdd(Type type, string schemaId, Func<Schema> factory);
+        ISchema GetOrAdd(Type type, string schemaId, Func<Schema> factory);
     }
 }

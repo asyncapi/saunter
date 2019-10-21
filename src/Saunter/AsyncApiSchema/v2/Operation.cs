@@ -15,7 +15,7 @@ namespace Saunter.AsyncApiSchema.v2
         public string Description { get; set; }
 
         [JsonProperty("tags")]
-        public IList<Tag> Tags { get; set; }
+        public ISet<Tag> Tags { get; set; }
 
         [JsonProperty("externalDocs")]
         public ExternalDocumentation ExternalDocs { get; set; }

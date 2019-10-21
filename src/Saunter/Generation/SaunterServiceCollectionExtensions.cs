@@ -12,7 +12,7 @@ namespace Saunter.Generation
             services.AddOptions();
             
             services.TryAddTransient<IAsyncApiDocumentProvider, AsyncApiDocumentGenerator>();
-            services.TryAddTransient<ISchemaGenerator, NoOpSchemaGenerator>();
+            services.TryAddTransient<ISchemaGenerator, SchemaGenerator>();
             
             if (setupAction != null) services.Configure(setupAction);
             
