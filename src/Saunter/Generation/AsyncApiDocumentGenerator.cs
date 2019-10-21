@@ -76,13 +76,20 @@ namespace Saunter.Generation
 
             foreach (var mc in methodsWithChannelAttribute)
             {
-                channels.Add(mc.Channel.Name, new ChannelItem
+                var channelItem = new ChannelItem
                 {
                     Description = mc.Channel.Description,
                     Parameters = mc.Channel.Parameters,
                     Publish = GeneratePublishOperation(mc.Method, schemaRepository),
                     Subscribe = GenerateSubscribeOperation(mc.Method, schemaRepository),
-                });
+                }; 
+                channels.Add(mc.Channel.Name, channelItem);
+                
+                var context = new ChannelItemFilterContext(mc.Method, schemaRepository, mc.Channel);
+                foreach (var filter in _options.ChannelItemFilters)
+                {
+                    filter.Apply(channelItem, context);
+                }
             }
 
             return channels;
