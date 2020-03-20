@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
@@ -64,43 +63,5 @@ namespace Saunter.AsyncApiSchema.v2
 
         [JsonProperty("properties")]
         public IDictionary<string, ISchema> Properties { get; set; }
-    }
-    
-    /// <summary>
-    /// A reference to a <see cref="Schema"/> within the asyncapi document. 
-    /// </summary>
-    public class Reference : ISchema
-    {
-        public Reference(string id, ReferenceType type)
-        {
-            _id = id ?? throw new ArgumentNullException(nameof(id));
-            _type = type ?? throw new ArgumentNullException(nameof(type));
-        }
-
-        private readonly string _id;
-        private readonly ReferenceType _type;
-
-        [JsonProperty("$ref")]
-        public string Ref => _type.GetReferencePath(_id);
-    }
-
-    /// <summary>
-    /// The type of a <see cref="Reference"/>. Determines where the reference will be located inside the asyncapi document.
-    /// </summary>
-    public class ReferenceType
-    {
-        public static readonly ReferenceType Schema = new ReferenceType(nameof(Schema), "#/components/schemas/{0}");
-
-        private ReferenceType(string name, string format)
-        {
-            Name = name;
-            _format = format;
-        }
-
-        private string _format;
-        
-        public string Name { get; }
-        
-        public string GetReferencePath(string id) => string.Format(_format, id);
     }
 }
