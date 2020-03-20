@@ -14,10 +14,16 @@ namespace Saunter.Tests.Generation
             
             var provider = TestProviderFactory.Provider(o =>
             {
-                o.AsyncApi.Components.OperationTraits.Add("exampleTrait", new OperationTrait
+                o.AsyncApi = new AsyncApiDocument
                 {
-                    Description = "This is an example trait",
-                });
+                    Components =
+                    {
+                        OperationTraits =
+                        {
+                            ["exampleTrait"] = new OperationTrait { Description = "This is an example trait" }
+                        }
+                    }
+                };
                 
                 o.PublishOperationFilters.Add(new TestOperationTraitsFilter());
             });
