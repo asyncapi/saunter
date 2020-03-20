@@ -8,7 +8,6 @@ using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using Namotion.Reflection;
 
-[assembly: InternalsVisibleTo("Saunter.Tests")]
 namespace Saunter.Utils
 {
     internal static class Reflection

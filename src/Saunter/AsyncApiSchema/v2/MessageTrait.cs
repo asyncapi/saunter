@@ -3,13 +3,15 @@ using Newtonsoft.Json;
 
 namespace Saunter.AsyncApiSchema.v2
 {
-    public class Message
+    /// <summary>
+    /// Can be either a <see cref="MessageTrait"/> or <see cref="Reference"/> to a message trait.
+    /// </summary>
+    public interface IMessageTrait { }
+    
+    public class MessageTrait : IMessageTrait
     {
         [JsonProperty("headers")]
         public ISchema Headers { get; set; }
-
-        [JsonProperty("payload")]
-        public ISchema Payload { get; set; }
 
         [JsonProperty("correlationId")]
         public CorrelationId CorrelationId { get; set; }
@@ -30,7 +32,7 @@ namespace Saunter.AsyncApiSchema.v2
         public string Description { get; set; }
 
         [JsonProperty("tags")]
-        public ISet<Tag> Tags { get; set; } = new HashSet<Tag>();
+        public ISet<Tag> Tags { get; set; } 
             
         [JsonProperty("externalDocs")]
         public ExternalDocumentation ExternalDocs { get; set; }
@@ -39,9 +41,6 @@ namespace Saunter.AsyncApiSchema.v2
         public MessageBindings Bindings { get; set; }
 
         [JsonProperty("examples")]
-        public IDictionary<string, object> Examples { get; set; } = new Dictionary<string, object>();
-        
-        [JsonProperty("traits")]
-        public IList<IMessageTrait> Traits { get; set; } = new List<IMessageTrait>();
+        public IDictionary<string, object> Examples { get; set; }
     }
 }

@@ -17,8 +17,7 @@ namespace Saunter.Tests
         public void Test1()
         {
             var services = new ServiceCollection() as IServiceCollection;
-            services.AddAsyncApiSchemaGeneration(
-                options =>
+            services.AddAsyncApiSchemaGeneration(options =>
                 {
                     options.AsyncApi = new AsyncApiSchema.v2.AsyncApiDocument
                     {

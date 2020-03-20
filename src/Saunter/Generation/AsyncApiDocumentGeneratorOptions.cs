@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using Newtonsoft.Json.Serialization;
+using Saunter.AsyncApiSchema.v2;
 using Saunter.Generation.Filters;
 
 namespace Saunter.Generation
@@ -12,7 +13,7 @@ namespace Saunter.Generation
         /// The base asyncapi schema.
         /// This will be augmented with other information auto-discovered from attributes.
         /// </summary>
-        public AsyncApiSchema.v2.AsyncApiDocument AsyncApi { get; set; }
+        public AsyncApiSchema.v2.AsyncApiDocument AsyncApi { get; set; } = new AsyncApiDocument();
 
         /// <summary>
         /// A list of marker types from assemblies to scan for Saunter attributes.
