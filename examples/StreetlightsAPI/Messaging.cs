@@ -32,7 +32,8 @@ namespace StreetlightsAPI
     [AsyncApi]
     public class StreetlightMessageBus : IStreetlightMessageBus
     {
-        private const string LightMeasuredTopic = "light/measured";
+        private const string PublishLightMeasuredTopic = "publish/light/measured";
+        private const string SubscribeLightMeasuredTopic = "subscribe/light/measured";
 
         private readonly ILogger _logger;
 
@@ -41,7 +42,7 @@ namespace StreetlightsAPI
             _logger = logger.CreateLogger("Streetlight");
         }
         
-        [Channel(LightMeasuredTopic)]
+        [Channel(PublishLightMeasuredTopic)]
         [PublishOperation(typeof(LightMeasuredEvent), Summary = "Inform about environmental lighting conditions for a particular streetlight.")]
         public void PublishLightMeasuredEvent(Streetlight streetlight, int lumens)
         {
@@ -57,7 +58,26 @@ namespace StreetlightsAPI
             // In reality this would call some kind of pub/sub client library and publish.
             // e.g. mqttClient.PublishAsync(message);
             // e.g. amqpClient.BasicPublish(LightMeasuredTopic, routingKey, props, payloadBytes);
-            _logger.LogInformation("Publishing message {Payload} to {Topic}", payload, LightMeasuredTopic);
+            _logger.LogInformation("Publishing message {Payload} to {Topic}", payload, PublishLightMeasuredTopic);
+        }
+
+        [Channel(SubscribeLightMeasuredTopic)]
+        [SubscribeOperation(typeof(LightMeasuredEvent), Summary = "Subscribe to environmental lighting conditions for a particular streetlight.")]
+        public void SubscribeToLightMeasuredEvent(Streetlight streetlight, int lumens)
+        {
+            var lightMeasuredEvent = new LightMeasuredEvent
+            {
+                Id = streetlight.Id,
+                Lumens = lumens,
+                SentAt = DateTime.Now,
+            };
+            var payload = JsonConvert.SerializeObject(lightMeasuredEvent);
+
+            // Simulate publishing a message to the channel.
+            // In reality this would call some kind of pub/sub client library and publish.
+            // e.g. mqttClient.PublishAsync(message);
+            // e.g. amqpClient.BasicPublish(LightMeasuredTopic, routingKey, props, payloadBytes);
+            _logger.LogInformation("Subscribing to {Topic} with payload {Payload} ", payload, SubscribeLightMeasuredTopic);
         }
     }
 }

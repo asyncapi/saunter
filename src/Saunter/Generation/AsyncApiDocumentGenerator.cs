@@ -80,8 +80,8 @@ namespace Saunter.Generation
                 {
                     Description = mc.Channel.Description,
                     Parameters = mc.Channel.Parameters,
-                    Publish = GeneratePublishOperation(mc.Method, schemaRepository),
-                    Subscribe = GenerateSubscribeOperation(mc.Method, schemaRepository),
+                    Publish = GenerateOperation(mc.Method, schemaRepository, OperationType.Publish),
+                    Subscribe = GenerateOperation(mc.Method, schemaRepository, OperationType.Subscribe),
                 }; 
                 channels.Add(mc.Channel.Name, channelItem);
                 
@@ -96,56 +96,61 @@ namespace Saunter.Generation
         }
 
 
+
         /// <summary>
-        /// Generate the Publish operation of an AsyncApi Channel for the given method.
+        /// Generate the an operation of an AsyncApi Channel for the given method.
         /// </summary>
-        private Operation GeneratePublishOperation(MethodInfo method, ISchemaRepository schemaRepository)
+        private Operation GenerateOperation(MethodInfo method, ISchemaRepository schemaRepository, OperationType operationType)
         {
-            var publishOperationAttribute = method.GetCustomAttribute<PublishOperationAttribute>();
-            if (publishOperationAttribute == null)
+            OperationAttribute operationAttribute;
+            switch (operationType)
             {
-                // Happens when a Channel has a Subscribe operation instead of a Publish operation.
-                return null;
+                case OperationType.Publish:
+                    var publishOperationAttribute = method.GetCustomAttribute<PublishOperationAttribute>();
+                    if (publishOperationAttribute == null)
+                    {
+                        return null;
+                    }
+                    operationAttribute = (OperationAttribute)publishOperationAttribute;
+                    break;
+                case OperationType.Subscribe:
+                    var subscribeOperationAttribute = method.GetCustomAttribute<SubscribeOperationAttribute>();
+                    if (subscribeOperationAttribute == null)
+                    {
+                        return null;
+                    }
+                    operationAttribute = (OperationAttribute)subscribeOperationAttribute;
+                    break;
+                default:
+                    return null;
             }
-            
-            var publish = new Operation
+
+            var operation = new Operation
             {
-                OperationId = publishOperationAttribute.OperationId ?? method.Name,
-                Summary = publishOperationAttribute.Summary ?? method.GetXmlDocsSummary(),
-                Description = publishOperationAttribute.Description ?? (method.GetXmlDocsRemarks() != "" ? method.GetXmlDocsRemarks() : null),
-                Message = GenerateMessage(method, publishOperationAttribute, schemaRepository),
+                OperationId = operationAttribute.OperationId ?? method.Name,
+                Summary = operationAttribute.Summary ?? method.GetXmlDocsSummary(),
+                Description = operationAttribute.Description ?? (method.GetXmlDocsRemarks() != "" ? method.GetXmlDocsRemarks() : null),
+                Message = GenerateMessage(method, operationAttribute, schemaRepository),
             };
 
-            var filterContext = new PublishOperationFilterContext(method, schemaRepository, publishOperationAttribute);
-            foreach (var filter in _options.PublishOperationFilters)
+            var filterContext = new OperationFiterContext(method, schemaRepository, operationAttribute);
+            foreach (var filter in _options.OperationFilters)
             {
-                filter.Apply(publish, filterContext);   
+                filter.Apply(operation, filterContext);
             }
-            
-            return publish;
+
+            return operation;
         }
 
-        private Message GenerateMessage(MethodInfo method, PublishOperationAttribute publishOperationAttribute, ISchemaRepository schemaRepository)
+        private Message GenerateMessage(MethodInfo method, OperationAttribute operationAttribute, ISchemaRepository schemaRepository)
         {
             var message = new Message
             {
-                Payload = _schemaGenerator.GenerateSchema(publishOperationAttribute.MessagePayloadType, schemaRepository),
+                Payload = _schemaGenerator.GenerateSchema(operationAttribute.MessagePayloadType, schemaRepository),
                 // todo: all the other properties... message has a lot!
             };
 
             return message;
-        }
-
-
-        /// <summary>
-        /// Generate the Subscribe operation of an AsyncApi Channel for the given method.
-        /// </summary>
-        /// <remarks>
-        /// Not implemented...
-        /// </remarks>
-        private Operation GenerateSubscribeOperation(MethodInfo method, ISchemaRepository schemaRepository)
-        {
-            return null;
         }
     }
 }

@@ -43,6 +43,6 @@ namespace Saunter.Generation
         /// <summary>
         /// A list of filters that will be applied to any generated Publish operations.
         /// </summary>
-        public IList<IPublishOperationFilter> PublishOperationFilters { get; } = new List<IPublishOperationFilter>();
+        public IList<OperationFilter> OperationFilters { get; } = new List<OperationFilter>();
     }
 }
