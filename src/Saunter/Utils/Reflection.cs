@@ -164,6 +164,22 @@ namespace Saunter.Utils
             return false;
         }
 
+        public static bool IsTimeSpan(this Type type)
+        {
+            if (type == typeof(TimeSpan))
+            {
+                return true;
+            }
+
+            if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))
+            {
+                var typeArgument = type.GetGenericArguments().Single();
+                return typeArgument.IsTimeSpan();
+            }
+
+            return false;
+        }
+
         public static string GetTitle(this PropertyInfo prop)
         {
             var displayAttribute = prop.GetCustomAttribute<DisplayAttribute>();
