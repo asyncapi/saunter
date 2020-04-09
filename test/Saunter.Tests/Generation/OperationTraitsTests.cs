@@ -24,8 +24,8 @@ namespace Saunter.Tests.Generation
                         }
                     }
                 };
-                
-                o.PublishOperationFilters.Add(new TestOperationTraitsFilter());
+
+                o.OperationFilters.Add(new TestOperationTraitsFilter());
             });
 
             var document = provider.GetDocument();
@@ -34,9 +34,9 @@ namespace Saunter.Tests.Generation
         }
         
         
-        private class TestOperationTraitsFilter : IPublishOperationFilter
+        private class TestOperationTraitsFilter : OperationFilter
         {
-            public void Apply(Operation publishOperation, PublishOperationFilterContext context)
+            public void Apply(Operation publishOperation, OperationFiterContext context)
             {
                 publishOperation.Traits.Add(new OperationTraitReference("exampleTrait"));
             }

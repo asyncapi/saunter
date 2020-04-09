@@ -5,24 +5,24 @@ using Saunter.Generation.SchemaGeneration;
 
 namespace Saunter.Generation.Filters
 {
-    public interface IPublishOperationFilter
+    public interface OperationFilter
     {
-        void Apply(Operation publishOperation, PublishOperationFilterContext context);
+        void Apply(Operation publishOperation, OperationFiterContext context);
     }
 
-    public class PublishOperationFilterContext
+    public class OperationFiterContext
     {
-        public PublishOperationFilterContext(MethodInfo method, ISchemaRepository schemaRepository, PublishOperationAttribute publishOperation)
+        public OperationFiterContext(MethodInfo method, ISchemaRepository schemaRepository, OperationAttribute operation)
         {
             Method = method;
             SchemaRepository = schemaRepository;
-            PublishOperation = publishOperation;
+            Operation = operation;
         }
         
         public MethodInfo Method { get; }
 
         public ISchemaRepository SchemaRepository { get; }
         
-        public PublishOperationAttribute PublishOperation { get; }
+        public OperationAttribute Operation { get; }
     }
 }
