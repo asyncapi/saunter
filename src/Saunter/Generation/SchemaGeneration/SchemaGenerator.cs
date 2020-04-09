@@ -159,6 +159,15 @@ namespace Saunter.Generation.SchemaGeneration
                 };
             }
 
+            if (type.IsTimeSpan())
+            {
+                return new Schema
+                {
+                    Type = "string",
+                    Format = "time-span"
+                };
+            }
+
             return null;
         }
 

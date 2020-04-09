@@ -171,6 +171,22 @@ namespace Saunter.Tests.Utils
             type.IsDateTime().ShouldBeFalse();
         }
 
+        [Theory]
+        [InlineData(typeof(TimeSpan))]
+        [InlineData(typeof(TimeSpan?))]
+        public void IsDateTime_True_WhenTypeIsTimeSpan(Type type)
+        {
+            type.IsTimeSpan().ShouldBeTrue();
+        }
+    
+        [Theory]
+        [InlineData(typeof(int))]
+        [InlineData(typeof(string))]
+        public void IsDateTime_False_WhenTypeIsTimeSpan(Type type)
+        {
+            type.IsTimeSpan().ShouldBeFalse();
+        }
+
         private class SomeClass
         {
             public string PropertyWithNothing { get; set; }
