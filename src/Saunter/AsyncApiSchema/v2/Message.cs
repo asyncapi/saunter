@@ -31,7 +31,7 @@ namespace Saunter.AsyncApiSchema.v2
 
         [JsonProperty("tags")]
         public ISet<Tag> Tags { get; set; } = new HashSet<Tag>();
-            
+
         [JsonProperty("externalDocs")]
         public ExternalDocumentation ExternalDocs { get; set; }
 
@@ -39,8 +39,8 @@ namespace Saunter.AsyncApiSchema.v2
         public MessageBindings Bindings { get; set; }
 
         [JsonProperty("examples")]
-        public IDictionary<string, object> Examples { get; set; } = new Dictionary<string, object>();
-        
+        public IList<IDictionary<string, object>> Examples { get; set; } = new List<IDictionary<string, object>>();
+
         [JsonProperty("traits")]
         public IList<IMessageTrait> Traits { get; set; } = new List<IMessageTrait>();
     }
