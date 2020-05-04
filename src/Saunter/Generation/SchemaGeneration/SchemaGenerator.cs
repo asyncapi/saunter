@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
 using Microsoft.Extensions.Options;
@@ -18,7 +18,7 @@ namespace Saunter.Generation.SchemaGeneration
         {
             _options = options.Value ?? throw new ArgumentNullException(nameof(options));
         }
-        
+
         public ISchema GenerateSchema(Type type, ISchemaRepository schemaRepository)
         {
             var schemaId = _options.SchemaIdSelector(type);
@@ -42,82 +42,88 @@ namespace Saunter.Generation.SchemaGeneration
                 return schema;
             }
 
-            schema = new Schema
+            var propertyAndFieldMembers = type.GetProperties().Cast<MemberInfo>()
+                .Concat(type.GetFields()).ToArray();
+
+            return CreateSchemaFromPropertyAndFieldMembers(schemaRepository, propertyAndFieldMembers);
+        }
+
+        private Schema CreateSchemaFromPropertyAndFieldMembers(ISchemaRepository schemaRepository, MemberInfo[] propertyAndFieldMembers)
+        {
+            var requiredMembers = new HashSet<string>();
+            var schema = new Schema
             {
                 Properties = new Dictionary<string, ISchema>()
             };
-            
-            var properties = type.GetProperties();
-            var requiredProperties = new HashSet<string>();
-            foreach (var prop in properties)
+
+            foreach (var member in propertyAndFieldMembers)
             {
-                var propName = GetPropName(prop);
-                var propType = prop.PropertyType;
-                
-                ISchema propSchema = GetSchemaIfPrimitive(propType);
-                
-                if (propSchema == null)
+                var underlyingTypeOfMember = Reflection.GetUnderlyingType(member);
+                var memberName = GetMemberName(member);
+
+                ISchema memberSchema = GetSchemaIfPrimitive(underlyingTypeOfMember);
+
+                if (memberSchema == null)
                 {
-                    propSchema = GetSchemaIfEnumerable(propType, schemaRepository);
-                    if (propSchema != null && propSchema is Schema s1) // todo: this better
+                    memberSchema = GetSchemaIfEnumerable(underlyingTypeOfMember, schemaRepository);
+                    if (memberSchema != null && memberSchema is Schema s1) // todo: this better
                     {
-                        s1.MinItems = prop.GetMinItems();
-                        s1.MaxItems = prop.GetMaxItems();
-                        s1.UniqueItems = prop.GetIsUniqueItems();
+                        s1.MinItems = member.GetMinItems();
+                        s1.MaxItems = member.GetMaxItems();
+                        s1.UniqueItems = member.GetIsUniqueItems();
                     }
 
-
-                    if (propSchema == null)
+                    if (memberSchema == null)
                     {
-                        propSchema = GenerateSchema(propType, schemaRepository);
+                        memberSchema = GenerateSchema(underlyingTypeOfMember, schemaRepository);
                     }
                 }
 
-                if (propSchema is Schema s2) // todo: this means we won't get anything on reference types.... is this okay???
+                if (memberSchema is Schema s2) // todo: this means we won't get anything on reference types.... is this okay???
                 {
-                    s2.Title = prop.GetTitle();
-                    s2.Description = prop.GetDescription();
-                    s2.Minimum = prop.GetMinimum();
-                    s2.Maximum = prop.GetMaximum();
-                    s2.MinLength = prop.GetMinLength();
-                    s2.MaxLength = prop.GetMaxLength();
-                    s2.Pattern = prop.GetPattern();
-                    s2.Example = prop.GetExample();
-                    
-                    if (prop.GetIsRequired())
+                    s2.Title = member.GetTitle();
+                    s2.Description = member.GetDescription();
+                    s2.Minimum = member.GetMinimum();
+                    s2.Maximum = member.GetMaximum();
+                    s2.MinLength = member.GetMinLength();
+                    s2.MaxLength = member.GetMaxLength();
+                    s2.Pattern = member.GetPattern();
+                    s2.Example = member.GetExample();
+
+                    if (member.GetIsRequired())
                     {
-                        requiredProperties.Add(_options.PropertyNameSelector(prop));
+                        requiredMembers.Add(member.Name);
                     }
                 }
 
-                schema.Properties.Add(propName, propSchema);
+                schema.Properties.Add(memberName, memberSchema);
             }
 
-            if (requiredProperties.Count > 0)
+            if (requiredMembers.Count > 0)
             {
-                schema.Required = requiredProperties;
+                schema.Required = requiredMembers;
             }
 
             return schema;
         }
-        
-        public string GetPropName(PropertyInfo prop)
+
+
+        public string GetMemberName(MemberInfo member)
         {
-            var jsonPropertyAttribute = prop.GetCustomAttribute<JsonPropertyAttribute>();
+            var jsonPropertyAttribute = member.GetCustomAttribute<JsonPropertyAttribute>();
             if (jsonPropertyAttribute?.PropertyName != null)
             {
                 return jsonPropertyAttribute.PropertyName;
             }
 
-            var dataMemberAttribute = prop.GetCustomAttribute<DataMemberAttribute>();
+            var dataMemberAttribute = member.GetCustomAttribute<DataMemberAttribute>();
             if (dataMemberAttribute?.Name != null)
             {
                 return dataMemberAttribute.Name;
             }
 
-            return _options.PropertyNameSelector(prop);
+            return member.Name;
         }
-
 
         private Schema GetSchemaIfPrimitive(Type type)
         {
@@ -125,7 +131,7 @@ namespace Saunter.Generation.SchemaGeneration
             {
                 return new Schema { Type = "integer" };
             }
-            
+
             if (type.IsNumber())
             {
                 return new Schema { Type = "number" };
@@ -149,7 +155,7 @@ namespace Saunter.Generation.SchemaGeneration
                     Enum = members,
                 };
             }
-            
+
             if (type.IsDateTime())
             {
                 return new Schema
@@ -180,15 +186,11 @@ namespace Saunter.Generation.SchemaGeneration
                     Type = "array",
                     Items = GenerateSchema(elementType, schemaRepository),
                 };
-                
+
                 return schema;
             }
 
             return null;
         }
-        
-        
-        
-        
     }
 }
