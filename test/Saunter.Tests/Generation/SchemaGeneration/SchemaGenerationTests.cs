@@ -14,7 +14,7 @@ namespace Saunter.Tests.Generation.SchemaGeneration
         public SchemaGenerationTests()
         {
             _schemaRepository = new SchemaRepository();
-            var options = new AsyncApiDocumentGeneratorOptions();
+            var options = new AsyncApiOptions();
 
             _schemaGenerator = new SchemaGenerator(Options.Create(options));
         }

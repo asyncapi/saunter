@@ -12,14 +12,14 @@ namespace Saunter.Generation.Filters
 
     public class ChannelItemFilterContext
     {
-        public ChannelItemFilterContext(MethodInfo method, ISchemaRepository schemaRepository, ChannelAttribute channel)
+        public ChannelItemFilterContext(MemberInfo member, ISchemaRepository schemaRepository, ChannelAttribute channel)
         {
-            Method = method;
+            Member = member;
             SchemaRepository = schemaRepository;
             Channel = channel;
         }
         
-        public MethodInfo Method { get; }
+        public MemberInfo Member { get; }
         
         public ISchemaRepository SchemaRepository { get; }
 

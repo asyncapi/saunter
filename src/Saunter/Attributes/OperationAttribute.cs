@@ -2,18 +2,14 @@
 
 namespace Saunter.Attributes
 {
-    [AttributeUsage(AttributeTargets.Method)]
+    [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class)]
     public abstract class OperationAttribute : Attribute
     {
-        public OperationAttribute(Type messagePayloadType)
-        {
-            MessagePayloadType = messagePayloadType;
-        }
-
-        public OperationType OperationType { get; set; }
+        public OperationType OperationType { get; protected set; }
+        
+        public Type MessagePayloadType { get; protected set; }
+        
         public string Summary { get; set; }
-
-        public Type MessagePayloadType { get; }
 
         public string OperationId { get; set; }
         
@@ -22,7 +18,13 @@ namespace Saunter.Attributes
 
     public class PublishOperationAttribute : OperationAttribute
     {
-        public PublishOperationAttribute(Type messagePayloadType) : base(messagePayloadType)
+        public PublishOperationAttribute(Type messagePayloadType)
+        {
+            OperationType = OperationType.Publish;
+            MessagePayloadType = messagePayloadType;
+        }
+
+        public PublishOperationAttribute()
         {
             OperationType = OperationType.Publish;
         }
@@ -30,9 +32,15 @@ namespace Saunter.Attributes
 
     public class SubscribeOperationAttribute : OperationAttribute
     {
-        public SubscribeOperationAttribute(Type messagePayloadType) : base(messagePayloadType)
+        public SubscribeOperationAttribute(Type messagePayloadType)
         {
-            OperationType = OperationType.Publish;
+            OperationType = OperationType.Subscribe;
+            MessagePayloadType = messagePayloadType;
+        }
+
+        public SubscribeOperationAttribute()
+        {
+            OperationType = OperationType.Subscribe;
         }
     }
 
@@ -41,4 +49,6 @@ namespace Saunter.Attributes
         Publish,
         Subscribe
     }
+    
+    
 }

@@ -7,15 +7,16 @@ namespace Saunter.Tests
 {
     public static class TestProviderFactory
     {
-        public static IAsyncApiDocumentProvider Provider(Action<AsyncApiDocumentGeneratorOptions> setupAction = null)
+        public static IAsyncApiDocumentProvider Provider(Action<AsyncApiOptions> setupAction = null)
         {
-            var options = new AsyncApiDocumentGeneratorOptions();
+            var options = new AsyncApiOptions();
             setupAction?.Invoke(options);
             var wrappedOptions = Options.Create(options);
             
             var schemaGenerator = new SchemaGenerator(wrappedOptions);
+            var documentGenerator = new DocumentGenerator(Options.Create(options), schemaGenerator);
             
-            return new AsyncApiDocumentGenerator(Options.Create(options), schemaGenerator);
+            return new AsyncApiDocumentProvider(Options.Create(options), documentGenerator);
         }
     }
 }

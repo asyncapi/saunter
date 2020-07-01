@@ -10,12 +10,12 @@ namespace Saunter
     public class AsyncApiMiddleware
     {
         private readonly RequestDelegate _next;
-        private readonly IOptions<AsyncApiOptions> _asyncApiOptionsAccessor;
+        private readonly IOptions<AsyncApiOptions> _options;
 
-        public AsyncApiMiddleware(RequestDelegate next, IOptions<AsyncApiOptions> asyncApiOptionsAccessor)
+        public AsyncApiMiddleware(RequestDelegate next, IOptions<AsyncApiOptions> options)
         {
             _next = next;
-            _asyncApiOptionsAccessor = asyncApiOptionsAccessor;
+            _options = options;
         }
 
         public async Task Invoke(HttpContext context, IAsyncApiDocumentProvider asyncApiDocumentProvider)
@@ -50,7 +50,7 @@ namespace Saunter
         private bool IsRequestingAsyncApiSchema(HttpRequest request)
         {
             return HttpMethods.IsGet(request.Method)
-                   && string.Equals(request.Path, _asyncApiOptionsAccessor.Value.Route, StringComparison.OrdinalIgnoreCase);
+                   && string.Equals(request.Path, _options.Value.Middleware.Route, StringComparison.OrdinalIgnoreCase);
         }
     }
 }
