@@ -73,10 +73,9 @@ namespace StreetlightsAPI
             };
             var payload = JsonConvert.SerializeObject(lightMeasuredEvent);
 
-            // Simulate publishing a message to the channel.
-            // In reality this would call some kind of pub/sub client library and publish.
-            // e.g. mqttClient.PublishAsync(message);
-            // e.g. amqpClient.BasicPublish(LightMeasuredTopic, routingKey, props, payloadBytes);
+            // Simulate subscribing to a channel.
+            // In reality this would call some kind of pub/sub client library to subscribe.
+            // e.g. amqpClient.BasicConsume(LightMeasuredTopic, ...);
             _logger.LogInformation("Subscribing to {Topic} with payload {Payload} ", payload, SubscribeLightMeasuredTopic);
         }
     }

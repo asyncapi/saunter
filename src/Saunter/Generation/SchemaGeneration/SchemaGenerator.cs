@@ -12,9 +12,9 @@ namespace Saunter.Generation.SchemaGeneration
 {
     public class SchemaGenerator : ISchemaGenerator
     {
-        private readonly AsyncApiDocumentGeneratorOptions _options;
+        private readonly AsyncApiOptions _options;
 
-        public SchemaGenerator(IOptions<AsyncApiDocumentGeneratorOptions> options)
+        public SchemaGenerator(IOptions<AsyncApiOptions> options)
         {
             _options = options.Value ?? throw new ArgumentNullException(nameof(options));
         }

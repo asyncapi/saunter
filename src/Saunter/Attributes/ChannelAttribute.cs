@@ -2,7 +2,7 @@ using System;
 
 namespace Saunter.Attributes
 {
-    [AttributeUsage(AttributeTargets.Method)]
+    [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class)]
     public class ChannelAttribute : Attribute
     {
         public string Name { get; }

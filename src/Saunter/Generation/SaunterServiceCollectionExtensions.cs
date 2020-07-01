@@ -7,11 +7,12 @@ namespace Saunter.Generation
 {
     public static class SaunterServiceCollectionExtensions
     {
-        public static IServiceCollection AddAsyncApiSchemaGeneration(this IServiceCollection services, Action<AsyncApiDocumentGeneratorOptions> setupAction)
+        public static IServiceCollection AddAsyncApiSchemaGeneration(this IServiceCollection services, Action<AsyncApiOptions> setupAction)
         {
             services.AddOptions();
             
-            services.TryAddTransient<IAsyncApiDocumentProvider, AsyncApiDocumentGenerator>();
+            services.TryAddTransient<IAsyncApiDocumentProvider, AsyncApiDocumentProvider>();
+            services.TryAddTransient<IDocumentGenerator, DocumentGenerator>();
             services.TryAddTransient<ISchemaGenerator, SchemaGenerator>();
             
             if (setupAction != null) services.Configure(setupAction);
