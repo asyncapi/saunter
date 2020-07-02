@@ -67,7 +67,7 @@ See [examples/StreetlightsAPI](examples/StreetlightsAPI).
 
 5. Use the published AsyncApi document:
 
-    ```json
+    ```jsonc
     // HTTP GET /asyncapi/asyncapi.json
     {
         // Properties from Startup.cs
