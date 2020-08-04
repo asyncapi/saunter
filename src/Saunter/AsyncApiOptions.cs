@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using Newtonsoft.Json.Serialization;
 using Saunter.AsyncApiSchema.v2;
+using Saunter.Generation;
 using Saunter.Generation.Filters;
 
 namespace Saunter
@@ -23,7 +24,7 @@ namespace Saunter
         /// <summary>
         /// A function to select a schemaId for a type.
         /// </summary>
-        public Func<Type, string> SchemaIdSelector { get; set; } = type => new CamelCaseNamingStrategy().GetPropertyName(type.Name, false);
+        public Func<Type, string> SchemaIdSelector { get; set; } = DefaultSchemaIdFactory.Generate;
 
         /// <summary>
         /// A function to select the name for a property.

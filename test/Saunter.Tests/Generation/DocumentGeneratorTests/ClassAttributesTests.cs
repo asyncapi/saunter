@@ -44,21 +44,7 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
             messages.OneOf.ShouldContain(m => m.Name == "tenantUpdated");
             messages.OneOf.ShouldContain(m => m.Name == "tenantRemoved");
         }
-        
-        
-        public class TenantCreated {}
-    
-        public class TenantUpdated {}
-    
-        public class TenantRemoved {}
-    
-        public interface ITenantMessageConsumer
-        {
-            void SubscribeTenantCreatedEvent(Guid tenantId, TenantCreated evnt);
-            void SubscribeTenantUpdatedEvent(Guid tenantId, TenantUpdated evnt);
-            void SubscribeTenantRemovedEvent(Guid tenantId, TenantRemoved evnt);
-        }
-    
+
         [AsyncApi]
         [Channel("asw.tenant_service.tenants_history", Description = "Tenant events.")]
         [SubscribeOperation(OperationId = "TenantMessageConsumer", Summary = "Subscribe to domains events about tenants.")]
@@ -73,5 +59,18 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
             [Message(typeof(TenantRemoved))]
             public void SubscribeTenantRemovedEvent(Guid tenantId, TenantRemoved evnt) {}
         }
+    }
+    
+    public class TenantCreated {}
+    
+    public class TenantUpdated {}
+    
+    public class TenantRemoved {}
+    
+    public interface ITenantMessageConsumer
+    {
+        void SubscribeTenantCreatedEvent(Guid tenantId, TenantCreated evnt);
+        void SubscribeTenantUpdatedEvent(Guid tenantId, TenantUpdated evnt);
+        void SubscribeTenantRemovedEvent(Guid tenantId, TenantRemoved evnt);
     }
 }

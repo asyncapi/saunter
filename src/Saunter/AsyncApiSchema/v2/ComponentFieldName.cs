@@ -8,6 +8,8 @@ namespace Saunter.AsyncApiSchema.v2
         private readonly string value;
 
         private const string ValidRegex = @"^[a-zA-Z0-9\.\-_]+$";
+        
+        public static readonly string InvalidRegex = @"[^a-zA-Z0-9\.\-_]";
 
         public ComponentFieldName(string fieldName)
         {
