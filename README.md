@@ -90,8 +90,9 @@ See [examples/StreetlightsAPI](examples/StreetlightsAPI).
 
 ## Contributing
 
-Feel free to get involved in the project by opening issues, or submitting pull requests.
+See our [contributing guide](./CONTRIBUTING.md).
 
+Feel free to get involved in the project by opening issues, or submitting pull requests.
 
 ## Thanks
 

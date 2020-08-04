@@ -68,6 +68,19 @@ namespace Saunter.Utils
             return false;
         }
 
+        public static bool IsGuid(this Type type)
+        {
+            if (type == typeof(Guid)) return true;
+
+            if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))
+            {
+                var typeArgument = type.GetGenericArguments().Single();
+                return typeArgument.IsGuid();
+            }
+
+            return false;
+        }
+
         public static bool IsEnumerable(this Type type, out Type elementType)
         {
             // Special case for string which is also an IEnumerable<char>,

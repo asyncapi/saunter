@@ -173,6 +173,15 @@ namespace Saunter.Generation.SchemaGeneration
                     Format = "time-span"
                 };
             }
+            
+            if (type.IsGuid())
+            {
+                return new Schema
+                {
+                    Type = "string",
+                    Format = "uuid",
+                };
+            }
 
             return null;
         }

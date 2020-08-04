@@ -98,6 +98,21 @@ namespace Saunter.Tests.Utils
             type.IsBoolean().ShouldBeFalse();
         }
 
+        [Theory]
+        [InlineData(typeof(string))]
+        [InlineData(typeof(int))]
+        public void IsGuid_False_WhenTypeIsNotGuid(Type type)
+        {
+            type.IsGuid().ShouldBeFalse();
+        }
+
+        [Theory]
+        [InlineData(typeof(Guid))]
+        [InlineData(typeof(Guid?))]
+        public void IsGuid_True_WhenTypeIsGuid(Type type)
+        {
+            type.IsGuid().ShouldBeTrue();
+        }
 
         private class CustomEnumerableType : IEnumerable<string>
         {
