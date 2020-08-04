@@ -1,5 +1,5 @@
+using System;
 using Microsoft.Extensions.Options;
-using Saunter.Generation;
 using Saunter.Generation.SchemaGeneration;
 using Shouldly;
 using Xunit;
@@ -52,7 +52,7 @@ namespace Saunter.Tests.Generation.SchemaGeneration
 
     public class Foo
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         public Bar Bar { get; set; }
     }
