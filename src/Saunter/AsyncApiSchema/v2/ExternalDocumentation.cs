@@ -1,5 +1,6 @@
 using System;
-using Newtonsoft.Json;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Saunter.AsyncApiSchema.v2 {
     public class ExternalDocumentation
@@ -9,10 +10,10 @@ namespace Saunter.AsyncApiSchema.v2 {
             Url = url ?? throw new ArgumentNullException(nameof(url));
         }
 
-        [JsonProperty("description")]
+        [JsonPropertyName("description")]
         public string Description { get; set; }
         
-        [JsonProperty("url")]
+        [JsonPropertyName("url")]
         public string Url { get; }
     }
 }

@@ -1,5 +1,6 @@
 using System;
-using Newtonsoft.Json;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Saunter.AsyncApiSchema.v2
 {
@@ -10,13 +11,13 @@ namespace Saunter.AsyncApiSchema.v2
             Name = name ?? throw new ArgumentNullException(nameof(name));
         }
 
-        [JsonProperty("name")]
+        [JsonPropertyName("name")]
         public string Name { get; }
 
-        [JsonProperty("description")]
+        [JsonPropertyName("description")]
         public string Description { get; set; }
 
-        [JsonProperty("externalDocs")]
+        [JsonPropertyName("externalDocs")]
         public ExternalDocumentation ExternalDocs { get; set; }
 
         public static implicit operator Tag(string s)

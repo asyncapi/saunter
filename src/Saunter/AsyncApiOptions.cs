@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
-using Newtonsoft.Json.Serialization;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Saunter.AsyncApiSchema.v2;
 using Saunter.Generation;
 using Saunter.Generation.Filters;
@@ -29,7 +30,7 @@ namespace Saunter
         /// <summary>
         /// A function to select the name for a property.
         /// </summary>
-        public Func<PropertyInfo, string> PropertyNameSelector { get; set; } = prop => new CamelCaseNamingStrategy().GetPropertyName(prop.Name, false); 
+        public Func<PropertyInfo, string> PropertyNameSelector { get; set; } = prop => JsonNamingPolicy.CamelCase.ConvertName(prop.Name);
         
         /// <summary>
         /// A list of filters that will be applied to the generated AsyncAPI document.

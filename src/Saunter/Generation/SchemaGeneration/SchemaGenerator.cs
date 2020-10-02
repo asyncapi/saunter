@@ -4,7 +4,8 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Saunter.AsyncApiSchema.v2;
 using Saunter.Utils;
 
@@ -110,10 +111,10 @@ namespace Saunter.Generation.SchemaGeneration
 
         public string GetMemberName(MemberInfo member)
         {
-            var jsonPropertyAttribute = member.GetCustomAttribute<JsonPropertyAttribute>();
-            if (jsonPropertyAttribute?.PropertyName != null)
+            var jsonPropertyAttribute = member.GetCustomAttribute<JsonPropertyNameAttribute>();
+            if (jsonPropertyAttribute?.Name != null)
             {
-                return jsonPropertyAttribute.PropertyName;
+                return jsonPropertyAttribute.Name;
             }
 
             var dataMemberAttribute = member.GetCustomAttribute<DataMemberAttribute>();

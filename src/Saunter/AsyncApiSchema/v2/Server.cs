@@ -1,5 +1,6 @@
 using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Saunter.AsyncApiSchema.v2 {
     public class Server
@@ -10,25 +11,25 @@ namespace Saunter.AsyncApiSchema.v2 {
             Protocol = protocol;
         }
 
-        [JsonProperty("url")]
+        [JsonPropertyName("url")]
         public string Url { get; }
 
-        [JsonProperty("protocol")]
+        [JsonPropertyName("protocol")]
         public string Protocol { get; }
 
-        [JsonProperty("protocolVersion")]
+        [JsonPropertyName("protocolVersion")]
         public string ProtocolVersion { get; set; }
 
-        [JsonProperty("description")]
+        [JsonPropertyName("description")]
         public string Description { get; set; }
 
-        [JsonProperty("variables")]
+        [JsonPropertyName("variables")]
         public IDictionary<string, ServerVariable> Variables { get; set; }
 
-        [JsonProperty("security")]
+        [JsonPropertyName("security")]
         public IList<SecurityRequirement> Security { get; set; }
 
-        [JsonProperty("bindings")]
+        [JsonPropertyName("bindings")]
         public ServerBindings Bindings { get; set; }
     }
 }
