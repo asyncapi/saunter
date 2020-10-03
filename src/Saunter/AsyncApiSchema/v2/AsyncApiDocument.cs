@@ -10,7 +10,6 @@ namespace Saunter.AsyncApiSchema.v2
         public AsyncApiVersionString AsyncApi { get; } = AsyncApiVersionString.v2;
         
         [JsonPropertyName("id")]
-        [JsonConverter(typeof(Identifier.JsonConverter))]
         public Identifier Id { get; set; }
 
         [JsonPropertyName("info")]

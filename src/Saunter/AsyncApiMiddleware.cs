@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using System.Text.Json;
+using Saunter.Utils;
 
 namespace Saunter
 {
@@ -39,6 +40,7 @@ namespace Saunter
                 {
                     WriteIndented = false,
                     IgnoreNullValues = true,
+                    Converters = { new DictionaryKeyToStringConverter() },
                 }
             );
 

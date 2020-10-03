@@ -1,8 +1,10 @@
 using System;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Saunter.AsyncApiSchema.v2 
 {
+    [JsonConverter(typeof(JsonConverter))]
     public class Identifier
     {
         private readonly Uri value;
@@ -19,7 +21,7 @@ namespace Saunter.AsyncApiSchema.v2
             return value.ToString();
         }
 
-        public class JsonConverter : System.Text.Json.Serialization.JsonConverter<Identifier>
+        public class JsonConverter : JsonConverter<Identifier>
         {
             public override bool CanConvert(Type objectType)
             {
