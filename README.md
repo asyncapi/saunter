@@ -1,3 +1,8 @@
+## Hacktoberfest
+🎃 I'm accepting [Hacktoberfest](https://hacktoberfest.digitalocean.com/) contributions - Please check the Issues, or create a new Issue before raising a Pull Request 🎃
+
+---
+
 # Saunter
 
 ![CI](https://github.com/tehmantra/saunter/workflows/CI/badge.svg)
