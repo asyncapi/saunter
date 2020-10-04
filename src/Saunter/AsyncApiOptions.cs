@@ -54,9 +54,11 @@ namespace Saunter
 
     public class AsyncApiMiddlewareOptions
     {
+        public const string AsyncApiMiddlewareDefaultRoute = "/asyncapi/asyncapi.json";
+
         /// <summary>
         /// The route which the AsyncApi document will be hosted
         /// </summary>
-        public string Route { get; set; } = "/asyncapi/asyncapi.json";
+        public string Route { get; set; } = AsyncApiMiddlewareDefaultRoute;
     }
 }

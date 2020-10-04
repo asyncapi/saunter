@@ -72,10 +72,10 @@ namespace StreetlightsAPI
             app.UseRouting();
             app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyMethod());
 
-            app.UseMiddleware<AsyncApiMiddleware>();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapAsyncApiDocuments();
             });
         }
     }
