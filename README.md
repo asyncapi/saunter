@@ -67,7 +67,10 @@ See [examples/StreetlightsAPI](examples/StreetlightsAPI).
 4. Add saunter middleware to host the AsyncApi json document. In the `Configure` method of `Startup.cs`:
 
     ```csharp
-    app.UseMiddleware<AsyncApiMiddleware>();
+    app.UseEndpoints(endpoints =>
+    {
+        endpoints.MapAsyncApiDocuments();
+    });
     ```
 
 5. Use the published AsyncApi document:
