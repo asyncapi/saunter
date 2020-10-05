@@ -40,16 +40,12 @@ namespace Saunter.Utils
             JsonConverter<IDictionary<TKey, TValue>>
         {
             private readonly JsonConverter<TValue> _valueConverter;
-            private readonly Type _valueType;
 
             public DictionaryKeyToStringConverterInner(JsonSerializerOptions options)
             {
                 // For performance, use the existing converter if available.
                 _valueConverter = (JsonConverter<TValue>)options
                     .GetConverter(typeof(TValue));
-
-                // Cache the key and value types.
-                _valueType = typeof(TValue);
             }
 
             public override IDictionary<TKey, TValue> Read(

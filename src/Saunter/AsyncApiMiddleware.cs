@@ -40,7 +40,11 @@ namespace Saunter
                 {
                     WriteIndented = false,
                     IgnoreNullValues = true,
-                    Converters = { new DictionaryKeyToStringConverter() },
+                    Converters =
+                    {
+                        new DictionaryKeyToStringConverter(),
+                        new InterfaceImplementationConverter(),
+                    },
                 }
             );
 
