@@ -1,3 +1,8 @@
+## Hacktoberfest
+🎃 I'm accepting [Hacktoberfest](https://hacktoberfest.digitalocean.com/) contributions - Please check the Issues, or create a new Issue before raising a Pull Request 🎃
+
+---
+
 # Saunter
 
 ![CI](https://github.com/tehmantra/saunter/workflows/CI/badge.svg)
@@ -62,7 +67,10 @@ See [examples/StreetlightsAPI](examples/StreetlightsAPI).
 4. Add saunter middleware to host the AsyncApi json document. In the `Configure` method of `Startup.cs`:
 
     ```csharp
-    app.UseMiddleware<AsyncApiMiddleware>();
+    app.UseEndpoints(endpoints =>
+    {
+        endpoints.MapAsyncApiDocuments();
+    });
     ```
 
 5. Use the published AsyncApi document:
