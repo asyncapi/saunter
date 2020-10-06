@@ -111,24 +111,29 @@ namespace Saunter.Generation.SchemaGeneration
 
         public string GetMemberName(MemberInfo member)
         {
+            var memberName = member.Name;
+
             var jsonPropertyAttribute = member.GetCustomAttribute<JsonPropertyNameAttribute>();
             if (jsonPropertyAttribute?.Name != null)
             {
-                return jsonPropertyAttribute.Name;
+                memberName = jsonPropertyAttribute.Name;
             }
-
-            var dataMemberAttribute = member.GetCustomAttribute<DataMemberAttribute>();
-            if (dataMemberAttribute?.Name != null)
+            else
             {
-                return dataMemberAttribute.Name;
+                var dataMemberAttribute = member.GetCustomAttribute<DataMemberAttribute>();
+                if (dataMemberAttribute?.Name != null)
+                {
+                    memberName = dataMemberAttribute.Name;
+                }
             }
+            
 
             if (_options.PropertyNameSelector != null)
             {
-                return _options.PropertyNameSelector(member);
+                return _options.PropertyNameSelector(memberName);
             }
 
-            return member.Name;
+            return memberName;
         }
 
         private Schema GetSchemaIfPrimitive(Type type)

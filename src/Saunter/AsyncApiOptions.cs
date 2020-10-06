@@ -30,7 +30,7 @@ namespace Saunter
         /// <summary>
         /// A function to select the name for a property.
         /// </summary>
-        public Func<MemberInfo, string> PropertyNameSelector { get; set; } = prop => JsonNamingPolicy.CamelCase.ConvertName(prop.Name);
+        public Func<string, string> PropertyNameSelector { get; set; } = name => JsonNamingPolicy.CamelCase.ConvertName(name);
         
         /// <summary>
         /// A list of filters that will be applied to the generated AsyncAPI document.
