@@ -29,6 +29,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
     })
     ```
 
+### Fixed
+- `AsyncApiOptions.PropertyNameSelector` was not being used
+
 
 ## [v0.2.0] - 2020-08-04
 ### Added
