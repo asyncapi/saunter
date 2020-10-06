@@ -1,6 +1,10 @@
 using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
+using Saunter.Utils;
 
-namespace Saunter.AsyncApiSchema.v2 {
+namespace Saunter.AsyncApiSchema.v2
+{
+    [JsonConverter(typeof(EnumMemberConverter))]
     public enum SecuritySchemeType
     {
         [EnumMember(Value = "userPassword")]

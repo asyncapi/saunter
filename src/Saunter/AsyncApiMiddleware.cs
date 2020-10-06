@@ -3,7 +3,8 @@ using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
+using System.Text.Json;
+using Saunter.Utils;
 
 namespace Saunter
 {
@@ -33,13 +34,19 @@ namespace Saunter
 
         private async Task RespondWithAsyncApiSchemaJson(HttpResponse response, AsyncApiSchema.v2.AsyncApiDocument asyncApiSchema)
         {
-            var asyncApiSchemaJson = JsonConvert.SerializeObject(
-                asyncApiSchema, 
-                Formatting.None,
-                new JsonSerializerSettings
+            var asyncApiSchemaJson = JsonSerializer.Serialize(
+                asyncApiSchema,
+                new JsonSerializerOptions
+                {
+                    WriteIndented = false,
+                    IgnoreNullValues = true,
+                    Converters =
                     {
-                       NullValueHandling = NullValueHandling.Ignore
-                    });
+                        new DictionaryKeyToStringConverter(),
+                        new InterfaceImplementationConverter(),
+                    },
+                }
+            );
 
             response.StatusCode = (int) HttpStatusCode.OK;
             response.ContentType = "application/json";

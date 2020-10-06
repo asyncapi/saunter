@@ -1,38 +1,36 @@
 using System.Collections.Generic;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
+using System.Text.Json.Serialization;
 
 namespace Saunter.AsyncApiSchema.v2
 {
     public class AsyncApiDocument
     {
-        [JsonProperty("asyncapi")]
-        [JsonConverter(typeof(StringEnumConverter))]
+        [JsonPropertyName("asyncapi")]
+        [JsonConverter(typeof(JsonStringEnumConverter))]
         public AsyncApiVersionString AsyncApi { get; } = AsyncApiVersionString.v2;
         
-        [JsonProperty("id")]
-        [JsonConverter(typeof(Identifier.JsonConverter))]
+        [JsonPropertyName("id")]
         public Identifier Id { get; set; }
 
-        [JsonProperty("info")]
+        [JsonPropertyName("info")]
         public Info Info { get; set; }
 
-        [JsonProperty("servers")]
+        [JsonPropertyName("servers")]
         public Servers Servers { get; } = new Servers();
 
-        [JsonProperty("defaultContentType")]
+        [JsonPropertyName("defaultContentType")]
         public string DefaultContentType { get; set; } = "application/json";
 
-        [JsonProperty("channels")]
+        [JsonPropertyName("channels")]
         public Channels Channels { get; set; } = new Channels();
 
-        [JsonProperty("components")]
+        [JsonPropertyName("components")]
         public Components Components { get; } = new Components();
 
-        [JsonProperty("tags")]
+        [JsonPropertyName("tags")]
         public ISet<Tag> Tags { get; } = new HashSet<Tag>();
 
-        [JsonProperty("externalDocs")]
+        [JsonPropertyName("externalDocs")]
         public ExternalDocumentation ExternalDocs { get; set; }
     }
 }

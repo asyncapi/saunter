@@ -1,6 +1,6 @@
 using System;
+using System.Text.Json;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using Saunter.Attributes;
 
 namespace StreetlightsAPI
@@ -52,7 +52,7 @@ namespace StreetlightsAPI
                 Lumens = lumens,
                 SentAt = DateTime.Now,
             };
-            var payload = JsonConvert.SerializeObject(lightMeasuredEvent);
+            var payload = JsonSerializer.Serialize(lightMeasuredEvent);
 
             // Simulate publishing a message to the channel.
             // In reality this would call some kind of pub/sub client library and publish.
@@ -71,7 +71,7 @@ namespace StreetlightsAPI
                 Lumens = lumens,
                 SentAt = DateTime.Now,
             };
-            var payload = JsonConvert.SerializeObject(lightMeasuredEvent);
+            var payload = JsonSerializer.Serialize(lightMeasuredEvent);
 
             // Simulate subscribing to a channel.
             // In reality this would call some kind of pub/sub client library to subscribe.

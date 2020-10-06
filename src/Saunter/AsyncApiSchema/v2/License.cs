@@ -1,4 +1,5 @@
-using Newtonsoft.Json;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Saunter.AsyncApiSchema.v2 {
     public class License
@@ -8,10 +9,10 @@ namespace Saunter.AsyncApiSchema.v2 {
             Name = name;
         }
 
-        [JsonProperty("name")]
+        [JsonPropertyName("name")]
         public string Name { get; }
 
-        [JsonProperty("url")]
+        [JsonPropertyName("url")]
         public string Url { get; set; }
     }
 }

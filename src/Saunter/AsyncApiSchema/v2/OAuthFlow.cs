@@ -1,19 +1,20 @@
 using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Saunter.AsyncApiSchema.v2 {
     public class OAuthFlow
     {
-        [JsonProperty("authorizationUrl")]
+        [JsonPropertyName("authorizationUrl")]
         public string AuthorizationUrl { get; set; }
 
-        [JsonProperty("tokenUrl")]
+        [JsonPropertyName("tokenUrl")]
         public string TokenUrl { get; set; }
 
-        [JsonProperty("refreshUrl")]
+        [JsonPropertyName("refreshUrl")]
         public string RefreshUrl { get; set; }
 
-        [JsonProperty("scopes")]
+        [JsonPropertyName("scopes")]
         public IDictionary<string,string> Scopes { get; set; }
     }
 }

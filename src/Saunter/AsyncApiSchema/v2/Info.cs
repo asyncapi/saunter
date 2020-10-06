@@ -1,5 +1,6 @@
 using System;
-using Newtonsoft.Json;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Saunter.AsyncApiSchema.v2 {
     public class Info
@@ -10,22 +11,22 @@ namespace Saunter.AsyncApiSchema.v2 {
             Version = version ?? throw new ArgumentNullException(nameof(version));
         }
 
-        [JsonProperty("title")]
+        [JsonPropertyName("title")]
         public string Title { get; }
 
-        [JsonProperty("version")]
+        [JsonPropertyName("version")]
         public string Version { get; set; }
 
-        [JsonProperty("description")]
+        [JsonPropertyName("description")]
         public string Description { get; set; }
 
-        [JsonProperty("termsOfService")]
+        [JsonPropertyName("termsOfService")]
         public string TermsOfService { get; set; }
 
-        [JsonProperty("contact")]
+        [JsonPropertyName("contact")]
         public Contact Contact { get; set; }
 
-        [JsonProperty("license")]
+        [JsonPropertyName("license")]
         public License License { get; set; }
     }
 }
