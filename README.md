@@ -106,5 +106,4 @@ Feel free to get involved in the project by opening issues, or submitting pull r
 
 * This project is heavily inspired by [Swashbuckle](https://github.com/domaindrivendev/Swashbuckle.AspNetCore).
 * We use [Namotion.Reflection](https://github.com/RicoSuter/Namotion.Reflection) for pulling xml documentation.
-* And [Newtonsoft.Json](https://github.com/JamesNK/Newtonsoft.Json) for serialization.
 
