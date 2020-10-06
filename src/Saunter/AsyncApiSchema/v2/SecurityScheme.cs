@@ -11,7 +11,6 @@ namespace Saunter.AsyncApiSchema.v2
         }
 
         [JsonPropertyName("type")]
-        [JsonConverter(typeof(JsonStringEnumConverter))]
         public SecuritySchemeType Type { get; }
 
         [JsonPropertyName("description")]

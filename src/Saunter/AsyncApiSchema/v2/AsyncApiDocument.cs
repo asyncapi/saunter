@@ -6,7 +6,6 @@ namespace Saunter.AsyncApiSchema.v2
     public class AsyncApiDocument
     {
         [JsonPropertyName("asyncapi")]
-        [JsonConverter(typeof(JsonStringEnumConverter))]
         public AsyncApiVersionString AsyncApi { get; } = AsyncApiVersionString.v2;
         
         [JsonPropertyName("id")]
