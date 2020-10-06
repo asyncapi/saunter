@@ -123,6 +123,11 @@ namespace Saunter.Generation.SchemaGeneration
                 return dataMemberAttribute.Name;
             }
 
+            if (_options.PropertyNameSelector != null)
+            {
+                return _options.PropertyNameSelector(member);
+            }
+
             return member.Name;
         }
 

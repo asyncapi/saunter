@@ -29,9 +29,14 @@ namespace Saunter.Tests.Generation.SchemaGeneration
             schema.ShouldNotBeNull();
             _schemaRepository.Schemas.ShouldNotBeNull();
             _schemaRepository.Schemas.ContainsKey("foo").ShouldBeTrue();
-            _schemaRepository.Schemas["foo"].Properties.Count.ShouldBe(2);
+            _schemaRepository.Schemas["foo"].Properties.Count.ShouldBe(3);
+            _schemaRepository.Schemas["foo"].Properties.ContainsKey("id").ShouldBeTrue();
+            _schemaRepository.Schemas["foo"].Properties.ContainsKey("bar").ShouldBeTrue();
+            _schemaRepository.Schemas["foo"].Properties.ContainsKey("fooType").ShouldBeTrue();
             _schemaRepository.Schemas.ContainsKey("bar").ShouldBeTrue();
             _schemaRepository.Schemas["bar"].Properties.Count.ShouldBe(2);
+            _schemaRepository.Schemas["bar"].Properties.ContainsKey("name").ShouldBeTrue();
+            _schemaRepository.Schemas["bar"].Properties.ContainsKey("cost").ShouldBeTrue();
         }
 
         [Fact]
@@ -46,7 +51,10 @@ namespace Saunter.Tests.Generation.SchemaGeneration
             _schemaRepository.Schemas.ContainsKey("book").ShouldBeTrue();
             _schemaRepository.Schemas["book"].Properties.Count.ShouldBe(4);
             _schemaRepository.Schemas.ContainsKey("foo").ShouldBeTrue();
-            _schemaRepository.Schemas["foo"].Properties.Count.ShouldBe(2);
+            _schemaRepository.Schemas["foo"].Properties.Count.ShouldBe(3);
+            _schemaRepository.Schemas["foo"].Properties.ContainsKey("id").ShouldBeTrue();
+            _schemaRepository.Schemas["foo"].Properties.ContainsKey("bar").ShouldBeTrue();
+            _schemaRepository.Schemas["foo"].Properties.ContainsKey("fooType").ShouldBeTrue();
         }
     }
 
@@ -55,6 +63,13 @@ namespace Saunter.Tests.Generation.SchemaGeneration
         public Guid Id { get; set; }
 
         public Bar Bar { get; set; }
+        public FooType FooType { get; set; }
+    }
+
+    public enum FooType
+    {
+        Foo,
+        Bar
     }
 
     public class Bar

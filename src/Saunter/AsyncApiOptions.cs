@@ -15,7 +15,7 @@ namespace Saunter
         /// The base asyncapi schema.
         /// This will be augmented with other information auto-discovered from attributes.
         /// </summary>
-        public AsyncApiSchema.v2.AsyncApiDocument AsyncApi { get; set; } = new AsyncApiDocument();
+        public AsyncApiDocument AsyncApi { get; set; } = new AsyncApiDocument();
 
         /// <summary>
         /// A list of marker types from assemblies to scan for Saunter attributes.
@@ -30,7 +30,7 @@ namespace Saunter
         /// <summary>
         /// A function to select the name for a property.
         /// </summary>
-        public Func<PropertyInfo, string> PropertyNameSelector { get; set; } = prop => JsonNamingPolicy.CamelCase.ConvertName(prop.Name);
+        public Func<MemberInfo, string> PropertyNameSelector { get; set; } = prop => JsonNamingPolicy.CamelCase.ConvertName(prop.Name);
         
         /// <summary>
         /// A list of filters that will be applied to the generated AsyncAPI document.
