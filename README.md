@@ -96,6 +96,13 @@ See [examples/StreetlightsAPI](examples/StreetlightsAPI).
     }
     ```
 
+## Changelog
+
+This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
+
+See [CHANGELOG.md](./CHANGELOG.md) for all changes.
+
+
 ## Contributing
 
 See our [contributing guide](./CONTRIBUTING.md).
