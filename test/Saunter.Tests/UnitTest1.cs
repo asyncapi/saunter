@@ -16,6 +16,8 @@ namespace Saunter.Tests
         [Fact]
         public void Test1()
         {
+            Assert.False(true);
+            
             var services = new ServiceCollection() as IServiceCollection;
             services.AddAsyncApiSchemaGeneration(options =>
                 {
