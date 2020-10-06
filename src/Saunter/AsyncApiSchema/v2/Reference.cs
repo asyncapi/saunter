@@ -1,5 +1,6 @@
 using System;
-using Newtonsoft.Json;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Saunter.AsyncApiSchema.v2
 {
@@ -17,7 +18,7 @@ namespace Saunter.AsyncApiSchema.v2
         private readonly string _id;
         private readonly ReferenceType _type;
 
-        [JsonProperty("$ref")]
+        [JsonPropertyName("$ref")]
         public string Ref => _type.GetReferencePath(_id);
     }
     

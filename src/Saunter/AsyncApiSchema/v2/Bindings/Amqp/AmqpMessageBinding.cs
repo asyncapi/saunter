@@ -1,4 +1,5 @@
-using Newtonsoft.Json;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Saunter.AsyncApiSchema.v2.Bindings.Amqp
 {
@@ -7,13 +8,13 @@ namespace Saunter.AsyncApiSchema.v2.Bindings.Amqp
     /// </remarks>
     public class AmqpMessageBinding : IMessageBinding
     {
-        [JsonProperty("contentEncoding")]
+        [JsonPropertyName("contentEncoding")]
         public string ContentEncoding { get; set; }
 
-        [JsonProperty("messageType")]
+        [JsonPropertyName("messageType")]
         public string MessageType { get; set; }
 
-        [JsonProperty("bindingVersion")]
+        [JsonPropertyName("bindingVersion")]
         public string BindingVersion { get; set; }
     }
 }

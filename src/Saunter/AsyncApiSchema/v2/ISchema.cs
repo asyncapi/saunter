@@ -1,5 +1,6 @@
 using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Saunter.AsyncApiSchema.v2 
 {
@@ -13,55 +14,55 @@ namespace Saunter.AsyncApiSchema.v2
     /// </summary>
     public class Schema : ISchema
     {
-        [JsonProperty("type")]
+        [JsonPropertyName("type")]
         public string Type { get; set; }
 
-        [JsonProperty("title")]
+        [JsonPropertyName("title")]
         public string Title { get; set; }
         
-        [JsonProperty("format")]
+        [JsonPropertyName("format")]
         public string Format { get; set; }
         
-        [JsonProperty("description")]
+        [JsonPropertyName("description")]
         public string Description { get; set; }
         
-        [JsonProperty("minimum")]
+        [JsonPropertyName("minimum")]
         public decimal? Minimum { get; set; }
         
-        [JsonProperty("maximum")]
+        [JsonPropertyName("maximum")]
         public decimal? Maximum { get; set; }
         
-        [JsonProperty("maxLength")]
+        [JsonPropertyName("maxLength")]
         public int? MaxLength { get; set; }
         
-        [JsonProperty("minLength")]
+        [JsonPropertyName("minLength")]
         public int? MinLength { get; set; }
         
-        [JsonProperty("minItems")]
+        [JsonPropertyName("minItems")]
         public int? MinItems { get; set; }
         
-        [JsonProperty("maxItems")]
+        [JsonPropertyName("maxItems")]
         public int? MaxItems { get; set; }
         
-        [JsonProperty("uniqueItems")]
+        [JsonPropertyName("uniqueItems")]
         public bool? UniqueItems { get; set; }
         
-        [JsonProperty("pattern")]
+        [JsonPropertyName("pattern")]
         public string Pattern { get; set; }
 
-        [JsonProperty("required")]
+        [JsonPropertyName("required")]
         public ISet<string> Required { get; set; }
 
-        [JsonProperty("items")]
+        [JsonPropertyName("items")]
         public ISchema Items { get; set; }
 
-        [JsonProperty("example")]
+        [JsonPropertyName("example")]
         public string Example { get; set; }
 
-        [JsonProperty("enum")]
+        [JsonPropertyName("enum")]
         public IList<string> Enum { get; set; }
 
-        [JsonProperty("properties")]
+        [JsonPropertyName("properties")]
         public IDictionary<string, ISchema> Properties { get; set; }
     }
 }

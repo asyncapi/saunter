@@ -1,5 +1,5 @@
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Saunter.AsyncApiSchema.v2
 {
@@ -10,29 +10,28 @@ namespace Saunter.AsyncApiSchema.v2
             Type = type;
         }
 
-        [JsonProperty("type")]
-        [JsonConverter(typeof(StringEnumConverter))]
+        [JsonPropertyName("type")]
         public SecuritySchemeType Type { get; }
 
-        [JsonProperty("description")]
+        [JsonPropertyName("description")]
         public string Description { get; set; }
 
-        [JsonProperty("name")]
+        [JsonPropertyName("name")]
         public string Name { get; set; }
 
-        [JsonProperty("in")]
+        [JsonPropertyName("in")]
         public string In { get; set; }
 
-        [JsonProperty("scheme")]
+        [JsonPropertyName("scheme")]
         public string Scheme { get; set; }
 
-        [JsonProperty("bearerFormat")]
+        [JsonPropertyName("bearerFormat")]
         public string BearerFormat { get; set; }
 
-        [JsonProperty("flows")]
+        [JsonPropertyName("flows")]
         public OAuthFlows Flows { get; set; }
 
-        [JsonProperty("openIdConnectUrl")]
+        [JsonPropertyName("openIdConnectUrl")]
         public string OpenIdConnectUrl { get; set; }
     }
 }

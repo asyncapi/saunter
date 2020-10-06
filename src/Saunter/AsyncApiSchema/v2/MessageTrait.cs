@@ -1,5 +1,6 @@
 using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Saunter.AsyncApiSchema.v2
 {
@@ -10,37 +11,37 @@ namespace Saunter.AsyncApiSchema.v2
     
     public class MessageTrait : IMessageTrait
     {
-        [JsonProperty("headers")]
+        [JsonPropertyName("headers")]
         public ISchema Headers { get; set; }
 
-        [JsonProperty("correlationId")]
+        [JsonPropertyName("correlationId")]
         public CorrelationId CorrelationId { get; set; }
 
-        [JsonProperty("schemaFormat")]
+        [JsonPropertyName("schemaFormat")]
         public string SchemaFormat { get; set; }
 
-        [JsonProperty("contentType")]
+        [JsonPropertyName("contentType")]
         public string ContentType { get; set; }
 
-        [JsonProperty("name")]
+        [JsonPropertyName("name")]
         public string Name { get; set; }
 
-        [JsonProperty("title")]
+        [JsonPropertyName("title")]
         public string Title { get; set; }
 
-        [JsonProperty("description")]
+        [JsonPropertyName("description")]
         public string Description { get; set; }
 
-        [JsonProperty("tags")]
+        [JsonPropertyName("tags")]
         public ISet<Tag> Tags { get; set; } 
             
-        [JsonProperty("externalDocs")]
+        [JsonPropertyName("externalDocs")]
         public ExternalDocumentation ExternalDocs { get; set; }
 
-        [JsonProperty("bindings")]
+        [JsonPropertyName("bindings")]
         public MessageBindings Bindings { get; set; }
 
-        [JsonProperty("examples")]
+        [JsonPropertyName("examples")]
         public IDictionary<string, object> Examples { get; set; }
     }
 }

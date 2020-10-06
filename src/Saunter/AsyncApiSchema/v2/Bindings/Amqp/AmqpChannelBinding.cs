@@ -1,6 +1,5 @@
 using System.Runtime.Serialization;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
+using System.Text.Json.Serialization;
 
 namespace Saunter.AsyncApiSchema.v2.Bindings.Amqp
 {
@@ -9,47 +8,47 @@ namespace Saunter.AsyncApiSchema.v2.Bindings.Amqp
     /// </remarks>
     public class AmqpChannelBinding : IChannelBinding
     {
-        [JsonProperty("is")]
-        [JsonConverter(typeof(StringEnumConverter))]
+        [JsonPropertyName("is")]
+        [JsonConverter(typeof(JsonStringEnumConverter))]
         public AmqpChannelBindingIs Is { get; set; }
 
-        [JsonProperty("exchange")]
+        [JsonPropertyName("exchange")]
         public AmqpChannelBindingExchange Exchange { get; set; }
 
-        [JsonProperty("queue")]
+        [JsonPropertyName("queue")]
         public AmqpChannelBindingQueue Queue { get; set; }
 
-        [JsonProperty("bindingVersion")]
+        [JsonPropertyName("bindingVersion")]
         public string BindingVersion { get; set; }
     }
 
     public class AmqpChannelBindingExchange
     {
-        [JsonProperty("name")]
+        [JsonPropertyName("name")]
         public string Name { get; set; }
 
-        [JsonProperty("type")]
+        [JsonPropertyName("type")]
         public string Type { get; set; }
 
-        [JsonProperty("durable")]
+        [JsonPropertyName("durable")]
         public bool? Durable { get; set; }
 
-        [JsonProperty("autoDelete")]
+        [JsonPropertyName("autoDelete")]
         public bool? AutoDelete { get; set; }
     }
 
     public class AmqpChannelBindingQueue
     {
-        [JsonProperty("name")]
+        [JsonPropertyName("name")]
         public string Name { get; set; }
 
-        [JsonProperty("durable")]
+        [JsonPropertyName("durable")]
         public bool? Durable { get; set; }
 
-        [JsonProperty("exclusive")]
+        [JsonPropertyName("exclusive")]
         public bool? Exclusive { get; set; }
 
-        [JsonProperty("autoDelete")]
+        [JsonPropertyName("autoDelete")]
         public bool? AutoDelete { get; set; }
     }
 

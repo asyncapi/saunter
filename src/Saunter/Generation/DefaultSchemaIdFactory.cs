@@ -1,16 +1,14 @@
 using System;
 using System.Linq;
-using System.Reflection;
 using System.Text.RegularExpressions;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
+using System.Text.Json;
 using Saunter.AsyncApiSchema.v2;
 
 namespace Saunter.Generation
 {
     public static class DefaultSchemaIdFactory
     {
-        private static readonly NamingStrategy CamelCase = new CamelCaseNamingStrategy(); 
+        private static readonly JsonNamingPolicy CamelCase = JsonNamingPolicy.CamelCase;
         
         public static string Generate(Type type)
         {
@@ -32,7 +30,7 @@ namespace Saunter.Generation
             name = Regex.Replace(name, ComponentFieldName.InvalidRegex, string.Empty);
             
             // and lastly, camelCase the name
-            name = CamelCase.GetPropertyName(name, false);
+            name = CamelCase.ConvertName(name);
             
             return name;
         }
@@ -44,19 +42,9 @@ namespace Saunter.Generation
             //     public class Bar {}
             // }
             // which should be named as "fooBar", rather than just "bar"
-            var name = type.IsNested
+            return type.IsNested
                 ? NameForType(type.DeclaringType) + type.Name
                 : type.Name;
-            
-
-            // If a title is specified, use that
-            var jsonObject = type.GetCustomAttribute<JsonObjectAttribute>();
-            if (jsonObject != null && !string.IsNullOrWhiteSpace(jsonObject.Title))
-            {
-                name = jsonObject.Title;
-            }
-
-            return name;
         }
 
         /// <summary>

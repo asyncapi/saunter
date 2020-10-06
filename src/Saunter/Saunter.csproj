@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <TargetFrameworks>netcoreapp3.0;netstandard2.0</TargetFrameworks>
     <IsPackable>true</IsPackable>
     <PackageId>Saunter</PackageId>
     <Title>Saunter</Title>
@@ -32,12 +32,14 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.0.0" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="3.0.0" />
     <PackageReference Include="Namotion.Reflection" Version="1.0.6" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
-    
-    <FrameworkReference Include="Microsoft.AspNetCore.App" />
-    
+    <PackageReference Include="System.Text.Json" Version="4.7.2" />
+
     <!-- Development Dependencies -->
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp3.0'">
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
 
 </Project>

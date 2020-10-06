@@ -1,5 +1,6 @@
 using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Saunter.AsyncApiSchema.v2.Bindings.Amqp
 {
@@ -8,37 +9,37 @@ namespace Saunter.AsyncApiSchema.v2.Bindings.Amqp
     /// </remarks>
     public class AmqpOperationBinding : IOperationBinding
     {
-        [JsonProperty("expiration")]
+        [JsonPropertyName("expiration")]
         public int Expiration { get; set; }
 
-        [JsonProperty("userId")]
+        [JsonPropertyName("userId")]
         public string UserId { get; set; }
 
-        [JsonProperty("cc")]
+        [JsonPropertyName("cc")]
         public IList<string> Cc { get; set; }
 
-        [JsonProperty("priority")]
+        [JsonPropertyName("priority")]
         public int Priority { get; set; }
 
-        [JsonProperty("deliveryMode")]
+        [JsonPropertyName("deliveryMode")]
         public int DeliveryMode { get; set; }
 
-        [JsonProperty("mandatory")]
+        [JsonPropertyName("mandatory")]
         public bool? Mandatory { get; set; }
 
-        [JsonProperty("bcc")]
+        [JsonPropertyName("bcc")]
         public IList<string> Bcc { get; set; }
 
-        [JsonProperty("replyTo")]
+        [JsonPropertyName("replyTo")]
         public string ReplyTo { get; set; }
 
-        [JsonProperty("timestamp")]
+        [JsonPropertyName("timestamp")]
         public bool? Timestamp { get; set; }
 
-        [JsonProperty("ack")]
+        [JsonPropertyName("ack")]
         public bool? Ack { get; set; }
 
-        [JsonProperty("bindingVersion")]
+        [JsonPropertyName("bindingVersion")]
         public string BindingVersion { get; set; }
     }
 }

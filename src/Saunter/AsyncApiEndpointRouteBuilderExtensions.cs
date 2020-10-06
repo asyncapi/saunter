@@ -1,3 +1,4 @@
+#if NETCOREAPP3_0
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
@@ -24,3 +25,4 @@ namespace Saunter
         }
     }
 }
+#endif

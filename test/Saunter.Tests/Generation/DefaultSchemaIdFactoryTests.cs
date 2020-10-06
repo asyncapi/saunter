@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Newtonsoft.Json;
 using Saunter.Generation;
 using Shouldly;
 using Xunit;
@@ -8,13 +7,6 @@ namespace Saunter.Tests.Generation
 {
     public class DefaultSchemaIdFactoryTests
     {
-        [Fact]
-        public void Generate_UsesTitleFromJsonObject()
-        {
-            DefaultSchemaIdFactory.Generate(typeof(TypeWithJsonObjectAttribute))
-                .ShouldBe("jsonObjectTitle");
-        }
-
         [Fact]
         public void Generate_NestedType_ConcatenatesTypeNames()
         {
@@ -35,17 +27,7 @@ namespace Saunter.Tests.Generation
             DefaultSchemaIdFactory.Generate(typeof(Dictionary<string, Foo>))
                 .ShouldBe("dictionaryOfStringAndFoo");
         }
-
-        [Fact]
-        public void Generate_RemovesInvalidCharacters()
-        {
-            DefaultSchemaIdFactory.Generate(typeof(TypeWithInvalidCharacters))
-                .ShouldBe("thisisinvalid");
-        }
     }
-    
-    [JsonObject(Title = "jsonObjectTitle")]
-    public class TypeWithJsonObjectAttribute {}
 
     public class OuterType
     {
@@ -53,7 +35,4 @@ namespace Saunter.Tests.Generation
     }
     
     public class Foo {}
-    
-    [JsonObject(Title = "This is invalid!")]
-    public class TypeWithInvalidCharacters {}
 }

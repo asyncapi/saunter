@@ -1,32 +1,33 @@
 using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Saunter.AsyncApiSchema.v2
 {
     public class Operation
     {
-        [JsonProperty("operationId")]
+        [JsonPropertyName("operationId")]
         public string OperationId { get; set; }
 
-        [JsonProperty("summary")]
+        [JsonPropertyName("summary")]
         public string Summary { get; set; }
 
-        [JsonProperty("description")]
+        [JsonPropertyName("description")]
         public string Description { get; set; }
 
-        [JsonProperty("tags")]
+        [JsonPropertyName("tags")]
         public ISet<Tag> Tags { get; set; } = new HashSet<Tag>();
 
-        [JsonProperty("externalDocs")]
+        [JsonPropertyName("externalDocs")]
         public ExternalDocumentation ExternalDocs { get; set; }
 
-        [JsonProperty("bindings")]
+        [JsonPropertyName("bindings")]
         public IDictionary<string, OperationBindings> Bindings { get; set; } = new Dictionary<string, OperationBindings>();
 
-        [JsonProperty("message")]
+        [JsonPropertyName("message")]
         public IMessage Message { get; set; }
 
-        [JsonProperty("traits")]
+        [JsonPropertyName("traits")]
         public IList<IOperationTrait> Traits { get; set; } = new List<IOperationTrait>();
     }
 }

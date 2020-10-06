@@ -1,22 +1,23 @@
-using Newtonsoft.Json;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Saunter.AsyncApiSchema.v2
 {
     public class ChannelItem
     {
-        [JsonProperty("description")]
+        [JsonPropertyName("description")]
         public string Description { get; set; }
 
-        [JsonProperty("subscribe")]
+        [JsonPropertyName("subscribe")]
         public Operation Subscribe { get; set; }
 
-        [JsonProperty("publish")]
+        [JsonPropertyName("publish")]
         public Operation Publish { get; set; }
 
-        [JsonProperty("parameters")]
+        [JsonPropertyName("parameters")]
         public string Parameters { get; set; }
 
-        [JsonProperty("bindings")]
+        [JsonPropertyName("bindings")]
         public ChannelBindings Bindings { get; set; }
     }
 }

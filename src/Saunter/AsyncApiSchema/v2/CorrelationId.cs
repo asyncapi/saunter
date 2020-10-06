@@ -1,5 +1,6 @@
 using System;
-using Newtonsoft.Json;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Saunter.AsyncApiSchema.v2 {
     public class CorrelationId
@@ -9,10 +10,10 @@ namespace Saunter.AsyncApiSchema.v2 {
             Location = location ?? throw new ArgumentNullException(nameof(location));
         }
 
-        [JsonProperty("description")]
+        [JsonPropertyName("description")]
         public string Description { get; set; }
 
-        [JsonProperty("location")]
+        [JsonPropertyName("location")]
         public string Location { get; }
 
     }

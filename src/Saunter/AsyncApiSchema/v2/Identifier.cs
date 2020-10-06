@@ -1,8 +1,10 @@
 using System;
-using Newtonsoft.Json;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Saunter.AsyncApiSchema.v2 
 {
+    [JsonConverter(typeof(JsonConverter))]
     public class Identifier
     {
         private readonly Uri value;
@@ -19,25 +21,24 @@ namespace Saunter.AsyncApiSchema.v2
             return value.ToString();
         }
 
-        public class JsonConverter : Newtonsoft.Json.JsonConverter
+        public class JsonConverter : JsonConverter<Identifier>
         {
             public override bool CanConvert(Type objectType)
             {
                 return objectType == typeof(Identifier);
             }
 
-            public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+            public override Identifier Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
             {
-                if (reader.TokenType != JsonToken.String) return null;
+                if (reader.TokenType != JsonTokenType.String) return null;
 
-                var text = reader.Value.ToString();
+                var text = reader.GetString();
                 return new Identifier(text);
             }
 
-            public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+            public override void Write(Utf8JsonWriter writer, Identifier value, JsonSerializerOptions options)
             {
-                var identifier = value as Identifier;
-                serializer.Serialize(writer, identifier.ToString());
+                writer.WriteStringValue(value.ToString());
             }
         }
     }
