@@ -1,3 +1,4 @@
+#if NETCOREAPP3_0
 using System;
 using System.Net;
 using System.Threading.Tasks;
@@ -61,3 +62,4 @@ namespace Saunter
         }
     }
 }
+#endif
