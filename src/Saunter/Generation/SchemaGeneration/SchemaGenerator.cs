@@ -93,7 +93,7 @@ namespace Saunter.Generation.SchemaGeneration
 
                     if (member.GetIsRequired())
                     {
-                        requiredMembers.Add(member.Name);
+                        requiredMembers.Add(memberName);
                     }
                 }
 
