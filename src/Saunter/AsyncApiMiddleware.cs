@@ -1,6 +1,7 @@
 #if NETCOREAPP3_0
 using System;
 using System.Net;
+using System.Net.Mime;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
@@ -50,7 +51,7 @@ namespace Saunter
             );
 
             response.StatusCode = (int) HttpStatusCode.OK;
-            response.ContentType = "application/json";
+            response.ContentType = MediaTypeNames.Application.Json;
 
             await response.WriteAsync(asyncApiSchemaJson);
         }

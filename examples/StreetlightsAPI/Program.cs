@@ -76,6 +76,7 @@ namespace StreetlightsAPI
             {
                 endpoints.MapControllers();
                 endpoints.MapAsyncApiDocuments();
+                endpoints.MapAsyncApiUi();
             });
         }
     }
