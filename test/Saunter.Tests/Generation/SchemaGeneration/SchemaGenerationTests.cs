@@ -74,6 +74,9 @@ namespace Saunter.Tests.Generation.SchemaGeneration
         [Required]
         public Guid Id { get; set; }
 
+        [JsonIgnore]
+        public string Ignore { get; set; }
+
         public Bar Bar { get; set; }
 
         [JsonPropertyName("hello")]
