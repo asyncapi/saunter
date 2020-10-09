@@ -19,6 +19,7 @@ namespace Saunter
 
         private const string GenerateApiPath = "html/generate";
         private const string PlaygroundAssetsPath = "/html/template/";
+        private const string PlaygroundHtmlCacheKey = "index.html";
 
         private readonly RequestDelegate _next;
         private readonly IOptions<AsyncApiOptions> _options;
@@ -56,7 +57,7 @@ namespace Saunter
 
         private async Task RespondWithAsyncApiHtml(HttpResponse response, AsyncApiDocument asyncApiSchema)
         {
-            if (!_memoryCache.TryGetValue<string>("playground_html", out var responseString))
+            if (!_memoryCache.TryGetValue<string>(PlaygroundHtmlCacheKey, out var responseString))
             {
                 var asyncApiSchemaJson = JsonSerializer.Serialize(
                     asyncApiSchema,
@@ -76,7 +77,7 @@ namespace Saunter
                     new StringContent(asyncApiSchemaJson));
 
                 responseString = await asyncApiUiHtml.Content.ReadAsStringAsync();
-                _memoryCache.Set("playground_html", responseString);
+                _memoryCache.Set(PlaygroundHtmlCacheKey, responseString);
             }
 
             response.StatusCode = (int)HttpStatusCode.OK;
