@@ -56,8 +56,9 @@ namespace Saunter
     public class AsyncApiMiddlewareOptions
     {
         public const string AsyncApiMiddlewareDefaultRoute = "/asyncapi/asyncapi.json";
-        public const string AsyncApiUiMiddlewareBasePath = "/asyncapi/ui/";
-        public const string AsyncApiUiMiddlewareDefaultRoute = "/asyncapi/ui/index.html";
+        private const string AsyncApiUiMiddlewareBasePath = "/asyncapi/ui/";
+        private const string AsyncApiUiMiddlewareDefaultRoute = "/asyncapi/ui/index.html";
+        private const string AsyncApiPlaygroundBaseUri = "https://playground.asyncapi.io/";
 
         /// <summary>
         ///     The route which the AsyncApi document will be hosted
@@ -77,7 +78,7 @@ namespace Saunter
         /// <summary>
         ///     
         /// </summary>
-        public string PlaygroundBaseAddress { get; set; } = "https://playground.asyncapi.io/";
+        public string PlaygroundBaseAddress { get; set; } = AsyncApiPlaygroundBaseUri;
 
         /// <summary>
         ///     Key/Value pairs where keys will be replaced by the corresponding value in the html
