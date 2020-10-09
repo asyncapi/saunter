@@ -90,10 +90,11 @@ namespace Saunter
             if (!_memoryCache.TryGetValue<string>(request.Path, out var responseString))
             {
                 // Strip off the path this middleware is hosted at
-                var playgroundPath = request.Path.Value.Substring(_options.Value.Middleware.UiBaseRoute.Length);
+                var playgroundPath = request.Path.Value.Replace(_options.Value.Middleware.UiBaseRoute,
+                    PlaygroundAssetsPath);
 
                 var proxiedResult = await _client.GetAsync(
-                    $"{PlaygroundAssetsPath}{playgroundPath}"
+                    $"{playgroundPath}"
                 );
 
                 responseString = await proxiedResult.Content.ReadAsStringAsync();
