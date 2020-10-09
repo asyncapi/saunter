@@ -51,7 +51,7 @@ namespace Saunter
                 }
             );
 
-            response.StatusCode = (int) HttpStatusCode.OK;
+            response.StatusCode = (int)HttpStatusCode.OK;
             response.ContentType = MediaTypeNames.Application.Json;
 
             await response.WriteAsync(asyncApiSchemaJson);

@@ -56,6 +56,7 @@ namespace Saunter
     public class AsyncApiMiddlewareOptions
     {
         public const string AsyncApiMiddlewareDefaultRoute = "/asyncapi/asyncapi.json";
+        public const string AsyncApiUiMiddlewareBasePath = "/asyncapi/ui/";
         public const string AsyncApiUiMiddlewareDefaultRoute = "/asyncapi/ui/index.html";
 
         /// <summary>
@@ -67,5 +68,43 @@ namespace Saunter
         ///     The route which the AsyncApi UI will be hosted
         /// </summary>
         public string UiRoute { get; set; } = AsyncApiUiMiddlewareDefaultRoute;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public string UiBaseRoute { get; set; } = AsyncApiUiMiddlewareBasePath;
+
+        /// <summary>
+        ///     
+        /// </summary>
+        public string PlaygroundBaseAddress { get; set; } = "https://playground.asyncapi.io/";
+
+        /// <summary>
+        ///     Key/Value pairs where keys will be replaced by the corresponding value in the html
+        ///     returned from playground
+        /// </summary>
+        public Dictionary<string, string> HtmlProxyRewrites { get; set; } = new Dictionary<string, string>
+        {
+            {
+                "text-xs uppercase text-grey mt-10 mb-4 font-thin",
+                "text-xs uppercase text-dark-grey mt-10 mb-4 font-thin"
+            },
+            {
+                "text-grey text-sm",
+                "text-dark-grey text-sm"
+            }
+        };
+
+        /// <summary>
+        ///     Key/Value pairs where keys will be replaced by the corresponding value in the other
+        ///     assets (css, js) returned from playground
+        /// </summary>
+        public Dictionary<string, string> AssetsProxyRewrites { get; set; } = new Dictionary<string, string>
+        {
+            {
+                "font-weight: lighter",
+                "font-weight: normal"
+            }
+        };
     }
 }
