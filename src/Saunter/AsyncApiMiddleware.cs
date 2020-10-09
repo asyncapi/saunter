@@ -2,10 +2,11 @@
 using System;
 using System.Net;
 using System.Net.Mime;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
-using System.Text.Json;
+using Saunter.AsyncApiSchema.v2;
 using Saunter.Utils;
 
 namespace Saunter
@@ -28,13 +29,13 @@ namespace Saunter
                 await _next(context);
                 return;
             }
-            
+
             var asyncApiSchema = asyncApiDocumentProvider.GetDocument();
 
             await RespondWithAsyncApiSchemaJson(context.Response, asyncApiSchema);
         }
 
-        private async Task RespondWithAsyncApiSchemaJson(HttpResponse response, AsyncApiSchema.v2.AsyncApiDocument asyncApiSchema)
+        private async Task RespondWithAsyncApiSchemaJson(HttpResponse response, AsyncApiDocument asyncApiSchema)
         {
             var asyncApiSchemaJson = JsonSerializer.Serialize(
                 asyncApiSchema,
@@ -45,8 +46,8 @@ namespace Saunter
                     Converters =
                     {
                         new DictionaryKeyToStringConverter(),
-                        new InterfaceImplementationConverter(),
-                    },
+                        new InterfaceImplementationConverter()
+                    }
                 }
             );
 
