@@ -2,10 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.Serialization;
 using Microsoft.Extensions.Options;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using Saunter.AsyncApiSchema.v2;
 using Saunter.Utils;
 
@@ -43,7 +40,11 @@ namespace Saunter.Generation.SchemaGeneration
                 return schema;
             }
 
-            var propertyAndFieldMembers = type.GetProperties().Cast<MemberInfo>()
+            var filter = _options.PropertyFilter ?? ((_) => true);
+
+            var propertyAndFieldMembers = type.GetProperties()
+                .Where(filter)
+                .Cast<MemberInfo>()
                 .Concat(type.GetFields()).ToArray();
 
             return CreateSchemaFromPropertyAndFieldMembers(schemaRepository, propertyAndFieldMembers);
@@ -57,10 +58,11 @@ namespace Saunter.Generation.SchemaGeneration
                 Properties = new Dictionary<string, ISchema>()
             };
 
+            var memberNameSelector = _options.PropertyNameSelector ?? ((prop) => prop.Name);
             foreach (var member in propertyAndFieldMembers)
             {
                 var underlyingTypeOfMember = Reflection.GetUnderlyingType(member);
-                var memberName = GetMemberName(member);
+                var memberName = memberNameSelector(member);
 
                 ISchema memberSchema = GetSchemaIfPrimitive(underlyingTypeOfMember);
 
@@ -93,7 +95,7 @@ namespace Saunter.Generation.SchemaGeneration
 
                     if (member.GetIsRequired())
                     {
-                        requiredMembers.Add(member.Name);
+                        requiredMembers.Add(memberName);
                     }
                 }
 
@@ -106,29 +108,6 @@ namespace Saunter.Generation.SchemaGeneration
             }
 
             return schema;
-        }
-
-
-        public string GetMemberName(MemberInfo member)
-        {
-            var jsonPropertyAttribute = member.GetCustomAttribute<JsonPropertyNameAttribute>();
-            if (jsonPropertyAttribute?.Name != null)
-            {
-                return jsonPropertyAttribute.Name;
-            }
-
-            var dataMemberAttribute = member.GetCustomAttribute<DataMemberAttribute>();
-            if (dataMemberAttribute?.Name != null)
-            {
-                return dataMemberAttribute.Name;
-            }
-
-            if (_options.PropertyNameSelector != null)
-            {
-                return _options.PropertyNameSelector(member);
-            }
-
-            return member.Name;
         }
 
         private Schema GetSchemaIfPrimitive(Type type)

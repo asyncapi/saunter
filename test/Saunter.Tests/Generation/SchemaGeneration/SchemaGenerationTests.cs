@@ -1,4 +1,7 @@
 using System;
+using System.ComponentModel.DataAnnotations;
+using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
 using Microsoft.Extensions.Options;
 using Saunter.Generation.SchemaGeneration;
 using Shouldly;
@@ -29,10 +32,14 @@ namespace Saunter.Tests.Generation.SchemaGeneration
             schema.ShouldNotBeNull();
             _schemaRepository.Schemas.ShouldNotBeNull();
             _schemaRepository.Schemas.ContainsKey("foo").ShouldBeTrue();
-            _schemaRepository.Schemas["foo"].Properties.Count.ShouldBe(3);
+            _schemaRepository.Schemas["foo"].Required.Count.ShouldBe(1);
+            _schemaRepository.Schemas["foo"].Required.Contains("id").ShouldBeTrue();
+            _schemaRepository.Schemas["foo"].Properties.Count.ShouldBe(5);
             _schemaRepository.Schemas["foo"].Properties.ContainsKey("id").ShouldBeTrue();
             _schemaRepository.Schemas["foo"].Properties.ContainsKey("bar").ShouldBeTrue();
             _schemaRepository.Schemas["foo"].Properties.ContainsKey("fooType").ShouldBeTrue();
+            _schemaRepository.Schemas["foo"].Properties.ContainsKey("hello").ShouldBeTrue();
+            _schemaRepository.Schemas["foo"].Properties.ContainsKey("world").ShouldBeTrue();
             _schemaRepository.Schemas.ContainsKey("bar").ShouldBeTrue();
             _schemaRepository.Schemas["bar"].Properties.Count.ShouldBe(2);
             _schemaRepository.Schemas["bar"].Properties.ContainsKey("name").ShouldBeTrue();
@@ -51,18 +58,33 @@ namespace Saunter.Tests.Generation.SchemaGeneration
             _schemaRepository.Schemas.ContainsKey("book").ShouldBeTrue();
             _schemaRepository.Schemas["book"].Properties.Count.ShouldBe(4);
             _schemaRepository.Schemas.ContainsKey("foo").ShouldBeTrue();
-            _schemaRepository.Schemas["foo"].Properties.Count.ShouldBe(3);
+            _schemaRepository.Schemas["foo"].Required.Count.ShouldBe(1);
+            _schemaRepository.Schemas["foo"].Required.Contains("id").ShouldBeTrue();
+            _schemaRepository.Schemas["foo"].Properties.Count.ShouldBe(5);
             _schemaRepository.Schemas["foo"].Properties.ContainsKey("id").ShouldBeTrue();
             _schemaRepository.Schemas["foo"].Properties.ContainsKey("bar").ShouldBeTrue();
             _schemaRepository.Schemas["foo"].Properties.ContainsKey("fooType").ShouldBeTrue();
+            _schemaRepository.Schemas["foo"].Properties.ContainsKey("hello").ShouldBeTrue();
+            _schemaRepository.Schemas["foo"].Properties.ContainsKey("world").ShouldBeTrue();
         }
     }
 
     public class Foo
     {
+        [Required]
         public Guid Id { get; set; }
 
+        [JsonIgnore]
+        public string Ignore { get; set; }
+
         public Bar Bar { get; set; }
+
+        [JsonPropertyName("hello")]
+        public string HelloWorld { get; set; }
+
+        [DataMember(Name = "myworld")]
+        public string World { get; set; }
+
         public FooType FooType { get; set; }
     }
 
