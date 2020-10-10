@@ -40,7 +40,11 @@ namespace Saunter.Generation.SchemaGeneration
                 return schema;
             }
 
-            var propertyAndFieldMembers = type.GetProperties().Cast<MemberInfo>()
+            var filter = _options.PropertyFilter ?? ((_) => true);
+
+            var propertyAndFieldMembers = type.GetProperties()
+                .Where(filter)
+                .Cast<MemberInfo>()
                 .Concat(type.GetFields()).ToArray();
 
             return CreateSchemaFromPropertyAndFieldMembers(schemaRepository, propertyAndFieldMembers);
