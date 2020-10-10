@@ -36,7 +36,7 @@ namespace Saunter.Tests.Generation
         
         private class TestOperationTraitsFilter : OperationFilter
         {
-            public void Apply(Operation publishOperation, OperationFiterContext context)
+            public void Apply(Operation publishOperation, OperationFilterContext context)
             {
                 publishOperation.Traits.Add(new OperationTraitReference("exampleTrait"));
             }

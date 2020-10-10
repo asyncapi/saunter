@@ -1,6 +1,5 @@
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using Saunter.AsyncApiSchema.v2.Bindings.Amqp;
+using System.Text.Json.Serialization;
 
 namespace Saunter.AsyncApiSchema.v2
 {

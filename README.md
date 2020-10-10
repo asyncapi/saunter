@@ -96,6 +96,60 @@ See [examples/StreetlightsAPI](examples/StreetlightsAPI).
     }
     ```
 
+## Bindings
+Bindings are used to describe protocol specific information. Currently the only implementation is via filters
+
+Http bindings:
+ 
+To use Http Operation filter add in the `ConfigureServices` method of the `Startup.cs`
+
+ ``` 
+    services.AddAsyncApiSchemaGeneration(options =>
+    {
+        options.ChannelItemFilters.Add(new HttpOperationFilter());
+    });
+});
+```
+
+and create a new class into your app called `HttpOperationFilter` 
+
+```
+public class HttpOperationFilter : OperationFilter
+    {
+        public void Apply(Operation operation, OperationFilterContext context)
+        {
+            operation.Bindings = new OperationBindings
+            {
+                Http = new HttpOperationBinding
+                {
+                    Type = "request",
+                    Method = "GET",
+                    Query = new HttpOperationBindingQuery
+                    {
+                        Type = "object",
+                        Required = new string[] { "companyId" },
+                        Properties = new
+                        {
+                            CompanyId = new
+                            {
+                                Type = "number",
+                                Minimum = 1,
+                                Desciption = "The Id of the company."
+                            }
+                        },
+                        AdditionalProperties = false
+                    },
+                    BindingVersion = "0.1.0"
+                }
+            };
+        }
+    }
+```
+In the `HttpOperationFilter` you can customise the binding information. 
+
+Once these steps are complete, when you generate your documentation any class with a `[PublishOperation()]` or `[SubscribeOperation()]` attributes will have the http binding information added to the documentation.
+
+
 ## Changelog
 
 This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
