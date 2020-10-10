@@ -22,7 +22,7 @@ namespace Saunter.AsyncApiSchema.v2
         public ExternalDocumentation ExternalDocs { get; set; }
 
         [JsonPropertyName("bindings")]
-        public IDictionary<string, OperationBindings> Bindings { get; set; } = new Dictionary<string, OperationBindings>();
+        public OperationBindings Bindings { get; set; }
 
         [JsonPropertyName("message")]
         public IMessage Message { get; set; }

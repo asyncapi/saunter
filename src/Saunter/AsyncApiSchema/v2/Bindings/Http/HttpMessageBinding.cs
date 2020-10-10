@@ -8,9 +8,18 @@ namespace Saunter.AsyncApiSchema.v2.Bindings.Http
     public class HttpMessageBinding : IMessageBinding
     {
         [JsonPropertyName("headers")]
-        public string Headers { get; set; }
+        public HttpMessageBindingHeaders Headers { get; set; }
 
         [JsonPropertyName("bindingVersion")]
         public string BindingVersion { get; set; }
+    }
+
+    public class HttpMessageBindingHeaders
+    {
+        [JsonPropertyName("type")]
+        public string Type { get; set; }
+
+        [JsonPropertyName("properties")]
+        public object Properties { get; set; }
     }
 }

@@ -9,8 +9,5 @@ namespace Saunter.AsyncApiSchema.v2
     {
         [JsonPropertyName("amqp")]
         public AmqpChannelBinding Amqp { get; set; }
-
-        [JsonPropertyName("http")]
-        public HttpChannelBinding Http { get; set; }
     }
 }
