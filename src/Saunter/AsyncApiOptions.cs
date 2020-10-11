@@ -45,7 +45,7 @@ namespace Saunter
         /// </summary>
         public Func<Type, Enum, string> EnumMemberNameSelector { get; set; } = (type, val) =>
         {
-            var converterType = type.GetCustomAttribute<JsonConverterAttribute>().ConverterType;
+            var converterType = type.GetCustomAttribute<JsonConverterAttribute>()?.ConverterType;
             if (converterType?.FullName == "System.Text.Json.Serialization.JsonStringEnumMemberConverter"
                 || converterType == typeof(EnumMemberConverter))
             {
