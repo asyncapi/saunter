@@ -27,6 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\Saunter.NewtonsoftJson\Saunter.NewtonsoftJson.csproj" />
     <ProjectReference Include="..\..\src\Saunter\Saunter.csproj" />
   </ItemGroup>
 

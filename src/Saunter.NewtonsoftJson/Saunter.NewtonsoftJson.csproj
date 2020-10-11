@@ -1,0 +1,38 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
+    <IsPackable>true</IsPackable>
+    <PackageId>Saunter.NewtonsoftJson</PackageId>
+    <Title>Saunter.NewtonsoftJson</Title>
+    <PackageIcon>logo.png</PackageIcon>
+    <Authors>tehmantra</Authors>
+    <Description>Code-first AsyncAPI documentation - NewtonsoftJson support</Description>
+    <PackageTags>asyncapi;aspnetcore;openapi;documentation;amqp</PackageTags>
+    <RepositoryUrl>https://github.com/tehmantra/saunter</RepositoryUrl>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <PackageProjectUrl>https://github.com/tehmantra/saunter</PackageProjectUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\assets\logo.png" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- TODO transform to package reference as soon as the options are available as nuget package -->
+    <ProjectReference Include="..\Saunter\Saunter.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+
+    <!-- Development Dependencies -->
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
+  </ItemGroup>
+
+</Project>
