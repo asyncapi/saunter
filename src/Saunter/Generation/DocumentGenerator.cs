@@ -1,13 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 using Microsoft.Extensions.Options;
 using Namotion.Reflection;
 using Saunter.AsyncApiSchema.v2;
 using Saunter.Attributes;
 using Saunter.Generation.Filters;
 using Saunter.Generation.SchemaGeneration;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 
 namespace Saunter.Generation
 {
@@ -76,7 +76,7 @@ namespace Saunter.Generation
             foreach (var mc in methodsWithChannelAttribute)
             {
                 var channelItem = new ChannelItem
-                {
+                {              
                     Description = mc.Channel.Description,
                     Parameters = mc.Channel.Parameters,
                     Publish = GenerateOperationFromMethod(mc.Method, schemaRepository, OperationType.Publish),
@@ -157,7 +157,7 @@ namespace Saunter.Generation
                 Message = message,
             };
 
-            var filterContext = new OperationFiterContext(method, schemaRepository, operationAttribute);
+            var filterContext = new OperationFilterContext(method, schemaRepository, operationAttribute);
             foreach (var filter in _options.OperationFilters)
             {
                 filter.Apply(operation, filterContext);

@@ -7,12 +7,12 @@ namespace Saunter.Generation.Filters
 {
     public interface OperationFilter
     {
-        void Apply(Operation publishOperation, OperationFiterContext context);
+        void Apply(Operation publishOperation, OperationFilterContext context);
     }
 
-    public class OperationFiterContext
+    public class OperationFilterContext
     {
-        public OperationFiterContext(MethodInfo method, ISchemaRepository schemaRepository, OperationAttribute operation)
+        public OperationFilterContext(MethodInfo method, ISchemaRepository schemaRepository, OperationAttribute operation)
         {
             Method = method;
             SchemaRepository = schemaRepository;

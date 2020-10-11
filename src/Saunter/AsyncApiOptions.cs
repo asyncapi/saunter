@@ -42,6 +42,11 @@ namespace Saunter
         };
         
         /// <summary>
+        /// A function to filter the properties which will be included.
+        /// </summary>
+        public Func<MemberInfo, bool> PropertyFilter { get; set; } = prop => prop.GetCustomAttribute<JsonIgnoreAttribute>() == null;
+
+        /// <summary>
         /// A list of filters that will be applied to the generated AsyncAPI document.
         /// </summary>
         public IList<IDocumentFilter> DocumentFilters { get; } = new List<IDocumentFilter>();
