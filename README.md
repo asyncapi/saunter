@@ -99,7 +99,7 @@ See [examples/StreetlightsAPI](examples/StreetlightsAPI).
 ## Bindings
 Bindings are used to describe protocol specific information. Currently the only implementation is via filters
 
-Http bindings:
+**Http bindings:**
  
 To use Http Operation filter add in the `ConfigureServices` method of the `Startup.cs`
 
@@ -150,7 +150,7 @@ In the `HttpOperationFilter` you can customise the binding information.
 Once these steps are complete, when you generate your documentation any class with a `[PublishOperation()]` or `[SubscribeOperation()]` attributes will have the http binding information added to the documentation.
 
 
-Kafka bindings:
+**Kafka bindings:**
  
 To use Kafka Operation filter add in the `ConfigureServices` method of the `Startup.cs`
 
