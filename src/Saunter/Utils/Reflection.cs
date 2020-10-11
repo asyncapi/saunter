@@ -4,7 +4,6 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.Serialization;
 using Namotion.Reflection;
 
 namespace Saunter.Utils
@@ -114,45 +113,57 @@ namespace Saunter.Utils
             return false;
         }
 
-        public static bool IsEnum(this Type type, out IList<string> members)
+        public static bool IsEnum(this Type type, AsyncApiOptions options, out EnumMembers members)
         {
             if (type.IsEnum)
             {
-                members = type.GetEnumMembers();
+                members = type.GetEnumMembers(options);
                 return true;
             }
 
             if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))
             {
                 var typeArgument = type.GetGenericArguments().Single();
-                return typeArgument.IsEnum(out members);
+                return typeArgument.IsEnum(options, out members);
             }
 
             members = null;
             return false;
         }
 
-        private static IList<string> GetEnumMembers(this Type type)
+        private static EnumMembers GetEnumMembers(this Type type, AsyncApiOptions options)
         {
-            var values = new List<string>();
-
-            foreach (Enum val in type.GetEnumValues())
+            var useEnumName = options.UseEnumMemberName != null && options.UseEnumMemberName(type);
+            if (useEnumName)
             {
-                var enumMemberAttribute = val.GetCustomAttribute<EnumMemberAttribute>();
-                if (enumMemberAttribute?.Value != null)
+                return new EnumMembers
                 {
-                    values.Add(enumMemberAttribute.Value);
-                }
-                else
-                {
-                    values.Add(val.ToString());
-                }
+                    MemberType = typeof(string),
+                    Members = type.GetEnumMemberNames(options).ToList(),
+                };
             }
-
-            return values;
+            
+            return new EnumMembers
+            {
+                MemberType = typeof(int),
+                Members = type.GetEnumMemberValues().ToList(),
+            };
         }
 
-        private static T GetCustomAttribute<T>(this Enum enumValue) where T : Attribute
+        private static IEnumerable<string> GetEnumMemberNames(this Type type, AsyncApiOptions options)
+        {
+            foreach (Enum val in type.GetEnumValues())
+            {
+                yield return options.EnumMemberNameSelector(type, val);
+            }
+        }
+
+        private static IEnumerable<int> GetEnumMemberValues(this Type type)
+        {
+            return type.GetEnumValues().Cast<int>();
+        }
+
+        public static T GetCustomAttribute<T>(this Enum enumValue) where T : Attribute
         {
             var type = enumValue.GetType();
             var memberInfo = type.GetMember(enumValue.ToString()).Single();

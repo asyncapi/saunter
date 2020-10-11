@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
 using Saunter.Utils;
 using Shouldly;
 using Xunit;
@@ -148,18 +149,74 @@ namespace Saunter.Tests.Utils
             type.IsEnumerable(out _).ShouldBeFalse();
         }
 
-        private enum SomeEnum
+        [JsonConverter(typeof(JsonStringEnumConverter))]
+        private enum JsonStringEnumConverterEnum
         {
-            [EnumMember(Value = "hello")] Hello,
+            Hello,
+            [EnumMember(Value = "world")]
             World,
         }
 
         [Theory]
-        [InlineData(typeof(SomeEnum), new[] { "hello", "World" })]
-        public void IsEnum_True_WhenTypeIsEnum(Type type, string[] members)
+        [InlineData(typeof(JsonStringEnumConverterEnum), new[] { "Hello", "World" })]
+        public void IsEnum_True_WhenTypeIsJsonStringEnumConverterEnum(Type type, string[] members)
         {
-            type.IsEnum(out var actualMembers).ShouldBeTrue();
-            actualMembers.ShouldBe(members);
+            var options = new AsyncApiOptions();
+            type.IsEnum(options, out var actualMembers).ShouldBeTrue();
+            actualMembers.MemberType.ShouldBe(typeof(string));
+            actualMembers.Members.ShouldBe(members);
+        }
+        
+        [JsonConverter(typeof(JsonStringEnumMemberConverter))]
+        private enum JsonStringEnumMemberConverterEnum
+        {
+            Hello,
+            [EnumMember(Value = "world")]
+            World,
+        }
+
+        [Theory]
+        [InlineData(typeof(JsonStringEnumMemberConverterEnum), new[] { "Hello", "world" })]
+        public void IsEnum_True_WhenTypeIsJsonStringEnumMemberConverterEnum(Type type, string[] members)
+        {
+            var options = new AsyncApiOptions();
+            type.IsEnum(options, out var actualMembers).ShouldBeTrue();
+            actualMembers.MemberType.ShouldBe(typeof(string));
+            actualMembers.Members.ShouldBe(members);
+        }
+
+        [JsonConverter(typeof(EnumMemberConverter))]
+        private enum EnumMemberConverterEnum
+        {
+            Hello,
+            [EnumMember(Value = "world")]
+            World,
+        }
+
+        [Theory]
+        [InlineData(typeof(EnumMemberConverterEnum), new[] { "Hello", "world" })]
+        public void IsEnum_True_WhenTypeIsEnumMemberConverterEnum(Type type, string[] members)
+        {
+            var options = new AsyncApiOptions();
+            type.IsEnum(options, out var actualMembers).ShouldBeTrue();
+            actualMembers.MemberType.ShouldBe(typeof(string));
+            actualMembers.Members.ShouldBe(members);
+        }
+
+        private enum SomeEnum
+        {
+            Hello,
+            World,
+        }
+
+        [Theory]
+        [InlineData(typeof(SomeEnum), new[] { 0, 1 })]
+        public void IsEnum_True_WhenTypeIsEnum(Type type, int[] members)
+        {
+            var options = new AsyncApiOptions();
+            type.IsEnum(options, out var actualMembers).ShouldBeTrue();
+            actualMembers.MemberType.ShouldBe(typeof(int));
+            actualMembers.Members.ShouldBe(members);
         }
 
         [Theory]
@@ -167,7 +224,8 @@ namespace Saunter.Tests.Utils
         [InlineData(typeof(string[]))]
         public void IsEnum_False_WhenTypeIsNotEnum(Type type)
         {
-            type.IsEnum(out _).ShouldBeFalse();
+            var options = new AsyncApiOptions();
+            type.IsEnum(options, out _).ShouldBeFalse();
         }
 
         [Theory]

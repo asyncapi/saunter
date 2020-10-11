@@ -132,12 +132,14 @@ namespace Saunter.Generation.SchemaGeneration
                 return new Schema { Type = "boolean" };
             }
 
-            if (type.IsEnum(out var members))
+            if (type.IsEnum(_options, out var members))
             {
                 return new Schema
                 {
-                    Type = "string",
-                    Enum = members,
+                    Type = members.MemberType == typeof(string) 
+                        ? "string" 
+                        : "integer",
+                    Enum = members.Members,
                 };
             }
 

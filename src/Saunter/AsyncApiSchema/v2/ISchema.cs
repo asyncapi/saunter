@@ -1,5 +1,5 @@
+using System.Collections;
 using System.Collections.Generic;
-using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Saunter.AsyncApiSchema.v2 
@@ -60,7 +60,7 @@ namespace Saunter.AsyncApiSchema.v2
         public string Example { get; set; }
 
         [JsonPropertyName("enum")]
-        public IList<string> Enum { get; set; }
+        public IList Enum { get; set; }
 
         [JsonPropertyName("properties")]
         public IDictionary<string, ISchema> Properties { get; set; }

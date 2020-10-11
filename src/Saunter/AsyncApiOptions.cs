@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Runtime.Serialization;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Saunter.AsyncApiSchema.v2;
 using Saunter.Generation;
 using Saunter.Generation.Filters;
+using Saunter.Utils;
 
 namespace Saunter
 {
@@ -27,6 +29,36 @@ namespace Saunter
         /// </summary>
         public Func<Type, string> SchemaIdSelector { get; set; } = DefaultSchemaIdFactory.Generate;
 
+        /// <summary>
+        /// A function that specifies if the member name of the enum should be used instead of its value.
+        /// </summary>
+        public Func<Type, bool> UseEnumMemberName { get; set; } = type =>
+        {
+            var jsonConverterAttribute = type.GetCustomAttribute<JsonConverterAttribute>();
+            return jsonConverterAttribute?.ConverterType == typeof(JsonStringEnumConverter)
+                || jsonConverterAttribute?.ConverterType?.FullName == "System.Text.Json.Serialization.JsonStringEnumMemberConverter"
+                || jsonConverterAttribute?.ConverterType == typeof(EnumMemberConverter);
+        };
+
+        /// <summary>
+        /// A function that returns the enum member name.
+        /// </summary>
+        public Func<Type, Enum, string> EnumMemberNameSelector { get; set; } = (type, val) =>
+        {
+            var converterType = type.GetCustomAttribute<JsonConverterAttribute>()?.ConverterType;
+            if (converterType?.FullName == "System.Text.Json.Serialization.JsonStringEnumMemberConverter"
+                || converterType == typeof(EnumMemberConverter))
+            {
+                var enumMemberAttribute = val.GetCustomAttribute<EnumMemberAttribute>();
+                if (enumMemberAttribute?.Value != null)
+                {
+                    return enumMemberAttribute.Value;
+                }
+            }
+
+            return val.ToString();
+        };
+        
         /// <summary>
         /// A function to select the name for a property.
         /// </summary>
