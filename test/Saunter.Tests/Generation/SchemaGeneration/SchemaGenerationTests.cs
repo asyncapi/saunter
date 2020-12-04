@@ -1,8 +1,11 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Runtime.Serialization;
 using System.Text.Json.Serialization;
 using Microsoft.Extensions.Options;
+using NJsonSchema;
+using NJsonSchema.Generation;
 using Saunter.Generation.SchemaGeneration;
 using Shouldly;
 using Xunit;
@@ -11,15 +14,14 @@ namespace Saunter.Tests.Generation.SchemaGeneration
 {
     public class SchemaGenerationTests
     {
-        private readonly ISchemaRepository _schemaRepository;
-        private readonly SchemaGenerator _schemaGenerator;
+        private readonly JsonSchemaResolver _schemaResolver;
+        private readonly JsonSchemaGenerator _schemaGenerator;
 
         public SchemaGenerationTests()
         {
-            _schemaRepository = new SchemaRepository();
-            var options = new AsyncApiOptions();
-
-            _schemaGenerator = new SchemaGenerator(Options.Create(options));
+            var settings = new JsonSchemaGeneratorSettings();
+            _schemaResolver = new JsonSchemaResolver(new JsonSchema(), settings);
+            _schemaGenerator = new JsonSchemaGenerator(settings);
         }
 
         [Fact]
@@ -27,23 +29,31 @@ namespace Saunter.Tests.Generation.SchemaGeneration
         {
             var type = typeof(Foo);
 
-            var schema = _schemaGenerator.GenerateSchema(type, _schemaRepository);
+            var schema = _schemaGenerator.Generate(type, _schemaResolver);
 
             schema.ShouldNotBeNull();
-            _schemaRepository.Schemas.ShouldNotBeNull();
-            _schemaRepository.Schemas.ContainsKey("foo").ShouldBeTrue();
-            _schemaRepository.Schemas["foo"].Required.Count.ShouldBe(1);
-            _schemaRepository.Schemas["foo"].Required.Contains("id").ShouldBeTrue();
-            _schemaRepository.Schemas["foo"].Properties.Count.ShouldBe(5);
-            _schemaRepository.Schemas["foo"].Properties.ContainsKey("id").ShouldBeTrue();
-            _schemaRepository.Schemas["foo"].Properties.ContainsKey("bar").ShouldBeTrue();
-            _schemaRepository.Schemas["foo"].Properties.ContainsKey("fooType").ShouldBeTrue();
-            _schemaRepository.Schemas["foo"].Properties.ContainsKey("hello").ShouldBeTrue();
-            _schemaRepository.Schemas["foo"].Properties.ContainsKey("world").ShouldBeTrue();
-            _schemaRepository.Schemas.ContainsKey("bar").ShouldBeTrue();
-            _schemaRepository.Schemas["bar"].Properties.Count.ShouldBe(2);
-            _schemaRepository.Schemas["bar"].Properties.ContainsKey("name").ShouldBeTrue();
-            _schemaRepository.Schemas["bar"].Properties.ContainsKey("cost").ShouldBeTrue();
+            _schemaResolver.Schemas.ShouldNotBeNull();
+            ResolverShouldHaveValidFooSchema();
+
+            var barSchema = _schemaResolver.Schemas.FirstOrDefault(sh => sh.Id == "bar");
+            barSchema.ShouldNotBeNull();
+            barSchema.Properties.Count.ShouldBe(2);
+            barSchema.Properties.ContainsKey("name").ShouldBeTrue();
+            barSchema.Properties.ContainsKey("cost").ShouldBeTrue();
+        }
+
+        private void ResolverShouldHaveValidFooSchema()
+        {
+            var fooSchema = _schemaResolver.Schemas.FirstOrDefault(sh => sh.Id == "foo");
+            fooSchema.ShouldNotBeNull();
+            fooSchema.RequiredProperties.Count.ShouldBe(1);
+            fooSchema.RequiredProperties.Contains("id").ShouldBeTrue();
+            fooSchema.Properties.Count.ShouldBe(5);
+            fooSchema.Properties.ContainsKey("id").ShouldBeTrue();
+            fooSchema.Properties.ContainsKey("bar").ShouldBeTrue();
+            fooSchema.Properties.ContainsKey("fooType").ShouldBeTrue();
+            fooSchema.Properties.ContainsKey("hello").ShouldBeTrue();
+            fooSchema.Properties.ContainsKey("world").ShouldBeTrue();
         }
 
         [Fact]
@@ -51,21 +61,15 @@ namespace Saunter.Tests.Generation.SchemaGeneration
         {
             var type = typeof(Book);
 
-            var schema = _schemaGenerator.GenerateSchema(type, _schemaRepository);
+            var schema = _schemaGenerator.Generate(type, _schemaResolver);
 
             schema.ShouldNotBeNull();
-            _schemaRepository.Schemas.ShouldNotBeNull();
-            _schemaRepository.Schemas.ContainsKey("book").ShouldBeTrue();
-            _schemaRepository.Schemas["book"].Properties.Count.ShouldBe(4);
-            _schemaRepository.Schemas.ContainsKey("foo").ShouldBeTrue();
-            _schemaRepository.Schemas["foo"].Required.Count.ShouldBe(1);
-            _schemaRepository.Schemas["foo"].Required.Contains("id").ShouldBeTrue();
-            _schemaRepository.Schemas["foo"].Properties.Count.ShouldBe(5);
-            _schemaRepository.Schemas["foo"].Properties.ContainsKey("id").ShouldBeTrue();
-            _schemaRepository.Schemas["foo"].Properties.ContainsKey("bar").ShouldBeTrue();
-            _schemaRepository.Schemas["foo"].Properties.ContainsKey("fooType").ShouldBeTrue();
-            _schemaRepository.Schemas["foo"].Properties.ContainsKey("hello").ShouldBeTrue();
-            _schemaRepository.Schemas["foo"].Properties.ContainsKey("world").ShouldBeTrue();
+            _schemaResolver.Schemas.ShouldNotBeNull();
+            var bookSchema = _schemaResolver.Schemas.FirstOrDefault(sh => sh.Id == "book");
+            bookSchema.ShouldNotBeNull();
+            bookSchema.Properties.Count.ShouldBe(4);
+
+            ResolverShouldHaveValidFooSchema();
         }
     }
 

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
@@ -7,11 +8,13 @@ namespace Saunter.AsyncApiSchema.v2
     /// <remarks>
     /// Can be either a <see cref="Schema"/> or <see cref="Reference"/> to a schema.
     /// </remarks>
+    [Obsolete("Saunter now uses NJsonSchema.JsonSchema", true)]
     public interface ISchema { }
 
     /// <summary>
     /// The json-schema compatible definition of some type.
     /// </summary>
+    [Obsolete("Saunter now uses NJsonSchema.JsonSchema", true)]
     public class Schema : ISchema
     {
         [JsonPropertyName("type")]

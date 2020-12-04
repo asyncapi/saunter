@@ -1,3 +1,4 @@
+using NJsonSchema;
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -22,13 +23,13 @@ namespace Saunter.AsyncApiSchema.v2
         /// It MUST NOT define the protocol headers.
         /// </summary>
         [JsonPropertyName("headers")]
-        public ISchema Headers { get; set; }
+        public JsonSchema Headers { get; set; }
 
         /// <summary>
         /// Definition of the message payload. It can be of any type but defaults to Schema object.
         /// </summary>
         [JsonPropertyName("payload")]
-        public ISchema Payload { get; set; }
+        public JsonSchema Payload { get; set; }
 
         /// <summary>
         /// Definition of the correlation ID used for message tracing or matching.

@@ -5,6 +5,7 @@ using Saunter.AsyncApiSchema.v2;
 
 namespace Saunter.Generation.SchemaGeneration
 {
+    [Obsolete("Saunter now uses NJsonSchema.Generation.JsonSchemaResolver", true)]
     public class SchemaRepository : ISchemaRepository
     {
         private Dictionary<Type, string> _reservedIds = new Dictionary<Type, string>();
@@ -26,7 +27,7 @@ namespace Saunter.Generation.SchemaGeneration
                 schemaId = reservedId;
             }
 
-            return new Reference(schemaId, ReferenceType.Schema);
+            return new SchemaReference(schemaId);
         }
 
         private void ReserveIdFor(Type type, string schemaId)

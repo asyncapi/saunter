@@ -3,6 +3,7 @@ using Saunter.AsyncApiSchema.v2;
 
 namespace Saunter.Generation.SchemaGeneration
 {
+    [Obsolete("Saunter now uses NJsonSchema.Generation.JsonSchemaGenerator", true)]
     public interface ISchemaGenerator
     {
         /// <summary>

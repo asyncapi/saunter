@@ -1,4 +1,6 @@
+using System;
 using System.Reflection;
+using NJsonSchema.Generation;
 using Saunter.AsyncApiSchema.v2;
 using Saunter.Attributes;
 using Saunter.Generation.SchemaGeneration;
@@ -12,15 +14,17 @@ namespace Saunter.Generation.Filters
 
     public class OperationFilterContext
     {
-        public OperationFilterContext(MethodInfo method, ISchemaRepository schemaRepository, OperationAttribute operation)
+        public OperationFilterContext(MethodInfo method, JsonSchemaResolver schemaResolver, OperationAttribute operation)
         {
             Method = method;
-            SchemaRepository = schemaRepository;
+            SchemaResolver = schemaResolver;
             Operation = operation;
         }
         
         public MethodInfo Method { get; }
+        public JsonSchemaResolver SchemaResolver { get; }
 
+        [Obsolete("use SchemaResolver", true)]
         public ISchemaRepository SchemaRepository { get; }
         
         public OperationAttribute Operation { get; }

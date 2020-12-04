@@ -7,7 +7,7 @@ namespace Saunter.AsyncApiSchema.v2
     /// <summary>
     /// A reference to some other object within the asyncapi document. 
     /// </summary>
-    public class Reference : ISchema
+    public class Reference
     {
         public Reference(string id, ReferenceType type)
         {
@@ -21,13 +21,14 @@ namespace Saunter.AsyncApiSchema.v2
         [JsonPropertyName("$ref")]
         public string Ref => _type.GetReferencePath(_id);
     }
-    
-    
+
+
     /// <summary>
     /// The type of a <see cref="Reference"/>. Determines where the reference will be located inside the asyncapi document.
     /// </summary>
     public class ReferenceType
     {
+        [Obsolete("Saunter now uses NJsonSchema.JsonSchema", true)]
         public static readonly ReferenceType Schema = new ReferenceType(nameof(Schema), "#/components/schemas/{0}");
         
         public static readonly ReferenceType MessageTrait = new ReferenceType(nameof(MessageTrait), "#/components/messageTraits/{0}");
@@ -47,6 +48,11 @@ namespace Saunter.AsyncApiSchema.v2
         public string GetReferencePath(string id) => string.Format(_format, id);
     }
 
+    [Obsolete("Saunter now uses NJsonSchema.JsonSchema", true)]
+    public class SchemaReference : Reference, ISchema
+    {
+        public SchemaReference(string id) : base(id, ReferenceType.Schema) { }
+    }
 
     /// <summary>
     /// A reference to an OperationTrait within the AsyncAPI components
@@ -55,7 +61,7 @@ namespace Saunter.AsyncApiSchema.v2
     {
         public OperationTraitReference(string id) : base(id, ReferenceType.OperationTrait) { }
     }
-    
+
     /// <summary>
     /// A reference to a MessageTrait within the AsyncAPI components
     /// </summary>

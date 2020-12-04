@@ -41,21 +41,6 @@ namespace Saunter.Tests.Utils
             data.ShouldBe("{\"test1\":1,\"test2\":2}");
         }
 
-        [Fact]
-        public void InterfaceImplementationConverter_ShouldNot_ReturnEmptyObject()
-        {
-            ISchema schema = new Schema();
-            var json = JsonSerializer.Serialize(
-                schema,
-                new JsonSerializerOptions
-                {
-                    Converters = { new InterfaceImplementationConverter() }
-                }
-            );
-
-            json.ShouldNotBe("{}");
-        }
-
         [Theory]
         [InlineData(AsyncApiVersionString.v2, "\"2.0.0\"")]
         [InlineData(SecuritySchemeType.X509, "\"X509\"")]

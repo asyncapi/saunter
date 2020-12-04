@@ -1,3 +1,4 @@
+using NJsonSchema;
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -7,7 +8,7 @@ namespace Saunter.AsyncApiSchema.v2
     public class Components
     {
         [JsonPropertyName("schemas")]
-        public IDictionary<ComponentFieldName, Schema> Schemas { get; set; } = new Dictionary<ComponentFieldName, Schema>();
+        public IDictionary<ComponentFieldName, JsonSchema> Schemas { get; set; } = new Dictionary<ComponentFieldName, JsonSchema>();
 
         [JsonPropertyName("messages")]
         public IDictionary<ComponentFieldName, Message> Messages { get; set; } = new Dictionary<ComponentFieldName, Message>();

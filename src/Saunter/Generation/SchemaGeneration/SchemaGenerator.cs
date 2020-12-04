@@ -8,6 +8,7 @@ using Saunter.Utils;
 
 namespace Saunter.Generation.SchemaGeneration
 {
+    [Obsolete("NJsonSchema.Generation.JsonSchemaGenerator", true)]
     public class SchemaGenerator : ISchemaGenerator
     {
         private readonly AsyncApiOptions _options;

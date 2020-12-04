@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using NJsonSchema.Generation;
 using Saunter.AsyncApiSchema.v2;
 using Saunter.Generation.SchemaGeneration;
 
@@ -12,14 +13,16 @@ namespace Saunter.Generation.Filters
 
     public class DocumentFilterContext
     {
-        public DocumentFilterContext(IEnumerable<Type> asyncApiTypes, ISchemaRepository schemaRepository)
+        public DocumentFilterContext(IEnumerable<Type> asyncApiTypes, JsonSchemaResolver schemaResolver)
         {
             AsyncApiTypes = asyncApiTypes;
-            SchemaRepository = schemaRepository;
+            SchemaResolver = schemaResolver;
         }
         
         public IEnumerable<Type> AsyncApiTypes { get; }
-        
+        public JsonSchemaResolver SchemaResolver { get; }
+
+        [Obsolete("use SchemaResolver", true)]
         public ISchemaRepository SchemaRepository { get; }
     }
 }

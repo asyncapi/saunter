@@ -1,3 +1,4 @@
+using NJsonSchema;
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -12,7 +13,7 @@ namespace Saunter.AsyncApiSchema.v2
     public class MessageTrait : IMessageTrait
     {
         [JsonPropertyName("headers")]
-        public ISchema Headers { get; set; }
+        public JsonSchema Headers { get; set; }
 
         [JsonPropertyName("correlationId")]
         public CorrelationId CorrelationId { get; set; }
