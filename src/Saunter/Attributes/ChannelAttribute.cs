@@ -7,9 +7,9 @@ namespace Saunter.Attributes
     {
         public string Name { get; }
 
-        public string Description { get; set; }
+        public string? Description { get; set; }
         
-        public string Parameters { get; set; }
+        public string? Parameters { get; set; }
 
         public ChannelAttribute(string name)
         {

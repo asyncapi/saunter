@@ -6,15 +6,15 @@ namespace Saunter.AsyncApiSchema.v2 {
     public class ServerVariable
     {
         [JsonPropertyName("enum")]
-        public IList<string> Enum { get; set; }
+        public IList<string>? Enum { get; set; }
 
         [JsonPropertyName("default")]
-        public string Default { get; set; }
+        public string? Default { get; set; }
 
         [JsonPropertyName("description")]
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         [JsonPropertyName("examples")]
-        public IList<string> Examples { get; set; }
+        public IList<string>? Examples { get; set; }
     }
 }

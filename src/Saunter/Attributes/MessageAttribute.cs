@@ -16,22 +16,22 @@ namespace Saunter.Attributes
         /// A machine-friendly name for the message.
         /// Defaults to the generated schemaId.
         /// </summary>
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         /// <summary>
         /// A human-friendly title for the message.
         /// </summary>
-        public string Title { get; set; }
+        public string? Title { get; set; }
 
         /// <summary>
         /// A short summary of what the message is about.
         /// </summary>
-        public string Summary { get; set; }
+        public string? Summary { get; set; }
         
         /// <summary>
         /// A verbose explanation of the message.
         /// CommonMark syntax can be used for rich text representation.
         /// </summary>
-        public string Description { get; set; }
+        public string? Description { get; set; }
     }
 }

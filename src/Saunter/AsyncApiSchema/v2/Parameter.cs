@@ -5,12 +5,12 @@ namespace Saunter.AsyncApiSchema.v2 {
     public class Parameter 
     {
         [JsonPropertyName("description")]
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         [JsonPropertyName("schema")]
-        public Schema Schema { get; set; }
+        public Schema? Schema { get; set; }
 
         [JsonPropertyName("location")]
-        public string Location { get; set; }
+        public string? Location { get; set; }
     }
 }

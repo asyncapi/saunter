@@ -18,7 +18,7 @@ namespace StreetlightsAPI
         /// <summary>
         /// Lat-Long coordinates of the streetlight.
         /// </summary>
-        public double[] Position { get; set; }
+        public double[]? Position { get; set; }
     }
     
     [ApiController]

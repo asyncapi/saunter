@@ -12,36 +12,36 @@ namespace Saunter.AsyncApiSchema.v2
     public class MessageTrait : IMessageTrait
     {
         [JsonPropertyName("headers")]
-        public ISchema Headers { get; set; }
+        public ISchema? Headers { get; set; }
 
         [JsonPropertyName("correlationId")]
-        public CorrelationId CorrelationId { get; set; }
+        public CorrelationId? CorrelationId { get; set; }
 
         [JsonPropertyName("schemaFormat")]
-        public string SchemaFormat { get; set; }
+        public string? SchemaFormat { get; set; }
 
         [JsonPropertyName("contentType")]
-        public string ContentType { get; set; }
+        public string? ContentType { get; set; }
 
         [JsonPropertyName("name")]
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         [JsonPropertyName("title")]
-        public string Title { get; set; }
+        public string? Title { get; set; }
 
         [JsonPropertyName("description")]
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         [JsonPropertyName("tags")]
-        public ISet<Tag> Tags { get; set; } 
+        public ISet<Tag>? Tags { get; set; } 
             
         [JsonPropertyName("externalDocs")]
-        public ExternalDocumentation ExternalDocs { get; set; }
+        public ExternalDocumentation? ExternalDocs { get; set; }
 
         [JsonPropertyName("bindings")]
-        public MessageBindings Bindings { get; set; }
+        public MessageBindings? Bindings { get; set; }
 
         [JsonPropertyName("examples")]
-        public IDictionary<string, object> Examples { get; set; }
+        public IDictionary<string, object>? Examples { get; set; }
     }
 }

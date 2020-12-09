@@ -19,26 +19,25 @@ namespace Saunter.Tests
             var services = new ServiceCollection() as IServiceCollection;
             services.AddAsyncApiSchemaGeneration(options =>
                 {
-                    options.AsyncApi = new AsyncApiSchema.v2.AsyncApiDocument
+                    options.AsyncApi = new AsyncApiSchema.v2.AsyncApiDocument(new Info("Example API", "2019.01.12345")
+                    {
+                        Description = "An example API with events",
+                        Contact = new Contact
+                        {
+                            Email = "michael@mwild.me",
+                            Name = "Michael Wildman",
+                            Url = "https://mwild.me/",
+                        },
+                        License = new License("MIT"),
+                        TermsOfService = "https://mwild.me/tos",
+                    })
                     {
                         Id = new Identifier("urn:com:example:example-events"),
-                        Info = new Info("Example API", "An example API with events")
-                        {
-                            Version = "2019.01.12345",
-                            Contact = new Contact
-                            {
-                                Email = "michael@mwild.me",
-                                Name = "Michael Wildman",
-                                Url = "https://mwild.me/",
-                            },
-                            License = new License("MIT"),
-                            TermsOfService = "https://mwild.me/tos",
-                        },
                         Tags = { "example", "event" },
                         Servers =
                         {
-                            { 
-                                "development", 
+                            {
+                                "development",
                                 new Server("rabbitmq.dev.mwild.me", "amqp")
                                 {
                                     Security = new List<SecurityRequirement> { new SecurityRequirement { { "user-password", new List<string>() } }}

@@ -6,6 +6,6 @@ namespace Saunter.AsyncApiSchema.v2
     public class ChannelBindings
     {
         [JsonPropertyName("amqp")]
-        public AmqpChannelBinding Amqp { get; set; }
+        public AmqpChannelBinding? Amqp { get; set; }
     }
 }

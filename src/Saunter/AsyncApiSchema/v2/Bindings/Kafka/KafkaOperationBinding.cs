@@ -8,30 +8,30 @@ namespace Saunter.AsyncApiSchema.v2.Bindings.Kafka
     public class KafkaOperationBinding : IOperationBinding
     {
         [JsonPropertyName("groupId")]
-        public KafkaOperationBindingGroupId GroupId { get; set; }
+        public KafkaOperationBindingGroupId? GroupId { get; set; }
 
         [JsonPropertyName("clientId")]
-        public KafkaOperationBindingClientId ClientId { get; set; }
+        public KafkaOperationBindingClientId? ClientId { get; set; }
 
         [JsonPropertyName("bindingVersion")]
-        public string BindingVersion { get; set; }
+        public string? BindingVersion { get; set; }
     }
 
     public class KafkaOperationBindingGroupId
     {
         [JsonPropertyName("type")]
-        public string Type { get; set; }
+        public string? Type { get; set; }
 
         [JsonPropertyName("enum")]
-        public string[] Enum { get; set; }
+        public string[]? Enum { get; set; }
     }
 
     public class KafkaOperationBindingClientId
     {
         [JsonPropertyName("type")]
-        public string Type { get; set; }
+        public string? Type { get; set; }
 
         [JsonPropertyName("enum")]
-        public string[] Enum { get; set; }
+        public string[]? Enum { get; set; }
     }
 }

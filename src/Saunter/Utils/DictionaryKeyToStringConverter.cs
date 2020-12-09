@@ -18,14 +18,14 @@ namespace Saunter.Utils
                    typeToConvert.GetInterface("IDictionary") != null;
         }
 
-        public override JsonConverter CreateConverter(
+        public override JsonConverter? CreateConverter(
             Type type,
             JsonSerializerOptions options)
         {
             Type keyType = type.GetGenericArguments()[0];
             Type valueType = type.GetGenericArguments()[1];
 
-            JsonConverter converter = (JsonConverter)Activator.CreateInstance(
+            JsonConverter? converter = (JsonConverter?)Activator.CreateInstance(
                 typeof(DictionaryKeyToStringConverterInner<,>).MakeGenericType(
                     new Type[] { keyType, valueType }),
                 BindingFlags.Instance | BindingFlags.Public,
@@ -37,7 +37,7 @@ namespace Saunter.Utils
         }
 
         private class DictionaryKeyToStringConverterInner<TKey, TValue> :
-            JsonConverter<IDictionary<TKey, TValue>>
+            JsonConverter<IDictionary<TKey, TValue>> where TKey : notnull
         {
             private readonly JsonConverter<TValue> _valueConverter;
 

@@ -43,7 +43,7 @@ namespace Saunter.Generation
             // }
             // which should be named as "fooBar", rather than just "bar"
             return type.IsNested
-                ? NameForType(type.DeclaringType) + type.Name
+                ? NameForType(type.DeclaringType!) + type.Name
                 : type.Name;
         }
 

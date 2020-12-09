@@ -8,18 +8,18 @@ namespace Saunter.AsyncApiSchema.v2.Bindings.Kafka
     public class KafkaMessageBinding : IOperationBinding
     {
         [JsonPropertyName("key")]
-        public KafkaOperationBindingGroupId Key { get; set; }
+        public KafkaOperationBindingGroupId? Key { get; set; }
 
         [JsonPropertyName("bindingVersion")]
-        public string BindingVersion { get; set; }
+        public string? BindingVersion { get; set; }
     }
 
     public class KafkaMessageBindingKey
     {
         [JsonPropertyName("type")]
-        public string Type { get; set; }
+        public string? Type { get; set; }
 
         [JsonPropertyName("enum")]
-        public string[] Enum { get; set; }
+        public string[]? Enum { get; set; }
     }
 }

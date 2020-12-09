@@ -9,12 +9,12 @@ namespace Saunter.AsyncApiSchema.v2.Bindings.Amqp
     public class AmqpMessageBinding : IMessageBinding
     {
         [JsonPropertyName("contentEncoding")]
-        public string ContentEncoding { get; set; }
+        public string? ContentEncoding { get; set; }
 
         [JsonPropertyName("messageType")]
-        public string MessageType { get; set; }
+        public string? MessageType { get; set; }
 
         [JsonPropertyName("bindingVersion")]
-        public string BindingVersion { get; set; }
+        public string? BindingVersion { get; set; }
     }
 }

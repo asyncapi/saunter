@@ -7,25 +7,25 @@ namespace Saunter.AsyncApiSchema.v2
     public class Operation
     {
         [JsonPropertyName("operationId")]
-        public string OperationId { get; set; }
+        public string? OperationId { get; set; }
 
         [JsonPropertyName("summary")]
-        public string Summary { get; set; }
+        public string? Summary { get; set; }
 
         [JsonPropertyName("description")]
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         [JsonPropertyName("tags")]
         public ISet<Tag> Tags { get; set; } = new HashSet<Tag>();
 
         [JsonPropertyName("externalDocs")]
-        public ExternalDocumentation ExternalDocs { get; set; }
+        public ExternalDocumentation? ExternalDocs { get; set; }
 
         [JsonPropertyName("bindings")]
-        public OperationBindings Bindings { get; set; }
+        public OperationBindings? Bindings { get; set; }
 
         [JsonPropertyName("message")]
-        public IMessage Message { get; set; }
+        public IMessage? Message { get; set; }
 
         [JsonPropertyName("traits")]
         public IList<IOperationTrait> Traits { get; set; } = new List<IOperationTrait>();

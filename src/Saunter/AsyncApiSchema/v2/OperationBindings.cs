@@ -7,12 +7,12 @@ namespace Saunter.AsyncApiSchema.v2 {
     public class OperationBindings
     {         
         [JsonPropertyName("http")]
-        public HttpOperationBinding Http { get; set; }
+        public HttpOperationBinding? Http { get; set; }
 
         [JsonPropertyName("amqp")]
-        public AmqpOperationBinding Amqp { get; set; }
+        public AmqpOperationBinding? Amqp { get; set; }
 
         [JsonPropertyName("kafka")]
-        public KafkaOperationBinding Kafka { get; set; }
+        public KafkaOperationBinding? Kafka { get; set; }
     }
 }

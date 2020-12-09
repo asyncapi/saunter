@@ -23,7 +23,7 @@ namespace Saunter.AsyncApiSchema.v2
             return value.GetHashCode();
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             var channelsFieldName = obj as ChannelsFieldName;
             return channelsFieldName != null && value.Equals(channelsFieldName.value);

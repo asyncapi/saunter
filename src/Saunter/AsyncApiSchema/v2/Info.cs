@@ -15,18 +15,18 @@ namespace Saunter.AsyncApiSchema.v2 {
         public string Title { get; }
 
         [JsonPropertyName("version")]
-        public string Version { get; set; }
+        public string Version { get;  }
 
         [JsonPropertyName("description")]
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         [JsonPropertyName("termsOfService")]
-        public string TermsOfService { get; set; }
+        public string? TermsOfService { get; set; }
 
         [JsonPropertyName("contact")]
-        public Contact Contact { get; set; }
+        public Contact? Contact { get; set; }
 
         [JsonPropertyName("license")]
-        public License License { get; set; }
+        public License? License { get; set; }
     }
 }

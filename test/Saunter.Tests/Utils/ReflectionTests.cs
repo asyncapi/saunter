@@ -163,8 +163,8 @@ namespace Saunter.Tests.Utils
         {
             var options = new AsyncApiOptions();
             type.IsEnum(options, out var actualMembers).ShouldBeTrue();
-            actualMembers.MemberType.ShouldBe(typeof(string));
-            actualMembers.Members.ShouldBe(members);
+            actualMembers!.MemberType.ShouldBe(typeof(string));
+            actualMembers!.Members.ShouldBe(members);
         }
         
         [JsonConverter(typeof(JsonStringEnumMemberConverter))]
@@ -181,7 +181,7 @@ namespace Saunter.Tests.Utils
         {
             var options = new AsyncApiOptions();
             type.IsEnum(options, out var actualMembers).ShouldBeTrue();
-            actualMembers.MemberType.ShouldBe(typeof(string));
+            actualMembers!.MemberType.ShouldBe(typeof(string));
             actualMembers.Members.ShouldBe(members);
         }
 
@@ -199,7 +199,7 @@ namespace Saunter.Tests.Utils
         {
             var options = new AsyncApiOptions();
             type.IsEnum(options, out var actualMembers).ShouldBeTrue();
-            actualMembers.MemberType.ShouldBe(typeof(string));
+            actualMembers!.MemberType.ShouldBe(typeof(string));
             actualMembers.Members.ShouldBe(members);
         }
 
@@ -215,7 +215,7 @@ namespace Saunter.Tests.Utils
         {
             var options = new AsyncApiOptions();
             type.IsEnum(options, out var actualMembers).ShouldBeTrue();
-            actualMembers.MemberType.ShouldBe(typeof(int));
+            actualMembers!.MemberType.ShouldBe(typeof(int));
             actualMembers.Members.ShouldBe(members);
         }
 
@@ -262,13 +262,13 @@ namespace Saunter.Tests.Utils
 
         private class SomeClass
         {
-            public string PropertyWithNothing { get; set; }
+            public string? PropertyWithNothing { get; set; }
 
             [Display(Name = "title", Description = "description")]
-            public string PropertyWithDisplayAttribute { get; set; }
+            public string? PropertyWithDisplayAttribute { get; set; }
 
             [Description("description")]
-            public string PropertyWithDescriptionAttribute { get; set; }
+            public string? PropertyWithDescriptionAttribute { get; set; }
 
             /// <summary>
             /// description
@@ -276,33 +276,33 @@ namespace Saunter.Tests.Utils
             /// <example>
             /// example
             /// </example>
-            public string PropertyWithXmlComments { get; set; }
+            public string? PropertyWithXmlComments { get; set; }
 
             [Range(1, 3.33)]
             public decimal PropertyWithRangeAttribute { get; set; }
 
             [MinLength(1)]
             [MaxLength(33)]
-            public string[] ArrayPropertyWithMinMaxLengthAttributes { get; set; }
+            public string[]? ArrayPropertyWithMinMaxLengthAttributes { get; set; }
 
             [MinLength(1)]
             [MaxLength(33)]
-            public string StringPropertyWithMinMaxLengthAttributes { get; set; }
+            public string? StringPropertyWithMinMaxLengthAttributes { get; set; }
 
             [StringLength(33, MinimumLength = 1)]
-            public string PropertyWithStringLengthAttribute { get; set; }
+            public string? PropertyWithStringLengthAttribute { get; set; }
 
-            public ISet<string> ISetProperty { get; set; }
+            public ISet<string>? ISetProperty { get; set; }
 
-            public HashSet<string> HashSetProperty { get; set; }
+            public HashSet<string>? HashSetProperty { get; set; }
 
-            public IList<string> IListProperty { get; set; }
+            public IList<string>? IListProperty { get; set; }
 
             [RegularExpression("pattern")]
-            public string PropertyWithRegularExpressionAttribute { get; set; }
+            public string? PropertyWithRegularExpressionAttribute { get; set; }
 
             [Required]
-            public string PropertyWithRequiredAttribute { get; set; }
+            public string? PropertyWithRequiredAttribute { get; set; }
 
             //Fields
 
@@ -374,130 +374,130 @@ namespace Saunter.Tests.Utils
         public void GetTitle_ReturnsTitle_FromDisplayNameAttribute()
         {
             var prop = typeof(SomeClass).GetProperty(nameof(SomeClass.PropertyWithDisplayAttribute));
-            prop.GetTitle().ShouldBe("title");
+            prop!.GetTitle().ShouldBe("title");
 
             var field = typeof(SomeClass).GetField(nameof(SomeClass.FieldWithDisplayAttribute));
-            field.GetTitle().ShouldBe("title");
+            field!.GetTitle().ShouldBe("title");
         }
 
         [Fact]
         public void GetTitle_ReturnsNull_WhenNoTitle()
         {
             var prop = typeof(SomeClass).GetProperty(nameof(SomeClass.PropertyWithNothing));
-            prop.GetTitle().ShouldBeNull();
+            prop!.GetTitle().ShouldBeNull();
 
             var field = typeof(SomeClass).GetField(nameof(SomeClass.FieldWithNothing));
-            field.GetTitle().ShouldBeNull();
+            field!.GetTitle().ShouldBeNull();
         }
 
         [Fact]
         public void GetDescription_ReturnsDescription_FromDescriptionAttribute()
         {
             var prop = typeof(SomeClass).GetProperty(nameof(SomeClass.PropertyWithDescriptionAttribute));
-            prop.GetDescription().ShouldBe("description");
+            prop!.GetDescription().ShouldBe("description");
 
             var field = typeof(SomeClass).GetField(nameof(SomeClass.FieldWithDescriptionAttribute));
-            field.GetDescription().ShouldBe("description");
+            field!.GetDescription().ShouldBe("description");
         }
 
         [Fact]
         public void GetDescription_ReturnsDescription_FromDisplayAttribute()
         {
             var prop = typeof(SomeClass).GetProperty(nameof(SomeClass.PropertyWithDisplayAttribute));
-            prop.GetDescription().ShouldBe("description");
+            prop!.GetDescription().ShouldBe("description");
 
             var field = typeof(SomeClass).GetField(nameof(SomeClass.FieldWithDisplayAttribute));
-            field.GetDescription().ShouldBe("description");
+            field!.GetDescription().ShouldBe("description");
         }
 
         [Fact]
         public void GetDescription_ReturnsDescription_FromXmlSummaryTag()
         {
             var prop = typeof(SomeClass).GetProperty(nameof(SomeClass.PropertyWithXmlComments));
-            prop.GetDescription().ShouldBe("description");
+            prop!.GetDescription().ShouldBe("description");
 
             var field = typeof(SomeClass).GetField(nameof(SomeClass.FieldWithXmlComments));
-            field.GetDescription().ShouldBe("description");
+            field!.GetDescription().ShouldBe("description");
         }
 
         [Fact]
         public void GetMinimum_ReturnsMinimum_FromRangeAttribute()
         {
             var prop = typeof(SomeClass).GetProperty(nameof(SomeClass.PropertyWithRangeAttribute));
-            prop.GetMinimum().ShouldBe(1M);
+            prop!.GetMinimum().ShouldBe(1M);
 
             var field = typeof(SomeClass).GetField(nameof(SomeClass.FieldWithRangeAttribute));
-            field.GetMinimum().ShouldBe(1M);
+            field!.GetMinimum().ShouldBe(1M);
         }
 
         [Fact]
         public void GetMaximum_ReturnsMaximum_FromRangeAttribute()
         {
             var prop = typeof(SomeClass).GetProperty(nameof(SomeClass.PropertyWithRangeAttribute));
-            prop.GetMaximum().ShouldBe(3.33M);
+            prop!.GetMaximum().ShouldBe(3.33M);
 
             var field = typeof(SomeClass).GetField(nameof(SomeClass.FieldWithRangeAttribute));
-            field.GetMaximum().ShouldBe(3.33M);
+            field!.GetMaximum().ShouldBe(3.33M);
         }
 
         [Fact]
         public void GetMinItems_ReturnsMinItems_FromMinLengthAttribute()
         {
             var prop = typeof(SomeClass).GetProperty(nameof(SomeClass.ArrayPropertyWithMinMaxLengthAttributes));
-            prop.GetMinItems().ShouldBe(1);
+            prop!.GetMinItems().ShouldBe(1);
 
             var field = typeof(SomeClass).GetField(nameof(SomeClass.ArrayFieldWithMinMaxLengthAttributes));
-            field.GetMinItems().ShouldBe(1);
+            field!.GetMinItems().ShouldBe(1);
         }
 
         [Fact]
         public void GetMaxItems_ReturnsMaxItems_FromMaxLengthAttribute()
         {
             var prop = typeof(SomeClass).GetProperty(nameof(SomeClass.ArrayPropertyWithMinMaxLengthAttributes));
-            prop.GetMaxItems().ShouldBe(33);
+            prop!.GetMaxItems().ShouldBe(33);
 
             var field = typeof(SomeClass).GetField(nameof(SomeClass.ArrayFieldWithMinMaxLengthAttributes));
-            field.GetMaxItems().ShouldBe(33);
+            field!.GetMaxItems().ShouldBe(33);
         }
 
         [Fact]
         public void GetMinLength_ReturnsMinLength_FromMinLengthAttribute()
         {
             var prop = typeof(SomeClass).GetProperty(nameof(SomeClass.StringPropertyWithMinMaxLengthAttributes));
-            prop.GetMinLength().ShouldBe(1);
+            prop!.GetMinLength().ShouldBe(1);
 
             var field = typeof(SomeClass).GetField(nameof(SomeClass.StringFieldWithMinMaxLengthAttributes));
-            field.GetMinLength().ShouldBe(1);
+            field!.GetMinLength().ShouldBe(1);
         }
 
         [Fact]
         public void GetMinLength_ReturnsMinLength_FromStringLengthAttribute()
         {
             var prop = typeof(SomeClass).GetProperty(nameof(SomeClass.PropertyWithStringLengthAttribute));
-            prop.GetMinLength().ShouldBe(1);
+            prop!.GetMinLength().ShouldBe(1);
 
             var field = typeof(SomeClass).GetField(nameof(SomeClass.FieldWithStringLengthAttribute));
-            field.GetMinLength().ShouldBe(1);
+            field!.GetMinLength().ShouldBe(1);
         }
 
         [Fact]
         public void GetMaxLength_ReturnsMaxLength_FromMaxLengthAttribute()
         {
             var prop = typeof(SomeClass).GetProperty(nameof(SomeClass.StringPropertyWithMinMaxLengthAttributes));
-            prop.GetMaxLength().ShouldBe(33);
+            prop!.GetMaxLength().ShouldBe(33);
 
             var field = typeof(SomeClass).GetField(nameof(SomeClass.StringFieldWithMinMaxLengthAttributes));
-            field.GetMaxLength().ShouldBe(33);
+            field!.GetMaxLength().ShouldBe(33);
         }
 
         [Fact]
         public void GetMaxLength_ReturnsMaxLength_FromStringLengthAttribute()
         {
             var prop = typeof(SomeClass).GetProperty(nameof(SomeClass.PropertyWithStringLengthAttribute));
-            prop.GetMaxLength().ShouldBe(33);
+            prop!.GetMaxLength().ShouldBe(33);
 
             var field = typeof(SomeClass).GetField(nameof(SomeClass.FieldWithStringLengthAttribute));
-            field.GetMaxLength().ShouldBe(33);
+            field!.GetMaxLength().ShouldBe(33);
         }
 
         [Theory]
@@ -506,7 +506,7 @@ namespace Saunter.Tests.Utils
         public void GetIsUniqueItemsWithProperty_True_WhenTypeIsSet(string propertyName)
         {
             var prop = typeof(SomeClass).GetProperty(propertyName);
-            prop.GetIsUniqueItems().ShouldBe(true);
+            prop!.GetIsUniqueItems().ShouldBe(true);
         }
 
         [Theory]
@@ -515,7 +515,7 @@ namespace Saunter.Tests.Utils
         public void GetIsUniqueItemsWithField_True_WhenTypeIsSet(string fieldName)
         {
             var field = typeof(SomeClass).GetField(fieldName);
-            field.GetIsUniqueItems().ShouldBe(true);
+            field!.GetIsUniqueItems().ShouldBe(true);
         }
 
         [Theory]
@@ -523,64 +523,64 @@ namespace Saunter.Tests.Utils
         public void GetIsUniqueItemsWithProperty_False_WhenTypeIsNotSet(string propertyName)
         {
             var prop = typeof(SomeClass).GetProperty(propertyName);
-            prop.GetIsUniqueItems().ShouldBe(false);
+            prop!.GetIsUniqueItems().ShouldBe(false);
         }
         [Theory]
         [InlineData(nameof(SomeClass.IListField))]
         public void GetIsUniqueItemsWithField_False_WhenTypeIsNotSet(string fieldName)
         {
             var field = typeof(SomeClass).GetField(fieldName);
-            field.GetIsUniqueItems().ShouldBe(false);
+            field!.GetIsUniqueItems().ShouldBe(false);
         }
 
         [Fact]
         public void GetPattern_ReturnsPattern_FromRegularExpressionAttribute()
         {
             var prop = typeof(SomeClass).GetProperty(nameof(SomeClass.PropertyWithRegularExpressionAttribute));
-            prop.GetPattern().ShouldBe("pattern");
+            prop!.GetPattern().ShouldBe("pattern");
 
             var field = typeof(SomeClass).GetField(nameof(SomeClass.FieldWithRegularExpressionAttribute));
-            field.GetPattern().ShouldBe("pattern");
+            field!.GetPattern().ShouldBe("pattern");
         }
 
         [Fact]
         public void GetIsRequired_ReturnsTrue_WhenPropertyOrFieldHasRequiredAttribute()
         {
             var prop = typeof(SomeClass).GetProperty(nameof(SomeClass.PropertyWithRequiredAttribute));
-            prop.GetIsRequired().ShouldBeTrue();
+            prop!.GetIsRequired().ShouldBeTrue();
 
             var field = typeof(SomeClass).GetField(nameof(SomeClass.FieldWithRequiredAttribute));
-            field.GetIsRequired().ShouldBeTrue();
+            field!.GetIsRequired().ShouldBeTrue();
         }
 
         [Fact]
         public void GetIsRequired_ReturnsTrue_WhenPropertyOrFieldDoesNotHaveRequiredAttribute()
         {
             var prop = typeof(SomeClass).GetProperty(nameof(SomeClass.PropertyWithNothing));
-            prop.GetIsRequired().ShouldBeFalse();
+            prop!.GetIsRequired().ShouldBeFalse();
 
             var field = typeof(SomeClass).GetField(nameof(SomeClass.FieldWithNothing));
-            field.GetIsRequired().ShouldBeFalse();
+            field!.GetIsRequired().ShouldBeFalse();
         }
 
         [Fact]
         public void GetExample_ReturnsExample_FromXmlCommentExampleTag()
         {
             var prop = typeof(SomeClass).GetProperty(nameof(SomeClass.PropertyWithXmlComments));
-            prop.GetExample().ShouldBe("example");
+            prop!.GetExample().ShouldBe("example");
 
             var field = typeof(SomeClass).GetField(nameof(SomeClass.FieldWithXmlComments));
-            field.GetExample().ShouldBe("example");
+            field!.GetExample().ShouldBe("example");
         }
 
         [Fact]
         public void GetExample_ReturnsNull_WhenNoXmlCommentExampleTag()
         {
             var prop = typeof(SomeClass).GetProperty(nameof(SomeClass.PropertyWithNothing));
-            prop.GetExample().ShouldBeNull();
+            prop!.GetExample().ShouldBeNull();
 
             var field = typeof(SomeClass).GetField(nameof(SomeClass.FieldWithNothing));
-            field.GetExample().ShouldBeNull();
+            field!.GetExample().ShouldBeNull();
         }
     }
 }

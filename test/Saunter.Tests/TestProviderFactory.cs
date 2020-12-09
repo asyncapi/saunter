@@ -7,7 +7,7 @@ namespace Saunter.Tests
 {
     public static class TestProviderFactory
     {
-        public static IAsyncApiDocumentProvider Provider(Action<AsyncApiOptions> setupAction = null)
+        public static IAsyncApiDocumentProvider Provider(Action<AsyncApiOptions>? setupAction = null)
         {
             var options = new AsyncApiOptions();
             setupAction?.Invoke(options);

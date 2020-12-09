@@ -8,28 +8,28 @@ namespace Saunter.AsyncApiSchema.v2.Bindings.Http
     public class HttpOperationBinding : IOperationBinding
     {
         [JsonPropertyName("type")]
-        public string Type { get; set; }
+        public string? Type { get; set; }
 
         [JsonPropertyName("method")]
-        public string Method { get; set; }
+        public string? Method { get; set; }
 
         [JsonPropertyName("query")]
-        public HttpOperationBindingQuery Query { get; set; } 
+        public HttpOperationBindingQuery? Query { get; set; } 
 
         [JsonPropertyName("bindingVersion")]
-        public string BindingVersion { get; set; }
+        public string? BindingVersion { get; set; }
     }
 
     public class HttpOperationBindingQuery
     {
         [JsonPropertyName("type")]
-        public string Type { get; set; }
+        public string? Type { get; set; }
 
         [JsonPropertyName("required")]
-        public string[] Required { get; set; }
+        public string[]? Required { get; set; }
 
         [JsonPropertyName("properties")]
-        public object Properties { get; set; }
+        public object? Properties { get; set; }
 
         [JsonPropertyName("additionalProperties")]
         public bool AdditionalProperties { get; set; }

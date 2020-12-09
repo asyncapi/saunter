@@ -8,10 +8,10 @@ namespace Saunter.Utils
     {
         public override bool CanConvert(Type typeToConvert) => typeToConvert.IsInterface;
 
-        public override JsonConverter CreateConverter(Type typeToConvert, JsonSerializerOptions options)
+        public override JsonConverter? CreateConverter(Type typeToConvert, JsonSerializerOptions options)
         {
             Type converterType = typeof(InterfaceImplementationConverterInner<>).MakeGenericType(typeToConvert);
-            return (JsonConverter)Activator.CreateInstance(converterType);
+            return (JsonConverter?)Activator.CreateInstance(converterType);
         }
 
         private class InterfaceImplementationConverterInner<T> : JsonConverter<T>
@@ -25,7 +25,7 @@ namespace Saunter.Utils
             public override void Write(Utf8JsonWriter writer, T value, JsonSerializerOptions options)
             {
                 // Use the actual type at runtime to serialize the value
-                Type actualType = value?.GetType();
+                Type? actualType = value?.GetType();
                 JsonSerializer.Serialize(writer, value, actualType, options);
             }
         }

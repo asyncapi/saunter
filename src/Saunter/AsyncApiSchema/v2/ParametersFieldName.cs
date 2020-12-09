@@ -26,7 +26,7 @@ namespace Saunter.AsyncApiSchema.v2 {
             return value.GetHashCode();
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             var parametersFieldName = obj as ParametersFieldName;
             return parametersFieldName != null && value.Equals(parametersFieldName.value);

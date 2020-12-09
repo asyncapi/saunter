@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -7,8 +8,8 @@ namespace Saunter.AsyncApiSchema.v2 {
     {
         public Server(string url, string protocol)
         {
-            Url = url;
-            Protocol = protocol;
+            Url = url ?? throw new ArgumentNullException(nameof(url));
+            Protocol = protocol ?? throw new ArgumentNullException(nameof(protocol));
         }
 
         [JsonPropertyName("url")]
@@ -18,18 +19,18 @@ namespace Saunter.AsyncApiSchema.v2 {
         public string Protocol { get; }
 
         [JsonPropertyName("protocolVersion")]
-        public string ProtocolVersion { get; set; }
+        public string? ProtocolVersion { get; set; }
 
         [JsonPropertyName("description")]
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         [JsonPropertyName("variables")]
-        public IDictionary<string, ServerVariable> Variables { get; set; }
+        public IDictionary<string, ServerVariable>? Variables { get; set; }
 
         [JsonPropertyName("security")]
-        public IList<SecurityRequirement> Security { get; set; }
+        public IList<SecurityRequirement>? Security { get; set; }
 
         [JsonPropertyName("bindings")]
-        public ServerBindings Bindings { get; set; }
+        public ServerBindings? Bindings { get; set; }
     }
 }

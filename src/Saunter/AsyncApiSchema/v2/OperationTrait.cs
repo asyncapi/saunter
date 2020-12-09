@@ -12,21 +12,21 @@ namespace Saunter.AsyncApiSchema.v2
     public class OperationTrait : IOperationTrait
     {
         [JsonPropertyName("operationId")]
-        public string OperationId { get; set; }
+        public string? OperationId { get; set; }
 
         [JsonPropertyName("summary")]
-        public string Summary { get; set; }
+        public string? Summary { get; set; }
 
         [JsonPropertyName("description")]
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         [JsonPropertyName("tags")]
-        public ISet<Tag> Tags { get; set; }
+        public ISet<Tag>? Tags { get; set; }
 
         [JsonPropertyName("externalDocs")]
-        public ExternalDocumentation ExternalDocs { get; set; }
+        public ExternalDocumentation? ExternalDocs { get; set; }
 
         [JsonPropertyName("bindings")]
-        public IDictionary<string, OperationBindings> Bindings { get; set; }
+        public IDictionary<string, OperationBindings>? Bindings { get; set; }
     }
 }

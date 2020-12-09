@@ -5,16 +5,16 @@ namespace Saunter.AsyncApiSchema.v2 {
     public class OAuthFlows
     {
         [JsonPropertyName("implicit")]
-        public OAuthFlow Implicit { get; set; }
+        public OAuthFlow? Implicit { get; set; }
 
         [JsonPropertyName("password")]
-        public OAuthFlow Password { get; set; }
+        public OAuthFlow? Password { get; set; }
 
         [JsonPropertyName("clientCredentials")]
-        public OAuthFlow ClientCredentials { get; set; }
+        public OAuthFlow? ClientCredentials { get; set; }
 
         [JsonPropertyName("authorizationCode")]
-        public OAuthFlow AuthorizationCode { get; set; }
+        public OAuthFlow? AuthorizationCode { get; set; }
 
     }
 }

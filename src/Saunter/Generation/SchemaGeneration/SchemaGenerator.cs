@@ -64,7 +64,7 @@ namespace Saunter.Generation.SchemaGeneration
                 var underlyingTypeOfMember = Reflection.GetUnderlyingType(member);
                 var memberName = memberNameSelector(member);
 
-                ISchema memberSchema = GetSchemaIfPrimitive(underlyingTypeOfMember);
+                ISchema? memberSchema = GetSchemaIfPrimitive(underlyingTypeOfMember);
 
                 if (memberSchema == null)
                 {
@@ -110,7 +110,7 @@ namespace Saunter.Generation.SchemaGeneration
             return schema;
         }
 
-        private Schema GetSchemaIfPrimitive(Type type)
+        private Schema? GetSchemaIfPrimitive(Type type)
         {
             if (type.IsInteger())
             {
@@ -136,7 +136,7 @@ namespace Saunter.Generation.SchemaGeneration
             {
                 return new Schema
                 {
-                    Type = members.MemberType == typeof(string) 
+                    Type = members!.MemberType == typeof(string) 
                         ? "string" 
                         : "integer",
                     Enum = members.Members,
@@ -173,14 +173,14 @@ namespace Saunter.Generation.SchemaGeneration
             return null;
         }
 
-        private Schema GetSchemaIfEnumerable(Type type, ISchemaRepository schemaRepository)
+        private Schema? GetSchemaIfEnumerable(Type type, ISchemaRepository schemaRepository)
         {
             if (type.IsEnumerable(out var elementType))
             {
                 var schema = new Schema
                 {
                     Type = "array",
-                    Items = GenerateSchema(elementType, schemaRepository),
+                    Items = GenerateSchema(elementType!, schemaRepository),
                 };
 
                 return schema;

@@ -34,7 +34,7 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
             
             var subscribe = channel.Value.Subscribe;
             subscribe.ShouldNotBeNull();
-            subscribe.OperationId.ShouldBe("TenantMessageConsumer");
+            subscribe!.OperationId.ShouldBe("TenantMessageConsumer");
             subscribe.Summary.ShouldBe("Subscribe to domains events about tenants.");
 
             var messages = subscribe.Message.ShouldBeOfType<Messages>();

@@ -13,22 +13,22 @@ namespace Saunter.AsyncApiSchema.v2.Bindings.Amqp
         public AmqpChannelBindingIs Is { get; set; }
 
         [JsonPropertyName("exchange")]
-        public AmqpChannelBindingExchange Exchange { get; set; }
+        public AmqpChannelBindingExchange? Exchange { get; set; }
 
         [JsonPropertyName("queue")]
-        public AmqpChannelBindingQueue Queue { get; set; }
+        public AmqpChannelBindingQueue? Queue { get; set; }
 
         [JsonPropertyName("bindingVersion")]
-        public string BindingVersion { get; set; }
+        public string? BindingVersion { get; set; }
     }
 
     public class AmqpChannelBindingExchange
     {
         [JsonPropertyName("name")]
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         [JsonPropertyName("type")]
-        public string Type { get; set; }
+        public string? Type { get; set; }
 
         [JsonPropertyName("durable")]
         public bool? Durable { get; set; }
@@ -40,7 +40,7 @@ namespace Saunter.AsyncApiSchema.v2.Bindings.Amqp
     public class AmqpChannelBindingQueue
     {
         [JsonPropertyName("name")]
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         [JsonPropertyName("durable")]
         public bool? Durable { get; set; }

@@ -77,12 +77,13 @@ namespace Saunter.Generation
             {
                 var channelItem = new ChannelItem
                 {              
-                    Description = mc.Channel.Description,
-                    Parameters = mc.Channel.Parameters,
+                    Description = mc.Channel!.Description,
+                    Parameters = mc.Channel!.Parameters,
                     Publish = GenerateOperationFromMethod(mc.Method, schemaRepository, OperationType.Publish),
                     Subscribe = GenerateOperationFromMethod(mc.Method, schemaRepository, OperationType.Subscribe),
                 }; 
-                channels.Add(mc.Channel.Name, channelItem);
+                channels.Add(mc.Channel!.Name, channelItem);
+
                 
                 var context = new ChannelItemFilterContext(mc.Method, schemaRepository, mc.Channel);
                 foreach (var filter in _options.ChannelItemFilters)
@@ -111,16 +112,18 @@ namespace Saunter.Generation
 
             foreach (var cc in classesWithChannelAttribute)
             {
+
                 var channelItem = new ChannelItem
                 {
-                    Description = cc.Channel.Description,
-                    Parameters = cc.Channel.Parameters,
+                    Description = cc.Channel!.Description,
+                    Parameters = cc.Channel!.Parameters,
                     Publish = GenerateOperationFromClass(cc.Type, schemaRepository, OperationType.Publish),
                     Subscribe = GenerateOperationFromClass(cc.Type, schemaRepository, OperationType.Subscribe),                    
                 };
                 
-                channels.Add(cc.Channel.Name, channelItem);
-                
+                channels.Add(cc.Channel!.Name, channelItem);
+
+
                 var context = new ChannelItemFilterContext(cc.Type, schemaRepository, cc.Channel);
                 foreach (var filter in _options.ChannelItemFilters)
                 {
@@ -136,7 +139,7 @@ namespace Saunter.Generation
         /// <summary>
         /// Generate the an operation of an AsyncApi Channel for the given method.
         /// </summary>
-        private Operation GenerateOperationFromMethod(MethodInfo method, ISchemaRepository schemaRepository, OperationType operationType)
+        private Operation? GenerateOperationFromMethod(MethodInfo method, ISchemaRepository schemaRepository, OperationType operationType)
         {
             var operationAttribute = GetOperationAttribute(method, operationType);
             if (operationAttribute == null)
@@ -170,7 +173,7 @@ namespace Saunter.Generation
         /// <summary>
         /// Generate the an operation of an AsyncApi Channel for the given class.
         /// </summary>
-        private Operation GenerateOperationFromClass(TypeInfo type, ISchemaRepository schemaRepository, OperationType operationType)
+        private Operation? GenerateOperationFromClass(TypeInfo type, ISchemaRepository schemaRepository, OperationType operationType)
         {
             var operationAttribute = GetOperationAttribute(type, operationType);
             if (operationAttribute == null)
@@ -198,30 +201,31 @@ namespace Saunter.Generation
             foreach (var mm in methodsWithMessageAttribute)
             {
                 var message = GenerateMessageFromAttribute(mm.Message, schemaRepository);
-                messages.OneOf.Add(message);
+                if (message != null)
+                    messages.OneOf.Add(message);
             }
 
             return operation;
         }
 
-        private static OperationAttribute GetOperationAttribute(MemberInfo typeOrMethod, OperationType operationType)
+        private static OperationAttribute? GetOperationAttribute(MemberInfo typeOrMethod, OperationType operationType)
         {
             switch (operationType)
             {
                 case OperationType.Publish:
                     var publishOperationAttribute = typeOrMethod.GetCustomAttribute<PublishOperationAttribute>();
-                    return (OperationAttribute) publishOperationAttribute;
+                    return (OperationAttribute?) publishOperationAttribute;
                 
                 case OperationType.Subscribe:
                     var subscribeOperationAttribute = typeOrMethod.GetCustomAttribute<SubscribeOperationAttribute>();
-                    return (OperationAttribute) subscribeOperationAttribute;
+                    return (OperationAttribute?) subscribeOperationAttribute;
                 
                 default:
                     return null;
             }
         }
 
-        private Message GenerateMessageFromAttribute(MessageAttribute messageAttribute, ISchemaRepository schemaRepository)
+        private Message? GenerateMessageFromAttribute(MessageAttribute? messageAttribute, ISchemaRepository schemaRepository)
         {
             if (messageAttribute?.PayloadType == null)
             {
@@ -241,7 +245,7 @@ namespace Saunter.Generation
         }
         
 
-        private Message GenerateMessageFromType(Type payloadType, ISchemaRepository schemaRepository)
+        private Message? GenerateMessageFromType(Type? payloadType, ISchemaRepository schemaRepository)
         {
             if (payloadType == null)
             {

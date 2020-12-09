@@ -29,7 +29,7 @@ namespace Saunter.AsyncApiSchema.v2
             return value.GetHashCode();
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             var componentFieldName = obj as ComponentFieldName;
             return componentFieldName != null && value.Equals(componentFieldName.value);

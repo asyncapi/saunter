@@ -5,12 +5,12 @@ namespace Saunter.AsyncApiSchema.v2 {
     public class Contact
     {
         [JsonPropertyName("name")]
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         [JsonPropertyName("url")]
-        public string Url { get; set; }
+        public string? Url { get; set; }
 
         [JsonPropertyName("email")]
-        public string Email { get; set; }
+        public string? Email { get; set; }
     }
 }

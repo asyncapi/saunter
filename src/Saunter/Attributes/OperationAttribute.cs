@@ -7,13 +7,13 @@ namespace Saunter.Attributes
     {
         public OperationType OperationType { get; protected set; }
         
-        public Type MessagePayloadType { get; protected set; }
+        public Type? MessagePayloadType { get; protected set; }
         
-        public string Summary { get; set; }
+        public string? Summary { get; set; }
 
-        public string OperationId { get; set; }
+        public string? OperationId { get; set; }
         
-        public string Description { get; set; }
+        public string? Description { get; set; }
     }
 
     public class PublishOperationAttribute : OperationAttribute

@@ -15,16 +15,16 @@ namespace Saunter.AsyncApiSchema.v2
     public class Schema : ISchema
     {
         [JsonPropertyName("type")]
-        public string Type { get; set; }
+        public string? Type { get; set; }
 
         [JsonPropertyName("title")]
-        public string Title { get; set; }
+        public string? Title { get; set; }
         
         [JsonPropertyName("format")]
-        public string Format { get; set; }
+        public string? Format { get; set; }
         
         [JsonPropertyName("description")]
-        public string Description { get; set; }
+        public string? Description { get; set; }
         
         [JsonPropertyName("minimum")]
         public decimal? Minimum { get; set; }
@@ -48,21 +48,21 @@ namespace Saunter.AsyncApiSchema.v2
         public bool? UniqueItems { get; set; }
         
         [JsonPropertyName("pattern")]
-        public string Pattern { get; set; }
+        public string? Pattern { get; set; }
 
         [JsonPropertyName("required")]
-        public ISet<string> Required { get; set; }
+        public ISet<string>? Required { get; set; }
 
         [JsonPropertyName("items")]
-        public ISchema Items { get; set; }
+        public ISchema? Items { get; set; }
 
         [JsonPropertyName("example")]
-        public string Example { get; set; }
+        public string? Example { get; set; }
 
         [JsonPropertyName("enum")]
-        public IList Enum { get; set; }
+        public IList? Enum { get; set; }
 
         [JsonPropertyName("properties")]
-        public IDictionary<string, ISchema> Properties { get; set; }
+        public IDictionary<string, ISchema>? Properties { get; set; }
     }
 }

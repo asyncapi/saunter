@@ -80,7 +80,7 @@ namespace Saunter.Utils
             return false;
         }
 
-        public static bool IsEnumerable(this Type type, out Type elementType)
+        public static bool IsEnumerable(this Type type, out Type? elementType)
         {
             // Special case for string which is also an IEnumerable<char>,
             // but we never want to treat it that way when documenting types.
@@ -113,7 +113,7 @@ namespace Saunter.Utils
             return false;
         }
 
-        public static bool IsEnum(this Type type, AsyncApiOptions options, out EnumMembers members)
+        public static bool IsEnum(this Type type, AsyncApiOptions options, out EnumMembers? members)
         {
             if (type.IsEnum)
             {
@@ -136,25 +136,18 @@ namespace Saunter.Utils
             var useEnumName = options.UseEnumMemberName != null && options.UseEnumMemberName(type);
             if (useEnumName)
             {
-                return new EnumMembers
-                {
-                    MemberType = typeof(string),
-                    Members = type.GetEnumMemberNames(options).ToList(),
-                };
+                return new EnumMembers(typeof(string), type.GetEnumMemberNames(options).ToList());
             }
             
-            return new EnumMembers
-            {
-                MemberType = typeof(int),
-                Members = type.GetEnumMemberValues().ToList(),
-            };
+            return new EnumMembers(typeof(int), type.GetEnumMemberValues().ToList());
         }
 
         private static IEnumerable<string> GetEnumMemberNames(this Type type, AsyncApiOptions options)
         {
-            foreach (Enum val in type.GetEnumValues())
+            foreach (Enum? val in type.GetEnumValues())
             {
-                yield return options.EnumMemberNameSelector(type, val);
+                if (val != null)
+                    yield return options.EnumMemberNameSelector(type, val);
             }
         }
 
@@ -203,13 +196,13 @@ namespace Saunter.Utils
             return false;
         }
 
-        public static string GetTitle(this MemberInfo memberInfo)
+        public static string? GetTitle(this MemberInfo memberInfo)
         {
             var displayAttribute = memberInfo.GetCustomAttribute<DisplayAttribute>();
             return displayAttribute?.Name;
         }
 
-        public static string GetDescription(this MemberInfo memberInfo)
+        public static string? GetDescription(this MemberInfo memberInfo)
         {
             var descriptionAttribute = memberInfo.GetCustomAttribute<DescriptionAttribute>();
             if (descriptionAttribute != null)
@@ -312,7 +305,7 @@ namespace Saunter.Utils
             return false;
         }
 
-        public static string GetPattern(this MemberInfo memberInfo)
+        public static string? GetPattern(this MemberInfo memberInfo)
         {
             var regexAttribute = memberInfo.GetCustomAttribute<RegularExpressionAttribute>();
             return regexAttribute?.Pattern;
@@ -324,7 +317,7 @@ namespace Saunter.Utils
             return requiredAttribute != null;
         }
 
-        public static string GetExample(this MemberInfo memberInfo)
+        public static string? GetExample(this MemberInfo memberInfo)
         {
             var xmlExample = memberInfo.GetXmlDocsTag("example");
             if (!String.IsNullOrEmpty(xmlExample))

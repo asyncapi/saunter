@@ -11,10 +11,10 @@ namespace Saunter.Utils
     {
         public override bool CanConvert(Type typeToConvert) => typeToConvert.IsEnum;
 
-        public override JsonConverter CreateConverter(Type typeToConvert, JsonSerializerOptions options)
+        public override JsonConverter? CreateConverter(Type typeToConvert, JsonSerializerOptions options)
         {
             Type converterType = typeof(EnumMemberConverterInner<>).MakeGenericType(typeToConvert);
-            return (JsonConverter)Activator.CreateInstance(converterType);
+            return (JsonConverter?)Activator.CreateInstance(converterType);
         }
 
         private class EnumMemberConverterInner<TEnum> : JsonConverter<TEnum>
@@ -28,16 +28,16 @@ namespace Saunter.Utils
 
             public override void Write(Utf8JsonWriter writer, TEnum value, JsonSerializerOptions options)
             {
-                if (TryGetEnumMemberValue(value, out string name))
+                if (TryGetEnumMemberValue(value, out string? name))
                     JsonSerializer.Serialize(writer, name, options);
                 else
                     JsonSerializer.Serialize(writer, value.ToString(), options);
             }
 
-            private static bool TryGetEnumMemberValue(TEnum value, out string name)
+            private static bool TryGetEnumMemberValue(TEnum value, out string? name)
             {
                 MemberInfo memberInfo = typeof(TEnum).GetMember(value.ToString()).First();
-                EnumMemberAttribute enumMemberAttribute = memberInfo.GetCustomAttribute<EnumMemberAttribute>();
+                EnumMemberAttribute? enumMemberAttribute = memberInfo.GetCustomAttribute<EnumMemberAttribute>();
 
                 if (enumMemberAttribute != null)
                 {

@@ -21,14 +21,14 @@ namespace Saunter.AsyncApiSchema.v2
             return value.ToString();
         }
 
-        public class JsonConverter : JsonConverter<Identifier>
+        public class JsonConverter : JsonConverter<Identifier?>
         {
             public override bool CanConvert(Type objectType)
             {
                 return objectType == typeof(Identifier);
             }
 
-            public override Identifier Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+            public override Identifier? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
             {
                 if (reader.TokenType != JsonTokenType.String) return null;
 
@@ -36,9 +36,9 @@ namespace Saunter.AsyncApiSchema.v2
                 return new Identifier(text);
             }
 
-            public override void Write(Utf8JsonWriter writer, Identifier value, JsonSerializerOptions options)
+            public override void Write(Utf8JsonWriter writer, Identifier? value, JsonSerializerOptions options)
             {
-                writer.WriteStringValue(value.ToString());
+                writer.WriteStringValue(value?.ToString());
             }
         }
     }

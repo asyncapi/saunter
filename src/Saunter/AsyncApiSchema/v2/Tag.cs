@@ -15,10 +15,10 @@ namespace Saunter.AsyncApiSchema.v2
         public string Name { get; }
 
         [JsonPropertyName("description")]
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         [JsonPropertyName("externalDocs")]
-        public ExternalDocumentation ExternalDocs { get; set; }
+        public ExternalDocumentation? ExternalDocs { get; set; }
 
         public static implicit operator Tag(string s)
         {
