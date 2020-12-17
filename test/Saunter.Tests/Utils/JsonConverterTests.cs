@@ -13,6 +13,7 @@ namespace Saunter.Tests.Utils
         [Theory]
         [InlineData(typeof(IDictionary<ComponentFieldName, IChannelBinding>))]
         [InlineData(typeof(Dictionary<ComponentFieldName, IChannelBinding>))]
+        [InlineData(typeof(Servers))]
         public void DictionaryKeyToStringConverter_CanConvert_True_OnConvertibleTypes(Type type)
         {
             var converter = new DictionaryKeyToStringConverter();
@@ -20,7 +21,7 @@ namespace Saunter.Tests.Utils
         }
 
         [Fact]
-        public void DictionaryKeyToStringConverter_Convert_Should_OutputCorrectData()
+        public void DictionaryKeyToStringConverter_Convert_Should_OutputCorrectData_GivenDictionary()
         {
             // Check whether serialization works
             var dict = new Dictionary<ComponentFieldName, int>
@@ -40,6 +41,29 @@ namespace Saunter.Tests.Utils
 
             data.ShouldBe("{\"test1\":1,\"test2\":2}");
         }
+
+        [Fact]
+        public void DictionaryKeyToStringConverter_Convert_Should_OutputCorrectData_GivenClassExtendingDictionary()
+        {
+            // Check whether serialization works
+            var dict = new Servers
+            {
+                { new ServersFieldName("test1"), null },
+                { new ServersFieldName("test2"), null },
+            };
+
+            var data = JsonSerializer.Serialize(
+                dict,
+                new JsonSerializerOptions
+                {
+                    WriteIndented = false,
+                    Converters = { new DictionaryKeyToStringConverter() }
+                }
+            );
+
+            data.ShouldBe("{\"test1\":null,\"test2\":null}");
+        }
+        
 
         [Fact]
         public void InterfaceImplementationConverter_ShouldNot_ReturnEmptyObject()
