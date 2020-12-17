@@ -28,12 +28,14 @@ namespace Saunter.Generation
         
         public AsyncApiSchema.v2.AsyncApiDocument GenerateDocument(TypeInfo[] asyncApiTypes)
         {
-            var schemaResolver = new JsonSchemaResolver(new JsonSchema(), _jsonSchemaSettings);
-
             var asyncApiSchema = _options.AsyncApi;
             
+            var schemaResolver = new AsyncApiSchemaResolver(asyncApiSchema, _jsonSchemaSettings);
+
             asyncApiSchema.Channels = GenerateChannels(asyncApiTypes, schemaResolver);
-            asyncApiSchema.Components.Schemas = schemaResolver.Schemas.ToDictionary(p => new ComponentFieldName(p.Id), p => p.ActualSchema);
+            
+            // TODO: this is now done by the AsyncApiSchemaResolver?
+            // asyncApiSchema.Components.Schemas = schemaResolver.Schemas.ToDictionary(p => new ComponentFieldName(p.Id));
 
             var filterContext = new DocumentFilterContext(asyncApiTypes, schemaResolver);
             foreach (var filter in _options.DocumentFilters)
@@ -230,10 +232,10 @@ namespace Saunter.Generation
             {
                 return null;
             }
-            
+
             var message = new Message
             {
-                Payload = _schemaGenerator.Generate(messageAttribute.PayloadType, schemaResolver),
+                Payload = _schemaGenerator.GenerateWithReferenceAndNullability<JsonSchema>(messageAttribute.PayloadType.ToContextualType(), schemaResolver),
                 Name = messageAttribute.Name ?? _options.SchemaIdSelector(messageAttribute.PayloadType),
                 Title = messageAttribute.Title,
                 Summary = messageAttribute.Summary,
@@ -250,17 +252,11 @@ namespace Saunter.Generation
             {
                 return null;
             }
-            
-            var id = _options.SchemaIdSelector(payloadType);
-            var payloadSchema = _schemaGenerator.GenerateWithReferenceAndNullability<JsonSchema>(
-                payloadType.ToContextualType(),
-                schemaResolver,
-                (_, s) => { s.Id = id; });
-            
+
             var message = new Message
             {
-                Payload = payloadSchema.Reference,
-                Name = id,
+                Payload = _schemaGenerator.GenerateWithReferenceAndNullability<JsonSchema>(payloadType.ToContextualType(), schemaResolver),
+                Name = _options.SchemaIdSelector(payloadType),
             };
 
             return message;
