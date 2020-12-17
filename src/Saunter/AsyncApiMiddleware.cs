@@ -35,19 +35,22 @@ namespace Saunter
 
         private async Task RespondWithAsyncApiSchemaJson(HttpResponse response, AsyncApiSchema.v2.AsyncApiDocument asyncApiSchema)
         {
-            var asyncApiSchemaJson = JsonSerializer.Serialize(
-                asyncApiSchema,
-                new JsonSerializerOptions
-                {
-                    WriteIndented = false,
-                    IgnoreNullValues = true,
-                    Converters =
-                    {
-                        new DictionaryKeyToStringConverter(),
-                        new InterfaceImplementationConverter(),
-                    },
-                }
-            );
+            // TODO: figure out why this works but the commented out System.Text.Json does not!
+            var asyncApiSchemaJson = Newtonsoft.Json.JsonConvert.SerializeObject(asyncApiSchema);
+
+            // var asyncApiSchemaJson = JsonSerializer.Serialize(
+            //     asyncApiSchema,
+            //     new JsonSerializerOptions
+            //     {
+            //         WriteIndented = false,
+            //         IgnoreNullValues = true,
+            //         Converters =
+            //         {
+            //             new DictionaryKeyToStringConverter(),
+            //             new InterfaceImplementationConverter(),
+            //         },
+            //     }
+            // );
 
             response.StatusCode = (int) HttpStatusCode.OK;
             response.ContentType = "application/json";

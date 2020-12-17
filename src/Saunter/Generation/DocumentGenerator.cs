@@ -33,7 +33,7 @@ namespace Saunter.Generation
             var asyncApiSchema = _options.AsyncApi;
             
             asyncApiSchema.Channels = GenerateChannels(asyncApiTypes, schemaResolver);
-            asyncApiSchema.Components.Schemas = schemaResolver.Schemas.ToDictionary(p => new ComponentFieldName(p.Id));
+            asyncApiSchema.Components.Schemas = schemaResolver.Schemas.ToDictionary(p => new ComponentFieldName(p.Id), p => p.ActualSchema);
 
             var filterContext = new DocumentFilterContext(asyncApiTypes, schemaResolver);
             foreach (var filter in _options.DocumentFilters)
@@ -251,10 +251,16 @@ namespace Saunter.Generation
                 return null;
             }
             
+            var id = _options.SchemaIdSelector(payloadType);
+            var payloadSchema = _schemaGenerator.GenerateWithReferenceAndNullability<JsonSchema>(
+                payloadType.ToContextualType(),
+                schemaResolver,
+                (_, s) => { s.Id = id; });
+            
             var message = new Message
             {
-                Payload = _schemaGenerator.Generate(payloadType, schemaResolver),
-                Name = _options.SchemaIdSelector(payloadType),
+                Payload = payloadSchema.Reference,
+                Name = id,
             };
 
             return message;
