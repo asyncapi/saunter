@@ -10,22 +10,33 @@ namespace Saunter.Utils
     {
         public override bool CanConvert(Type typeToConvert)
         {
-            if (!typeToConvert.IsGenericType)
-                return false;
-
             // Check whether type either IS an IDictionary or implements it
-            return typeToConvert.GetGenericTypeDefinition() == typeof(IDictionary<,>) ||
-                   typeToConvert.GetInterface("IDictionary") != null;
+            return TypeIsDictionary(typeToConvert)
+                   || TypeIsDictionary(typeToConvert.BaseType); // e.g. class Servers : Dictionary<ServersFieldName, Server>
         }
+
+        private static bool TypeIsDictionary(Type type)
+            => type != null 
+                   && type.IsGenericType
+                   && (type.GetGenericTypeDefinition() == typeof(IDictionary<,>) || type.GetInterface("IDictionary") != null);
 
         public override JsonConverter CreateConverter(
             Type type,
             JsonSerializerOptions options)
         {
-            Type keyType = type.GetGenericArguments()[0];
-            Type valueType = type.GetGenericArguments()[1];
+            var genericArguments = TypeIsDictionary(type)
+                ? type.GetGenericArguments()
+                : type.BaseType?.GetGenericArguments();
 
-            JsonConverter converter = (JsonConverter)Activator.CreateInstance(
+            if (genericArguments == null || genericArguments.Length != 2)
+            {
+                throw new NotSupportedException($"Type {type} not supported by this converted.");
+            }
+            
+            var keyType = genericArguments[0];
+            var valueType = genericArguments[1];
+
+            var converter = (JsonConverter)Activator.CreateInstance(
                 typeof(DictionaryKeyToStringConverterInner<,>).MakeGenericType(
                     new Type[] { keyType, valueType }),
                 BindingFlags.Instance | BindingFlags.Public,

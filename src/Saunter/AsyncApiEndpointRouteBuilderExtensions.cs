@@ -1,4 +1,4 @@
-#if NETCOREAPP3_0
+#if !NETSTANDARD2_0
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;

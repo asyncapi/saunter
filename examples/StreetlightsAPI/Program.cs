@@ -1,8 +1,11 @@
+using System.Linq;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Hosting.Server.Features;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Saunter;
 using Saunter.AsyncApiSchema.v2;
 using Saunter.Generation;
@@ -77,6 +80,13 @@ namespace StreetlightsAPI
                 endpoints.MapControllers();
                 endpoints.MapAsyncApiDocuments();
             });
+
+            
+            // Print the AsyncAPI doc location
+            var logger = app.ApplicationServices.GetService<ILoggerFactory>().CreateLogger<Program>();
+            var addresses = app.ServerFeatures.Get<IServerAddressesFeature>().Addresses;
+            
+            logger.LogInformation("AsyncAPI doc available at: {URL}", $"{addresses.FirstOrDefault()}/asyncapi/asyncapi.json");
         }
     }
 }
