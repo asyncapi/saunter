@@ -1,7 +1,8 @@
 using System;
 using System.Text.RegularExpressions;
 
-namespace Saunter.AsyncApiSchema.v2 {
+namespace Saunter.AsyncApiSchema.v2
+{
     public class ServersFieldName
     {
         private readonly string value;
