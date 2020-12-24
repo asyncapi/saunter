@@ -1,8 +1,10 @@
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
+using NJsonSchema.Converters;
 
 namespace Saunter.AsyncApiSchema.v2
 {
+    [JsonConverter(typeof(JsonReferenceConverter))]
     public class AsyncApiDocument
     {
         [JsonPropertyName("asyncapi")]
