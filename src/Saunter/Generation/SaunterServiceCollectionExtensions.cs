@@ -2,7 +2,6 @@ using System;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using NJsonSchema.Generation;
-using Saunter.Generation.SchemaGeneration;
 
 namespace Saunter.Generation
 {

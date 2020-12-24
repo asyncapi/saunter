@@ -3,10 +3,8 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text.Json.Serialization;
-using Microsoft.Extensions.Options;
 using NJsonSchema;
 using NJsonSchema.Generation;
-using Saunter.Generation.SchemaGeneration;
 using Shouldly;
 using Xunit;
 
@@ -83,7 +81,7 @@ namespace Saunter.Tests.Generation.SchemaGeneration
 
         public Bar Bar { get; set; }
 
-        [JsonPropertyName("hello")]
+        [JsonProperty("hello")]
         public string HelloWorld { get; set; }
 
         [DataMember(Name = "myworld")]

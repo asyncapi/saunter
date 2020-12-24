@@ -1,15 +1,23 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using Saunter.AsyncApiSchema.v2.Bindings;
-using Saunter.AsyncApiSchema.v2.Traits;
 
-namespace Saunter.AsyncApiSchema.v2
+namespace Saunter.AsyncApiSchema.v2.Traits
 {
     /// <summary>
-    /// Describes a publish or a subscribe operation.
-    /// This provides a place to document how and why messages are sent and received. 
+    /// Can be either an <see cref="OperationTrait"/> or an <see cref="OperationTraitReference"/> reference to an operation trait.
     /// </summary>
-    public class Operation
+    public interface IOperationTrait { }
+    
+    /// <summary>
+    /// A reference to an OperationTrait within the AsyncAPI components.
+    /// </summary>
+    public class OperationTraitReference : Reference, IOperationTrait
+    {
+        public OperationTraitReference(string id) : base(id, "#/components/operationTraits/{0}") { }
+    }
+    
+    public class OperationTrait : IOperationTrait
     {
         /// <summary>
         /// Unique string used to identify the operation.
@@ -38,7 +46,7 @@ namespace Saunter.AsyncApiSchema.v2
         /// A list of tags for API documentation control. Tags can be used for logical grouping of operations.
         /// </summary>
         [JsonProperty("tags")]
-        public ISet<Tag> Tags { get; set; } = new HashSet<Tag>();
+        public ISet<Tag> Tags { get; set; }
 
         /// <summary>
         /// Additional external documentation for this operation.
@@ -47,25 +55,9 @@ namespace Saunter.AsyncApiSchema.v2
         public ExternalDocumentation ExternalDocs { get; set; }
 
         /// <summary>
-        /// A free-form map where the keys describe the name of the protocol and the values describe
-        /// protocol-specific definitions for the operation.
+        /// A free-form map where the keys describe the name of the protocol and the values describe protocol-specific definitions for the operation.
         /// </summary>
         [JsonProperty("bindings")]
         public OperationBindings Bindings { get; set; }
-        
-        /// <summary>
-        /// A definition of the message that will be published or received on this channel.
-        /// oneOf is allowed here to specify multiple messages, however, a message MUST be
-        /// valid only against one of the referenced message objects.
-        /// </summary>
-        [JsonProperty("message")]
-        public IMessage Message { get; set; }
-
-        /// <summary>
-        /// A list of traits to apply to the operation object. Traits MUST be merged into the operation
-        /// object using the JSON Merge Patch algorithm in the same order they are defined here.
-        /// </summary>
-        [JsonProperty("traits")]
-        public IList<IOperationTrait> Traits { get; set; } = new List<IOperationTrait>();
     }
 }

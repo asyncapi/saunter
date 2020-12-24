@@ -1,43 +1,78 @@
 using NJsonSchema;
 using System.Collections.Generic;
-using System.Text.Json;
-using System.Text.Json.Serialization;
+using Newtonsoft.Json;
+using Saunter.AsyncApiSchema.v2.Bindings;
+using Saunter.AsyncApiSchema.v2.Traits;
 
 namespace Saunter.AsyncApiSchema.v2
 {
     public class Components
     {
-        [JsonPropertyName("schemas")]
-        public IDictionary<ComponentFieldName, JsonSchema> Schemas { get; set; } = new Dictionary<ComponentFieldName, JsonSchema>();
+        /// <summary>
+        /// An object to hold reusable Schema Objects.
+        /// </summary>
+        [JsonProperty("schemas")]
+        public IDictionary<string, JsonSchema> Schemas { get; set; } = new Dictionary<string, JsonSchema>();
 
-        [JsonPropertyName("messages")]
-        public IDictionary<ComponentFieldName, Message> Messages { get; set; } = new Dictionary<ComponentFieldName, Message>();
+        /// <summary>
+        /// An object to hold reusable Message Objects.
+        /// </summary>
+        [JsonProperty("messages")]
+        public IDictionary<string, Message> Messages { get; set; } = new Dictionary<string, Message>();
 
-        [JsonPropertyName("securitySchemes")]
-        public IDictionary<ComponentFieldName, SecurityScheme> SecuritySchemes { get; set; } = new Dictionary<ComponentFieldName, SecurityScheme>();
+        /// <summary>
+        /// An object to hold reusable Security Scheme Objects.
+        /// </summary>
+        [JsonProperty("securitySchemes")]
+        public IDictionary<string, SecurityScheme> SecuritySchemes { get; set; } = new Dictionary<string, SecurityScheme>();
 
-        [JsonPropertyName("parameters")]
-        public IDictionary<ComponentFieldName, Parameter> Parameters { get; set; } = new Dictionary<ComponentFieldName, Parameter>();
+        /// <summary>
+        /// An object to hold reusable Parameter Objects.
+        /// </summary>
+        [JsonProperty("parameters")]
+        public IDictionary<string, Parameter> Parameters { get; set; } = new Dictionary<string, Parameter>();
 
-        [JsonPropertyName("correlationIds")]
-        public IDictionary<ComponentFieldName, CorrelationId> CorrelationIds { get; set; } = new Dictionary<ComponentFieldName, CorrelationId>();
+        /// <summary>
+        /// An object to hold reusable Correlation ID Objects.
+        /// </summary>
+        [JsonProperty("correlationIds")]
+        public IDictionary<string, CorrelationId> CorrelationIds { get; set; } = new Dictionary<string, CorrelationId>();
+        
+        /// <summary>
+        /// An object to hold reusable Server Binding Objects.
+        /// </summary>
+        [JsonProperty("serverBindings")]
+        public IDictionary<string, ServerBindings> ServerBindings { get; set; } = new Dictionary<string, ServerBindings>();
 
-        [JsonPropertyName("serverBindings")]
-        public IDictionary<ComponentFieldName, IServerBinding> ServerBindings { get; set; } = new Dictionary<ComponentFieldName, IServerBinding>();
+        /// <summary>
+        /// An object to hold reusable Channel Binding Objects.
+        /// </summary>
+        [JsonProperty("channelBindings")]
+        public IDictionary<string, ChannelBindings> ChannelBindings { get; set; } = new Dictionary<string, ChannelBindings>();
 
-        [JsonPropertyName("channelBindings")]
-        public IDictionary<ComponentFieldName, IChannelBinding> ChannelBindings { get; set; } = new Dictionary<ComponentFieldName, IChannelBinding>();
+        /// <summary>
+        /// An object to hold reusable Operation Binding Objects.
+        /// </summary>
+        [JsonProperty("operationBindings")]
+        public IDictionary<string, OperationBindings> OperationBindings { get; set; } = new Dictionary<string, OperationBindings>();
 
-        [JsonPropertyName("operationBindings")]
-        public IDictionary<ComponentFieldName, IOperationBinding> OperationBindings { get; set; } = new Dictionary<ComponentFieldName, IOperationBinding>();
+        /// <summary>
+        /// An object to hold reusable Message Binding Objects.
+        /// </summary>
+        [JsonProperty("messageBindings")]
+        public IDictionary<string, MessageBindings> MessageBindings { get; set; } = new Dictionary<string, MessageBindings>();
 
-        [JsonPropertyName("messageBindings")]
-        public IDictionary<ComponentFieldName, IMessageBinding> MessageBindings { get; set; } = new Dictionary<ComponentFieldName, IMessageBinding>();
+        
+        /// <summary>
+        /// An object to hold reusable Operation Trait Objects.
+        /// </summary>
+        [JsonProperty("operationTraits")]
+        public IDictionary<string, OperationTrait> OperationTraits { get; set; } = new Dictionary<string, OperationTrait>();
 
-        [JsonPropertyName("operationTraits")]
-        public IDictionary<ComponentFieldName, OperationTrait> OperationTraits { get; set; } = new Dictionary<ComponentFieldName, OperationTrait>();
-
-        [JsonPropertyName("messageTraits")]
-        public IDictionary<ComponentFieldName, MessageTrait> MessageTraits { get; set; } = new Dictionary<ComponentFieldName, MessageTrait>();
+        /// <summary>
+        /// An object to hold reusable Message Trait Objects.
+        /// </summary>
+        [JsonProperty("messageTraits")]
+        public IDictionary<string, MessageTrait> MessageTraits { get; set; } = new Dictionary<string, MessageTrait>();
     }
 }

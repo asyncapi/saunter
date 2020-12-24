@@ -4,7 +4,7 @@
     /// See: https://github.com/asyncapi/bindings/tree/master/kafka#channel-binding-object
     /// This object MUST NOT contain any properties. Its name is reserved for future use.
     /// </remarks>
-    class KafkaChannelBinding : IChannelBinding
+    public class KafkaChannelBinding
     {
     }
 }

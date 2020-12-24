@@ -1,58 +1,60 @@
 using System.Runtime.Serialization;
-using System.Text.Json.Serialization;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace Saunter.AsyncApiSchema.v2.Bindings.Amqp
 {
     /// <remarks>
     /// https://github.com/asyncapi/bindings/blob/master/amqp/README.md#channel
     /// </remarks>
-    public class AmqpChannelBinding : IChannelBinding
+    public class AmqpChannelBinding
     {
-        [JsonPropertyName("is")]
-        [JsonConverter(typeof(JsonStringEnumConverter))]
+        [JsonProperty("is")]
+        [JsonConverter(typeof(StringEnumConverter))]
         public AmqpChannelBindingIs Is { get; set; }
 
-        [JsonPropertyName("exchange")]
+        [JsonProperty("exchange")]
         public AmqpChannelBindingExchange Exchange { get; set; }
 
-        [JsonPropertyName("queue")]
+        [JsonProperty("queue")]
         public AmqpChannelBindingQueue Queue { get; set; }
 
-        [JsonPropertyName("bindingVersion")]
+        [JsonProperty("bindingVersion")]
         public string BindingVersion { get; set; }
     }
 
     public class AmqpChannelBindingExchange
     {
-        [JsonPropertyName("name")]
+        [JsonProperty("name")]
         public string Name { get; set; }
 
-        [JsonPropertyName("type")]
+        [JsonProperty("type")]
         public string Type { get; set; }
 
-        [JsonPropertyName("durable")]
+        [JsonProperty("durable")]
         public bool? Durable { get; set; }
 
-        [JsonPropertyName("autoDelete")]
+        [JsonProperty("autoDelete")]
         public bool? AutoDelete { get; set; }
     }
 
     public class AmqpChannelBindingQueue
     {
-        [JsonPropertyName("name")]
+        [JsonProperty("name")]
         public string Name { get; set; }
 
-        [JsonPropertyName("durable")]
+        [JsonProperty("durable")]
         public bool? Durable { get; set; }
 
-        [JsonPropertyName("exclusive")]
+        [JsonProperty("exclusive")]
         public bool? Exclusive { get; set; }
 
-        [JsonPropertyName("autoDelete")]
+        [JsonProperty("autoDelete")]
         public bool? AutoDelete { get; set; }
     }
 
 
+    [JsonConverter(typeof(StringEnumConverter))]
     public enum AmqpChannelBindingIs
     {
         [EnumMember(Value = "routingKey")]

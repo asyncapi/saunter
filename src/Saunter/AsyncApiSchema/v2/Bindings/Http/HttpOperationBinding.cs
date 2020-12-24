@@ -1,37 +1,37 @@
-﻿using System.Text.Json.Serialization;
+﻿using Newtonsoft.Json;
 
 namespace Saunter.AsyncApiSchema.v2.Bindings.Http
 {
     /// <remarks>
     /// See: https://github.com/asyncapi/bindings/tree/master/http#Operation-Binding-Object
     /// </remarks>
-    public class HttpOperationBinding : IOperationBinding
+    public class HttpOperationBinding
     {
-        [JsonPropertyName("type")]
+        [JsonProperty("type")]
         public string Type { get; set; }
 
-        [JsonPropertyName("method")]
+        [JsonProperty("method")]
         public string Method { get; set; }
 
-        [JsonPropertyName("query")]
+        [JsonProperty("query")]
         public HttpOperationBindingQuery Query { get; set; } 
 
-        [JsonPropertyName("bindingVersion")]
+        [JsonProperty("bindingVersion")]
         public string BindingVersion { get; set; }
     }
 
     public class HttpOperationBindingQuery
     {
-        [JsonPropertyName("type")]
+        [JsonProperty("type")]
         public string Type { get; set; }
 
-        [JsonPropertyName("required")]
+        [JsonProperty("required")]
         public string[] Required { get; set; }
 
-        [JsonPropertyName("properties")]
+        [JsonProperty("properties")]
         public object Properties { get; set; }
 
-        [JsonPropertyName("additionalProperties")]
+        [JsonProperty("additionalProperties")]
         public bool AdditionalProperties { get; set; }
     }
 }

@@ -1,18 +1,21 @@
+using Newtonsoft.Json;
 using Saunter.AsyncApiSchema.v2.Bindings.Amqp;
 using Saunter.AsyncApiSchema.v2.Bindings.Http;
 using Saunter.AsyncApiSchema.v2.Bindings.Kafka;
-using System.Text.Json.Serialization;
 
-namespace Saunter.AsyncApiSchema.v2 {
+namespace Saunter.AsyncApiSchema.v2.Bindings
+{
+    // TODO: set-up references for all 4 binding types
+
     public class OperationBindings
     {         
-        [JsonPropertyName("http")]
+        [JsonProperty("http")]
         public HttpOperationBinding Http { get; set; }
 
-        [JsonPropertyName("amqp")]
+        [JsonProperty("amqp")]
         public AmqpOperationBinding Amqp { get; set; }
 
-        [JsonPropertyName("kafka")]
+        [JsonProperty("kafka")]
         public KafkaOperationBinding Kafka { get; set; }
     }
 }

@@ -1,8 +1,8 @@
 using System;
-using System.Text.Json;
-using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 
-namespace Saunter.AsyncApiSchema.v2 {
+namespace Saunter.AsyncApiSchema.v2
+{
     public class ExternalDocumentation
     {
         public ExternalDocumentation(string url)
@@ -10,10 +10,18 @@ namespace Saunter.AsyncApiSchema.v2 {
             Url = url ?? throw new ArgumentNullException(nameof(url));
         }
 
-        [JsonPropertyName("description")]
+        /// <summary>
+        /// A short description of the target documentation.
+        /// CommonMark syntax can be used for rich text representation.
+        /// </summary>
+        [JsonProperty("description")]
         public string Description { get; set; }
         
-        [JsonPropertyName("url")]
+        /// <summary>
+        /// The URL for the target documentation.
+        /// Value MUST be in the format of a URL.
+        /// </summary>
+        [JsonProperty("url")]
         public string Url { get; }
     }
 }

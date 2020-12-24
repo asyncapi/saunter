@@ -1,20 +1,35 @@
-using System.Text.Json;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using Newtonsoft.Json;
 
-namespace Saunter.AsyncApiSchema.v2 {
+namespace Saunter.AsyncApiSchema.v2
+{
     public class OAuthFlows
     {
-        [JsonPropertyName("implicit")]
+        [JsonProperty("implicit")]
         public OAuthFlow Implicit { get; set; }
 
-        [JsonPropertyName("password")]
+        [JsonProperty("password")]
         public OAuthFlow Password { get; set; }
 
-        [JsonPropertyName("clientCredentials")]
+        [JsonProperty("clientCredentials")]
         public OAuthFlow ClientCredentials { get; set; }
 
-        [JsonPropertyName("authorizationCode")]
+        [JsonProperty("authorizationCode")]
         public OAuthFlow AuthorizationCode { get; set; }
+    }
+    
+    public class OAuthFlow
+    {
+        [JsonProperty("authorizationUrl")]
+        public string AuthorizationUrl { get; set; }
 
+        [JsonProperty("tokenUrl")]
+        public string TokenUrl { get; set; }
+
+        [JsonProperty("refreshUrl")]
+        public string RefreshUrl { get; set; }
+
+        [JsonProperty("scopes")]
+        public IDictionary<string, string> Scopes { get; set; } = new Dictionary<string, string>();
     }
 }

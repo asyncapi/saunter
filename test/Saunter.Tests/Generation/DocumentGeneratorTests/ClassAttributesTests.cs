@@ -6,7 +6,6 @@ using NJsonSchema.Generation;
 using Saunter.AsyncApiSchema.v2;
 using Saunter.Attributes;
 using Saunter.Generation;
-using Saunter.Generation.SchemaGeneration;
 using Shouldly;
 using Xunit;
 
