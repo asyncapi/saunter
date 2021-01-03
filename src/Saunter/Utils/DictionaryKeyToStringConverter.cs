@@ -52,8 +52,19 @@ namespace Saunter.Utils
         {
             private readonly JsonConverter<TValue> _valueConverter;
 
+            private JsonSerializerOptions _keySerializerOption;
+
             public DictionaryKeyToStringConverterInner(JsonSerializerOptions options)
             {
+                try
+                {
+                    var keyConverter = new JsonSerializerOptions().GetConverter(typeof(TKey));
+                    _keySerializerOption = new JsonSerializerOptions { Converters = { keyConverter } };
+                }
+                catch
+                {
+                }
+
                 // For performance, use the existing converter if available.
                 _valueConverter = (JsonConverter<TValue>)options
                     .GetConverter(typeof(TValue));
@@ -77,7 +88,20 @@ namespace Saunter.Utils
 
                 foreach (KeyValuePair<TKey, TValue> kvp in dictionary)
                 {
-                    writer.WritePropertyName(kvp.Key.ToString());
+                    if (_keySerializerOption != null)
+                    {
+                        var serializedKey = JsonSerializer.Serialize(kvp.Key, _keySerializerOption);
+
+                        // Remove object/array braces
+                        if (!typeof(TKey).IsPrimitive && serializedKey.Length >= 2)
+                        {
+                            serializedKey = serializedKey.Substring(1, serializedKey.Length - 2);
+                        }
+
+                        writer.WritePropertyName(serializedKey);
+                    }
+                    else
+                        writer.WritePropertyName(kvp.Key.ToString());
 
                     if (_valueConverter != null)
                         _valueConverter.Write(writer, kvp.Value, options);
