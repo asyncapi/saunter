@@ -183,15 +183,18 @@ namespace Saunter.Generation
             var methodsWithMessageAttribute = type.DeclaredMethods
                 .Select(method => new
                 {
-                    Message = method.GetCustomAttribute<MessageAttribute>(),
+                    MessageAttributes = method.GetCustomAttributes<MessageAttribute>(),
                     Method = method,
                 })
-                .Where(mm => mm.Message != null);
+                .Where(mm => mm.MessageAttributes.Any());
 
-            foreach (var mm in methodsWithMessageAttribute)
+            foreach (MessageAttribute messageAttribute in methodsWithMessageAttribute.SelectMany(x => x.MessageAttributes))
             {
-                var message = GenerateMessageFromAttribute(mm.Message, schemaRepository);
-                messages.OneOf.Add(message);
+                Message message = GenerateMessageFromAttribute(messageAttribute, schemaRepository);
+                if (message != null)
+                {
+                    messages.OneOf.Add(message);
+                }
             }
 
             return operation;
