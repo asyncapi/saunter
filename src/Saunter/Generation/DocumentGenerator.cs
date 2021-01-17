@@ -197,6 +197,11 @@ namespace Saunter.Generation
                 }
             }
 
+            if (messages.OneOf.Count == 1)
+            {
+                operation.Message = messages.OneOf.First();
+            }
+
             return operation;
         }
 

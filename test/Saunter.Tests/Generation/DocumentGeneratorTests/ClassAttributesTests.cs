@@ -77,6 +77,34 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
             messages.OneOf.ShouldContain(m => m.Name == "anyTenantRemoved");
         }
 
+        [Fact]
+        public void GenerateDocument_GeneratesDocumentWithSingleMessage()
+        {
+            // Arrange
+            var options = new AsyncApiOptions();
+            var schemaGenerator = new SchemaGenerator(Options.Create(options));
+            var documentGenerator = new DocumentGenerator(Options.Create(options), schemaGenerator);
+            
+            // Act
+            var document = documentGenerator.GenerateDocument(new []{ typeof(TenantSingleMessagePublisher).GetTypeInfo() });
+
+            // Assert
+            document.ShouldNotBeNull();
+            document.Channels.Count.ShouldBe(1);
+
+            var channel = document.Channels.First();
+            channel.Key.ShouldBe("asw.tenant_service.tenants_history");
+            channel.Value.Description.ShouldBe("Tenant events.");
+            
+            var publish = channel.Value.Publish;
+            publish.ShouldNotBeNull();
+            publish.OperationId.ShouldBe("TenantSingleMessagePublisher");
+            publish.Summary.ShouldBe("Publish single domain event about tenants.");
+
+            var message = publish.Message.ShouldBeOfType<Message>();
+            message.Name.ShouldBe("anyTenantCreated");
+        }
+
         [AsyncApi]
         [Channel("asw.tenant_service.tenants_history", Description = "Tenant events.")]
         [SubscribeOperation(OperationId = "TenantMessageConsumer", Summary = "Subscribe to domains events about tenants.")]
@@ -102,6 +130,17 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
             [Message(typeof(AnyTenantRemoved))]
             public void PublishTenantEvent<TEvent>(Guid tenantId, TEvent @event)
                 where TEvent : IEvent
+            {
+            }
+        }
+
+        [AsyncApi]
+        [Channel("asw.tenant_service.tenants_history", Description = "Tenant events.")]
+        [PublishOperation(OperationId = "TenantSingleMessagePublisher", Summary = "Publish single domain event about tenants.")]
+        public class TenantSingleMessagePublisher
+        {
+            [Message(typeof(AnyTenantCreated))]
+            public void PublishTenantCreated(Guid tenantId, AnyTenantCreated @event)
             {
             }
         }
