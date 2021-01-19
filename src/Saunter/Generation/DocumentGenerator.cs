@@ -138,9 +138,9 @@ namespace Saunter.Generation
                 return null;
             }
 
-            IEnumerable<MessageAttribute> messageAttributes = method.GetCustomAttributes<MessageAttribute>();
-            IMessage message = messageAttributes != null
-                ? GenerateMessageFromAttributes(messageAttributes, schemaRepository)
+            var messageAttribute = method.GetCustomAttribute<MessageAttribute>();
+            var message = messageAttribute != null
+                ? GenerateMessageFromAttribute(messageAttribute, schemaRepository)
                 : GenerateMessageFromType(operationAttribute.MessagePayloadType, schemaRepository);
 
             var operation = new Operation
@@ -183,23 +183,15 @@ namespace Saunter.Generation
             var methodsWithMessageAttribute = type.DeclaredMethods
                 .Select(method => new
                 {
-                    MessageAttributes = method.GetCustomAttributes<MessageAttribute>(),
+                    Message = method.GetCustomAttribute<MessageAttribute>(),
                     Method = method,
                 })
-                .Where(mm => mm.MessageAttributes.Any());
+                .Where(mm => mm.Message != null);
 
-            foreach (MessageAttribute messageAttribute in methodsWithMessageAttribute.SelectMany(x => x.MessageAttributes))
+            foreach (var mm in methodsWithMessageAttribute)
             {
-                Message message = GenerateMessageFromAttribute(messageAttribute, schemaRepository);
-                if (message != null)
-                {
-                    messages.OneOf.Add(message);
-                }
-            }
-
-            if (messages.OneOf.Count == 1)
-            {
-                operation.Message = messages.OneOf.First();
+                var message = GenerateMessageFromAttribute(mm.Message, schemaRepository);
+                messages.OneOf.Add(message);
             }
 
             return operation;
@@ -220,31 +212,6 @@ namespace Saunter.Generation
                 default:
                     return null;
             }
-        }
-
-        private IMessage GenerateMessageFromAttributes(IEnumerable<MessageAttribute> messageAttributes, ISchemaRepository schemaRepository)
-        {
-            if (messageAttributes.Count() == 1)
-            {
-                return GenerateMessageFromAttribute(messageAttributes.First(), schemaRepository);
-            }
-
-            var messages = new Messages();
-            foreach (MessageAttribute messageAttribute in messageAttributes)
-            {
-                Message message = GenerateMessageFromAttribute(messageAttribute, schemaRepository);
-                if (message != null)
-                {
-                    messages.OneOf.Add(message);
-                }
-            }
-
-            if (messages.OneOf.Count == 1)
-            {
-                return messages.OneOf.First();
-            }
-
-            return messages;
         }
 
         private Message GenerateMessageFromAttribute(MessageAttribute messageAttribute, ISchemaRepository schemaRepository)
