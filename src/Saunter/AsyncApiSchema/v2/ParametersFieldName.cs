@@ -1,12 +1,13 @@
 using System;
 using System.Text.RegularExpressions;
 
-namespace Saunter.AsyncApiSchema.v2 {
+namespace Saunter.AsyncApiSchema.v2
+{
     public class ParametersFieldName
     {
-        private readonly string value;
-
         private const string ValidRegex = @"^[A-Za-z0-9_\-]+$";
+
+        private readonly string value;
 
         public ParametersFieldName(string fieldName)
         {
@@ -16,20 +17,12 @@ namespace Saunter.AsyncApiSchema.v2 {
             value = fieldName;
         }
 
-        public override string ToString()
-        {
-            return value.ToString();
-        }
+        public override string ToString() => value;
 
-        public override int GetHashCode()
-        {
-            return value.GetHashCode();
-        }
+        public override int GetHashCode() => value.GetHashCode();
 
-        public override bool Equals(object obj)
-        {
-            var parametersFieldName = obj as ParametersFieldName;
-            return parametersFieldName != null && value.Equals(parametersFieldName.value);
-        }
+        public override bool Equals(object obj) => obj is ParametersFieldName parametersFieldName && value.Equals(parametersFieldName.value);
+
+        public static implicit operator ParametersFieldName(string s) => new ParametersFieldName(s);
     }
 }

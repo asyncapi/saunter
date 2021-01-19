@@ -21,13 +21,13 @@ namespace Saunter.Generation
             _schemaGenerator = schemaGenerator;
             _options = options?.Value ?? throw new ArgumentNullException(nameof(options));
         }
-        
-        public AsyncApiSchema.v2.AsyncApiDocument GenerateDocument(TypeInfo[] asyncApiTypes)
+
+        public AsyncApiDocument GenerateDocument(TypeInfo[] asyncApiTypes)
         {
             var schemaRepository = new SchemaRepository();
 
             var asyncApiSchema = _options.AsyncApi;
-            
+
             asyncApiSchema.Channels = GenerateChannels(asyncApiTypes, schemaRepository);
             asyncApiSchema.Components.Schemas = schemaRepository.Schemas;
 
@@ -40,22 +40,18 @@ namespace Saunter.Generation
             return asyncApiSchema;
         }
 
-
-        
-        
         /// <summary>
         /// Generate the Channels section of an AsyncApi schema. 
         /// </summary>
         private Channels GenerateChannels(TypeInfo[] asyncApiTypes, ISchemaRepository schemaRepository)
         {
             var channels = new Channels();
-            
+
             channels.AddRange(GenerateChannelsFromMethods(asyncApiTypes, schemaRepository));
             channels.AddRange(GenerateChannelsFromClasses(asyncApiTypes, schemaRepository));
 
             return channels;
         }
-
 
         /// <summary>
         /// Generate the Channels section of the AsyncApi schema from the <see cref="ChannelAttribute"/> on methods.
@@ -76,14 +72,14 @@ namespace Saunter.Generation
             foreach (var mc in methodsWithChannelAttribute)
             {
                 var channelItem = new ChannelItem
-                {              
+                {
                     Description = mc.Channel.Description,
-                    Parameters = mc.Channel.Parameters,
+                    Parameters = this.GetChannelParametersFromAttributes(mc.Method, schemaRepository),
                     Publish = GenerateOperationFromMethod(mc.Method, schemaRepository, OperationType.Publish),
                     Subscribe = GenerateOperationFromMethod(mc.Method, schemaRepository, OperationType.Subscribe),
-                }; 
+                };
                 channels.Add(mc.Channel.Name, channelItem);
-                
+
                 var context = new ChannelItemFilterContext(mc.Method, schemaRepository, mc.Channel);
                 foreach (var filter in _options.ChannelItemFilters)
                 {
@@ -114,13 +110,13 @@ namespace Saunter.Generation
                 var channelItem = new ChannelItem
                 {
                     Description = cc.Channel.Description,
-                    Parameters = cc.Channel.Parameters,
+                    Parameters = this.GetChannelParametersFromAttributes(cc.Type, schemaRepository),
                     Publish = GenerateOperationFromClass(cc.Type, schemaRepository, OperationType.Publish),
                     Subscribe = GenerateOperationFromClass(cc.Type, schemaRepository, OperationType.Subscribe),                    
                 };
-                
+
                 channels.Add(cc.Channel.Name, channelItem);
-                
+
                 var context = new ChannelItemFilterContext(cc.Type, schemaRepository, cc.Channel);
                 foreach (var filter in _options.ChannelItemFilters)
                 {
@@ -130,8 +126,6 @@ namespace Saunter.Generation
 
             return channels;
         }
-        
-
 
         /// <summary>
         /// Generate the an operation of an AsyncApi Channel for the given method.
@@ -144,11 +138,11 @@ namespace Saunter.Generation
                 return null;
             }
 
-            var messageAttribute = method.GetCustomAttribute<MessageAttribute>();
-            var message = messageAttribute != null
-                ? GenerateMessageFromAttribute(messageAttribute, schemaRepository)
+            IEnumerable<MessageAttribute> messageAttributes = method.GetCustomAttributes<MessageAttribute>();
+            IMessage message = messageAttributes != null
+                ? GenerateMessageFromAttributes(messageAttributes, schemaRepository)
                 : GenerateMessageFromType(operationAttribute.MessagePayloadType, schemaRepository);
-            
+
             var operation = new Operation
             {
                 OperationId = operationAttribute.OperationId ?? method.Name,
@@ -165,7 +159,6 @@ namespace Saunter.Generation
 
             return operation;
         }
-
 
         /// <summary>
         /// Generate the an operation of an AsyncApi Channel for the given class.
@@ -190,15 +183,23 @@ namespace Saunter.Generation
             var methodsWithMessageAttribute = type.DeclaredMethods
                 .Select(method => new
                 {
-                    Message = method.GetCustomAttribute<MessageAttribute>(),
+                    MessageAttributes = method.GetCustomAttributes<MessageAttribute>(),
                     Method = method,
                 })
-                .Where(mm => mm.Message != null);
+                .Where(mm => mm.MessageAttributes.Any());
 
-            foreach (var mm in methodsWithMessageAttribute)
+            foreach (MessageAttribute messageAttribute in methodsWithMessageAttribute.SelectMany(x => x.MessageAttributes))
             {
-                var message = GenerateMessageFromAttribute(mm.Message, schemaRepository);
-                messages.OneOf.Add(message);
+                Message message = GenerateMessageFromAttribute(messageAttribute, schemaRepository);
+                if (message != null)
+                {
+                    messages.OneOf.Add(message);
+                }
+            }
+
+            if (messages.OneOf.Count == 1)
+            {
+                operation.Message = messages.OneOf.First();
             }
 
             return operation;
@@ -210,15 +211,40 @@ namespace Saunter.Generation
             {
                 case OperationType.Publish:
                     var publishOperationAttribute = typeOrMethod.GetCustomAttribute<PublishOperationAttribute>();
-                    return (OperationAttribute) publishOperationAttribute;
-                
+                    return publishOperationAttribute;
+
                 case OperationType.Subscribe:
                     var subscribeOperationAttribute = typeOrMethod.GetCustomAttribute<SubscribeOperationAttribute>();
-                    return (OperationAttribute) subscribeOperationAttribute;
-                
+                    return subscribeOperationAttribute;
+
                 default:
                     return null;
             }
+        }
+
+        private IMessage GenerateMessageFromAttributes(IEnumerable<MessageAttribute> messageAttributes, ISchemaRepository schemaRepository)
+        {
+            if (messageAttributes.Count() == 1)
+            {
+                return GenerateMessageFromAttribute(messageAttributes.First(), schemaRepository);
+            }
+
+            var messages = new Messages();
+            foreach (MessageAttribute messageAttribute in messageAttributes)
+            {
+                Message message = GenerateMessageFromAttribute(messageAttribute, schemaRepository);
+                if (message != null)
+                {
+                    messages.OneOf.Add(message);
+                }
+            }
+
+            if (messages.OneOf.Count == 1)
+            {
+                return messages.OneOf.First();
+            }
+
+            return messages;
         }
 
         private Message GenerateMessageFromAttribute(MessageAttribute messageAttribute, ISchemaRepository schemaRepository)
@@ -227,7 +253,7 @@ namespace Saunter.Generation
             {
                 return null;
             }
-            
+
             var message = new Message
             {
                 Payload = _schemaGenerator.GenerateSchema(messageAttribute.PayloadType, schemaRepository),
@@ -239,7 +265,6 @@ namespace Saunter.Generation
 
             return message;
         }
-        
 
         private Message GenerateMessageFromType(Type payloadType, ISchemaRepository schemaRepository)
         {
@@ -247,7 +272,7 @@ namespace Saunter.Generation
             {
                 return null;
             }
-            
+
             var message = new Message
             {
                 Payload = _schemaGenerator.GenerateSchema(payloadType, schemaRepository),
@@ -255,6 +280,27 @@ namespace Saunter.Generation
             };
 
             return message;
+        }
+
+        private Parameters GetChannelParametersFromAttributes(MemberInfo memberInfo, ISchemaRepository schemaRepository)
+        {
+            IEnumerable<ChannelParameterAttribute> attributes = memberInfo.GetCustomAttributes<ChannelParameterAttribute>();
+            var parameters = new Parameters();
+            if (attributes.Any())
+            {
+                foreach (ChannelParameterAttribute attribute in attributes)
+                {
+                    var parameter = new Parameter
+                    {
+                        Description = attribute.Description,
+                        Schema = _schemaGenerator.GenerateSchema(attribute.Type, schemaRepository),
+                        Location = attribute.Location,
+                    };
+                    parameters.Add(attribute.Name, parameter);
+                }
+            }
+
+            return parameters;
         }
     }
 }
