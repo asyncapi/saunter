@@ -139,7 +139,7 @@ namespace Saunter.Generation
             }
 
             IEnumerable<MessageAttribute> messageAttributes = method.GetCustomAttributes<MessageAttribute>();
-            IMessage message = messageAttributes != null
+            IMessage message = messageAttributes.Any()
                 ? GenerateMessageFromAttributes(messageAttributes, schemaRepository)
                 : GenerateMessageFromType(operationAttribute.MessagePayloadType, schemaRepository);
 
