@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using Microsoft.Extensions.Options;
 using Saunter.AsyncApiSchema.v2;
+using Saunter.Attributes;
 using Saunter.Utils;
 
 namespace Saunter.Generation.SchemaGeneration
@@ -40,11 +41,16 @@ namespace Saunter.Generation.SchemaGeneration
                 return schema;
             }
 
-            var filter = _options.PropertyFilter ?? ((_) => true);
+            schema = GetSchemaIfDiscriminator(type, schemaRepository);
+            if (schema != null)
+            {
+                return schema;
+            }
+
+            var filter = _options.PropertyFilter ?? (_ => true);
 
             var propertyAndFieldMembers = type.GetProperties()
                 .Where(filter)
-                .Cast<MemberInfo>()
                 .Concat(type.GetFields()).ToArray();
 
             return CreateSchemaFromPropertyAndFieldMembers(schemaRepository, propertyAndFieldMembers);
@@ -132,12 +138,12 @@ namespace Saunter.Generation.SchemaGeneration
                 return new Schema { Type = "boolean" };
             }
 
-            if (type.IsEnum(_options, out var members))
+            if (type.IsEnum(_options, out EnumMembers members))
             {
                 return new Schema
                 {
-                    Type = members.MemberType == typeof(string) 
-                        ? "string" 
+                    Type = members.MemberType == typeof(string)
+                        ? "string"
                         : "integer",
                     Enum = members.Members,
                 };
@@ -160,7 +166,7 @@ namespace Saunter.Generation.SchemaGeneration
                     Format = "time-span"
                 };
             }
-            
+
             if (type.IsGuid())
             {
                 return new Schema
@@ -175,18 +181,34 @@ namespace Saunter.Generation.SchemaGeneration
 
         private Schema GetSchemaIfEnumerable(Type type, ISchemaRepository schemaRepository)
         {
-            if (type.IsEnumerable(out var elementType))
+            if (type.IsEnumerable(out Type elementType))
             {
-                var schema = new Schema
+                return new Schema
                 {
                     Type = "array",
                     Items = GenerateSchema(elementType, schemaRepository),
                 };
-
-                return schema;
             }
 
             return null;
+        }
+
+        private Schema GetSchemaIfDiscriminator(Type type, ISchemaRepository schemaRepository)
+        {
+            const bool InheritDiscriminatorAttributes = false;
+            var discriminatorAttribute = type.GetCustomAttribute<DiscriminatorAttribute>(InheritDiscriminatorAttributes);
+            var discriminatorSubTypeAttributes = type.GetCustomAttributes<DiscriminatorSubTypeAttribute>();
+            if (discriminatorAttribute == null || !discriminatorSubTypeAttributes.Any())
+            {
+                return null;
+            }
+
+            return new Schema
+            {
+                Required = new HashSet<string> { discriminatorAttribute.PropertyName },
+                Discriminator = discriminatorAttribute.PropertyName,
+                OneOf = discriminatorSubTypeAttributes.Select(x => GenerateSchema(x.SubType, schemaRepository)).ToList(),
+            };
         }
     }
 }
