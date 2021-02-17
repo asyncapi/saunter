@@ -1,4 +1,5 @@
 #if !NETSTANDARD2_0
+
 using System;
 using System.Net;
 using System.Threading.Tasks;
@@ -13,6 +14,7 @@ namespace Saunter
     {
         private readonly RequestDelegate _next;
         private readonly IOptions<AsyncApiOptions> _options;
+        private readonly JsonAsyncApiDocumentSerializer _serializer = new JsonAsyncApiDocumentSerializer();
 
         public AsyncApiMiddleware(RequestDelegate next, IOptions<AsyncApiOptions> options)
         {
@@ -27,7 +29,7 @@ namespace Saunter
                 await _next(context);
                 return;
             }
-            
+
             var asyncApiSchema = asyncApiDocumentProvider.GetDocument();
 
             await RespondWithAsyncApiSchemaJson(context.Response, asyncApiSchema);
@@ -35,21 +37,9 @@ namespace Saunter
 
         private async Task RespondWithAsyncApiSchemaJson(HttpResponse response, AsyncApiSchema.v2.AsyncApiDocument asyncApiSchema)
         {
-            var asyncApiSchemaJson = JsonSerializer.Serialize(
-                asyncApiSchema,
-                new JsonSerializerOptions
-                {
-                    WriteIndented = false,
-                    IgnoreNullValues = true,
-                    Converters =
-                    {
-                        new DictionaryKeyToStringConverter(),
-                        new InterfaceImplementationConverter(),
-                    },
-                }
-            );
+            var asyncApiSchemaJson = _serializer.Serialize(asyncApiSchema);
 
-            response.StatusCode = (int) HttpStatusCode.OK;
+            response.StatusCode = (int)HttpStatusCode.OK;
             response.ContentType = "application/json";
 
             await response.WriteAsync(asyncApiSchemaJson);
@@ -62,4 +52,5 @@ namespace Saunter
         }
     }
 }
+
 #endif
