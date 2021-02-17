@@ -3,7 +3,7 @@ using System.Text.Json;
 
 namespace Saunter.Utils
 {
-    public class JsonAsyncApiDocumentSerializer
+    public class JsonAsyncApiDocumentSerializer : IAsyncApiDocumentSerializer
     {
         public string Serialize(AsyncApiDocument document)
         {
@@ -21,5 +21,7 @@ namespace Saunter.Utils
                 }
             );
         }
+
+        public string ContentType => "application/json";
     }
 }
