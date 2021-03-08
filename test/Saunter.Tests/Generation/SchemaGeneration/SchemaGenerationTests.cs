@@ -1,8 +1,11 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Runtime.Serialization;
 using System.Text.Json.Serialization;
 using Microsoft.Extensions.Options;
+
+using Saunter.Attributes;
 using Saunter.Generation.SchemaGeneration;
 using Shouldly;
 using Xunit;
@@ -69,6 +72,54 @@ namespace Saunter.Tests.Generation.SchemaGeneration
             _schemaRepository.Schemas["foo"].Properties.ContainsKey("hello").ShouldBeTrue();
             _schemaRepository.Schemas["foo"].Properties.ContainsKey("world").ShouldBeTrue();
         }
+
+        [Fact]
+        public void GenerateSchema_GenerateSchemaFromClassWithDiscriminator_GeneratesSchemaCorrectly()
+        {
+            var type = typeof(Pet);
+
+            var schema = _schemaGenerator.GenerateSchema(type, _schemaRepository);
+
+            schema.ShouldNotBeNull();
+            _schemaRepository.Schemas.ShouldNotBeNull();
+            _schemaRepository.Schemas.ContainsKey("pet").ShouldBeTrue();
+            _schemaRepository.Schemas["pet"].Discriminator.ShouldBe("petType");
+            _schemaRepository.Schemas["pet"].OneOf.Count().ShouldBe(2);
+            _schemaRepository.Schemas.ContainsKey("cat").ShouldBeTrue();
+            _schemaRepository.Schemas["cat"].Properties.Count.ShouldBe(3);
+            _schemaRepository.Schemas["cat"].Properties.ContainsKey("petType").ShouldBeTrue();
+            _schemaRepository.Schemas["cat"].Properties.ContainsKey("name").ShouldBeTrue();
+            _schemaRepository.Schemas["cat"].Properties.ContainsKey("huntingSkill").ShouldBeTrue();
+            _schemaRepository.Schemas.ContainsKey("dog").ShouldBeTrue();
+            _schemaRepository.Schemas["dog"].Properties.Count.ShouldBe(3);
+            _schemaRepository.Schemas["dog"].Properties.ContainsKey("petType").ShouldBeTrue();
+            _schemaRepository.Schemas["dog"].Properties.ContainsKey("name").ShouldBeTrue();
+            _schemaRepository.Schemas["dog"].Properties.ContainsKey("packSize").ShouldBeTrue();
+        }
+
+        [Fact]
+        public void GenerateSchema_GenerateSchemaFromInterfaceWithDiscriminator_GeneratesSchemaCorrectly()
+        {
+            var type = typeof(IPet);
+
+            var schema = _schemaGenerator.GenerateSchema(type, _schemaRepository);
+
+            schema.ShouldNotBeNull();
+            _schemaRepository.Schemas.ShouldNotBeNull();
+            _schemaRepository.Schemas.ContainsKey("iPet").ShouldBeTrue();
+            _schemaRepository.Schemas["iPet"].Discriminator.ShouldBe("petType");
+            _schemaRepository.Schemas["iPet"].OneOf.Count().ShouldBe(2);
+            _schemaRepository.Schemas.ContainsKey("cat").ShouldBeTrue();
+            _schemaRepository.Schemas["cat"].Properties.Count.ShouldBe(3);
+            _schemaRepository.Schemas["cat"].Properties.ContainsKey("petType").ShouldBeTrue();
+            _schemaRepository.Schemas["cat"].Properties.ContainsKey("name").ShouldBeTrue();
+            _schemaRepository.Schemas["cat"].Properties.ContainsKey("huntingSkill").ShouldBeTrue();
+            _schemaRepository.Schemas.ContainsKey("dog").ShouldBeTrue();
+            _schemaRepository.Schemas["dog"].Properties.Count.ShouldBe(3);
+            _schemaRepository.Schemas["dog"].Properties.ContainsKey("petType").ShouldBeTrue();
+            _schemaRepository.Schemas["dog"].Properties.ContainsKey("name").ShouldBeTrue();
+            _schemaRepository.Schemas["dog"].Properties.ContainsKey("packSize").ShouldBeTrue();
+        }
     }
 
     public class Foo
@@ -121,5 +172,35 @@ namespace Saunter.Tests.Generation.SchemaGeneration
             NumberOfPages = numberOfPages;
             Foo = foo;
         }
+    }
+
+    [Discriminator("petType")]
+    [DiscriminatorSubType(typeof(Cat))]
+    [DiscriminatorSubType(typeof(Dog))]
+    public interface IPet
+    {
+        string PetType { get; }
+
+        string Name { get; }
+    }
+
+    [Discriminator("petType")]
+    [DiscriminatorSubType(typeof(Cat))]
+    [DiscriminatorSubType(typeof(Dog))]
+    public abstract class Pet : IPet
+    {
+        public string PetType { get; set; }
+
+        public string Name { get; set; }
+    }
+
+    public class Cat : Pet
+    {
+        public string HuntingSkill { get; set; }
+    }
+
+    public class Dog : Pet
+    {
+        public string PackSize { get; set; }
     }
 }
