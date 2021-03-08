@@ -92,11 +92,11 @@ namespace Saunter.Generation.SchemaGeneration
                     s2.MaxLength = member.GetMaxLength();
                     s2.Pattern = member.GetPattern();
                     s2.Example = member.GetExample();
+                }
 
-                    if (member.GetIsRequired())
-                    {
-                        requiredMembers.Add(memberName);
-                    }
+                if (member.GetIsRequired())
+                {
+                    requiredMembers.Add(memberName);
                 }
 
                 schema.Properties.Add(memberName, memberSchema);

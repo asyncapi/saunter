@@ -32,8 +32,9 @@ namespace Saunter.Tests.Generation.SchemaGeneration
             schema.ShouldNotBeNull();
             _schemaRepository.Schemas.ShouldNotBeNull();
             _schemaRepository.Schemas.ContainsKey("foo").ShouldBeTrue();
-            _schemaRepository.Schemas["foo"].Required.Count.ShouldBe(1);
+            _schemaRepository.Schemas["foo"].Required.Count.ShouldBe(2);
             _schemaRepository.Schemas["foo"].Required.Contains("id").ShouldBeTrue();
+            _schemaRepository.Schemas["foo"].Required.Contains("bar").ShouldBeTrue();
             _schemaRepository.Schemas["foo"].Properties.Count.ShouldBe(5);
             _schemaRepository.Schemas["foo"].Properties.ContainsKey("id").ShouldBeTrue();
             _schemaRepository.Schemas["foo"].Properties.ContainsKey("bar").ShouldBeTrue();
@@ -58,8 +59,9 @@ namespace Saunter.Tests.Generation.SchemaGeneration
             _schemaRepository.Schemas.ContainsKey("book").ShouldBeTrue();
             _schemaRepository.Schemas["book"].Properties.Count.ShouldBe(4);
             _schemaRepository.Schemas.ContainsKey("foo").ShouldBeTrue();
-            _schemaRepository.Schemas["foo"].Required.Count.ShouldBe(1);
+            _schemaRepository.Schemas["foo"].Required.Count.ShouldBe(2);
             _schemaRepository.Schemas["foo"].Required.Contains("id").ShouldBeTrue();
+            _schemaRepository.Schemas["foo"].Required.Contains("bar").ShouldBeTrue();
             _schemaRepository.Schemas["foo"].Properties.Count.ShouldBe(5);
             _schemaRepository.Schemas["foo"].Properties.ContainsKey("id").ShouldBeTrue();
             _schemaRepository.Schemas["foo"].Properties.ContainsKey("bar").ShouldBeTrue();
@@ -77,6 +79,7 @@ namespace Saunter.Tests.Generation.SchemaGeneration
         [JsonIgnore]
         public string Ignore { get; set; }
 
+        [Required]
         public Bar Bar { get; set; }
 
         [JsonPropertyName("hello")]
