@@ -1,5 +1,6 @@
 using System.Runtime.Serialization;
 using System.Text.Json.Serialization;
+using Saunter.Utils;
 
 namespace Saunter.AsyncApiSchema.v2.Bindings.Amqp
 {
@@ -9,7 +10,7 @@ namespace Saunter.AsyncApiSchema.v2.Bindings.Amqp
     public class AmqpChannelBinding : IChannelBinding
     {
         [JsonPropertyName("is")]
-        [JsonConverter(typeof(JsonStringEnumConverter))]
+        [JsonConverter(typeof(EnumMemberConverter))]
         public AmqpChannelBindingIs Is { get; set; }
 
         [JsonPropertyName("exchange")]
