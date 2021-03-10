@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using Saunter.AsyncApiSchema.v2;
 using Saunter.Generation;
 using Saunter.Generation.Filters;
@@ -20,12 +19,12 @@ namespace Saunter
         public AsyncApiDocument AsyncApi { get; set; } = new AsyncApiDocument();
 
         /// <summary>
-        /// A list of marker types from assemblies to scan for Saunter attributes.
+        ///     A list of marker types from assemblies to scan for Saunter attributes.
         /// </summary>
         public IList<Type> AssemblyMarkerTypes { get; set; } = new List<Type>();
 
         /// <summary>
-        /// A function to select a schemaId for a type.
+        ///     A function to select a schemaId for a type.
         /// </summary>
         public Func<Type, string> SchemaIdSelector { get; set; } = DefaultSchemaIdFactory.Generate;
 
@@ -78,23 +77,24 @@ namespace Saunter
         /// </summary>
         public Func<MemberInfo, bool> PropertyFilter { get; set; } = prop => prop.GetCustomAttribute<JsonIgnoreAttribute>() == null;
 
+
         /// <summary>
-        /// A list of filters that will be applied to the generated AsyncAPI document.
+        ///     A list of filters that will be applied to the generated AsyncAPI document.
         /// </summary>
         public IList<IDocumentFilter> DocumentFilters { get; } = new List<IDocumentFilter>();
 
         /// <summary>
-        /// A list of filters that will be applies to any generated channels.
+        ///     A list of filters that will be applies to any generated channels.
         /// </summary>
         public IList<IChannelItemFilter> ChannelItemFilters { get; } = new List<IChannelItemFilter>();
 
         /// <summary>
-        /// A list of filters that will be applied to any generated Publish operations.
+        ///     A list of filters that will be applied to any generated Publish operations.
         /// </summary>
         public IList<OperationFilter> OperationFilters { get; } = new List<OperationFilter>();
 
         /// <summary>
-        /// Options related to the Saunter middleware
+        ///     Options related to the Saunter middleware
         /// </summary>
         public AsyncApiMiddlewareOptions Middleware { get; set; } = new AsyncApiMiddlewareOptions();
     }
@@ -102,10 +102,56 @@ namespace Saunter
     public class AsyncApiMiddlewareOptions
     {
         public const string AsyncApiMiddlewareDefaultRoute = "/asyncapi/asyncapi.json";
+        private const string AsyncApiUiMiddlewareBasePath = "/asyncapi/ui/";
+        private const string AsyncApiUiMiddlewareDefaultRoute = "/asyncapi/ui/index.html";
+        private const string AsyncApiPlaygroundBaseUri = "https://playground.asyncapi.io/";
 
         /// <summary>
-        /// The route which the AsyncApi document will be hosted
+        ///     The route which the AsyncApi document will be hosted
         /// </summary>
         public string Route { get; set; } = AsyncApiMiddlewareDefaultRoute;
+
+        /// <summary>
+        ///     The route which the AsyncApi UI will be hosted
+        /// </summary>
+        public string UiRoute { get; set; } = AsyncApiUiMiddlewareDefaultRoute;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public string UiBaseRoute { get; set; } = AsyncApiUiMiddlewareBasePath;
+
+        /// <summary>
+        ///     
+        /// </summary>
+        public string PlaygroundBaseAddress { get; set; } = AsyncApiPlaygroundBaseUri;
+
+        /// <summary>
+        ///     Key/Value pairs where keys will be replaced by the corresponding value in the html
+        ///     returned from playground
+        /// </summary>
+        public Dictionary<string, string> HtmlProxyRewrites { get; set; } = new Dictionary<string, string>
+        {
+            {
+                "text-xs uppercase text-grey mt-10 mb-4 font-thin",
+                "text-xs uppercase text-dark-grey mt-10 mb-4 font-thin"
+            },
+            {
+                "text-grey text-sm",
+                "text-dark-grey text-sm"
+            }
+        };
+
+        /// <summary>
+        ///     Key/Value pairs where keys will be replaced by the corresponding value in the other
+        ///     assets (css, js) returned from playground
+        /// </summary>
+        public Dictionary<string, string> AssetsProxyRewrites { get; set; } = new Dictionary<string, string>
+        {
+            {
+                "font-weight: lighter",
+                "font-weight: normal"
+            }
+        };
     }
 }

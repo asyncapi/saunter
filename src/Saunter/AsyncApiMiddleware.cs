@@ -2,10 +2,12 @@
 
 using System;
 using System.Net;
+using System.Net.Mime;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
-using System.Text.Json;
+using Saunter.AsyncApiSchema.v2;
 using Saunter.Utils;
 
 namespace Saunter
