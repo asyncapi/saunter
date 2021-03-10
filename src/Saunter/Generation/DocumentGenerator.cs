@@ -22,7 +22,7 @@ namespace Saunter.Generation
             _options = options?.Value ?? throw new ArgumentNullException(nameof(options));
         }
 
-        public AsyncApiDocument GenerateDocument(TypeInfo[] asyncApiTypes)
+        public AsyncApiSchema.v2.AsyncApiDocument GenerateDocument(TypeInfo[] asyncApiTypes)
         {
             var schemaRepository = new SchemaRepository();
 
@@ -41,7 +41,7 @@ namespace Saunter.Generation
         }
 
         /// <summary>
-        /// Generate the Channels section of an AsyncApi schema. 
+        /// Generate the Channels section of an AsyncApi schema.
         /// </summary>
         private Channels GenerateChannels(TypeInfo[] asyncApiTypes, ISchemaRepository schemaRepository)
         {
@@ -54,7 +54,8 @@ namespace Saunter.Generation
         }
 
         /// <summary>
-        /// Generate the Channels section of the AsyncApi schema from the <see cref="ChannelAttribute"/> on methods.
+        /// Generate the Channels section of the AsyncApi schema from the
+        /// <see cref="ChannelAttribute"/> on methods.
         /// </summary>
         private Channels GenerateChannelsFromMethods(IEnumerable<TypeInfo> asyncApiTypes, ISchemaRepository schemaRepository)
         {
@@ -77,7 +78,7 @@ namespace Saunter.Generation
                     Parameters = mc.Channel.Parameters,
                     Publish = GenerateOperationFromMethod(mc.Method, schemaRepository, OperationType.Publish),
                     Subscribe = GenerateOperationFromMethod(mc.Method, schemaRepository, OperationType.Subscribe),
-                }; 
+                };
                 channels.Add(mc.Channel.Name, channelItem);
 
                 var context = new ChannelItemFilterContext(mc.Method, schemaRepository, mc.Channel);
@@ -91,7 +92,8 @@ namespace Saunter.Generation
         }
 
         /// <summary>
-        /// Generate the Channels section of the AsyncApi schema from the <see cref="ChannelAttribute"/> on classes.
+        /// Generate the Channels section of the AsyncApi schema from the
+        /// <see cref="ChannelAttribute"/> on classes.
         /// </summary>
         private Channels GenerateChannelsFromClasses(IEnumerable<TypeInfo> asyncApiTypes, ISchemaRepository schemaRepository)
         {
@@ -112,10 +114,10 @@ namespace Saunter.Generation
                     Description = cc.Channel.Description,
                     Parameters = cc.Channel.Parameters,
                     Publish = GenerateOperationFromClass(cc.Type, schemaRepository, OperationType.Publish),
-                    Subscribe = GenerateOperationFromClass(cc.Type, schemaRepository, OperationType.Subscribe),                    
+                    Subscribe = GenerateOperationFromClass(cc.Type, schemaRepository, OperationType.Subscribe),
                 };
 
-                channels.Add(cc.Channel.Name, channelItem);
+                channels.AddOrAppend(cc.Channel.Name, channelItem);
 
                 var context = new ChannelItemFilterContext(cc.Type, schemaRepository, cc.Channel);
                 foreach (var filter in _options.ChannelItemFilters)
@@ -211,11 +213,11 @@ namespace Saunter.Generation
             {
                 case OperationType.Publish:
                     var publishOperationAttribute = typeOrMethod.GetCustomAttribute<PublishOperationAttribute>();
-                    return publishOperationAttribute;
+                    return (OperationAttribute) publishOperationAttribute;
 
                 case OperationType.Subscribe:
                     var subscribeOperationAttribute = typeOrMethod.GetCustomAttribute<SubscribeOperationAttribute>();
-                    return subscribeOperationAttribute;
+                    return (OperationAttribute) subscribeOperationAttribute;
 
                 default:
                     return null;
