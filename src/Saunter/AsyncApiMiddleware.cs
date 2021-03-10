@@ -1,4 +1,4 @@
-#if NETCOREAPP3_0
+#if !NETSTANDARD2_0
 using System;
 using System.Net;
 using System.Threading.Tasks;

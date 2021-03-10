@@ -64,5 +64,11 @@ namespace Saunter.AsyncApiSchema.v2
 
         [JsonPropertyName("properties")]
         public IDictionary<string, ISchema> Properties { get; set; }
+
+        [JsonPropertyName("discriminator")]
+        public string Discriminator { get; set; }
+
+        [JsonPropertyName("oneOf")]
+        public IEnumerable<ISchema> OneOf { get; set; }
     }
 }

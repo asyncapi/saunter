@@ -36,6 +36,9 @@ namespace Saunter.AsyncApiSchema.v2.Bindings.Amqp
 
         [JsonPropertyName("autoDelete")]
         public bool? AutoDelete { get; set; }
+
+        [JsonPropertyName("vhost")]
+        public string VirtualHost { get; set; }
     }
 
     public class AmqpChannelBindingQueue
@@ -51,6 +54,9 @@ namespace Saunter.AsyncApiSchema.v2.Bindings.Amqp
 
         [JsonPropertyName("autoDelete")]
         public bool? AutoDelete { get; set; }
+
+        [JsonPropertyName("vhost")]
+        public string VirtualHost { get; set; }
     }
 
     public enum AmqpChannelBindingIs
@@ -60,5 +66,18 @@ namespace Saunter.AsyncApiSchema.v2.Bindings.Amqp
 
         [EnumMember(Value = "queue")]
         Queue,
+    }
+
+    public static class AmqpChannelBindingExchangeType
+    {
+        public const string Topic = "topic";
+
+        public const string Direct = "direct";
+
+        public const string Fanout = "fanout";
+
+        public const string Default = "default";
+
+        public const string Headers = "headers";
     }
 }
