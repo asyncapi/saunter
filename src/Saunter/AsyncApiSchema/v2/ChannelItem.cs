@@ -1,4 +1,3 @@
-using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Saunter.AsyncApiSchema.v2
@@ -15,7 +14,7 @@ namespace Saunter.AsyncApiSchema.v2
         public Operation Publish { get; set; }
 
         [JsonPropertyName("parameters")]
-        public string Parameters { get; set; }
+        public Parameters Parameters { get; set; }
 
         [JsonPropertyName("bindings")]
         public ChannelBindings Bindings { get; set; }
