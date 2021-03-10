@@ -14,8 +14,8 @@ namespace Saunter
     public class AsyncApiOptions
     {
         /// <summary>
-        /// The base asyncapi schema.
-        /// This will be augmented with other information auto-discovered from attributes.
+        /// The base asyncapi schema. This will be augmented with other information auto-discovered
+        /// from attributes.
         /// </summary>
         public AsyncApiDocument AsyncApi { get; set; } = new AsyncApiDocument();
 
@@ -23,7 +23,7 @@ namespace Saunter
         /// A list of marker types from assemblies to scan for Saunter attributes.
         /// </summary>
         public IList<Type> AssemblyMarkerTypes { get; set; } = new List<Type>();
-        
+
         /// <summary>
         /// A function to select a schemaId for a type.
         /// </summary>
@@ -58,7 +58,7 @@ namespace Saunter
 
             return val.ToString();
         };
-        
+
         /// <summary>
         /// A function to select the name for a property.
         /// </summary>
@@ -72,7 +72,7 @@ namespace Saunter
 
             return JsonNamingPolicy.CamelCase.ConvertName(prop.Name);
         };
-        
+
         /// <summary>
         /// A function to filter the properties which will be included.
         /// </summary>
@@ -87,7 +87,7 @@ namespace Saunter
         /// A list of filters that will be applies to any generated channels.
         /// </summary>
         public IList<IChannelItemFilter> ChannelItemFilters { get; } = new List<IChannelItemFilter>();
-        
+
         /// <summary>
         /// A list of filters that will be applied to any generated Publish operations.
         /// </summary>

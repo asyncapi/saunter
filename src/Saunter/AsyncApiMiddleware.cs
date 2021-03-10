@@ -1,4 +1,5 @@
 #if !NETSTANDARD2_0
+
 using System;
 using System.Net;
 using System.Threading.Tasks;
@@ -20,39 +21,27 @@ namespace Saunter
             _options = options;
         }
 
-        public async Task Invoke(HttpContext context, IAsyncApiDocumentProvider asyncApiDocumentProvider)
+        public async Task Invoke(HttpContext context, IAsyncApiDocumentProvider asyncApiDocumentProvider, IAsyncApiDocumentSerializer asyncApiDocumentSerializer)
         {
             if (!IsRequestingAsyncApiSchema(context.Request))
             {
                 await _next(context);
                 return;
             }
-            
+
             var asyncApiSchema = asyncApiDocumentProvider.GetDocument();
 
-            await RespondWithAsyncApiSchemaJson(context.Response, asyncApiSchema);
+            await RespondWithAsyncApiSchemaJson(context.Response, asyncApiSchema, asyncApiDocumentSerializer);
         }
 
-        private async Task RespondWithAsyncApiSchemaJson(HttpResponse response, AsyncApiSchema.v2.AsyncApiDocument asyncApiSchema)
+        private async Task RespondWithAsyncApiSchemaJson(HttpResponse response, AsyncApiSchema.v2.AsyncApiDocument asyncApiSchema, IAsyncApiDocumentSerializer asyncApiDocumentSerializer)
         {
-            var asyncApiSchemaJson = JsonSerializer.Serialize(
-                asyncApiSchema,
-                new JsonSerializerOptions
-                {
-                    WriteIndented = false,
-                    IgnoreNullValues = true,
-                    Converters =
-                    {
-                        new DictionaryKeyToStringConverter(),
-                        new InterfaceImplementationConverter(),
-                    },
-                }
-            );
+            var asyncApiSchemaSerialized = asyncApiDocumentSerializer.Serialize(asyncApiSchema);
 
-            response.StatusCode = (int) HttpStatusCode.OK;
-            response.ContentType = "application/json";
+            response.StatusCode = (int)HttpStatusCode.OK;
+            response.ContentType = asyncApiDocumentSerializer.ContentType;
 
-            await response.WriteAsync(asyncApiSchemaJson);
+            await response.WriteAsync(asyncApiSchemaSerialized);
         }
 
         private bool IsRequestingAsyncApiSchema(HttpRequest request)
@@ -62,4 +51,5 @@ namespace Saunter
         }
     }
 }
+
 #endif
