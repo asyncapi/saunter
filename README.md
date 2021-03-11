@@ -166,7 +166,7 @@ public class HttpOperationFilter : IOperationFilter
  
 Example Kafka binding operation filter
 
-```
+```csharp
 public class KafkaOperationFilter : IOperationFilter
 {
     public void Apply(Operation operation, OperationFilterContext context)
