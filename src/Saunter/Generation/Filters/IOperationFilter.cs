@@ -5,9 +5,9 @@ using Saunter.Generation.SchemaGeneration;
 
 namespace Saunter.Generation.Filters
 {
-    public interface OperationFilter
+    public interface IOperationFilter
     {
-        void Apply(Operation publishOperation, OperationFilterContext context);
+        void Apply(Operation operation, OperationFilterContext context);
     }
 
     public class OperationFilterContext
