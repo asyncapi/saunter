@@ -34,7 +34,7 @@ namespace Saunter.Tests.Generation
         }
         
         
-        private class TestOperationTraitsFilter : OperationFilter
+        private class TestOperationTraitsFilter : IOperationFilter
         {
             public void Apply(Operation publishOperation, OperationFilterContext context)
             {

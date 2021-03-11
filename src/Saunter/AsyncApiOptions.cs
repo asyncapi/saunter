@@ -92,7 +92,7 @@ namespace Saunter
         /// <summary>
         /// A list of filters that will be applied to any generated Publish operations.
         /// </summary>
-        public IList<OperationFilter> OperationFilters { get; } = new List<OperationFilter>();
+        public IList<IOperationFilter> OperationFilters { get; } = new List<IOperationFilter>();
 
         /// <summary>
         /// Options related to the Saunter middleware
