@@ -21,14 +21,37 @@ namespace Saunter
             this IEndpointRouteBuilder endpoints,
             string title = AsyncApiDefaultDocumentTitle)
         {
-            RequestDelegate pipeline = endpoints.CreateApplicationBuilder()
+            var pipeline = endpoints.CreateApplicationBuilder()
                 .UseMiddleware<AsyncApiMiddleware>()
                 .Build();
 
             var options = endpoints.ServiceProvider.GetService<IOptions<AsyncApiOptions>>();
-            string route = options?.Value?.Middleware?.Route ?? AsyncApiMiddlewareOptions.AsyncApiMiddlewareDefaultRoute;
+            var route = options.Value.Middleware.Route;
 
-            return endpoints.Map(route, pipeline).WithDisplayName(title);
+            return endpoints.MapGet(route, pipeline).WithDisplayName(title);
+        }
+
+
+        public static IEndpointConventionBuilder MapAsyncApiUi(
+            this IEndpointRouteBuilder endpoints,
+            string title = AsyncApiDefaultDocumentTitle)
+        {
+            // Add the middleware 
+            var pipeline = endpoints.CreateApplicationBuilder()
+                // I don't really understand why...
+                // https://github.com/dotnet/aspnetcore/issues/24252#issuecomment-663620294
+                .Use((context, next) =>
+                {
+                    context.SetEndpoint(null);
+                    return next();
+                })
+                .UseMiddleware<AsyncApiUiMiddleware>()
+                .Build();
+
+            var options = endpoints.ServiceProvider.GetService<IOptions<AsyncApiOptions>>();
+            var route = options.Value.Middleware.UiBaseRoute + "{*wildcard}";
+
+            return endpoints.MapGet(route, pipeline).WithDisplayName(title);
         }
     }
 }
