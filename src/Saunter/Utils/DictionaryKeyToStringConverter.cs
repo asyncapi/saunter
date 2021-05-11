@@ -66,8 +66,7 @@ namespace Saunter.Utils
                 Type typeToConvert,
                 JsonSerializerOptions options)
             {
-                // Doesn't support deserialization
-                throw new NotSupportedException();
+                return (TType)_innerConverter.Read(ref reader, typeToConvert, options);
             }
 
             public override void Write(
