@@ -51,15 +51,14 @@ namespace Saunter.Utils
             return converter;
         }
 
-        private class InheritedDictionaryKeyToStringConverterInner<TType, TKey, TValue> : JsonConverter<TType> where TType : IDictionary<TKey, TValue>
+        private class InheritedDictionaryKeyToStringConverterInner<TType, TKey, TValue> :
+            JsonConverter<TType> where TType : IDictionary<TKey, TValue>
         {
-            private readonly JsonConverter<TValue> _valueConverter;
+            private readonly DictionaryKeyToStringConverterInner<TKey, TValue> _innerConverter;
 
             public InheritedDictionaryKeyToStringConverterInner(JsonSerializerOptions options)
             {
-                // For performance, use the existing converter if available.
-                _valueConverter = (JsonConverter<TValue>)options
-                    .GetConverter(typeof(TValue));
+                _innerConverter = new DictionaryKeyToStringConverterInner<TKey, TValue>(options);
             }
 
             public override TType Read(
@@ -76,19 +75,7 @@ namespace Saunter.Utils
                 TType dictionary,
                 JsonSerializerOptions options)
             {
-                writer.WriteStartObject();
-
-                foreach (KeyValuePair<TKey, TValue> kvp in dictionary)
-                {
-                    writer.WritePropertyName(kvp.Key.ToString());
-
-                    if (_valueConverter != null)
-                        _valueConverter.Write(writer, kvp.Value, options);
-                    else
-                        JsonSerializer.Serialize(writer, kvp.Value, options);
-                }
-
-                writer.WriteEndObject();
+                _innerConverter.Write(writer, dictionary, options);
             }
         }
 
