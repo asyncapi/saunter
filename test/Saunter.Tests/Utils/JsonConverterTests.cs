@@ -63,7 +63,31 @@ namespace Saunter.Tests.Utils
 
             data.ShouldBe("{\"test1\":null,\"test2\":null}");
         }
-        
+
+        [Fact]
+        public void DictionaryKeyToStringConverter_Convert_Should_OutputCorrectData_GivenClassExtendingDictionaryInList()
+        {
+            // Check whether serialization works
+            var list = new List<SecurityRequirement>
+            { 
+                new SecurityRequirement { 
+                    { "test1", new List<string>() { "testA", "testB" } },
+                    { "test2", new List<string>() {"testC" } }
+                }
+            };
+
+            var data = JsonSerializer.Serialize(
+                list,
+                new JsonSerializerOptions
+                {
+                    WriteIndented = false,
+                    Converters = { new DictionaryKeyToStringConverter() }
+                }
+            );
+
+            data.ShouldBe("[{\"test1\":[\"testA\",\"testB\"],\"test2\":[\"testC\"]}]");
+        }
+
 
         [Fact]
         public void InterfaceImplementationConverter_ShouldNot_ReturnEmptyObject()
@@ -88,5 +112,6 @@ namespace Saunter.Tests.Utils
             string actualValue = JsonSerializer.Serialize(value, value.GetType());
             actualValue.ShouldBe(expectedValue);
         }
+
     }
 }
