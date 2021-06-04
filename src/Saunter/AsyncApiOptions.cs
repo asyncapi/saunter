@@ -40,7 +40,8 @@ namespace Saunter
 
         private bool DefaultUseEnumMemberName(Type t)
         {
-            return JsonSerializerSettings.Converters.OfType<StringEnumConverter>().Any();
+            return JsonSerializerSettings.Converters.OfType<StringEnumConverter>().Any() 
+                   || t.GetCustomAttributes<JsonConverterAttribute>().Any(c => c.ConverterType == typeof(StringEnumConverter));
         }
 
         /// <summary>

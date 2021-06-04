@@ -5,7 +5,8 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 using System.Runtime.Serialization;
-using System.Text.Json.Serialization;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using Saunter.Utils;
 using Shouldly;
 using Xunit;
@@ -149,11 +150,10 @@ namespace Saunter.Tests.Utils
             type.IsEnumerable(out _).ShouldBeFalse();
         }
 
-        [JsonConverter(typeof(JsonStringEnumConverter))]
+        [JsonConverter(typeof(StringEnumConverter))]
         private enum JsonStringEnumConverterEnum
         {
             Hello,
-            [EnumMember(Value = "world")]
             World,
         }
 
@@ -167,7 +167,7 @@ namespace Saunter.Tests.Utils
             actualMembers.Members.ShouldBe(members);
         }
         
-        [JsonConverter(typeof(JsonStringEnumMemberConverter))]
+        [JsonConverter(typeof(StringEnumConverter))]
         private enum JsonStringEnumMemberConverterEnum
         {
             Hello,
@@ -185,6 +185,7 @@ namespace Saunter.Tests.Utils
             actualMembers.Members.ShouldBe(members);
         }
         
+        [JsonConverter(typeof(StringEnumConverter))]
         private enum EnumMemberConverterEnum
         {
             Hello,

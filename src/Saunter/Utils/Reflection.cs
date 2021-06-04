@@ -156,18 +156,33 @@ namespace Saunter.Utils
 
         private static IEnumerable<string> GetEnumMemberNames(this Type type, AsyncApiOptions options)
         {
-            var converter = options.JsonSerializerSettings.Converters.OfType<StringEnumConverter>().First();
+            var converter =  type.EnumConverter() ?? options.JsonSerializerSettings.Converters.OfType<StringEnumConverter>().First();
             
             var sb = new StringBuilder();
-            var jsonwriter = new JsonTextWriter(new StringWriter());
+            var jsonwriter = new JsonTextWriter(new StringWriter(sb));
             var serializer = new JsonSerializer();
 
             foreach (Enum val in type.GetEnumValues())
             {
                 sb.Clear();
                 converter.WriteJson(jsonwriter, val, serializer);
-                yield return sb.ToString();
+                jsonwriter.Flush();
+                yield return sb.ToString().Replace("\"","");
             }
+        }
+
+        private static StringEnumConverter EnumConverter(this Type type)
+        {
+            var converterType = type.GetCustomAttributes<JsonConverterAttribute>()
+                .Where(a => a.ConverterType.IsAssignableFrom(typeof(StringEnumConverter)))
+                .Select(a => a.ConverterType)
+                .FirstOrDefault();
+            if (converterType == null)
+            {
+                return null;
+            }
+
+            return (StringEnumConverter)Activator.CreateInstance(converterType);
         }
 
         private static IEnumerable<int> GetEnumMemberValues(this Type type)
