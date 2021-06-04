@@ -2,10 +2,15 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Runtime.Serialization;
+using Namotion.Reflection;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using NJsonSchema;
 using NJsonSchema.Generation;
+using NJsonSchema.Generation.SchemaProcessors;
+using Saunter.AsyncApiSchema.v2;
 using Saunter.Attributes;
+using Saunter.Generation.SchemaGeneration;
 using Shouldly;
 using Xunit;
 
@@ -13,13 +18,17 @@ namespace Saunter.Tests.Generation.SchemaGeneration
 {
     public class SchemaGenerationTests
     {
-        private readonly JsonSchemaResolver _schemaResolver;
+        private readonly AsyncApiSchemaResolver _schemaResolver;
         private readonly JsonSchemaGenerator _schemaGenerator;
 
         public SchemaGenerationTests()
         {
-            var settings = new JsonSchemaGeneratorSettings();
-            _schemaResolver = new JsonSchemaResolver(new JsonSchema(), settings);
+            var settings = new SaunterJsonSchemaGeneratorSettings();
+            settings.SerializerSettings = new JsonSerializerSettings()
+            {
+                ContractResolver = new CamelCasePropertyNamesContractResolver()
+            };
+            _schemaResolver = new AsyncApiSchemaResolver(new AsyncApiDocument(), settings);
             _schemaGenerator = new JsonSchemaGenerator(settings);
         }
 
@@ -45,7 +54,7 @@ namespace Saunter.Tests.Generation.SchemaGeneration
         {
             var fooSchema = _schemaResolver.Schemas.FirstOrDefault(sh => sh.Id == "foo");
             fooSchema.ShouldNotBeNull();
-            fooSchema.RequiredProperties.Count.ShouldBe(1);
+            fooSchema.RequiredProperties.Count.ShouldBe(2);
             fooSchema.RequiredProperties.Contains("id").ShouldBeTrue();
             fooSchema.Properties.Count.ShouldBe(5);
             fooSchema.Properties.ContainsKey("id").ShouldBeTrue();
@@ -76,6 +85,8 @@ namespace Saunter.Tests.Generation.SchemaGeneration
         {
             var type = typeof(Pet);
 
+            _schemaGenerator.Settings.SchemaProcessors.Add(new DiscriminatorSchemaProcessor(typeof(Pet), "petType"));
+
             var schema = _schemaGenerator.Generate(type, _schemaResolver);
 
             schema.ShouldNotBeNull();
@@ -105,6 +116,7 @@ namespace Saunter.Tests.Generation.SchemaGeneration
         {
             var type = typeof(IPet);
 
+            _schemaGenerator.Settings.SchemaProcessors.Add(new DiscriminatorSchemaProcessor(typeof(IPet), "petType"));
             var schema = _schemaGenerator.Generate(type, _schemaResolver);
 
             schema.ShouldNotBeNull();
@@ -182,7 +194,6 @@ namespace Saunter.Tests.Generation.SchemaGeneration
         }
     }
     
-    [Discriminator("petType")]
     [DiscriminatorSubType(typeof(Cat))]
     [DiscriminatorSubType(typeof(Dog))]
     public interface IPet
@@ -191,8 +202,7 @@ namespace Saunter.Tests.Generation.SchemaGeneration
 
         string Name { get; }
     }
-
-    [Discriminator("petType")]
+    
     [DiscriminatorSubType(typeof(Cat))]
     [DiscriminatorSubType(typeof(Dog))]
     public abstract class Pet : IPet

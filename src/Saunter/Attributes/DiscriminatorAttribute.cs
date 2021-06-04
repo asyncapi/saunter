@@ -2,6 +2,7 @@ using System;
 
 namespace Saunter.Attributes
 {
+    [Obsolete("add DiscriminatorSchemaProcessor to JsonSchemaGeneratorSettings", true)]
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct | AttributeTargets.Interface)]
     public class DiscriminatorAttribute : Attribute
     {

@@ -2,14 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using NJsonSchema.Generation;
+using Newtonsoft.Json.Serialization;
 using Saunter.AsyncApiSchema.v2;
-using Saunter.Generation;
 using Saunter.Generation.Filters;
-using Saunter.Utils;
+using Saunter.Generation.SchemaGeneration;
 
 namespace Saunter
 {
@@ -18,6 +16,10 @@ namespace Saunter
         public AsyncApiOptions()
         {
             UseEnumMemberName = DefaultUseEnumMemberName;
+            JsonSerializerSettings = new JsonSerializerSettings()
+            {
+                ContractResolver = new CamelCasePropertyNamesContractResolver()
+            };
         }
 
         /// <summary>
@@ -31,7 +33,11 @@ namespace Saunter
         /// </summary>
         public IList<Type> AssemblyMarkerTypes { get; set; } = new List<Type>();
 
-        public JsonSerializerSettings JsonSerializerSettings { get; set; } = new JsonSerializerSettings();
+        public JsonSerializerSettings JsonSerializerSettings
+        {
+            get => JsonSchemaGeneratorSettings.SerializerSettings;
+            set => JsonSchemaGeneratorSettings.SerializerSettings = value;
+        } 
 
         /// <summary>
         /// A function that specifies if the member name of the enum should be used instead of its value.
@@ -64,8 +70,8 @@ namespace Saunter
         /// </summary>
         public AsyncApiMiddlewareOptions Middleware { get; set; } = new AsyncApiMiddlewareOptions();
 
-        public JsonSchemaGeneratorSettings JsonSchemaGeneratorSettings { get; set; } =
-            new JsonSchemaGeneratorSettings();
+        public SaunterJsonSchemaGeneratorSettings JsonSchemaGeneratorSettings { get; set; } =
+            new SaunterJsonSchemaGeneratorSettings();
     }
 
     public class AsyncApiMiddlewareOptions
