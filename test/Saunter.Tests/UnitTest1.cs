@@ -21,10 +21,10 @@ namespace Saunter.Tests
                 {
                     options.AsyncApi = new AsyncApiSchema.v2.AsyncApiDocument
                     {
-                        Id = new Identifier("urn:com:example:example-events"),
-                        Info = new Info("Example API", "An example API with events")
+                        Id = "urn:com:example:example-events",
+                        Info = new Info("Example API", "2019.01.12345" )
                         {
-                            Version = "2019.01.12345",
+                            Description = "An example API with events",
                             Contact = new Contact
                             {
                                 Email = "michael@mwild.me",

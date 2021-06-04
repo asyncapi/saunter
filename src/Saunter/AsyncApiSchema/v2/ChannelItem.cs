@@ -34,7 +34,7 @@ namespace Saunter.AsyncApiSchema.v2
         /// (as defined by RFC 6570 section 2.2).
         /// </summary>
         [JsonProperty("parameters")]
-        public IList<IParameter> Parameters { get; set; } = new List<IParameter>();
+        public Parameters Parameters { get; set; }
 
         /// <summary>
         /// A free-form map where the keys describe the name of the protocol

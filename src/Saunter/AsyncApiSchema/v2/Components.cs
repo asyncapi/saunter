@@ -12,67 +12,67 @@ namespace Saunter.AsyncApiSchema.v2
         /// An object to hold reusable Schema Objects.
         /// </summary>
         [JsonProperty("schemas")]
-        public IDictionary<string, JsonSchema> Schemas { get; set; } = new Dictionary<string, JsonSchema>();
+        public IDictionary<ComponentFieldName, JsonSchema> Schemas { get; set; } = new Dictionary<ComponentFieldName, JsonSchema>();
 
         /// <summary>
         /// An object to hold reusable Message Objects.
         /// </summary>
         [JsonProperty("messages")]
-        public IDictionary<string, Message> Messages { get; set; } = new Dictionary<string, Message>();
+        public IDictionary<ComponentFieldName, Message> Messages { get; set; } = new Dictionary<ComponentFieldName, Message>();
 
         /// <summary>
         /// An object to hold reusable Security Scheme Objects.
         /// </summary>
         [JsonProperty("securitySchemes")]
-        public IDictionary<string, SecurityScheme> SecuritySchemes { get; set; } = new Dictionary<string, SecurityScheme>();
+        public IDictionary<ComponentFieldName, SecurityScheme> SecuritySchemes { get; set; } = new Dictionary<ComponentFieldName, SecurityScheme>();
 
         /// <summary>
         /// An object to hold reusable Parameter Objects.
         /// </summary>
         [JsonProperty("parameters")]
-        public IDictionary<string, Parameter> Parameters { get; set; } = new Dictionary<string, Parameter>();
+        public IDictionary<ComponentFieldName, Parameter> Parameters { get; set; } = new Dictionary<ComponentFieldName, Parameter>();
 
         /// <summary>
         /// An object to hold reusable Correlation ID Objects.
         /// </summary>
         [JsonProperty("correlationIds")]
-        public IDictionary<string, CorrelationId> CorrelationIds { get; set; } = new Dictionary<string, CorrelationId>();
+        public IDictionary<ComponentFieldName, CorrelationId> CorrelationIds { get; set; } = new Dictionary<ComponentFieldName, CorrelationId>();
         
         /// <summary>
         /// An object to hold reusable Server Binding Objects.
         /// </summary>
         [JsonProperty("serverBindings")]
-        public IDictionary<string, ServerBindings> ServerBindings { get; set; } = new Dictionary<string, ServerBindings>();
+        public IDictionary<ComponentFieldName, ServerBindings> ServerBindings { get; set; } = new Dictionary<ComponentFieldName, ServerBindings>();
 
         /// <summary>
         /// An object to hold reusable Channel Binding Objects.
         /// </summary>
         [JsonProperty("channelBindings")]
-        public IDictionary<string, ChannelBindings> ChannelBindings { get; set; } = new Dictionary<string, ChannelBindings>();
+        public IDictionary<ComponentFieldName, ChannelBindings> ChannelBindings { get; set; } = new Dictionary<ComponentFieldName, ChannelBindings>();
 
         /// <summary>
         /// An object to hold reusable Operation Binding Objects.
         /// </summary>
         [JsonProperty("operationBindings")]
-        public IDictionary<string, OperationBindings> OperationBindings { get; set; } = new Dictionary<string, OperationBindings>();
+        public IDictionary<ComponentFieldName, OperationBindings> OperationBindings { get; set; } = new Dictionary<ComponentFieldName, OperationBindings>();
 
         /// <summary>
         /// An object to hold reusable Message Binding Objects.
         /// </summary>
         [JsonProperty("messageBindings")]
-        public IDictionary<string, MessageBindings> MessageBindings { get; set; } = new Dictionary<string, MessageBindings>();
+        public IDictionary<ComponentFieldName, MessageBindings> MessageBindings { get; set; } = new Dictionary<ComponentFieldName, MessageBindings>();
 
         
         /// <summary>
         /// An object to hold reusable Operation Trait Objects.
         /// </summary>
         [JsonProperty("operationTraits")]
-        public IDictionary<string, OperationTrait> OperationTraits { get; set; } = new Dictionary<string, OperationTrait>();
+        public IDictionary<ComponentFieldName, OperationTrait> OperationTraits { get; set; } = new Dictionary<ComponentFieldName, OperationTrait>();
 
         /// <summary>
         /// An object to hold reusable Message Trait Objects.
         /// </summary>
         [JsonProperty("messageTraits")]
-        public IDictionary<string, MessageTrait> MessageTraits { get; set; } = new Dictionary<string, MessageTrait>();
+        public IDictionary<ComponentFieldName, MessageTrait> MessageTraits { get; set; } = new Dictionary<ComponentFieldName, MessageTrait>();
     }
 }

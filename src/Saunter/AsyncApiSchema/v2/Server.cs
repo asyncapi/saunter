@@ -58,7 +58,7 @@ namespace Saunter.AsyncApiSchema.v2
         /// be satisfied to authorize a connection or operation.
         /// </summary>
         [JsonProperty("security")]
-        public IList<Dictionary<string, List<string>>> Security { get; set; }
+        public IList<SecurityRequirement> Security { get; set; }
 
         /// <summary>
         /// A free-form map where the keys describe the name of the protocol and the
@@ -94,5 +94,34 @@ namespace Saunter.AsyncApiSchema.v2
         /// </summary>
         [JsonProperty("examples")]
         public IList<string> Examples { get; set; }
+    }
+
+    public static class ServerProtocol
+    {
+        public const string Amqp = "amqp";
+
+        public const string Amqps = "amqps";
+
+        public const string Http = "http";
+
+        public const string Https = "https";
+
+        public const string Jms = "jms";
+
+        public const string Kafka = "kafka";
+
+        public const string KafkaSecure = "kafka-secure";
+
+        public const string Mqtt = "mqtt";
+
+        public const string SecureMqtt = "secure-mqtt";
+
+        public const string Stomp = "stomp";
+
+        public const string Stomps = "stomps";
+
+        public const string Ws = "ws";
+
+        public const string Wss = "wss";
     }
 }

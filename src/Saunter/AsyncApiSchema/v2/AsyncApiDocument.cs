@@ -42,7 +42,7 @@ namespace Saunter.AsyncApiSchema.v2
         /// The available channels and messages for the API.
         /// </summary>
         [JsonProperty("channels")]
-        public IDictionary<string, ChannelItem> Channels { get; set; } = new Dictionary<string, ChannelItem>();
+        public Channels Channels { get; set; } = new Channels();
 
         /// <summary>
         /// An element to hold various schemas for the specification.

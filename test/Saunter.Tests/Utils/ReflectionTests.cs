@@ -184,8 +184,7 @@ namespace Saunter.Tests.Utils
             actualMembers.MemberType.ShouldBe(typeof(string));
             actualMembers.Members.ShouldBe(members);
         }
-
-        [JsonConverter(typeof(EnumMemberConverter))]
+        
         private enum EnumMemberConverterEnum
         {
             Hello,

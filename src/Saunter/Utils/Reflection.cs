@@ -2,9 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using Namotion.Reflection;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace Saunter.Utils
 {
@@ -152,9 +156,17 @@ namespace Saunter.Utils
 
         private static IEnumerable<string> GetEnumMemberNames(this Type type, AsyncApiOptions options)
         {
+            var converter = options.JsonSerializerSettings.Converters.OfType<StringEnumConverter>().First();
+            
+            var sb = new StringBuilder();
+            var jsonwriter = new JsonTextWriter(new StringWriter());
+            var serializer = new JsonSerializer();
+
             foreach (Enum val in type.GetEnumValues())
             {
-                yield return options.EnumMemberNameSelector(type, val);
+                sb.Clear();
+                converter.WriteJson(jsonwriter, val, serializer);
+                yield return sb.ToString();
             }
         }
 

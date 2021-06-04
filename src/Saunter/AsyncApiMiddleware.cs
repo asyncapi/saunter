@@ -1,9 +1,12 @@
 #if !NETSTANDARD2_0
+
 using System;
 using System.Net;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
+using Saunter.Utils;
 
 namespace Saunter
 {
@@ -18,42 +21,27 @@ namespace Saunter
             _options = options;
         }
 
-        public async Task Invoke(HttpContext context, IAsyncApiDocumentProvider asyncApiDocumentProvider)
+        public async Task Invoke(HttpContext context, IAsyncApiDocumentProvider asyncApiDocumentProvider, IAsyncApiDocumentSerializer asyncApiDocumentSerializer)
         {
             if (!IsRequestingAsyncApiSchema(context.Request))
             {
                 await _next(context);
                 return;
             }
-            
+
             var asyncApiSchema = asyncApiDocumentProvider.GetDocument();
 
-            await RespondWithAsyncApiSchemaJson(context.Response, asyncApiSchema);
+            await RespondWithAsyncApiSchemaJson(context.Response, asyncApiSchema, asyncApiDocumentSerializer);
         }
 
-        private async Task RespondWithAsyncApiSchemaJson(HttpResponse response, AsyncApiSchema.v2.AsyncApiDocument asyncApiSchema)
+        private async Task RespondWithAsyncApiSchemaJson(HttpResponse response, AsyncApiSchema.v2.AsyncApiDocument asyncApiSchema, IAsyncApiDocumentSerializer asyncApiDocumentSerializer)
         {
-            // TODO: figure out why this works but the commented out System.Text.Json does not!
-            var asyncApiSchemaJson = Newtonsoft.Json.JsonConvert.SerializeObject(asyncApiSchema);
+            var asyncApiSchemaSerialized = asyncApiDocumentSerializer.Serialize(asyncApiSchema);
 
-            // var asyncApiSchemaJson = JsonSerializer.Serialize(
-            //     asyncApiSchema,
-            //     new JsonSerializerOptions
-            //     {
-            //         WriteIndented = false,
-            //         IgnoreNullValues = true,
-            //         Converters =
-            //         {
-            //             new DictionaryKeyToStringConverter(),
-            //             new InterfaceImplementationConverter(),
-            //         },
-            //     }
-            // );
+            response.StatusCode = (int)HttpStatusCode.OK;
+            response.ContentType = asyncApiDocumentSerializer.ContentType;
 
-            response.StatusCode = (int) HttpStatusCode.OK;
-            response.ContentType = "application/json";
-
-            await response.WriteAsync(asyncApiSchemaJson);
+            await response.WriteAsync(asyncApiSchemaSerialized, Encoding.UTF8);
         }
 
         private bool IsRequestingAsyncApiSchema(HttpRequest request)
@@ -63,4 +51,5 @@ namespace Saunter
         }
     }
 }
+
 #endif
