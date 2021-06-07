@@ -19,9 +19,8 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
         {
             // Arrange
             var options = new AsyncApiOptions();
-            var jsonSchemaSettings = new JsonSchemaGeneratorSettings();
-            var schemaGenerator = new JsonSchemaGenerator(jsonSchemaSettings);
-            var documentGenerator = new DocumentGenerator(Options.Create(options), schemaGenerator, jsonSchemaSettings);
+            var schemaGenerator = new JsonSchemaGenerator(options.JsonSchemaGeneratorSettings);
+            var documentGenerator = new DocumentGenerator(Options.Create(options), schemaGenerator, options.JsonSchemaGeneratorSettings);
 
             // Act
             var document = documentGenerator.GenerateDocument(new []{ typeof(TenantMessagePublisher).GetTypeInfo() });

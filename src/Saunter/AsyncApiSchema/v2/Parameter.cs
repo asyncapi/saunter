@@ -25,6 +25,8 @@ namespace Saunter.AsyncApiSchema.v2
         [JsonProperty("description")]
         public string Description { get; set; }
 
+        [JsonProperty("name")]
+        public string Name { get; set; }
         /// <summary>
         /// Definition of the parameter.
         /// </summary>

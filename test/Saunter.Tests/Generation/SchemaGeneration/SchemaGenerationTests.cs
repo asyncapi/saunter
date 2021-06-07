@@ -3,9 +3,12 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using NJsonSchema;
 using NJsonSchema.Generation;
+using Saunter.AsyncApiSchema.v2;
 using Saunter.Attributes;
+using Saunter.Generation.SchemaGeneration;
 using Shouldly;
 using Xunit;
 
@@ -13,13 +16,20 @@ namespace Saunter.Tests.Generation.SchemaGeneration
 {
     public class SchemaGenerationTests
     {
-        private readonly JsonSchemaResolver _schemaResolver;
+        private readonly AsyncApiSchemaResolver _schemaResolver;
         private readonly JsonSchemaGenerator _schemaGenerator;
 
         public SchemaGenerationTests()
         {
-            var settings = new JsonSchemaGeneratorSettings();
-            _schemaResolver = new JsonSchemaResolver(new JsonSchema(), settings);
+            var settings = new JsonSchemaGeneratorSettings()
+            {
+                TypeNameGenerator = new CamelCaseTypeNameGenerator(),
+                SerializerSettings = new JsonSerializerSettings()
+                {
+                    ContractResolver = new CamelCasePropertyNamesContractResolver()
+                }
+            };
+            _schemaResolver = new AsyncApiSchemaResolver(new AsyncApiDocument(), settings);
             _schemaGenerator = new JsonSchemaGenerator(settings);
         }
 
@@ -45,8 +55,9 @@ namespace Saunter.Tests.Generation.SchemaGeneration
         {
             var fooSchema = _schemaResolver.Schemas.FirstOrDefault(sh => sh.Id == "foo");
             fooSchema.ShouldNotBeNull();
-            fooSchema.RequiredProperties.Count.ShouldBe(1);
+            fooSchema.RequiredProperties.Count.ShouldBe(2);
             fooSchema.RequiredProperties.Contains("id").ShouldBeTrue();
+            fooSchema.RequiredProperties.Contains("bar").ShouldBeTrue();
             fooSchema.Properties.Count.ShouldBe(5);
             fooSchema.Properties.ContainsKey("id").ShouldBeTrue();
             fooSchema.Properties.ContainsKey("bar").ShouldBeTrue();
@@ -129,6 +140,7 @@ namespace Saunter.Tests.Generation.SchemaGeneration
         [Required]
         public Guid Id { get; set; }
 
+        [JsonIgnore]
         [System.Text.Json.Serialization.JsonIgnore]
         public string Ignore { get; set; }
 

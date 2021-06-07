@@ -6,6 +6,7 @@ using NJsonSchema.Generation;
 using Saunter.AsyncApiSchema.v2;
 using Saunter.Attributes;
 using Saunter.Generation;
+using Saunter.Generation.SchemaGeneration;
 using Shouldly;
 using Xunit;
 
@@ -18,9 +19,8 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
         {
             // Arrange
             var options = new AsyncApiOptions();
-            var jsonSchemaSettings = new JsonSchemaGeneratorSettings();
-            var schemaGenerator = new JsonSchemaGenerator(jsonSchemaSettings);
-            var documentGenerator = new DocumentGenerator(Options.Create(options), schemaGenerator, jsonSchemaSettings);
+            var schemaGenerator = new JsonSchemaGenerator(options.JsonSchemaGeneratorSettings);
+            var documentGenerator = new DocumentGenerator(Options.Create(options), schemaGenerator, options.JsonSchemaGeneratorSettings);
             
             // Act
             var document = documentGenerator.GenerateDocument(new[] { typeof(TenantMessageConsumer).GetTypeInfo() });
@@ -52,9 +52,8 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
         {
             // Arrange
             var options = new AsyncApiOptions();
-            var jsonSchemaSettings = new JsonSchemaGeneratorSettings();
-            var schemaGenerator = new JsonSchemaGenerator(jsonSchemaSettings);
-            var documentGenerator = new DocumentGenerator(Options.Create(options), schemaGenerator, jsonSchemaSettings);
+            var schemaGenerator = new JsonSchemaGenerator(options.JsonSchemaGeneratorSettings);
+            var documentGenerator = new DocumentGenerator(Options.Create(options), schemaGenerator, options.JsonSchemaGeneratorSettings);
 
             // Act
             var document = documentGenerator.GenerateDocument(new []{ typeof(TenantGenericMessagePublisher).GetTypeInfo() });
@@ -86,9 +85,8 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
         {
             // Arrange
             var options = new AsyncApiOptions();
-            var jsonSchemaSettings = new JsonSchemaGeneratorSettings();
-            var schemaGenerator = new JsonSchemaGenerator(jsonSchemaSettings);
-            var documentGenerator = new DocumentGenerator(Options.Create(options), schemaGenerator, jsonSchemaSettings);
+            var schemaGenerator = new JsonSchemaGenerator(options.JsonSchemaGeneratorSettings);
+            var documentGenerator = new DocumentGenerator(Options.Create(options), schemaGenerator, options.JsonSchemaGeneratorSettings);
 
             // Act
             var document = documentGenerator.GenerateDocument(new []{ typeof(TenantSingleMessagePublisher).GetTypeInfo() });
@@ -116,9 +114,8 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
         {
             // Arrange
             var options = new AsyncApiOptions();
-            var jsonSchemaSettings = new JsonSchemaGeneratorSettings();
-            var schemaGenerator = new JsonSchemaGenerator(jsonSchemaSettings);
-            var documentGenerator = new DocumentGenerator(Options.Create(options), schemaGenerator, jsonSchemaSettings);
+            var schemaGenerator = new JsonSchemaGenerator(options.JsonSchemaGeneratorSettings);
+            var documentGenerator = new DocumentGenerator(Options.Create(options), schemaGenerator, options.JsonSchemaGeneratorSettings);
 
             // Act
             var document = documentGenerator.GenerateDocument(new[]
@@ -167,9 +164,8 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
         {
             // Arrange
             var options = new AsyncApiOptions();
-            var jsonSchemaSettings = new JsonSchemaGeneratorSettings();
-            var schemaGenerator = new JsonSchemaGenerator(jsonSchemaSettings);
-            var documentGenerator = new DocumentGenerator(Options.Create(options), schemaGenerator, jsonSchemaSettings);
+            var schemaGenerator = new JsonSchemaGenerator(options.JsonSchemaGeneratorSettings);
+            var documentGenerator = new DocumentGenerator(Options.Create(options), schemaGenerator, options.JsonSchemaGeneratorSettings);
 
             // Act
             var document = documentGenerator.GenerateDocument(new []{ typeof(OneTenantMessageConsumer).GetTypeInfo() });
@@ -182,8 +178,8 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
             channel.Key.ShouldBe("asw.tenant_service.{tenant_id}.{tenant_status}");
             channel.Value.Description.ShouldBe("A tenant events.");
             channel.Value.Parameters.Count.ShouldBe(2);
-            channel.Value.Parameters.OfType<Parameter>().ShouldContain(p => p.Schema.Id == "tenant_id" && p.Description == "The tenant identifier.");
-            channel.Value.Parameters.OfType<Parameter>().ShouldContain(p => p.Schema.Id == "tenant_status" && p.Description == "The tenant status.");
+            channel.Value.Parameters.OfType<Parameter>().ShouldContain(p => p.Name == "tenant_id" && p.Schema != null && p.Description == "The tenant identifier.");
+            channel.Value.Parameters.OfType<Parameter>().ShouldContain(p => p.Name == "tenant_status" && p.Schema != null && p.Description == "The tenant status.");
             
             var subscribe = channel.Value.Subscribe;
             subscribe.ShouldNotBeNull();

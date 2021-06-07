@@ -4,10 +4,16 @@ using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using NJsonSchema.Generation;
 using Saunter.AsyncApiSchema.v2;
 using Saunter.Generation;
 using Saunter.Generation.Filters;
+using Saunter.Generation.SchemaGeneration;
 using Saunter.Utils;
+using JsonConverterAttribute = System.Text.Json.Serialization.JsonConverterAttribute;
+using JsonIgnoreAttribute = System.Text.Json.Serialization.JsonIgnoreAttribute;
 
 namespace Saunter
 {
@@ -91,6 +97,19 @@ namespace Saunter
         /// Options related to the Saunter middleware
         /// </summary>
         public AsyncApiMiddlewareOptions Middleware { get; set; } = new AsyncApiMiddlewareOptions();
+
+        public JsonSchemaGeneratorSettings JsonSchemaGeneratorSettings { get; set; } = new JsonSchemaGeneratorSettings()
+        {
+            TypeNameGenerator = new CamelCaseTypeNameGenerator(),
+            SerializerSettings = new JsonSerializerSettings()
+            {
+                ContractResolver = new CamelCasePropertyNamesContractResolver()
+            },
+            SchemaProcessors =
+            {
+                new DiscoverDiscriminatorSchemaProcessor()
+            }
+        };
     }
 
     public class AsyncApiMiddlewareOptions

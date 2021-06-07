@@ -264,7 +264,7 @@ namespace Saunter.Generation
 
             var message = new Message
             {
-                Payload = _schemaGenerator.GenerateWithReferenceAndNullability<JsonSchema>(messageAttribute.PayloadType.ToContextualType(), schemaResolver),
+                Payload = _schemaGenerator.Generate(messageAttribute.PayloadType, schemaResolver),
                 Title = messageAttribute.Title,
                 Summary = messageAttribute.Summary,
                 Description = messageAttribute.Description,
@@ -284,7 +284,7 @@ namespace Saunter.Generation
 
             var message = new Message
             {
-                Payload = _schemaGenerator.GenerateWithReferenceAndNullability<JsonSchema>(payloadType.ToContextualType(), schemaResolver),
+                Payload = _schemaGenerator.Generate(payloadType, schemaResolver),
             };
             message.Name = message.Payload.Id;
 
@@ -302,6 +302,7 @@ namespace Saunter.Generation
                     var parameter = new Parameter
                     {
                         Description = attribute.Description,
+                        Name = attribute.Name,
                         Schema = _schemaGenerator.Generate(attribute.Type, schemaResolver),
                         Location = attribute.Location,
                     };

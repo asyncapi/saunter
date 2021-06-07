@@ -1,6 +1,7 @@
 using System;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Options;
 using NJsonSchema.Generation;
 using Saunter.Utils;
 
@@ -16,7 +17,7 @@ namespace Saunter.Generation
             services.TryAddTransient<IAsyncApiDocumentProvider, AsyncApiDocumentProvider>();
             services.TryAddTransient<IDocumentGenerator, DocumentGenerator>();
             services.TryAddTransient<JsonSchemaGenerator>();
-            services.TryAddSingleton<JsonSchemaGeneratorSettings>();
+            services.TryAddTransient(c => c.GetRequiredService<IOptions<AsyncApiOptions>>().Value.JsonSchemaGeneratorSettings);
 
             if (setupAction != null) services.Configure(setupAction);
 
