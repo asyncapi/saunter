@@ -5,7 +5,7 @@ namespace Saunter.AsyncApiSchema.v2.Bindings.Http
     /// <remarks>
     /// See: https://github.com/asyncapi/bindings/tree/master/http#message-binding-object
     /// </remarks>
-    public class HttpMessageBinding
+    public class HttpMessageBinding : IMessageBinding
     {
         [JsonProperty("headers")]
         public HttpMessageBindingHeaders Headers { get; set; }
