@@ -42,7 +42,7 @@ namespace Saunter.Generation.SchemaGeneration
 
         public IMessage GetMessageOrReference(Message message)
         {
-            var id = message.Payload.ActualSchema.Id;
+            var id = message.Name;
             if (id == null)
             {
                 return message;

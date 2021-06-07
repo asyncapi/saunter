@@ -273,7 +273,7 @@ namespace Saunter.Generation
                 Summary = messageAttribute.Summary,
                 Description = messageAttribute.Description,
             };
-            message.Name = message.Payload.Id;
+            message.Name = messageAttribute.Name ?? message.Payload.ActualSchema.Id;
 
             return schemaResolver.GetMessageOrReference(message);
         }
