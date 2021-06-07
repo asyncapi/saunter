@@ -120,7 +120,7 @@ namespace Saunter.Generation
                     Subscribe = GenerateOperationFromClass(cc.Type, schemaResolver, OperationType.Subscribe),                    
                 };
                 
-                channels.Add(cc.Channel.Name, channelItem);
+                channels.AddOrAppend(cc.Channel.Name, channelItem);
                 
                 var context = new ChannelItemFilterContext(cc.Type, schemaResolver, cc.Channel);
                 foreach (var filter in _options.ChannelItemFilters)
@@ -143,11 +143,11 @@ namespace Saunter.Generation
                 return null;
             }
 
-            var messageAttribute = method.GetCustomAttribute<MessageAttribute>();
-            var message = messageAttribute != null
-                ? GenerateMessageFromAttribute(messageAttribute, schemaResolver)
+            IEnumerable<MessageAttribute> messageAttributes = method.GetCustomAttributes<MessageAttribute>();
+            IMessage message = messageAttributes.Any()
+                ? GenerateMessageFromAttributes(messageAttributes, schemaResolver)
                 : GenerateMessageFromType(operationAttribute.MessagePayloadType, schemaResolver);
-            
+
             var operation = new Operation
             {
                 OperationId = operationAttribute.OperationId ?? method.Name,
@@ -193,16 +193,12 @@ namespace Saunter.Generation
                 })
                 .Where(mm => mm.MessageAttributes.Any());
 
-            foreach (var mm in methodsWithMessageAttribute)
+            foreach (MessageAttribute messageAttribute in methodsWithMessageAttribute.SelectMany(x => x.MessageAttributes))
             {
-                foreach (var attribute in mm.MessageAttributes)
+                Message message = GenerateMessageFromAttribute(messageAttribute, schemaResolver);
+                if (message != null)
                 {
-                    var message = GenerateMessageFromAttribute(attribute, schemaResolver);
-
-                    if (message != null)
-                    {
-                        messages.OneOf.Add(message);
-                    }
+                    messages.OneOf.Add(message);
                 }
             }
 

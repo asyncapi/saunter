@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using NJsonSchema.Converters;
 
 namespace Saunter.AsyncApiSchema.v2
@@ -11,13 +12,13 @@ namespace Saunter.AsyncApiSchema.v2
         /// Specifies the AsyncAPI Specification version being used.
         /// </summary>
         [JsonProperty("asyncapi")]
-        public string AsyncApi { get; } = "2.0.0";
+        public AsyncApiVersionString AsyncApi { get; } = AsyncApiVersionString.v2;
         
         /// <summary>
         /// Identifier of the application the AsyncAPI document is defining.
         /// </summary>
         [JsonProperty("id")]
-        public string Id { get; set; }
+        public Identifier Id { get; set; }
 
         /// <summary>
         /// Provides metadata about the API. The metadata can be used by the clients if needed.
@@ -29,7 +30,7 @@ namespace Saunter.AsyncApiSchema.v2
         /// Provides connection details of servers.
         /// </summary>
         [JsonProperty("servers")]
-        public Dictionary<string, Server> Servers { get; } = new Dictionary<string, Server>();
+        public Servers Servers { get; } = new Servers();
 
         /// <summary>
         /// A string representing the default content type to use when encoding/decoding a message's payload.

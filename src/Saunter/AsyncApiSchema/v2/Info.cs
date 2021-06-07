@@ -49,48 +49,4 @@ namespace Saunter.AsyncApiSchema.v2 {
         [JsonProperty("license")]
         public License License { get; set; }
     }
-    
-    public class Contact
-    {
-        /// <summary>
-        /// The identifying name of the contact person/organization.
-        /// </summary>
-        [JsonProperty("name")]
-        public string Name { get; set; }
-
-        /// <summary>
-        /// The URL pointing to the contact information.
-        /// MUST be in the format of a URL.
-        /// </summary>
-        [JsonProperty("url")]
-        public string Url { get; set; }
-
-        /// <summary>
-        /// The email address of the contact person/organization.
-        /// MUST be in the format of an email address.
-        /// </summary>
-        [JsonProperty("email")]
-        public string Email { get; set; }
-    }
-    
-    public class License
-    {
-        public License(string name)
-        {
-            Name = name;
-        }
-        
-        /// <summary>
-        /// The license name used for the API.
-        /// </summary>
-        [JsonProperty("name")]
-        public string Name { get; }
-
-        /// <summary>
-        /// A URL to the license used for the API.
-        /// MUST be in the format of a URL.
-        /// </summary>
-        [JsonProperty("url")]
-        public string Url { get; set; }
-    }
 }

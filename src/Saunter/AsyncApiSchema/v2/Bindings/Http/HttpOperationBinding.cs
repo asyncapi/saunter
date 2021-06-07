@@ -5,7 +5,7 @@ namespace Saunter.AsyncApiSchema.v2.Bindings.Http
     /// <remarks>
     /// See: https://github.com/asyncapi/bindings/tree/master/http#Operation-Binding-Object
     /// </remarks>
-    public class HttpOperationBinding
+    public class HttpOperationBinding : IOperationBinding
     {
         [JsonProperty("type")]
         public string Type { get; set; }

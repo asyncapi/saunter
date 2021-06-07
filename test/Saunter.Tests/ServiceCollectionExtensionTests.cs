@@ -14,14 +14,14 @@ namespace Saunter.Tests
     {
 
         [Fact]
-        public void Test1()
+        public void TestAddAsyncApiSchemaGeneration()
         {
             var services = new ServiceCollection() as IServiceCollection;
             services.AddAsyncApiSchemaGeneration(options =>
                 {
                     options.AsyncApi = new AsyncApiSchema.v2.AsyncApiDocument
                     {
-                        Id = "urn:com:example:example-events",
+                        Id = new Identifier("urn:com:example:example-events"),
                         Info = new Info("Example API", "2019.01.12345" )
                         {
                             Description = "An example API with events",

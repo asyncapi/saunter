@@ -5,7 +5,7 @@ namespace Saunter.AsyncApiSchema.v2.Bindings.Kafka
     /// <remarks>
     /// See: https://github.com/asyncapi/bindings/tree/master/kafka#Message-binding-object
     /// </remarks>
-    public class KafkaMessageBinding
+    public class KafkaMessageBinding : IOperationBinding
     {
         [JsonProperty("key")]
         public KafkaOperationBindingGroupId Key { get; set; }
