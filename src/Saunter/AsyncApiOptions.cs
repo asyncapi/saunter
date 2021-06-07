@@ -105,10 +105,6 @@ namespace Saunter
             {
                 ContractResolver = new CamelCasePropertyNamesContractResolver()
             },
-            SchemaProcessors =
-            {
-                new DiscoverDiscriminatorSchemaProcessor()
-            }
         };
 
         public IAsyncApiDocumentSerializer Serializer { get; set; } = new NewtonsoftAsyncApiDocumentSerializer();

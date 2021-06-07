@@ -5,10 +5,12 @@ using System.Runtime.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using NJsonSchema;
+using NJsonSchema.Converters;
 using NJsonSchema.Generation;
 using Saunter.AsyncApiSchema.v2;
 using Saunter.Attributes;
 using Saunter.Generation.SchemaGeneration;
+using Saunter.Utils;
 using Shouldly;
 using Xunit;
 
@@ -27,7 +29,7 @@ namespace Saunter.Tests.Generation.SchemaGeneration
                 SerializerSettings = new JsonSerializerSettings()
                 {
                     ContractResolver = new CamelCasePropertyNamesContractResolver()
-                }
+                },
             };
             _schemaResolver = new AsyncApiSchemaResolver(new AsyncApiDocument(), settings);
             _schemaGenerator = new JsonSchemaGenerator(settings);
@@ -85,33 +87,37 @@ namespace Saunter.Tests.Generation.SchemaGeneration
         [Fact]
         public void GenerateSchema_GenerateSchemaFromClassWithDiscriminator_GeneratesSchemaCorrectly()
         {
-            var type = typeof(Pet);
+            var type = typeof(PetOwner);
 
             var schema = _schemaGenerator.Generate(type, _schemaResolver);
 
             schema.ShouldNotBeNull();
+            
             _schemaResolver.Schemas.ShouldNotBeNull();
             var petSchema = _schemaResolver.Schemas.FirstOrDefault(s => s.Id == "pet");
             petSchema.Discriminator.ShouldBe("petType");
-            petSchema.OneOf.Count().ShouldBe(2);
+
+            schema.Properties["pet"].OneOf.Count().ShouldBe(2);
 
             var catSchema = _schemaResolver.Schemas.FirstOrDefault(s => s.Id == "cat");
-            catSchema.Properties.Count.ShouldBe(3);
-            catSchema.Properties.ContainsKey("petType").ShouldBeTrue();
-            catSchema.Properties.ContainsKey("name").ShouldBeTrue();
-            catSchema.Properties.ContainsKey("huntingSkill").ShouldBeTrue();
+            var catProperties = catSchema.MergeAllProperties();
+            catProperties.Count.ShouldBe(3);
+            catProperties.ContainsKey("petType").ShouldBeTrue();
+            catProperties.ContainsKey("name").ShouldBeTrue();
+            catProperties.ContainsKey("huntingSkill").ShouldBeTrue();
 
             var dogSchema = _schemaResolver.Schemas.FirstOrDefault(s => s.Id == "dog");
-            dogSchema.Properties.Count.ShouldBe(3);
-            dogSchema.Properties.ContainsKey("petType").ShouldBeTrue();
-            dogSchema.Properties.ContainsKey("name").ShouldBeTrue();
-            dogSchema.Properties.ContainsKey("packSize").ShouldBeTrue();
+            var dogProperties = dogSchema.MergeAllProperties();
+            dogProperties.Count.ShouldBe(3);
+            dogProperties.ContainsKey("petType").ShouldBeTrue();
+            dogProperties.ContainsKey("name").ShouldBeTrue();
+            dogProperties.ContainsKey("packSize").ShouldBeTrue();
         }
 
-        [Fact]
+        [Fact()]
         public void GenerateSchema_GenerateSchemaFromInterfaceWithDiscriminator_GeneratesSchemaCorrectly()
         {
-            var type = typeof(IPet);
+            var type = typeof(IPetOwner);
 
             var schema = _schemaGenerator.Generate(type, _schemaResolver);
 
@@ -119,19 +125,22 @@ namespace Saunter.Tests.Generation.SchemaGeneration
             _schemaResolver.Schemas.ShouldNotBeNull();
             var ipetSchema = _schemaResolver.Schemas.FirstOrDefault(s => s.Id == "iPet");
             ipetSchema.Discriminator.ShouldBe("petType");
-            ipetSchema.OneOf.Count().ShouldBe(2);
+
+            schema.Properties["pet"].OneOf.Count().ShouldBe(2);
 
             var catSchema = _schemaResolver.Schemas.FirstOrDefault(s => s.Id == "cat");
-            catSchema.Properties.Count.ShouldBe(3);
-            catSchema.Properties.ContainsKey("petType").ShouldBeTrue();
-            catSchema.Properties.ContainsKey("name").ShouldBeTrue();
-            catSchema.Properties.ContainsKey("huntingSkill").ShouldBeTrue();
+            var catProperties = catSchema.MergeAllProperties();
+            catProperties.Count.ShouldBe(3);
+            catProperties.ContainsKey("petType").ShouldBeTrue();
+            catProperties.ContainsKey("name").ShouldBeTrue();
+            catProperties.ContainsKey("huntingSkill").ShouldBeTrue();
 
             var dogSchema = _schemaResolver.Schemas.FirstOrDefault(s => s.Id == "dog");
-            dogSchema.Properties.Count.ShouldBe(3);
-            dogSchema.Properties.ContainsKey("petType").ShouldBeTrue();
-            dogSchema.Properties.ContainsKey("name").ShouldBeTrue();
-            dogSchema.Properties.ContainsKey("packSize").ShouldBeTrue();
+            var dogProperties = dogSchema.MergeAllProperties();
+            dogProperties.Count.ShouldBe(3);
+            dogProperties.ContainsKey("petType").ShouldBeTrue();
+            dogProperties.ContainsKey("name").ShouldBeTrue();
+            dogProperties.ContainsKey("packSize").ShouldBeTrue();
         }
     }
 
@@ -188,9 +197,19 @@ namespace Saunter.Tests.Generation.SchemaGeneration
         }
     }
 
-    [Discriminator("petType")]
-    [DiscriminatorSubType(typeof(Cat))]
-    [DiscriminatorSubType(typeof(Dog))]
+    public class PetOwner
+    {
+        public Pet Pet { get; set; }
+    }
+
+    public class IPetOwner
+    {
+        public IPet Pet { get; set; }
+    }
+
+    [JsonConverter(typeof(JsonInheritanceConverter), "petType")]
+    [JsonInheritance("cat", typeof(Cat))]
+    [JsonInheritance("dog", typeof(Dog))]
     public interface IPet
     {
         string PetType { get; }
@@ -198,9 +217,9 @@ namespace Saunter.Tests.Generation.SchemaGeneration
         string Name { get; }
     }
 
-    [Discriminator("petType")]
-    [DiscriminatorSubType(typeof(Cat))]
-    [DiscriminatorSubType(typeof(Dog))]
+    [JsonConverter(typeof(JsonInheritanceConverter), "petType")]
+    [KnownType(typeof(Cat))]
+    [KnownType(typeof(Dog))]
     public abstract class Pet : IPet
     {
         public string PetType { get; set; }
