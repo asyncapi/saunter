@@ -110,6 +110,8 @@ namespace Saunter
                 new DiscoverDiscriminatorSchemaProcessor()
             }
         };
+
+        public IAsyncApiDocumentSerializer Serializer { get; set; } = new NewtonsoftAsyncApiDocumentSerializer();
     }
 
     public class AsyncApiMiddlewareOptions

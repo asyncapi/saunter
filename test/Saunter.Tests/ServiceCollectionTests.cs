@@ -10,11 +10,11 @@ namespace Saunter.Tests
     /// <remarks>
     /// These are not real tests! Tests will be added once the API is semi-stable...
     /// </remarks>
-    public class Tests
+    public class ServiceCollectionTests
     {
 
         [Fact]
-        public void Test1()
+        public void TestAddAsyncApiSchemaGeneration()
         {
             var services = new ServiceCollection() as IServiceCollection;
             services.AddAsyncApiSchemaGeneration(options =>

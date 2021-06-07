@@ -38,22 +38,6 @@ namespace Saunter
         private async Task RespondWithAsyncApiSchemaJson(HttpResponse response, AsyncApiSchema.v2.AsyncApiDocument asyncApiSchema, IAsyncApiDocumentSerializer asyncApiDocumentSerializer)
         {
             var asyncApiSchemaJson = asyncApiDocumentSerializer.Serialize(asyncApiSchema);
-
-            // TODO: figure out why this works but the commented out System.Text.Json does not!
-            // var asyncApiSchemaJson = JsonSerializer.Serialize(
-            //     asyncApiSchema,
-            //     new JsonSerializerOptions
-            //     {
-            //         WriteIndented = false,
-            //         IgnoreNullValues = true,
-            //         Converters =
-            //         {
-            //             new DictionaryKeyToStringConverter(),
-            //             new InterfaceImplementationConverter(),
-            //         },
-            //     }
-            // );
-
             response.StatusCode = (int)HttpStatusCode.OK;
             response.ContentType = asyncApiDocumentSerializer.ContentType;
 

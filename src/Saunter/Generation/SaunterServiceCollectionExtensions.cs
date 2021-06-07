@@ -13,11 +13,11 @@ namespace Saunter.Generation
         {
             services.AddOptions();
 
-            services.TryAddTransient<IAsyncApiDocumentSerializer, JsonAsyncApiDocumentSerializer>();
             services.TryAddTransient<IAsyncApiDocumentProvider, AsyncApiDocumentProvider>();
             services.TryAddTransient<IDocumentGenerator, DocumentGenerator>();
             services.TryAddTransient<JsonSchemaGenerator>();
             services.TryAddTransient(c => c.GetRequiredService<IOptions<AsyncApiOptions>>().Value.JsonSchemaGeneratorSettings);
+            services.TryAddTransient(c => c.GetRequiredService<IOptions<AsyncApiOptions>>().Value.Serializer);
 
             if (setupAction != null) services.Configure(setupAction);
 
