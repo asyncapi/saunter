@@ -39,5 +39,25 @@ namespace Saunter.Generation.SchemaGeneration
                     _document.Components.Schemas.Add("ref_" + Guid.NewGuid().ToString().Replace("-", "_"), schema);
             }
         }
+
+        public IMessage GetMessageOrReference(Message message)
+        {
+            var id = message.Payload.ActualSchema.Id;
+            if (id == null)
+            {
+                return message;
+            }
+
+            if (!_document.Components.Messages.ContainsKey(id))
+            {
+                _document.Components.Messages.Add(id, message);
+                message.Payload = new JsonSchema()
+                {
+                    Reference = message.Payload
+                };
+            }
+
+            return new MessageReference(id);
+        }
     }
 }

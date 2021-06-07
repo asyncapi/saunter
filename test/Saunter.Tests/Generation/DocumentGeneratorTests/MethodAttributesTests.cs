@@ -41,9 +41,9 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
             var messages = publish.Message.ShouldBeOfType<Messages>();
             messages.OneOf.Count.ShouldBe(3);
             
-            messages.OneOf.OfType<Message>().ShouldContain(m => m.Name == "anyTenantCreated");
-            messages.OneOf.OfType<Message>().ShouldContain(m => m.Name == "anyTenantUpdated");
-            messages.OneOf.OfType<Message>().ShouldContain(m => m.Name == "anyTenantRemoved");
+            messages.OneOf.OfType<MessageReference>().ShouldContain(m => m.Id == "anyTenantCreated");
+            messages.OneOf.OfType<MessageReference>().ShouldContain(m => m.Id == "anyTenantUpdated");
+            messages.OneOf.OfType<MessageReference>().ShouldContain(m => m.Id == "anyTenantRemoved");
         }
 
         [AsyncApi]

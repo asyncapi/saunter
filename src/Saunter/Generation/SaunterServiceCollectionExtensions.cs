@@ -17,7 +17,7 @@ namespace Saunter.Generation
             services.TryAddTransient<IDocumentGenerator, DocumentGenerator>();
             services.TryAddTransient<JsonSchemaGenerator>();
             services.TryAddTransient(c => c.GetRequiredService<IOptions<AsyncApiOptions>>().Value.JsonSchemaGeneratorSettings);
-            services.TryAddTransient(c => c.GetRequiredService<IOptions<AsyncApiOptions>>().Value.Serializer);
+            services.TryAddTransient<IAsyncApiDocumentSerializer, NewtonsoftAsyncApiDocumentSerializer>();
 
             if (setupAction != null) services.Configure(setupAction);
 

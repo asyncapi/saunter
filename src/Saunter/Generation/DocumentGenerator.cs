@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Newtonsoft.Json;
 using Saunter.Utils;
 
 namespace Saunter.Generation
@@ -30,7 +31,10 @@ namespace Saunter.Generation
         public AsyncApiSchema.v2.AsyncApiDocument GenerateDocument(TypeInfo[] asyncApiTypes)
         {
             var asyncApiSchema = _options.AsyncApi;
-            
+
+            // todo: clone the global document so each call generates a new document
+            asyncApiSchema.Components = new Components();
+
             var schemaResolver = new AsyncApiSchemaResolver(asyncApiSchema, _jsonSchemaSettings);
 
             asyncApiSchema.Channels = GenerateChannels(asyncApiTypes, schemaResolver);
@@ -50,7 +54,7 @@ namespace Saunter.Generation
         /// <summary>
         /// Generate the Channels section of an AsyncApi schema.
         /// </summary>
-        private IDictionary<string, ChannelItem> GenerateChannels(TypeInfo[] asyncApiTypes, JsonSchemaResolver schemaResolver)
+        private IDictionary<string, ChannelItem> GenerateChannels(TypeInfo[] asyncApiTypes, AsyncApiSchemaResolver schemaResolver)
         {
             var channels = new Dictionary<string, ChannelItem>();
             
@@ -63,7 +67,7 @@ namespace Saunter.Generation
         /// Generate the Channels section of the AsyncApi schema from the
         /// <see cref="ChannelAttribute"/> on methods.
         /// </summary>
-        private IDictionary<string, ChannelItem> GenerateChannelsFromMethods(IEnumerable<TypeInfo> asyncApiTypes, JsonSchemaResolver schemaResolver)
+        private IDictionary<string, ChannelItem> GenerateChannelsFromMethods(IEnumerable<TypeInfo> asyncApiTypes, AsyncApiSchemaResolver schemaResolver)
         {
             var channels = new Dictionary<string, ChannelItem>();
 
@@ -101,7 +105,7 @@ namespace Saunter.Generation
         /// Generate the Channels section of the AsyncApi schema from the
         /// <see cref="ChannelAttribute"/> on classes.
         /// </summary>
-        private IDictionary<string, ChannelItem> GenerateChannelsFromClasses(IEnumerable<TypeInfo> asyncApiTypes, JsonSchemaResolver schemaResolver)
+        private IDictionary<string, ChannelItem> GenerateChannelsFromClasses(IEnumerable<TypeInfo> asyncApiTypes, AsyncApiSchemaResolver schemaResolver)
         {
             var channels = new Dictionary<string, ChannelItem>();
 
@@ -138,7 +142,7 @@ namespace Saunter.Generation
         /// <summary>
         /// Generate the an operation of an AsyncApi Channel for the given method.
         /// </summary>
-        private Operation GenerateOperationFromMethod(MethodInfo method, JsonSchemaResolver schemaResolver, OperationType operationType)
+        private Operation GenerateOperationFromMethod(MethodInfo method, AsyncApiSchemaResolver schemaResolver, OperationType operationType)
         {
             var operationAttribute = GetOperationAttribute(method, operationType);
             if (operationAttribute == null)
@@ -171,7 +175,7 @@ namespace Saunter.Generation
         /// <summary>
         /// Generate the an operation of an AsyncApi Channel for the given class.
         /// </summary>
-        private Operation GenerateOperationFromClass(TypeInfo type, JsonSchemaResolver schemaResolver, OperationType operationType)
+        private Operation GenerateOperationFromClass(TypeInfo type, AsyncApiSchemaResolver schemaResolver, OperationType operationType)
         {
             var operationAttribute = GetOperationAttribute(type, operationType);
             if (operationAttribute == null)
@@ -198,7 +202,7 @@ namespace Saunter.Generation
 
             foreach (MessageAttribute messageAttribute in methodsWithMessageAttribute.SelectMany(x => x.MessageAttributes))
             {
-                Message message = GenerateMessageFromAttribute(messageAttribute, schemaResolver);
+                var message = GenerateMessageFromAttribute(messageAttribute, schemaResolver);
                 if (message != null)
                 {
                     messages.OneOf.Add(message);
@@ -230,7 +234,7 @@ namespace Saunter.Generation
             }
         }
 
-        private IMessage GenerateMessageFromAttributes(IEnumerable<MessageAttribute> messageAttributes, JsonSchemaResolver schemaResolver)
+        private IMessage GenerateMessageFromAttributes(IEnumerable<MessageAttribute> messageAttributes, AsyncApiSchemaResolver schemaResolver)
         {
             if (messageAttributes.Count() == 1)
             {
@@ -240,7 +244,7 @@ namespace Saunter.Generation
             var messages = new Messages();
             foreach (MessageAttribute messageAttribute in messageAttributes)
             {
-                Message message = GenerateMessageFromAttribute(messageAttribute, schemaResolver);
+                var message = GenerateMessageFromAttribute(messageAttribute, schemaResolver);
                 if (message != null)
                 {
                     messages.OneOf.Add(message);
@@ -255,7 +259,7 @@ namespace Saunter.Generation
             return messages;
         }
 
-        private Message GenerateMessageFromAttribute(MessageAttribute messageAttribute, JsonSchemaResolver schemaResolver)
+        private IMessage GenerateMessageFromAttribute(MessageAttribute messageAttribute, AsyncApiSchemaResolver schemaResolver)
         {
             if (messageAttribute?.PayloadType == null)
             {
@@ -271,11 +275,11 @@ namespace Saunter.Generation
             };
             message.Name = message.Payload.Id;
 
-            return message;
+            return schemaResolver.GetMessageOrReference(message);
         }
         
 
-        private Message GenerateMessageFromType(Type payloadType, JsonSchemaResolver schemaResolver)
+        private IMessage GenerateMessageFromType(Type payloadType, AsyncApiSchemaResolver schemaResolver)
         {
             if (payloadType == null)
             {
@@ -288,13 +292,13 @@ namespace Saunter.Generation
             };
             message.Name = message.Payload.Id;
 
-            return message;
+            return schemaResolver.GetMessageOrReference(message);
         }
 
-        private IList<IParameter> GetChannelParametersFromAttributes(MemberInfo memberInfo, JsonSchemaResolver schemaResolver)
+        private IDictionary<string,IParameter> GetChannelParametersFromAttributes(MemberInfo memberInfo, AsyncApiSchemaResolver schemaResolver)
         {
             IEnumerable<ChannelParameterAttribute> attributes = memberInfo.GetCustomAttributes<ChannelParameterAttribute>();
-            var parameters = new List<IParameter>();
+            var parameters = new Dictionary<string, IParameter>();
             if (attributes.Any())
             {
                 foreach (ChannelParameterAttribute attribute in attributes)
@@ -306,7 +310,7 @@ namespace Saunter.Generation
                         Schema = _schemaGenerator.Generate(attribute.Type, schemaResolver),
                         Location = attribute.Location,
                     };
-                    parameters.Add(parameter);
+                    parameters.Add(attribute.Name, parameter);
                 }
             }
 

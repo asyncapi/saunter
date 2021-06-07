@@ -41,9 +41,9 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
             var messages = subscribe.Message.ShouldBeOfType<Messages>();
             messages.OneOf.Count.ShouldBe(3);
 
-            messages.OneOf.OfType<Message>().ShouldContain(m => m.Name == "tenantCreated");
-            messages.OneOf.OfType<Message>().ShouldContain(m => m.Name == "tenantUpdated");
-            messages.OneOf.OfType<Message>().ShouldContain(m => m.Name == "tenantRemoved");
+            messages.OneOf.OfType<MessageReference>().ShouldContain(m => m.Id == "tenantCreated");
+            messages.OneOf.OfType<MessageReference>().ShouldContain(m => m.Id == "tenantUpdated");
+            messages.OneOf.OfType<MessageReference>().ShouldContain(m => m.Id == "tenantRemoved");
         }
 
 
@@ -74,9 +74,9 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
             var messages = publish.Message.ShouldBeOfType<Messages>();
             messages.OneOf.Count.ShouldBe(3);
             
-            messages.OneOf.OfType<Message>().ShouldContain(m => m.Name == "anyTenantCreated");
-            messages.OneOf.OfType<Message>().ShouldContain(m => m.Name == "anyTenantUpdated");
-            messages.OneOf.OfType<Message>().ShouldContain(m => m.Name == "anyTenantRemoved");
+            messages.OneOf.OfType<MessageReference>().ShouldContain(m => m.Id == "anyTenantCreated");
+            messages.OneOf.OfType<MessageReference>().ShouldContain(m => m.Id == "anyTenantUpdated");
+            messages.OneOf.OfType<MessageReference>().ShouldContain(m => m.Id == "anyTenantRemoved");
         }
 
 
@@ -104,8 +104,8 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
             publish.OperationId.ShouldBe("TenantSingleMessagePublisher");
             publish.Summary.ShouldBe("Publish single domain event about tenants.");
 
-            var message = publish.Message.ShouldBeOfType<Message>();
-            message.Name.ShouldBe("anyTenantCreated");
+            var message = publish.Message.ShouldBeOfType<MessageReference>();
+            message.Id.ShouldBe("anyTenantCreated");
         }
 
 
@@ -146,16 +146,16 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
             var subscribeMessages = subscribe.Message.ShouldBeOfType<Messages>();
             subscribeMessages.OneOf.Count.ShouldBe(3);
 
-            subscribeMessages.OneOf.OfType<Message>().ShouldContain(m => m.Name == "tenantCreated");
-            subscribeMessages.OneOf.OfType<Message>().ShouldContain(m => m.Name == "tenantUpdated");
-            subscribeMessages.OneOf.OfType<Message>().ShouldContain(m => m.Name == "tenantRemoved");
+            subscribeMessages.OneOf.OfType<MessageReference>().ShouldContain(m => m.Id == "tenantCreated");
+            subscribeMessages.OneOf.OfType<MessageReference>().ShouldContain(m => m.Id == "tenantUpdated");
+            subscribeMessages.OneOf.OfType<MessageReference>().ShouldContain(m => m.Id == "tenantRemoved");
 
             var publishMessages = subscribe.Message.ShouldBeOfType<Messages>();
             publishMessages.OneOf.Count.ShouldBe(3);
 
-            publishMessages.OneOf.OfType<Message>().ShouldContain(m => m.Name == "tenantCreated");
-            publishMessages.OneOf.OfType<Message>().ShouldContain(m => m.Name == "tenantUpdated");
-            publishMessages.OneOf.OfType<Message>().ShouldContain(m => m.Name == "tenantRemoved");
+            publishMessages.OneOf.OfType<MessageReference>().ShouldContain(m => m.Id == "tenantCreated");
+            publishMessages.OneOf.OfType<MessageReference>().ShouldContain(m => m.Id == "tenantUpdated");
+            publishMessages.OneOf.OfType<MessageReference>().ShouldContain(m => m.Id == "tenantRemoved");
         }
 
 
@@ -178,8 +178,8 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
             channel.Key.ShouldBe("asw.tenant_service.{tenant_id}.{tenant_status}");
             channel.Value.Description.ShouldBe("A tenant events.");
             channel.Value.Parameters.Count.ShouldBe(2);
-            channel.Value.Parameters.OfType<Parameter>().ShouldContain(p => p.Name == "tenant_id" && p.Schema != null && p.Description == "The tenant identifier.");
-            channel.Value.Parameters.OfType<Parameter>().ShouldContain(p => p.Name == "tenant_status" && p.Schema != null && p.Description == "The tenant status.");
+            channel.Value.Parameters.Values.OfType<Parameter>().ShouldContain(p => p.Name == "tenant_id" && p.Schema != null && p.Description == "The tenant identifier.");
+            channel.Value.Parameters.Values.OfType<Parameter>().ShouldContain(p => p.Name == "tenant_status" && p.Schema != null && p.Description == "The tenant status.");
             
             var subscribe = channel.Value.Subscribe;
             subscribe.ShouldNotBeNull();
@@ -189,9 +189,9 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
             var messages = subscribe.Message.ShouldBeOfType<Messages>();
             messages.OneOf.Count.ShouldBe(3);
             
-            messages.OneOf.OfType<Message>().ShouldContain(m => m.Name == "tenantCreated");
-            messages.OneOf.OfType<Message>().ShouldContain(m => m.Name == "tenantUpdated");
-            messages.OneOf.OfType<Message>().ShouldContain(m => m.Name == "tenantRemoved");
+            messages.OneOf.OfType<MessageReference>().ShouldContain(m => m.Id == "tenantCreated");
+            messages.OneOf.OfType<MessageReference>().ShouldContain(m => m.Id == "tenantUpdated");
+            messages.OneOf.OfType<MessageReference>().ShouldContain(m => m.Id == "tenantRemoved");
         }
         
 

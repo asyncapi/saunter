@@ -1,19 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reflection;
-using System.Runtime.Serialization;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using NJsonSchema.Generation;
 using Saunter.AsyncApiSchema.v2;
-using Saunter.Generation;
 using Saunter.Generation.Filters;
 using Saunter.Generation.SchemaGeneration;
-using Saunter.Utils;
-using JsonConverterAttribute = System.Text.Json.Serialization.JsonConverterAttribute;
-using JsonIgnoreAttribute = System.Text.Json.Serialization.JsonIgnoreAttribute;
 
 namespace Saunter
 {
@@ -30,54 +22,6 @@ namespace Saunter
         /// </summary>
         public IList<Type> AssemblyMarkerTypes { get; set; } = new List<Type>();
         
-        /// <summary>
-        /// A function that specifies if the member name of the enum should be used instead of its value.
-        /// </summary>
-        public Func<Type, bool> UseEnumMemberName { get; set; } = type =>
-        {
-            var jsonConverterAttribute = type.GetCustomAttribute<JsonConverterAttribute>();
-            return jsonConverterAttribute?.ConverterType == typeof(JsonStringEnumConverter)
-                || jsonConverterAttribute?.ConverterType?.FullName == "System.Text.Json.Serialization.JsonStringEnumMemberConverter";
-        };
-
-        /// <summary>
-        /// A function that returns the enum member name.
-        /// </summary>
-        public Func<Type, Enum, string> EnumMemberNameSelector { get; set; } = (type, val) =>
-        {
-            var converterType = type.GetCustomAttribute<JsonConverterAttribute>()?.ConverterType;
-            if (converterType?.FullName == "System.Text.Json.Serialization.JsonStringEnumMemberConverter")
-            {
-                var enumMemberAttribute = val.GetCustomAttribute<EnumMemberAttribute>();
-                if (enumMemberAttribute?.Value != null)
-                {
-                    return enumMemberAttribute.Value;
-                }
-            }
-
-            return val.ToString();
-        };
-
-        /// <summary>
-        /// A function to select the name for a property.
-        /// </summary>
-        public Func<MemberInfo, string> PropertyNameSelector { get; set; } = prop =>
-        {
-            var jsonPropertyAttribute = prop.GetCustomAttribute<JsonPropertyNameAttribute>();
-            if (jsonPropertyAttribute?.Name != null)
-            {
-                return jsonPropertyAttribute.Name;
-            }
-
-            return JsonNamingPolicy.CamelCase.ConvertName(prop.Name);
-        };
-
-        /// <summary>
-        /// A function to filter the properties which will be included.
-        /// </summary>
-        public Func<MemberInfo, bool> PropertyFilter { get; set; } = prop => prop.GetCustomAttribute<JsonIgnoreAttribute>() == null;
-
-
         /// <summary>
         /// A list of filters that will be applied to the generated AsyncAPI document.
         /// </summary>
@@ -103,11 +47,12 @@ namespace Saunter
             TypeNameGenerator = new CamelCaseTypeNameGenerator(),
             SerializerSettings = new JsonSerializerSettings()
             {
-                ContractResolver = new CamelCasePropertyNamesContractResolver()
+                ContractResolver = new CamelCasePropertyNamesContractResolver(),
+                Formatting = Formatting.Indented,
+                NullValueHandling = NullValueHandling.Ignore,
+                DefaultValueHandling = DefaultValueHandling.Ignore
             },
         };
-
-        public IAsyncApiDocumentSerializer Serializer { get; set; } = new NewtonsoftAsyncApiDocumentSerializer();
     }
 
     public class AsyncApiMiddlewareOptions
