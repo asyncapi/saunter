@@ -31,9 +31,9 @@ namespace Saunter.Generation.SchemaGeneration
                 var schemaId = _settings.TypeNameGenerator.Generate(schema, typeNameHint, _document.Components.Schemas.Keys.Select(k => k.ToString()));
                 
                 if (!string.IsNullOrEmpty(schemaId) && !_document.Components.Schemas.ContainsKey(schemaId))
-                    _document.Components.Schemas.Add(new ComponentFieldName(schemaId), schema);
+                    _document.Components.Schemas.Add(schemaId, schema);
                 else
-                    _document.Components.Schemas.Add(new ComponentFieldName("ref_" + Guid.NewGuid().ToString().Replace("-", "_")), schema);
+                    _document.Components.Schemas.Add("ref_" + Guid.NewGuid().ToString().Replace("-", "_"), schema);
             }
         }
     }

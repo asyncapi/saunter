@@ -24,6 +24,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="wwwroot/**/*" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="..\..\assets\logo.png" Pack="true" PackagePath="\" />
   </ItemGroup>
 
@@ -39,5 +43,9 @@
   <ItemGroup Condition="'$(TargetFramework)' != 'netstandard2.0'">
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
+
+    <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+        <PackageReference Include="System.Text.Json" Version="5.0.2" />
+    </ItemGroup>
 
 </Project>

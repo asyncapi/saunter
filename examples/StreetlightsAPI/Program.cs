@@ -19,15 +19,17 @@ namespace StreetlightsAPI
             CreateHostBuilder(args).Build().Run();
         }
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
+        public static IHostBuilder CreateHostBuilder(string[] args)
+        {
+            return Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(builder =>
                 {
                     builder.UseStartup<Startup>();
                     builder.UseUrls("http://localhost:5000");
                 });
+        }
     }
-    
+
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -49,7 +51,8 @@ namespace StreetlightsAPI
                 {
                     Info = new Info("Streetlights API", "1.0.0")
                     {
-                        Description = "The Smartylighting Streetlights API allows you\nto remotely manage the city lights.",
+                        Description =
+                            "The Smartylighting Streetlights API allows you\nto remotely manage the city lights.",
                         License = new License("Apache 2.0")
                         {
                             Url = "https://www.apache.org/licenses/LICENSE-2.0"
@@ -57,12 +60,12 @@ namespace StreetlightsAPI
                     },
                     Servers =
                     {
-                        { "mosquitto", new Server("test.mosquitto.org", "mqtt") }
+                        {"mosquitto", new Server("test.mosquitto.org", "mqtt")}
                     }
                 };
             });
-            
-            
+
+
             services.AddScoped<IStreetlightMessageBus, StreetlightMessageBus>();
             services.AddControllers();
         }
@@ -71,14 +74,16 @@ namespace StreetlightsAPI
         public void Configure(IApplicationBuilder app)
         {
             app.UseDeveloperExceptionPage();
-            
+
             app.UseRouting();
             app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyMethod());
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers();
                 endpoints.MapAsyncApiDocuments();
+                endpoints.MapAsyncApiUi();
+                
+                endpoints.MapControllers();
             });
 
             
@@ -87,6 +92,7 @@ namespace StreetlightsAPI
             var addresses = app.ServerFeatures.Get<IServerAddressesFeature>().Addresses;
             
             logger.LogInformation("AsyncAPI doc available at: {URL}", $"{addresses.FirstOrDefault()}/asyncapi/asyncapi.json");
+            logger.LogInformation("AsyncAPI UI available at: {URL}", $"{addresses.FirstOrDefault()}/asyncapi/ui/index.html");
         }
     }
 }
