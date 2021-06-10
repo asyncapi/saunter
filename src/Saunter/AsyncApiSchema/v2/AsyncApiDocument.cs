@@ -62,5 +62,17 @@ namespace Saunter.AsyncApiSchema.v2
         /// </summary>
         [JsonProperty("externalDocs", NullValueHandling = NullValueHandling.Ignore)]
         public ExternalDocumentation ExternalDocs { get; set; }
+
+
+
+        public bool ShouldSerializeTags()
+        {
+            return Tags != null && Tags.Count > 0;
+        }
+
+        public bool ShouldSerializeServers()
+        {
+            return Servers != null && Servers.Count > 0;
+        }
     }
 }

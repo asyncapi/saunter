@@ -74,5 +74,62 @@ namespace Saunter.AsyncApiSchema.v2
         /// </summary>
         [JsonProperty("messageTraits", DefaultValueHandling = DefaultValueHandling.Ignore)]
         public IDictionary<string, MessageTrait> MessageTraits { get; set; } = new Dictionary<string, MessageTrait>();
+
+
+
+        public bool ShouldSerializeMessageTraits()
+        {
+            return MessageTraits != null && MessageTraits.Count > 0;
+        }
+
+        public bool ShouldSerializeOperationTraits()
+        {
+            return OperationTraits != null && OperationTraits.Count > 0;
+        }
+
+        public bool ShouldSerializeMessageBindings()
+        {
+            return MessageBindings != null && MessageBindings.Count > 0;
+        }
+
+        public bool ShouldSerializeOperationBindings()
+        {
+            return OperationBindings != null && OperationBindings.Count > 0;
+        }
+
+        public bool ShouldSerializeChannelBindings()
+        {
+            return ChannelBindings != null && ChannelBindings.Count > 0;
+        }
+
+        public bool ShouldSerializeServerBindings()
+        {
+            return ServerBindings != null && ServerBindings.Count > 0;
+        }
+
+        public bool ShouldSerializeCorrelationIds()
+        {
+            return CorrelationIds != null && CorrelationIds.Count > 0;
+        }
+
+        public bool ShouldSerializeParameters()
+        {
+            return Parameters != null && Parameters.Count > 0;
+        }
+
+        public bool ShouldSerializeSecuritySchemes()
+        {
+            return SecuritySchemes != null && SecuritySchemes.Count > 0;
+        }
+
+        public bool ShouldSerializeMessages()
+        {
+            return Messages != null && Messages.Count > 0;
+        }
+
+        public bool ShouldSerializeSchemas()
+        {
+            return Schemas != null && Schemas.Count > 0;
+        }
     }
 }

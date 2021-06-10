@@ -43,5 +43,11 @@ namespace Saunter.AsyncApiSchema.v2
         /// </summary>
         [JsonProperty("bindings", NullValueHandling = NullValueHandling.Ignore)]
         public ChannelBindings Bindings { get; set; }
+
+
+        public bool ShouldSerializeParameters()
+        {
+            return Parameters != null && Parameters.Count > 0;
+        }
     }
 }

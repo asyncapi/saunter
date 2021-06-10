@@ -90,6 +90,11 @@ namespace Saunter.AsyncApiSchema.v2
         [JsonProperty("tags", DefaultValueHandling = DefaultValueHandling.Ignore)]
         public ISet<Tag> Tags { get; set; } = new HashSet<Tag>();
 
+        public bool ShouldSerializeTags()
+        {
+            return Tags != null && Tags.Count > 0;
+        }
+
         /// <summary>
         /// Additional external documentation for this message.
         /// </summary>
@@ -107,6 +112,11 @@ namespace Saunter.AsyncApiSchema.v2
         /// </summary>
         [JsonProperty("examples")]
         public IList<IDictionary<string, object>> Examples { get; set; } = new List<IDictionary<string, object>>();
+        
+        public bool ShouldSerializeExamples()
+        {
+            return Examples != null && Examples.Count > 0;
+        }
 
         /// <summary>
         /// A list of traits to apply to the message object.
@@ -115,5 +125,10 @@ namespace Saunter.AsyncApiSchema.v2
         /// </summary>
         [JsonProperty("traits")]
         public IList<IMessageTrait> Traits { get; set; } = new List<IMessageTrait>();
+
+        public bool ShouldSerializeTraits()
+        {
+            return Traits != null && Traits.Count > 0;
+        }
     }
 }

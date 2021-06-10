@@ -40,6 +40,11 @@ namespace Saunter.AsyncApiSchema.v2
         [JsonProperty("tags", DefaultValueHandling = DefaultValueHandling.Ignore)]
         public ISet<Tag> Tags { get; set; } = new HashSet<Tag>();
 
+        public bool ShouldSerializeTags()
+        {
+            return Tags != null && Tags.Count > 0;
+        }
+
         /// <summary>
         /// Additional external documentation for this operation.
         /// </summary>
@@ -67,5 +72,11 @@ namespace Saunter.AsyncApiSchema.v2
         /// </summary>
         [JsonProperty("traits", DefaultValueHandling = DefaultValueHandling.Ignore)]
         public IList<IOperationTrait> Traits { get; set; } = new List<IOperationTrait>();
+
+
+        public bool ShouldSerializeTraits()
+        {
+            return Traits != null && Traits.Count > 0;
+        }
     }
 }

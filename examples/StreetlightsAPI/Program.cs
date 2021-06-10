@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using Saunter;
 using Saunter.AsyncApiSchema.v2;
 using Saunter.Generation;
@@ -63,6 +64,8 @@ namespace StreetlightsAPI
                         {"mosquitto", new Server("test.mosquitto.org", "mqtt")}
                     }
                 };
+
+                options.JsonSchemaGeneratorSettings.SerializerSettings.Formatting = Formatting.Indented;
             });
 
 
