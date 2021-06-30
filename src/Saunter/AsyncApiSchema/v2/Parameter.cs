@@ -25,7 +25,7 @@ namespace Saunter.AsyncApiSchema.v2
         [JsonProperty("description", NullValueHandling = NullValueHandling.Ignore)]
         public string Description { get; set; }
 
-        [JsonProperty("name", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonIgnore]
         public string Name { get; set; }
         /// <summary>
         /// Definition of the parameter.

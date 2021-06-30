@@ -28,14 +28,29 @@ namespace Saunter.Generation
 
         public AsyncApiSchema.v2.AsyncApiDocument GenerateDocument(TypeInfo[] asyncApiTypes)
         {
-            var asyncApiSchema = _options.AsyncApi;
-
-            // HACK: The same document is modified each time we call GenerateDocument.
-            //       This could lead to unexpected behaviour where the document grows each time it is "generated"
-            //       For now, we reinitialize the generated parts of the document.
-            // TODO: Clone the global document so each call generates a new document
-            asyncApiSchema.Components.Messages = new Dictionary<string, Message>();
-            asyncApiSchema.Components.Schemas = new Dictionary<string, JsonSchema>();
+            // todo: clone the global document so each call generates a new document
+            var asyncApiSchema = new AsyncApiDocument();
+            asyncApiSchema.Info = _options.AsyncApi.Info;
+            asyncApiSchema.Id = _options.AsyncApi.Id;
+            asyncApiSchema.DefaultContentType = _options.AsyncApi.DefaultContentType;
+            asyncApiSchema.Channels = _options.AsyncApi.Channels.ToDictionary(p => p.Key, p => p.Value);
+            asyncApiSchema.Servers = _options.AsyncApi.Servers.ToDictionary(p => p.Key, p => p.Value);
+            foreach (var tag in _options.AsyncApi.Tags)
+            {
+                asyncApiSchema.Tags.Add(tag);
+            }
+            asyncApiSchema.ExternalDocs = _options.AsyncApi.ExternalDocs;
+            asyncApiSchema.Components.Schemas = _options.AsyncApi.Components.Schemas.ToDictionary(p => p.Key, p => p.Value);
+            asyncApiSchema.Components.Messages = _options.AsyncApi.Components.Messages.ToDictionary(p => p.Key, p => p.Value);
+            asyncApiSchema.Components.SecuritySchemes = _options.AsyncApi.Components.SecuritySchemes.ToDictionary(p => p.Key, p => p.Value);
+            asyncApiSchema.Components.Parameters = _options.AsyncApi.Components.Parameters.ToDictionary(p => p.Key, p => p.Value);
+            asyncApiSchema.Components.CorrelationIds = _options.AsyncApi.Components.CorrelationIds.ToDictionary(p => p.Key, p => p.Value);
+            asyncApiSchema.Components.ServerBindings = _options.AsyncApi.Components.ServerBindings.ToDictionary(p => p.Key, p => p.Value);
+            asyncApiSchema.Components.ChannelBindings = _options.AsyncApi.Components.ChannelBindings.ToDictionary(p => p.Key, p => p.Value);
+            asyncApiSchema.Components.OperationBindings = _options.AsyncApi.Components.OperationBindings.ToDictionary(p => p.Key, p => p.Value);
+            asyncApiSchema.Components.MessageBindings = _options.AsyncApi.Components.MessageBindings.ToDictionary(p => p.Key, p => p.Value);
+            asyncApiSchema.Components.OperationTraits = _options.AsyncApi.Components.OperationTraits.ToDictionary(p => p.Key, p => p.Value);
+            asyncApiSchema.Components.MessageTraits = _options.AsyncApi.Components.MessageTraits.ToDictionary(p => p.Key, p => p.Value);
 
             var schemaResolver = new AsyncApiSchemaResolver(asyncApiSchema, _options.JsonSchemaGeneratorSettings);
 
@@ -307,13 +322,14 @@ namespace Saunter.Generation
             {
                 foreach (ChannelParameterAttribute attribute in attributes)
                 {
-                    var parameter = new Parameter
+                    var parameter = schemaResolver.GetParameterOrReference(new Parameter
                     {
                         Description = attribute.Description,
                         Name = attribute.Name,
                         Schema = _schemaGenerator.Generate(attribute.Type, schemaResolver),
                         Location = attribute.Location,
-                    };
+                    });
+                    
                     parameters.Add(attribute.Name, parameter);
                 }
             }

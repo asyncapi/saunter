@@ -29,7 +29,7 @@ namespace Saunter.AsyncApiSchema.v2
         /// Provides connection details of servers.
         /// </summary>
         [JsonProperty("servers")]
-        public Dictionary<string, Server> Servers { get; } = new Dictionary<string, Server>();
+        public Dictionary<string, Server> Servers { get; set; } = new Dictionary<string, Server>();
 
         /// <summary>
         /// A string representing the default content type to use when encoding/decoding a message's payload.

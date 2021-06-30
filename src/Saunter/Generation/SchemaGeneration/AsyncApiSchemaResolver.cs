@@ -58,5 +58,21 @@ namespace Saunter.Generation.SchemaGeneration
 
             return new MessageReference(id);
         }
+
+        public IParameter GetParameterOrReference(Parameter parameter)
+        {
+            var id = parameter.Name;
+            if (id == null)
+            {
+                return parameter;
+            }
+
+            if (!_document.Components.Parameters.ContainsKey(id))
+            {
+                _document.Components.Parameters.Add(id, parameter);
+            }
+
+            return new ParameterReference(id);
+        }
     }
 }
