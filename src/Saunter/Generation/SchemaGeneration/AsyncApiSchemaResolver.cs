@@ -72,7 +72,7 @@ namespace Saunter.Generation.SchemaGeneration
                 _document.Components.Parameters.Add(id, parameter);
             }
 
-            return new ParameterReference(id);
+            return new ParameterReference(id, _document);
         }
     }
 }

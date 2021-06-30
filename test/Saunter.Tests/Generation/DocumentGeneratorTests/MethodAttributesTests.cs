@@ -17,10 +17,10 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
         {
             // Arrange
             var options = new AsyncApiOptions();
-            var documentGenerator = new DocumentGenerator(Options.Create(options));
+            var documentGenerator = new DocumentGenerator();
 
             // Act
-            var document = documentGenerator.GenerateDocument(new []{ typeof(TenantMessagePublisher).GetTypeInfo() });
+            var document = documentGenerator.GenerateDocument(new []{ typeof(TenantMessagePublisher).GetTypeInfo() }, options);
             
             // Assert
             document.ShouldNotBeNull();

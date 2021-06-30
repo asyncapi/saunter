@@ -4,6 +4,6 @@ namespace Saunter
 {
     public interface IAsyncApiDocumentProvider
     {
-        AsyncApiDocument GetDocument();
+        AsyncApiDocument GetDocument(AsyncApiOptions options);
     }
 }

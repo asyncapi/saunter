@@ -1,5 +1,3 @@
-#if !NETSTANDARD2_0
-
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -19,12 +17,23 @@ namespace Saunter.UI
 {
     public class AsyncApiUiMiddleware
     {
-        private readonly IOptions<AsyncApiOptions> _options;
+        private readonly AsyncApiOptions _options;
         private readonly StaticFileMiddleware _staticFiles;
 
-        public AsyncApiUiMiddleware(RequestDelegate next, IOptions<AsyncApiOptions> options, IWebHostEnvironment env, ILoggerFactory loggerFactory)
+#if NETSTANDARD2_0
+        public AsyncApiUiMiddleware(RequestDelegate next, IOptionsSnapshot<AsyncApiOptions> options, IHostingEnvironment env, ILoggerFactory loggerFactory, string apiName = null)
+#else
+        public AsyncApiUiMiddleware(RequestDelegate next, IOptionsSnapshot<AsyncApiOptions> options, IWebHostEnvironment env, ILoggerFactory loggerFactory, string apiName = null)
+#endif
         {
-            _options = options ?? throw new ArgumentNullException(nameof(options));
+            if (apiName == null)
+            {
+                _options = options.Value;
+            }
+            else
+            {
+                _options = options.Get(apiName);
+            }
 
             var staticFileOptions = new StaticFileOptions
             {
@@ -54,19 +63,21 @@ namespace Saunter.UI
 
         private async Task RespondWithAsyncApiHtml(HttpResponse response)
         {
-            await using var stream = GetType().Assembly.GetManifestResourceStream($"{GetType().Namespace}.index.html");
-            using var reader = new StreamReader(stream);
-            var indexHtml = new StringBuilder(await reader.ReadToEndAsync());
-
-            // Replace dynamic content such as the AsyncAPI document url
-            foreach (var replacement in IndexHtmlReplacements)
+            using (var stream = GetType().Assembly.GetManifestResourceStream($"{GetType().Namespace}.index.html"))
+            using (var reader = new StreamReader(stream))
             {
-                indexHtml.Replace(replacement.Key, replacement.Value);
-            }
+                var indexHtml = new StringBuilder(await reader.ReadToEndAsync());
 
-            response.StatusCode = (int)HttpStatusCode.OK;
-            response.ContentType = MediaTypeNames.Text.Html;
-            await response.WriteAsync(indexHtml.ToString(), Encoding.UTF8);
+                // Replace dynamic content such as the AsyncAPI document url
+                foreach (var replacement in IndexHtmlReplacements)
+                {
+                    indexHtml.Replace(replacement.Key, replacement.Value);
+                }
+
+                response.StatusCode = (int)HttpStatusCode.OK;
+                response.ContentType = MediaTypeNames.Text.Html;
+                await response.WriteAsync(indexHtml.ToString(), Encoding.UTF8);
+            }
         }
 
 
@@ -85,13 +96,12 @@ namespace Saunter.UI
         private Dictionary<string, string> IndexHtmlReplacements
             => new Dictionary<string, string>
             {
-                ["{{title}}"] = _options.Value.Middleware.UiTitle,
-                ["{{asyncApiDocumentUrl}}"] = _options.Value.Middleware.Route,
+                ["{{title}}"] = _options.Middleware.UiTitle,
+                ["{{asyncApiDocumentUrl}}"] = _options.Middleware.Route,
             };
 
-        private string UiIndexRoute => _options.Value.Middleware.UiBaseRoute?.TrimEnd('/') + "/index.html";
+        private string UiIndexRoute => _options.Middleware.UiBaseRoute?.TrimEnd('/') + "/index.html";
 
-        private string UiBaseRoute => _options.Value.Middleware.UiBaseRoute?.TrimEnd('/') ?? string.Empty;
+        private string UiBaseRoute => _options.Middleware.UiBaseRoute?.TrimEnd('/') ?? string.Empty;
     }
 }
-#endif

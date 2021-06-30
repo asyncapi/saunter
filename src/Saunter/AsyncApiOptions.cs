@@ -55,6 +55,8 @@ namespace Saunter
                 DefaultValueHandling = DefaultValueHandling.Ignore
             },
         };
+
+        public string ApiName { get; set; }
     }
 
     public class AsyncApiMiddlewareOptions

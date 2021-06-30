@@ -6,17 +6,14 @@ namespace Saunter.Serialization
 {
     public class NewtonsoftAsyncApiDocumentSerializer : IAsyncApiDocumentSerializer
     {
-        private readonly IOptions<AsyncApiOptions> _options;
-
-        public NewtonsoftAsyncApiDocumentSerializer(IOptions<AsyncApiOptions> options)
+        public NewtonsoftAsyncApiDocumentSerializer()
         {
-            _options = options;
         }
 
         public string ContentType => "application/json";
-        public string Serialize(AsyncApiDocument document)
+        public string Serialize(AsyncApiDocument document, AsyncApiOptions options)
         {
-            return JsonConvert.SerializeObject(document, _options.Value.JsonSchemaGeneratorSettings.ActualSerializerSettings);
+            return JsonConvert.SerializeObject(document, options.JsonSchemaGeneratorSettings.ActualSerializerSettings);
         }
     }
 }
