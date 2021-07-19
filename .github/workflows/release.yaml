@@ -26,7 +26,7 @@ jobs:
     # Below steps are only on release, not CI.
     - name: Set version
       # Gets the numeric version from a tag (e.g. v1.2.3 -> 1.2.3)
-      run: echo ::set-env name=RELEASE_VERSION::${GITHUB_REF#refs/tags/v} 
+      run: echo "RELEASE_VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
     - name: Create Nuget package
       run: dotnet pack ./src/Saunter/Saunter.csproj --configuration Release -p:Version="$RELEASE_VERSION" --output ./build
     - name: Push Nuget package to Nuget.org
