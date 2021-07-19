@@ -6,10 +6,14 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 <!-- Please update the links section at the bottom when adding a new version. -->
 
 ## [Unreleased]
+
+
+## [v0.3.1] - 2021-07-19
 ### Fixed
 - DateTimeOffset causes recursive schema - now treated same as DateTime
+- DictionaryKeyToStringConverter to support lists #94
 
-## [v0.3]
+## [v0.3.0] - 2021-07-19
 ### Changed
 - Replaced dependency on Newtonsoft.Json with System.Text.Json
     - Previously we were inspecting types for the attributes provided by Newtonsoft.Json such as `[JsonProperty]`. If you were relying on these attributes, you will now need to set `options.SchemaIdSelector` and/or `options.PropertyNameSelector` to a function which inspects those attributes.
@@ -61,7 +65,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 When updating here set baseVersion to the previous tag and targetVersion to your new tag
 This link will be dead until after you have completed the pull request and tagged the new version in master
 -->
-[Unreleased]: https://github.com/tehmantra/saunter/compare/v0.3.0...master
+[Unreleased]: https://github.com/tehmantra/saunter/compare/v0.3.1...master
+[v0.3.1]: https://github.com/tehmantra/saunter/compare/v0.3.0...v0.3.1
 [v0.3.0]: https://github.com/tehmantra/saunter/compare/v0.2.0...v0.3.0
 [v0.2.0]: https://github.com/tehmantra/saunter/compare/v0.1.0...v0.2.0
 [v0.1.0]: https://github.com/tehmantra/saunter/compare/97abfdb20e11dccfe4c6b9317e6a7e1fa419fd5c...v0.1.0
