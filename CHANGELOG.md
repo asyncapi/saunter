@@ -6,7 +6,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 <!-- Please update the links section at the bottom when adding a new version. -->
 
 ## [Unreleased]
-
+### Fixed
+- DateTimeOffset causes recursive schema - now treated same as DateTime
 
 ## [v0.3]
 ### Changed

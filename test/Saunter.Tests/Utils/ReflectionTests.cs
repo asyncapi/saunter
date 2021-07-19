@@ -231,6 +231,8 @@ namespace Saunter.Tests.Utils
         [Theory]
         [InlineData(typeof(DateTime))]
         [InlineData(typeof(DateTime?))]
+        [InlineData(typeof(DateTimeOffset))]
+        [InlineData(typeof(DateTimeOffset?))]
         public void IsDateTime_True_WhenTypeIsDateTime(Type type)
         {
             type.IsDateTime().ShouldBeTrue();
