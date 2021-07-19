@@ -173,7 +173,8 @@ namespace Saunter.Utils
 
         public static bool IsDateTime(this Type type)
         {
-            if (type == typeof(DateTime))
+            if (type == typeof(DateTime)
+                || type == typeof(DateTimeOffset))
             {
                 return true;
             }
