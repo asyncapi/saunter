@@ -16,7 +16,7 @@ namespace Saunter.Utils
         }
 
         private static bool TypeIsDictionary(Type type)
-            => type != null 
+            => type != null
                    && type.IsGenericType
                    && (type.GetGenericTypeDefinition() == typeof(IDictionary<,>) || type.GetInterface("IDictionary") != null);
 
@@ -32,19 +32,50 @@ namespace Saunter.Utils
             {
                 throw new NotSupportedException($"Type {type} not supported by this converted.");
             }
-            
+
             var keyType = genericArguments[0];
             var valueType = genericArguments[1];
 
+
+            var converterType = TypeIsDictionary(type)
+                ? typeof(DictionaryKeyToStringConverterInner<,>).MakeGenericType(new Type[] { keyType, valueType })
+                : typeof(InheritedDictionaryKeyToStringConverterInner<,,>).MakeGenericType(new Type[] { type, keyType, valueType });
+
             var converter = (JsonConverter)Activator.CreateInstance(
-                typeof(DictionaryKeyToStringConverterInner<,>).MakeGenericType(
-                    new Type[] { keyType, valueType }),
+                converterType,
                 BindingFlags.Instance | BindingFlags.Public,
                 binder: null,
                 args: new object[] { options },
                 culture: null);
 
             return converter;
+        }
+
+        private class InheritedDictionaryKeyToStringConverterInner<TType, TKey, TValue> :
+            JsonConverter<TType> where TType : IDictionary<TKey, TValue>
+        {
+            private readonly DictionaryKeyToStringConverterInner<TKey, TValue> _innerConverter;
+
+            public InheritedDictionaryKeyToStringConverterInner(JsonSerializerOptions options)
+            {
+                _innerConverter = new DictionaryKeyToStringConverterInner<TKey, TValue>(options);
+            }
+
+            public override TType Read(
+                ref Utf8JsonReader reader,
+                Type typeToConvert,
+                JsonSerializerOptions options)
+            {
+                return (TType)_innerConverter.Read(ref reader, typeToConvert, options);
+            }
+
+            public override void Write(
+                Utf8JsonWriter writer,
+                TType dictionary,
+                JsonSerializerOptions options)
+            {
+                _innerConverter.Write(writer, dictionary, options);
+            }
         }
 
         private class DictionaryKeyToStringConverterInner<TKey, TValue> :
