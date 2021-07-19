@@ -5,6 +5,10 @@
 
 Saunter is an [AsyncAPI](https://github.com/asyncapi/asyncapi) documentation generator for dotnet.
 
+
+ℹ Note that pre version 1.0.0, the API is regarded as unstable and **breaking changes may be introduced**.
+
+
 ## Getting Started
 
 See [examples/StreetlightsAPI](examples/StreetlightsAPI).
