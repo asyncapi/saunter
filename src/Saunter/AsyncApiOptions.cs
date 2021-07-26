@@ -97,7 +97,7 @@ namespace Saunter
         /// <summary>
         /// Options related to the Saunter middleware
         /// </summary>
-        public AsyncApiMiddlewareOptions Middleware { get; set; } = new AsyncApiMiddlewareOptions();
+        public AsyncApiMiddlewareOptions Middleware { get; } = new AsyncApiMiddlewareOptions();
     }
 
     public class AsyncApiMiddlewareOptions
@@ -108,18 +108,13 @@ namespace Saunter
         public string Route { get; set; } = "/asyncapi/asyncapi.json";
 
         /// <summary>
-        /// The route which the AsyncAPI UI will be hosted
-        /// </summary>
-        public string UiRoute { get; set; } = "/asyncapi/ui/index.html";
-
-        /// <summary>
         /// The base URL for the AsyncAPI UI
         /// </summary>
         public string UiBaseRoute { get; set; } = "/asyncapi/ui/";
 
         /// <summary>
-        /// The address of an AsyncAPI playground which will be used to generate the HTML from the AsyncAPI document.
+        /// The title of page for AsyncAPI UI
         /// </summary>
-        public string PlaygroundBaseAddress { get; set; } = "https://playground.asyncapi.io/";
+        public string UiTitle { get; set; } = "AsyncAPI";
     }
 }
