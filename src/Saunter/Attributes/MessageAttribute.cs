@@ -10,6 +10,9 @@ namespace Saunter.Attributes
             PayloadType = payloadType;
         }
 
+        /// <summary>
+        /// The type to use to generate the message payload schema.
+        /// </summary>
         public Type PayloadType { get; }
 
         /// <summary>
@@ -33,5 +36,11 @@ namespace Saunter.Attributes
         /// CommonMark syntax can be used for rich text representation.
         /// </summary>
         public string Description { get; set; }
+
+        /// <summary>
+        /// The name of a message bindings item to reference.
+        /// The bindings must be added to components/messageBindings with the same name.
+        /// </summary>
+        public string BindingsRef { get; set; }
     }
 }

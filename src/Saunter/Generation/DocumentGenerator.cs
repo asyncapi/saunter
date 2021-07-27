@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Saunter.AsyncApiSchema.v2.Bindings;
 using Saunter.Utils;
 
 namespace Saunter.Generation
@@ -81,6 +82,7 @@ namespace Saunter.Generation
                     Parameters = GetChannelParametersFromAttributes(mc.Method, schemaResolver),
                     Publish = GenerateOperationFromMethod(mc.Method, schemaResolver, OperationType.Publish),
                     Subscribe = GenerateOperationFromMethod(mc.Method, schemaResolver, OperationType.Subscribe),
+                    Bindings = mc.Channel.BindingsRef != null ? new ChannelBindingsReference(mc.Channel.BindingsRef) : null,
                 }; 
                 channels.Add(mc.Channel.Name, channelItem);
                 
@@ -117,7 +119,8 @@ namespace Saunter.Generation
                     Description = cc.Channel.Description,
                     Parameters = GetChannelParametersFromAttributes(cc.Type, schemaResolver),
                     Publish = GenerateOperationFromClass(cc.Type, schemaResolver, OperationType.Publish),
-                    Subscribe = GenerateOperationFromClass(cc.Type, schemaResolver, OperationType.Subscribe),                    
+                    Subscribe = GenerateOperationFromClass(cc.Type, schemaResolver, OperationType.Subscribe),
+                    Bindings = cc.Channel.BindingsRef != null ? new ChannelBindingsReference(cc.Channel.BindingsRef) : null,
                 };
                 
                 channels.AddOrAppend(cc.Channel.Name, channelItem);
@@ -154,6 +157,7 @@ namespace Saunter.Generation
                 Summary = operationAttribute.Summary ?? method.GetXmlDocsSummary(),
                 Description = operationAttribute.Description ?? (method.GetXmlDocsRemarks() != "" ? method.GetXmlDocsRemarks() : null),
                 Message = message,
+                Bindings = operationAttribute.BindingsRef != null ? new OperationBindingsReference(operationAttribute.BindingsRef) : null,
             };
 
             var filterContext = new OperationFilterContext(method, schemaResolver, operationAttribute);
@@ -183,6 +187,7 @@ namespace Saunter.Generation
                 Summary = operationAttribute.Summary ?? type.GetXmlDocsSummary(),
                 Description = operationAttribute.Description ?? (type.GetXmlDocsRemarks() != "" ? type.GetXmlDocsRemarks() : null),
                 Message = messages,
+                Bindings = operationAttribute.BindingsRef != null ? new OperationBindingsReference(operationAttribute.BindingsRef) : null,
             };
 
             var methodsWithMessageAttribute = type.DeclaredMethods
@@ -265,6 +270,7 @@ namespace Saunter.Generation
                 Title = messageAttribute.Title,
                 Summary = messageAttribute.Summary,
                 Description = messageAttribute.Description,
+                Bindings = messageAttribute.BindingsRef != null ? new MessageBindingsReference(messageAttribute.BindingsRef) : null,
             };
             message.Name = messageAttribute.Name ?? message.Payload.ActualSchema.Id;
 
