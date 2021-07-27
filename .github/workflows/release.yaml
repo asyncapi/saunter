@@ -23,8 +23,8 @@ jobs:
       with:
         dotnet-version: '5.0.x' # SDK Version to use; x will use the latest version of the channel
 
-    - name: Run dotnet build -maxcpucount:1
-      run: dotnet build --configuration Debug
+    - name: Run dotnet build
+      run: dotnet build --configuration Debug -maxcpucount:1
     - name: Run dotnet test
       run: dotnet test --no-build
 
