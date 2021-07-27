@@ -5,6 +5,10 @@
 
 Saunter is an [AsyncAPI](https://github.com/asyncapi/asyncapi) documentation generator for dotnet.
 
+
+ℹ Note that pre version 1.0.0, the API is regarded as unstable and **breaking changes may be introduced**.
+
+
 ## Getting Started
 
 See [examples/StreetlightsAPI](examples/StreetlightsAPI).
@@ -63,6 +67,7 @@ See [examples/StreetlightsAPI](examples/StreetlightsAPI).
     app.UseEndpoints(endpoints =>
     {
         endpoints.MapAsyncApiDocuments();
+        endpoints.MapAsyncApiUi();
     });
     ```
 
@@ -88,6 +93,31 @@ See [examples/StreetlightsAPI](examples/StreetlightsAPI).
             //...
     }
     ```
+   
+6. Use the published AsyncAPI UI:
+
+    ![AsyncAPI UI](./assets/asyncapi-ui-screenshot.png)
+
+## Configuration
+
+See [the options source code](./src/Saunter/AsyncApiOptions.cs) for detailed info.
+
+Common options are below:
+
+```c#
+services.AddAsyncApiSchemaGeneration(options =>
+{
+    options.AssemblyMarkerTypes = new[] { typeof(Startup) };   // Tell Saunter where to scan for your classes.
+    
+    options.ChannelItemFilters.Add(new MyChannelItemFilter()); // Dynamically update ChanelItems
+    options.OperationFilters.Add(new MyOperationFilter());     // Dynamically update Operations
+    
+    options.Middleware.Route = "/asyncapi/asyncapi.json"       // AsyncAPI JSON document URL
+    options.Middleware.UiBaseRoute = "/asyncapi/ui/";          // AsyncAPI UI URL
+    options.Middleware.UiTitle = "My AsyncAPI Documentation";  // AsyncAPI UI page title
+}
+```
+
 
 ## Bindings
 Bindings are used to describe protocol specific information. These can be added by creating a Filter which will be applied to each operation during the AsyncAPI document generation.
@@ -198,8 +228,10 @@ See our [contributing guide](./CONTRIBUTING.md).
 
 Feel free to get involved in the project by opening issues, or submitting pull requests.
 
+You can also find me on the [AsyncAPI community slack](https://asyncapi.com/slack-invite).
+
 ## Thanks
 
 * This project is heavily inspired by [Swashbuckle](https://github.com/domaindrivendev/Swashbuckle.AspNetCore).
-* We use [Namotion.Reflection](https://github.com/RicoSuter/Namotion.Reflection) for pulling xml documentation.
+* We use [Namotion.Reflection](https://github.com/RicoSuter/Namotion.Reflection) for pulling XML documentation.
 

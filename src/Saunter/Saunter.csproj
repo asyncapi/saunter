@@ -24,8 +24,19 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="wwwroot/**/*" />
+    <EmbeddedResource Include="UI/index.html" />
+    <EmbeddedResource Include="UI/node_modules/@asyncapi/react-component/browser/standalone/index.js" LogicalName="Saunter.UI.index.js" Condition="Exists('UI/node_modules')" />
+    <EmbeddedResource Include="UI/node_modules/@asyncapi/react-component/styles/default.min.css" LogicalName="Saunter.UI.default.min.css" Condition="Exists('UI/node_modules')" />
   </ItemGroup>
+
+  <Target Name="NpmInstall" BeforeTargets="Build" Inputs="UI/package.json" Outputs="UI/node_modules/.install-stamp">
+    <Exec Command="npm install" EnvironmentVariables="PATH=$(Path.Replace(';', '%3B'))" ContinueOnError="true" WorkingDirectory="UI">
+      <Output TaskParameter="ExitCode" PropertyName="ErrorCode" />
+    </Exec>
+    <Touch Files="UI/node_modules/.install-stamp" AlwaysCreate="true" />
+    <Error Condition="'$(ErrorCode)' != '0'" Text="Node.js/npm is required to build this project. To continue, please install Node.js from https://nodejs.org/ or Visual Studio Installer, and then restart your command prompt or IDE." />
+  </Target>
+
 
   <ItemGroup>
     <None Include="..\..\assets\logo.png" Pack="true" PackagePath="\" />
@@ -34,6 +45,8 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.0.0" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="3.0.0" />
+    <PackageReference Include="Namotion.Reflection" Version="1.0.23" />
+    <PackageReference Include="System.Text.Json" Version="5.0.2" />
     <PackageReference Include="NJsonSchema" Version="10.4.4" />
 
     <!-- Development Dependencies -->
@@ -43,9 +56,5 @@
   <ItemGroup Condition="'$(TargetFramework)' != 'netstandard2.0'">
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
-
-    <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
-        <PackageReference Include="System.Text.Json" Version="5.0.2" />
-    </ItemGroup>
 
 </Project>
