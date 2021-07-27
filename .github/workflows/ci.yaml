@@ -28,3 +28,9 @@ jobs:
       run: dotnet build --configuration Debug
     - name: Run dotnet test
       run: dotnet test --no-build
+
+    # Below steps run only on CI, not release
+    - uses: actions/upload-artifact@v2
+      with:
+        name: saunter-bin
+        path: ./src/Saunter/bin
