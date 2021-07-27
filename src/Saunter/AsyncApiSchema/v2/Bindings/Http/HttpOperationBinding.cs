@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json;
+﻿using System.Runtime.Serialization;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using NJsonSchema;
 
 namespace Saunter.AsyncApiSchema.v2.Bindings.Http
 {
@@ -7,31 +10,73 @@ namespace Saunter.AsyncApiSchema.v2.Bindings.Http
     /// </remarks>
     public class HttpOperationBinding
     {
+        /// <summary>
+        /// Required. Type of operation. Its value MUST be either request or response.
+        /// </summary>
         [JsonProperty("type")]
-        public string Type { get; set; }
+        public HttpOperationBindingType Type { get; set; }
 
-        [JsonProperty("method")]
-        public string Method { get; set; }
+        /// <summary>
+        /// When type is request, this is the HTTP method, otherwise it MUST be ignored.
+        /// Its value MUST be one of GET, POST, PUT, PATCH, DELETE, HEAD, OPTIONS, CONNECT, and TRACE.
+        /// </summary>
+        [JsonProperty("method", NullValueHandling = NullValueHandling.Ignore)]
+        public HttpOperationBindingMethod? Method { get; set; }
 
-        [JsonProperty("query")]
-        public HttpOperationBindingQuery Query { get; set; } 
+        /// <summary>
+        /// A Schema object containing the definitions for each query parameter.
+        /// This schema MUST be of type object and have a properties key.
+        /// </summary>
+        [JsonProperty("query", NullValueHandling = NullValueHandling.Ignore)]
+        public JsonSchema Query { get; set; }
 
-        [JsonProperty("bindingVersion")]
+        /// <summary>
+        /// The version of this binding. If omitted, "latest" MUST be assumed.
+        /// </summary>
+        [JsonProperty("bindingVersion", NullValueHandling = NullValueHandling.Ignore)]
         public string BindingVersion { get; set; }
     }
 
-    public class HttpOperationBindingQuery
+
+    [JsonConverter(typeof(StringEnumConverter))]
+    public enum HttpOperationBindingType
     {
-        [JsonProperty("type")]
-        public string Type { get; set; }
+        [EnumMember(Value = "request")]
+        Request,
 
-        [JsonProperty("required")]
-        public string[] Required { get; set; }
-
-        [JsonProperty("properties")]
-        public object Properties { get; set; }
-
-        [JsonProperty("additionalProperties")]
-        public bool AdditionalProperties { get; set; }
+        [EnumMember(Value = "response")]
+        Response,
     }
+
+    [JsonConverter(typeof(StringEnumConverter))]
+    public enum HttpOperationBindingMethod
+    {
+        [EnumMember(Value = "GET")]
+        GET,
+
+        [EnumMember(Value = "POST")]
+        POST,
+
+        [EnumMember(Value = "PUT")]
+        PUT,
+
+        [EnumMember(Value = "PATCH")]
+        PATCH,
+
+        [EnumMember(Value = "DELETE")]
+        DELETE,
+
+        [EnumMember(Value = "HEAD")]
+        HEAD,
+
+        [EnumMember(Value = "OPTIONS")]
+        OPTIONS,
+
+        [EnumMember(Value = "CONNECT")]
+        CONNECT,
+
+        [EnumMember(Value = "TRACE")]
+        TRACE,
+    }
+
 }

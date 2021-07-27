@@ -1,11 +1,12 @@
 using System;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Saunter.Generation;
 using Saunter.Utils;
 
-namespace Saunter.Generation
+namespace Saunter
 {
-    public static class SaunterServiceCollectionExtensions
+    public static class AsyncApiServiceCollectionExtensions
     {
         public static IServiceCollection AddAsyncApiSchemaGeneration(this IServiceCollection services, Action<AsyncApiOptions> setupAction)
         {

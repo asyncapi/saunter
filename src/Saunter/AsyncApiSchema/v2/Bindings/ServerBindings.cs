@@ -2,6 +2,7 @@
 using Saunter.AsyncApiSchema.v2.Bindings.Amqp;
 using Saunter.AsyncApiSchema.v2.Bindings.Http;
 using Saunter.AsyncApiSchema.v2.Bindings.Kafka;
+using Saunter.AsyncApiSchema.v2.Bindings.Mqtt;
 
 namespace Saunter.AsyncApiSchema.v2.Bindings
 {
@@ -20,13 +21,16 @@ namespace Saunter.AsyncApiSchema.v2.Bindings
 
     public class ServerBindings : IServerBindings
     {
-        [JsonProperty("amqp")]
+        [JsonProperty("amqp", NullValueHandling = NullValueHandling.Ignore)]
         public AmqpServerBinding Amqp { get; set; }
 
-        [JsonProperty("http")]
+        [JsonProperty("http", NullValueHandling = NullValueHandling.Ignore)]
         public HttpServerBinding Http { get; set; }
 
-        [JsonProperty("kafka")]
+        [JsonProperty("kafka", NullValueHandling = NullValueHandling.Ignore)]
         public KafkaServerBinding Kafka { get; set; }
+
+        [JsonProperty("mqtt", NullValueHandling = NullValueHandling.Ignore)]
+        public MqttServerBinding Mqtt { get; set; }
     }
 }

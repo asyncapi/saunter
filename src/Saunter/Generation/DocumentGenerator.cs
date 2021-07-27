@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using NJsonSchema;
 using Saunter.AsyncApiSchema.v2.Bindings;
 using Saunter.Utils;
 
@@ -29,8 +30,12 @@ namespace Saunter.Generation
         {
             var asyncApiSchema = _options.AsyncApi;
 
-            // todo: clone the global document so each call generates a new document
-            asyncApiSchema.Components = new Components();
+            // HACK: The same document is modified each time we call GenerateDocument.
+            //       This could lead to unexpected behaviour where the document grows each time it is "generated"
+            //       For now, we reinitialize the generated parts of the document.
+            // TODO: Clone the global document so each call generates a new document
+            asyncApiSchema.Components.Messages = new Dictionary<string, Message>();
+            asyncApiSchema.Components.Schemas = new Dictionary<string, JsonSchema>();
 
             var schemaResolver = new AsyncApiSchemaResolver(asyncApiSchema, _options.JsonSchemaGeneratorSettings);
 

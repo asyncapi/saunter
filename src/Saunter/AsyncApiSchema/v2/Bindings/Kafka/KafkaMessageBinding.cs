@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using NJsonSchema;
 
 namespace Saunter.AsyncApiSchema.v2.Bindings.Kafka
 {
@@ -7,19 +8,16 @@ namespace Saunter.AsyncApiSchema.v2.Bindings.Kafka
     /// </remarks>
     public class KafkaMessageBinding
     {
-        [JsonProperty("key")]
-        public KafkaOperationBindingGroupId Key { get; set; }
+        /// <summary>
+        /// The message key.
+        /// </summary>
+        [JsonProperty("key", NullValueHandling = NullValueHandling.Ignore)]
+        public JsonSchema Key { get; set; }
 
-        [JsonProperty("bindingVersion")]
+        /// <summary>
+        /// The version of this binding. If omitted, "latest" MUST be assumed.
+        /// </summary>
+        [JsonProperty("bindingVersion", NullValueHandling = NullValueHandling.Ignore)]
         public string BindingVersion { get; set; }
-    }
-
-    public class KafkaMessageBindingKey
-    {
-        [JsonProperty("type")]
-        public string Type { get; set; }
-
-        [JsonProperty("enum")]
-        public string[] Enum { get; set; }
     }
 }

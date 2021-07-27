@@ -2,6 +2,7 @@ using Newtonsoft.Json;
 using Saunter.AsyncApiSchema.v2.Bindings.Amqp;
 using Saunter.AsyncApiSchema.v2.Bindings.Http;
 using Saunter.AsyncApiSchema.v2.Bindings.Kafka;
+using Saunter.AsyncApiSchema.v2.Bindings.Mqtt;
 
 namespace Saunter.AsyncApiSchema.v2.Bindings
 {
@@ -20,13 +21,16 @@ namespace Saunter.AsyncApiSchema.v2.Bindings
 
     public class OperationBindings : IOperationBindings
     {         
-        [JsonProperty("http")]
+        [JsonProperty("http", NullValueHandling = NullValueHandling.Ignore)]
         public HttpOperationBinding Http { get; set; }
 
-        [JsonProperty("amqp")]
+        [JsonProperty("amqp", NullValueHandling = NullValueHandling.Ignore)]
         public AmqpOperationBinding Amqp { get; set; }
 
-        [JsonProperty("kafka")]
+        [JsonProperty("kafka", NullValueHandling = NullValueHandling.Ignore)]
         public KafkaOperationBinding Kafka { get; set; }
+
+        [JsonProperty("mqtt", NullValueHandling = NullValueHandling.Ignore)]
+        public MqttOperationBinding Mqtt { get; set; }
     }
 }

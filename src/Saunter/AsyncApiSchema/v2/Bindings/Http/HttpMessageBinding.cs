@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using NJsonSchema;
 
 namespace Saunter.AsyncApiSchema.v2.Bindings.Http
 {
@@ -7,19 +8,17 @@ namespace Saunter.AsyncApiSchema.v2.Bindings.Http
     /// </remarks>
     public class HttpMessageBinding
     {
-        [JsonProperty("headers")]
-        public HttpMessageBindingHeaders Headers { get; set; }
+        /// <summary>
+        /// A Schema object containing the definitions for HTTP-specific headers.
+        /// This schema MUST be of type object and have a properties key.
+        /// </summary>
+        [JsonProperty("headers", NullValueHandling = NullValueHandling.Ignore)]
+        public JsonSchema Headers { get; set; }
 
-        [JsonProperty("bindingVersion")]
+        /// <summary>
+        /// The version of this binding. If omitted, "latest" MUST be assumed.
+        /// </summary>
+        [JsonProperty("bindingVersion", NullValueHandling = NullValueHandling.Ignore)]
         public string BindingVersion { get; set; }
-    }
-
-    public class HttpMessageBindingHeaders
-    {
-        [JsonProperty("type")]
-        public string Type { get; set; }
-
-        [JsonProperty("properties")]
-        public object Properties { get; set; }
     }
 }

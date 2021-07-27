@@ -7,8 +7,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 ## [Unreleased]
 ### Changed
-- Added ability to use bindings by specifying a BindingRef in the attribute e.g. `[Channel("light.measured", BindingRef = "my-amqp-binding")]`
-
+- Added ability to use bindings by specifying a BindingsRef in the attribute e.g. `[Channel("light.measured", BindingsRef = "my-amqp-binding")]`
+- Added MQTT bindings
 
 ## [v0.4.0] - 2021-07-27
 ### Changed
