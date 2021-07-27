@@ -58,6 +58,6 @@ namespace Saunter.AsyncApiSchema.v2.Traits
         /// A free-form map where the keys describe the name of the protocol and the values describe protocol-specific definitions for the operation.
         /// </summary>
         [JsonProperty("bindings")]
-        public OperationBindings Bindings { get; set; }
+        public IOperationBindings Bindings { get; set; }
     }
 }

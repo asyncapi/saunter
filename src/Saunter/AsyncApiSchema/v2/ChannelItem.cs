@@ -42,7 +42,7 @@ namespace Saunter.AsyncApiSchema.v2
         /// and the values describe protocol-specific definitions for the channel.
         /// </summary>
         [JsonProperty("bindings", NullValueHandling = NullValueHandling.Ignore)]
-        public ChannelBindings Bindings { get; set; }
+        public IChannelBindings Bindings { get; set; }
 
 
         public bool ShouldSerializeParameters()

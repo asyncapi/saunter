@@ -5,9 +5,20 @@ using Saunter.AsyncApiSchema.v2.Bindings.Kafka;
 
 namespace Saunter.AsyncApiSchema.v2.Bindings
 {
-    // TODO: set-up references for all 4 binding types
+    /// <summary>
+    /// ServerBindings can be either a the bindings or a reference to the bindings.
+    /// </summary>
+    public interface IServerBindings {}
 
-    public class ServerBindings
+    /// <summary>
+    /// A reference to the OperationBindings within the AsyncAPI components.
+    /// </summary>
+    public class ServerBindingsReference : Reference, IServerBindings
+    {
+        public ServerBindingsReference(string id) : base(id, "#/components/serverBindings/{0}") { }
+    }
+
+    public class ServerBindings : IServerBindings
     {
         [JsonProperty("amqp")]
         public AmqpServerBinding Amqp { get; set; }

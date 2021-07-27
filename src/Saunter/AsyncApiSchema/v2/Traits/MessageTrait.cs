@@ -91,7 +91,7 @@ namespace Saunter.AsyncApiSchema.v2.Traits
         /// and the values describe protocol-specific definitions for the message.
         /// </summary>
         [JsonProperty("bindings")]
-        public MessageBindings Bindings { get; set; }
+        public IMessageBindings Bindings { get; set; }
 
         /// <summary>
         /// An array with examples of valid message objects.

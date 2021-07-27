@@ -38,10 +38,13 @@ namespace Saunter
         public IList<IOperationFilter> OperationFilters { get; } = new List<IOperationFilter>();
 
         /// <summary>
-        /// Options related to the Saunter middleware
+        /// Options related to the Saunter middleware.
         /// </summary>
         public AsyncApiMiddlewareOptions Middleware { get; } = new AsyncApiMiddlewareOptions();
 
+        /// <summary>
+        /// Settings related to the JSON Schema generation.
+        /// </summary>
         public JsonSchemaGeneratorSettings JsonSchemaGeneratorSettings { get; set; } = new JsonSchemaGeneratorSettings()
         {
             TypeNameGenerator = new CamelCaseTypeNameGenerator(),

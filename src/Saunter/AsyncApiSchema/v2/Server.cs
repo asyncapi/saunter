@@ -65,7 +65,7 @@ namespace Saunter.AsyncApiSchema.v2
         /// values describe protocol-specific definitions for the server.
         /// </summary>
         [JsonProperty("bindings", NullValueHandling = NullValueHandling.Ignore)]
-        public ServerBindings Bindings { get; set; }
+        public IServerBindings Bindings { get; set; }
     }
     
     public class ServerVariable

@@ -56,7 +56,7 @@ namespace Saunter.AsyncApiSchema.v2
         /// protocol-specific definitions for the operation.
         /// </summary>
         [JsonProperty("bindings", NullValueHandling = NullValueHandling.Ignore)]
-        public OperationBindings Bindings { get; set; }
+        public IOperationBindings Bindings { get; set; }
         
         /// <summary>
         /// A definition of the message that will be published or received on this channel.

@@ -105,7 +105,7 @@ namespace Saunter.AsyncApiSchema.v2
         /// A free-form map where the keys describe the name of the protocol and the values describe protocol-specific definitions for the message.
         /// </summary>
         [JsonProperty("bindings", NullValueHandling = NullValueHandling.Ignore)]
-        public MessageBindings Bindings { get; set; }
+        public IMessageBindings Bindings { get; set; }
 
         /// <summary>
         /// An array with examples of valid message objects.
