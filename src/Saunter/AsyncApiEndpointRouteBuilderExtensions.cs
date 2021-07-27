@@ -4,22 +4,17 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Saunter.UI;
 
 namespace Saunter
 {
     public static class AsyncApiEndpointRouteBuilderExtensions
     {
-        private const string AsyncApiDefaultDocumentTitle = "Async API Documentation";
-
         /// <summary>
-        /// Maps the AsyncAPI endpoint.
+        /// Maps the AsyncAPI document endpoint
         /// </summary>
-        /// <param name="endpoints">The endpoints.</param>
-        /// <param name="title">The document tile.</param>
-        /// <returns>The endpoints with AsyncAPI endpoint added.</returns>
         public static IEndpointConventionBuilder MapAsyncApiDocuments(
-            this IEndpointRouteBuilder endpoints,
-            string title = AsyncApiDefaultDocumentTitle)
+            this IEndpointRouteBuilder endpoints)
         {
             var pipeline = endpoints.CreateApplicationBuilder()
                 .UseMiddleware<AsyncApiMiddleware>()
@@ -28,15 +23,15 @@ namespace Saunter
             var options = endpoints.ServiceProvider.GetService<IOptions<AsyncApiOptions>>();
             var route = options.Value.Middleware.Route;
 
-            return endpoints.MapGet(route, pipeline).WithDisplayName(title);
+            return endpoints.MapGet(route, pipeline);
         }
 
 
-        public static IEndpointConventionBuilder MapAsyncApiUi(
-            this IEndpointRouteBuilder endpoints,
-            string title = AsyncApiDefaultDocumentTitle)
+        /// <summary>
+        /// Maps the AsyncAPI UI endpoint(s)
+        /// </summary>
+        public static IEndpointConventionBuilder MapAsyncApiUi(this IEndpointRouteBuilder endpoints)
         {
-            // Add the middleware 
             var pipeline = endpoints.CreateApplicationBuilder()
                 // I don't really understand why...
                 // https://github.com/dotnet/aspnetcore/issues/24252#issuecomment-663620294
@@ -51,7 +46,7 @@ namespace Saunter
             var options = endpoints.ServiceProvider.GetService<IOptions<AsyncApiOptions>>();
             var route = options.Value.Middleware.UiBaseRoute + "{*wildcard}";
 
-            return endpoints.MapGet(route, pipeline).WithDisplayName(title);
+            return endpoints.MapGet(route, pipeline);
         }
     }
 }

@@ -7,6 +7,19 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 ## [Unreleased]
 
+## [v0.4.0] - 2021-07-27
+### Changed
+- UI no longer proxies to playground.asyncapi.io, but instead uses the asyncapi standalone react component as an embedded resource.
+- Removed settings related to the proxied UI
+    - AsyncApi.Middleware.UiRoute
+    - AsyncApi.Middleware.PlaygroundBaseAddress
+- Bumped project dependencies 
+```
+System.Text.Json 5.0.0 -> 5.0.2
+Namotion.Reflection 1.0.14 -> 1.0.23
+Microsoft.NET.Test.Sdk 16.8.3 -> 16.10.0
+```
+
 
 ## [v0.3.1] - 2021-07-19
 ### Fixed
@@ -65,7 +78,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 When updating here set baseVersion to the previous tag and targetVersion to your new tag
 This link will be dead until after you have completed the pull request and tagged the new version in master
 -->
-[Unreleased]: https://github.com/tehmantra/saunter/compare/v0.3.1...master
+[Unreleased]: https://github.com/tehmantra/saunter/compare/v0.4.0...master
+[v0.4.0]: https://github.com/tehmantra/saunter/compare/v0.3.1...v0.4.0
 [v0.3.1]: https://github.com/tehmantra/saunter/compare/v0.3.0...v0.3.1
 [v0.3.0]: https://github.com/tehmantra/saunter/compare/v0.2.0...v0.3.0
 [v0.2.0]: https://github.com/tehmantra/saunter/compare/v0.1.0...v0.2.0

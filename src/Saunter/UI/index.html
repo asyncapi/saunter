@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>{{title}}</title>
+    <link rel="stylesheet" type="text/css" href="./default.min.css">
+  </head>
+  <body>
+    
+    <div id="asyncapi"></div>
+
+    <script src="./index.js"></script>
+    <script>
+      AsyncApiStandalone.render({
+        schema: {
+          url: '{{asyncApiDocumentUrl}}',
+          options: { method: "GET", mode: "cors" },
+        },
+        config: {
+          show: {
+            sidebar: true,
+          }
+        },
+      }, document.getElementById('asyncapi'));
+    </script>
+
+  </body>
+</html>

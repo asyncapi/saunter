@@ -47,6 +47,8 @@ namespace StreetlightsAPI
             {
                 options.AssemblyMarkerTypes = new[] {typeof(StreetlightMessageBus)};
 
+                options.Middleware.UiTitle = "Streetlights API";
+
                 options.AsyncApi = new AsyncApiDocument
                 {
                     Info = new Info("Streetlights API", "1.0.0")
@@ -92,7 +94,7 @@ namespace StreetlightsAPI
             var addresses = app.ServerFeatures.Get<IServerAddressesFeature>().Addresses;
             
             logger.LogInformation("AsyncAPI doc available at: {URL}", $"{addresses.FirstOrDefault()}/asyncapi/asyncapi.json");
-            logger.LogInformation("AsyncAPI UI available at: {URL}", $"{addresses.FirstOrDefault()}/asyncapi/ui/index.html");
+            logger.LogInformation("AsyncAPI UI available at: {URL}", $"{addresses.FirstOrDefault()}/asyncapi/ui/");
         }
     }
 }
