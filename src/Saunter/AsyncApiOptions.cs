@@ -20,12 +20,12 @@ namespace Saunter
         public AsyncApiDocument AsyncApi { get; set; } = new AsyncApiDocument();
 
         /// <summary>
-        ///     A list of marker types from assemblies to scan for Saunter attributes.
+        /// A list of marker types from assemblies to scan for Saunter attributes.
         /// </summary>
         public IList<Type> AssemblyMarkerTypes { get; set; } = new List<Type>();
 
         /// <summary>
-        ///     A function to select a schemaId for a type.
+        /// A function to select a schemaId for a type.
         /// </summary>
         public Func<Type, string> SchemaIdSelector { get; set; } = DefaultSchemaIdFactory.Generate;
 
