@@ -1,8 +1,10 @@
 ﻿using System.Reflection;
 using Microsoft.Extensions.Options;
 using Saunter.Generation;
+using Saunter.Serialization;
 using Saunter.Tests.Generation.DocumentGeneratorTests;
 using Saunter.Utils;
+using Shouldly;
 using Xunit;
 
 namespace Saunter.Tests.Utils
@@ -23,20 +25,12 @@ namespace Saunter.Tests.Utils
         [Fact]
         public void TestSerialize()
         {
-            var doc = _documentGenerator.GenerateDocument(new[]
-                {typeof(MethodAttributesTests.TenantMessagePublisher).GetTypeInfo()});
+            var doc = _documentGenerator.GenerateDocument(new[] { typeof(MethodAttributesTests.TenantMessagePublisher).GetTypeInfo() });
             var serializedDoc = CreateSerializer(Options.Create(_options)).Serialize(doc);
+
+            serializedDoc.ShouldNotBeNullOrWhiteSpace();
         }
     }
-
-    //public class SystemTextJsonSerializerTests : SerializerTests
-    //{
-    //    protected override IAsyncApiDocumentSerializer CreateSerializer()
-    //    {
-    //        return new SystemTextJsonAsyncApiDocumentSerializer();
-    //    }
-    //}
-
 
     public class NewtonsoftSerializerTests : SerializerTests
     {

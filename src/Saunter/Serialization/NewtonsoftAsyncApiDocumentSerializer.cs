@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Saunter.AsyncApiSchema.v2;
 
-namespace Saunter.Utils
+namespace Saunter.Serialization
 {
     public class NewtonsoftAsyncApiDocumentSerializer : IAsyncApiDocumentSerializer
     {

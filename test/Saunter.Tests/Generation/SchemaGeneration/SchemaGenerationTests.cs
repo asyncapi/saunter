@@ -10,6 +10,7 @@ using NJsonSchema.Generation;
 using Saunter.AsyncApiSchema.v2;
 using Saunter.Attributes;
 using Saunter.Generation.SchemaGeneration;
+using Saunter.Tests.Utils;
 using Saunter.Utils;
 using Shouldly;
 using Xunit;

@@ -13,13 +13,18 @@ namespace Saunter.Generation.Filters
 
     public class DocumentFilterContext
     {
-        public DocumentFilterContext(IEnumerable<Type> asyncApiTypes, JsonSchemaResolver schemaResolver)
+        public DocumentFilterContext(IEnumerable<Type> asyncApiTypes, JsonSchemaResolver schemaResolver, JsonSchemaGenerator schemaGenerator)
         {
             AsyncApiTypes = asyncApiTypes;
             SchemaResolver = schemaResolver;
+            SchemaGenerator = schemaGenerator;
         }
         
         public IEnumerable<Type> AsyncApiTypes { get; }
+
         public JsonSchemaResolver SchemaResolver { get; }
+
+        public JsonSchemaGenerator SchemaGenerator { get; }
+
     }
 }

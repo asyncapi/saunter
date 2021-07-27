@@ -41,7 +41,7 @@ namespace Saunter.Generation
 
             asyncApiSchema.Channels = GenerateChannels(asyncApiTypes, schemaResolver);
 
-            var filterContext = new DocumentFilterContext(asyncApiTypes, schemaResolver);
+            var filterContext = new DocumentFilterContext(asyncApiTypes, schemaResolver, _schemaGenerator);
             foreach (var filter in _options.DocumentFilters)
             {
                 filter.Apply(asyncApiSchema, filterContext);
@@ -91,7 +91,7 @@ namespace Saunter.Generation
                 }; 
                 channels.Add(mc.Channel.Name, channelItem);
                 
-                var context = new ChannelItemFilterContext(mc.Method, schemaResolver, mc.Channel);
+                var context = new ChannelItemFilterContext(mc.Method, schemaResolver, _schemaGenerator, mc.Channel);
                 foreach (var filter in _options.ChannelItemFilters)
                 {
                     filter.Apply(channelItem, context);
@@ -130,7 +130,7 @@ namespace Saunter.Generation
                 
                 channels.AddOrAppend(cc.Channel.Name, channelItem);
                 
-                var context = new ChannelItemFilterContext(cc.Type, schemaResolver, cc.Channel);
+                var context = new ChannelItemFilterContext(cc.Type, schemaResolver, _schemaGenerator, cc.Channel);
                 foreach (var filter in _options.ChannelItemFilters)
                 {
                     filter.Apply(channelItem, context);
@@ -165,7 +165,7 @@ namespace Saunter.Generation
                 Bindings = operationAttribute.BindingsRef != null ? new OperationBindingsReference(operationAttribute.BindingsRef) : null,
             };
 
-            var filterContext = new OperationFilterContext(method, schemaResolver, operationAttribute);
+            var filterContext = new OperationFilterContext(method, schemaResolver, _schemaGenerator, operationAttribute);
             foreach (var filter in _options.OperationFilters)
             {
                 filter.Apply(operation, filterContext);

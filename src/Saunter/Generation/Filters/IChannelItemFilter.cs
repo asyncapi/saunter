@@ -1,9 +1,7 @@
-using System;
 using System.Reflection;
 using NJsonSchema.Generation;
 using Saunter.AsyncApiSchema.v2;
 using Saunter.Attributes;
-using Saunter.Generation.SchemaGeneration;
 
 namespace Saunter.Generation.Filters
 {
@@ -14,15 +12,19 @@ namespace Saunter.Generation.Filters
 
     public class ChannelItemFilterContext
     {
-        public ChannelItemFilterContext(MemberInfo member, JsonSchemaResolver schemaResolver, ChannelAttribute channel)
+        public ChannelItemFilterContext(MemberInfo member, JsonSchemaResolver schemaResolver, JsonSchemaGenerator schemaGenerator, ChannelAttribute channel)
         {
             Member = member;
             SchemaResolver = schemaResolver;
+            SchemaGenerator = schemaGenerator;
             Channel = channel;
         }
         
         public MemberInfo Member { get; }
+
         public JsonSchemaResolver SchemaResolver { get; }
+
+        public JsonSchemaGenerator SchemaGenerator { get; }
 
         public ChannelAttribute Channel { get; }
     }

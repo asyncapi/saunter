@@ -1,6 +1,6 @@
 ﻿using Saunter.AsyncApiSchema.v2;
 
-namespace Saunter.Utils
+namespace Saunter.Serialization
 {
     public interface IAsyncApiDocumentSerializer
     {

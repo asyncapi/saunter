@@ -233,5 +233,6 @@ You can also find me on the [AsyncAPI community slack](https://asyncapi.com/slac
 ## Thanks
 
 * This project is heavily inspired by [Swashbuckle](https://github.com/domaindrivendev/Swashbuckle.AspNetCore).
-* We use [Namotion.Reflection](https://github.com/RicoSuter/Namotion.Reflection) for pulling XML documentation.
+* We use [NJsonSchema](https://github.com/RicoSuter/NJsonSchema) for the JSON schema heavy lifting, 
+* and [Namotion.Reflection](https://github.com/RicoSuter/Namotion.Reflection) for pulling XML documentation.
 
