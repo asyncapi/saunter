@@ -1,6 +1,5 @@
 using Microsoft.Extensions.Options;
 using Namotion.Reflection;
-using NJsonSchema;
 using NJsonSchema.Generation;
 using Saunter.AsyncApiSchema.v2;
 using Saunter.Attributes;
@@ -10,7 +9,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Newtonsoft.Json;
 using Saunter.Utils;
 
 namespace Saunter.Generation
@@ -18,14 +16,12 @@ namespace Saunter.Generation
     public class DocumentGenerator : IDocumentGenerator
     {
         private readonly JsonSchemaGenerator _schemaGenerator;
-        private readonly JsonSchemaGeneratorSettings _jsonSchemaSettings;
         private readonly AsyncApiOptions _options;
 
-        public DocumentGenerator(IOptions<AsyncApiOptions> options, JsonSchemaGenerator schemaGenerator, JsonSchemaGeneratorSettings jsonSchemaSettings)
+        public DocumentGenerator(IOptions<AsyncApiOptions> options)
         {
-            _schemaGenerator = schemaGenerator;
-            _jsonSchemaSettings = jsonSchemaSettings ?? throw new ArgumentNullException(nameof(jsonSchemaSettings));
             _options = options?.Value ?? throw new ArgumentNullException(nameof(options));
+            _schemaGenerator = new JsonSchemaGenerator(options.Value.JsonSchemaGeneratorSettings);
         }
 
         public AsyncApiSchema.v2.AsyncApiDocument GenerateDocument(TypeInfo[] asyncApiTypes)
@@ -35,12 +31,9 @@ namespace Saunter.Generation
             // todo: clone the global document so each call generates a new document
             asyncApiSchema.Components = new Components();
 
-            var schemaResolver = new AsyncApiSchemaResolver(asyncApiSchema, _jsonSchemaSettings);
+            var schemaResolver = new AsyncApiSchemaResolver(asyncApiSchema, _options.JsonSchemaGeneratorSettings);
 
             asyncApiSchema.Channels = GenerateChannels(asyncApiTypes, schemaResolver);
-            
-            // TODO: this is now done by the AsyncApiSchemaResolver?
-            // asyncApiSchema.Components.Schemas = schemaResolver.Schemas.ToDictionary(p => new ComponentFieldName(p.Id));
 
             var filterContext = new DocumentFilterContext(asyncApiTypes, schemaResolver);
             foreach (var filter in _options.DocumentFilters)
@@ -85,7 +78,7 @@ namespace Saunter.Generation
                 var channelItem = new ChannelItem
                 {
                     Description = mc.Channel.Description,
-                    Parameters = this.GetChannelParametersFromAttributes(mc.Method, schemaResolver),
+                    Parameters = GetChannelParametersFromAttributes(mc.Method, schemaResolver),
                     Publish = GenerateOperationFromMethod(mc.Method, schemaResolver, OperationType.Publish),
                     Subscribe = GenerateOperationFromMethod(mc.Method, schemaResolver, OperationType.Subscribe),
                 }; 
@@ -122,7 +115,7 @@ namespace Saunter.Generation
                 var channelItem = new ChannelItem
                 {
                     Description = cc.Channel.Description,
-                    Parameters = this.GetChannelParametersFromAttributes(cc.Type, schemaResolver),
+                    Parameters = GetChannelParametersFromAttributes(cc.Type, schemaResolver),
                     Publish = GenerateOperationFromClass(cc.Type, schemaResolver, OperationType.Publish),
                     Subscribe = GenerateOperationFromClass(cc.Type, schemaResolver, OperationType.Subscribe),                    
                 };

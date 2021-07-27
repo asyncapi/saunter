@@ -2,11 +2,9 @@ using System;
 using System.Linq;
 using System.Reflection;
 using Microsoft.Extensions.Options;
-using NJsonSchema.Generation;
 using Saunter.AsyncApiSchema.v2;
 using Saunter.Attributes;
 using Saunter.Generation;
-using Saunter.Generation.SchemaGeneration;
 using Shouldly;
 using Xunit;
 
@@ -19,8 +17,7 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
         {
             // Arrange
             var options = new AsyncApiOptions();
-            var schemaGenerator = new JsonSchemaGenerator(options.JsonSchemaGeneratorSettings);
-            var documentGenerator = new DocumentGenerator(Options.Create(options), schemaGenerator, options.JsonSchemaGeneratorSettings);
+            var documentGenerator = new DocumentGenerator(Options.Create(options));
 
             // Act
             var document = documentGenerator.GenerateDocument(new []{ typeof(TenantMessagePublisher).GetTypeInfo() });

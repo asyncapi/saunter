@@ -1,11 +1,6 @@
 ﻿using System.Reflection;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
-using NJsonSchema.Generation;
-using Saunter.AsyncApiSchema.v2;
 using Saunter.Generation;
-using Saunter.Generation.SchemaGeneration;
 using Saunter.Tests.Generation.DocumentGeneratorTests;
 using Saunter.Utils;
 using Xunit;
@@ -20,8 +15,7 @@ namespace Saunter.Tests.Utils
         public SerializerTests()
         {
             _options = new AsyncApiOptions();
-            var schemaGenerator = new JsonSchemaGenerator(_options.JsonSchemaGeneratorSettings);
-            _documentGenerator = new DocumentGenerator(Options.Create(_options), schemaGenerator, _options.JsonSchemaGeneratorSettings);
+            _documentGenerator = new DocumentGenerator(Options.Create(_options));
         }
 
         protected abstract IAsyncApiDocumentSerializer CreateSerializer(IOptions<AsyncApiOptions> options);

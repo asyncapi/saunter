@@ -27,7 +27,6 @@ namespace Saunter.Generation.SchemaGeneration
             
             if (!_document.Components.Schemas.Values.Contains(schema))
             {
-                // TODO: how to use our SchemaIdFactory here? Do we need to?
                 var schemaId = _settings.TypeNameGenerator.Generate(schema, typeNameHint, _document.Components.Schemas.Keys.Select(k => k.ToString()));
 
                 if (!string.IsNullOrEmpty(schemaId) && !_document.Components.Schemas.ContainsKey(schemaId))

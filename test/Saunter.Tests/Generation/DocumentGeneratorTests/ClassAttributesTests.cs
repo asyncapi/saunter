@@ -19,8 +19,7 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
         {
             // Arrange
             var options = new AsyncApiOptions();
-            var schemaGenerator = new JsonSchemaGenerator(options.JsonSchemaGeneratorSettings);
-            var documentGenerator = new DocumentGenerator(Options.Create(options), schemaGenerator, options.JsonSchemaGeneratorSettings);
+            var documentGenerator = new DocumentGenerator(Options.Create(options));
             
             // Act
             var document = documentGenerator.GenerateDocument(new[] { typeof(TenantMessageConsumer).GetTypeInfo() });
@@ -52,8 +51,7 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
         {
             // Arrange
             var options = new AsyncApiOptions();
-            var schemaGenerator = new JsonSchemaGenerator(options.JsonSchemaGeneratorSettings);
-            var documentGenerator = new DocumentGenerator(Options.Create(options), schemaGenerator, options.JsonSchemaGeneratorSettings);
+            var documentGenerator = new DocumentGenerator(Options.Create(options));
 
             // Act
             var document = documentGenerator.GenerateDocument(new []{ typeof(TenantGenericMessagePublisher).GetTypeInfo() });
@@ -85,8 +83,7 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
         {
             // Arrange
             var options = new AsyncApiOptions();
-            var schemaGenerator = new JsonSchemaGenerator(options.JsonSchemaGeneratorSettings);
-            var documentGenerator = new DocumentGenerator(Options.Create(options), schemaGenerator, options.JsonSchemaGeneratorSettings);
+            var documentGenerator = new DocumentGenerator(Options.Create(options));
 
             // Act
             var document = documentGenerator.GenerateDocument(new []{ typeof(TenantSingleMessagePublisher).GetTypeInfo() });
@@ -114,8 +111,7 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
         {
             // Arrange
             var options = new AsyncApiOptions();
-            var schemaGenerator = new JsonSchemaGenerator(options.JsonSchemaGeneratorSettings);
-            var documentGenerator = new DocumentGenerator(Options.Create(options), schemaGenerator, options.JsonSchemaGeneratorSettings);
+            var documentGenerator = new DocumentGenerator(Options.Create(options));
 
             // Act
             var document = documentGenerator.GenerateDocument(new[]
@@ -164,8 +160,7 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
         {
             // Arrange
             var options = new AsyncApiOptions();
-            var schemaGenerator = new JsonSchemaGenerator(options.JsonSchemaGeneratorSettings);
-            var documentGenerator = new DocumentGenerator(Options.Create(options), schemaGenerator, options.JsonSchemaGeneratorSettings);
+            var documentGenerator = new DocumentGenerator(Options.Create(options));
 
             // Act
             var document = documentGenerator.GenerateDocument(new []{ typeof(OneTenantMessageConsumer).GetTypeInfo() });

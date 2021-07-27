@@ -20,6 +20,7 @@ namespace Saunter.Tests.Generation
             {
                 o.AsyncApi = new AsyncApiDocument
                 {
+                    Info = new Info(GetType().FullName, "1.0.0"),
                     Components =
                     {
                         OperationTraits =
@@ -40,8 +41,8 @@ namespace Saunter.Tests.Generation
                 document.Components.OperationTraits.ShouldContainKey("exampleTrait");
             }
         }
-        
-        
+
+
         private class TestOperationTraitsFilter : IOperationFilter
         {
             public void Apply(Operation publishOperation, OperationFilterContext context)
