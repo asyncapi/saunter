@@ -25,6 +25,8 @@
 
   <ItemGroup>
     <EmbeddedResource Include="UI/index.html" />
+    <EmbeddedResource Include="UI/node_modules/@asyncapi/react-component/browser/standalone/index.js" LogicalName="Saunter.UI.index.js" Condition="Exists('UI/node_modules')" />
+    <EmbeddedResource Include="UI/node_modules/@asyncapi/react-component/styles/default.min.css" LogicalName="Saunter.UI.default.min.css" Condition="Exists('UI/node_modules')" />
   </ItemGroup>
 
   <Target Name="NpmInstall" BeforeTargets="Build" Inputs="UI/package.json" Outputs="UI/node_modules/.install-stamp">
@@ -33,11 +35,6 @@
     </Exec>
     <Touch Files="UI/node_modules/.install-stamp" AlwaysCreate="true" />
     <Error Condition="'$(ErrorCode)' != '0'" Text="Node.js/npm is required to build this project. To continue, please install Node.js from https://nodejs.org/ or Visual Studio Installer, and then restart your command prompt or IDE." />
-
-    <ItemGroup>
-      <EmbeddedResource Include="UI/node_modules/@asyncapi/react-component/browser/standalone/index.js" LogicalName="Saunter.UI.index.js" />
-      <EmbeddedResource Include="UI/node_modules/@asyncapi/react-component/styles/default.min.css" LogicalName="Saunter.UI.default.min.css" />
-    </ItemGroup>
   </Target>
 
 
