@@ -62,23 +62,22 @@ namespace Saunter.UI
 
         private async Task RespondWithAsyncApiHtml(HttpResponse response)
         {
-            using (var stream = GetType().Assembly.GetManifestResourceStream($"{GetType().Namespace}.index.html"))
-            using (var reader = new StreamReader(stream))
+            await using var stream = GetType().Assembly.GetManifestResourceStream($"{GetType().Namespace}.index.html");
+            using var reader = new StreamReader(stream);
+
+
+            var indexHtml = new StringBuilder(await reader.ReadToEndAsync());
+
+            // Replace dynamic content such as the AsyncAPI document url
+            foreach (var replacement in IndexHtmlReplacements)
             {
-                var indexHtml = new StringBuilder(await reader.ReadToEndAsync());
-
-                // Replace dynamic content such as the AsyncAPI document url
-                foreach (var replacement in IndexHtmlReplacements)
-                {
-                    indexHtml.Replace(replacement.Key, replacement.Value);
-                }
-
-                response.StatusCode = (int)HttpStatusCode.OK;
-                response.ContentType = MediaTypeNames.Text.Html;
-                await response.WriteAsync(indexHtml.ToString(), Encoding.UTF8);
+                indexHtml.Replace(replacement.Key, replacement.Value);
             }
-        }
 
+            response.StatusCode = (int) HttpStatusCode.OK;
+            response.ContentType = MediaTypeNames.Text.Html;
+            await response.WriteAsync(indexHtml.ToString(), Encoding.UTF8);
+        }
 
         private bool IsRequestingUiBase(HttpRequest request)
         {
