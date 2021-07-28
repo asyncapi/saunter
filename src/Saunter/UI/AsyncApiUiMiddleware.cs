@@ -64,8 +64,6 @@ namespace Saunter.UI
         {
             await using var stream = GetType().Assembly.GetManifestResourceStream($"{GetType().Namespace}.index.html");
             using var reader = new StreamReader(stream);
-
-
             var indexHtml = new StringBuilder(await reader.ReadToEndAsync());
 
             // Replace dynamic content such as the AsyncAPI document url
@@ -74,7 +72,7 @@ namespace Saunter.UI
                 indexHtml.Replace(replacement.Key, replacement.Value);
             }
 
-            response.StatusCode = (int) HttpStatusCode.OK;
+            response.StatusCode = (int)HttpStatusCode.OK;
             response.ContentType = MediaTypeNames.Text.Html;
             await response.WriteAsync(indexHtml.ToString(), Encoding.UTF8);
         }
