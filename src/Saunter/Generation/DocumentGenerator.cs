@@ -22,29 +22,7 @@ namespace Saunter.Generation
 
         public AsyncApiSchema.v2.AsyncApiDocument GenerateDocument(TypeInfo[] asyncApiTypes, AsyncApiOptions options)
         {
-            // todo: clone the global document so each call generates a new document
-            var asyncApiSchema = new AsyncApiDocument();
-            asyncApiSchema.Info = options.AsyncApi.Info;
-            asyncApiSchema.Id = options.AsyncApi.Id;
-            asyncApiSchema.DefaultContentType = options.AsyncApi.DefaultContentType;
-            asyncApiSchema.Channels = options.AsyncApi.Channels.ToDictionary(p => p.Key, p => p.Value);
-            asyncApiSchema.Servers = options.AsyncApi.Servers.ToDictionary(p => p.Key, p => p.Value);
-            foreach (var tag in options.AsyncApi.Tags)
-            {
-                asyncApiSchema.Tags.Add(tag);
-            }
-            asyncApiSchema.ExternalDocs = options.AsyncApi.ExternalDocs;
-            asyncApiSchema.Components.Schemas = options.AsyncApi.Components.Schemas.ToDictionary(p => p.Key, p => p.Value);
-            asyncApiSchema.Components.Messages = options.AsyncApi.Components.Messages.ToDictionary(p => p.Key, p => p.Value);
-            asyncApiSchema.Components.SecuritySchemes = options.AsyncApi.Components.SecuritySchemes.ToDictionary(p => p.Key, p => p.Value);
-            asyncApiSchema.Components.Parameters = options.AsyncApi.Components.Parameters.ToDictionary(p => p.Key, p => p.Value);
-            asyncApiSchema.Components.CorrelationIds = options.AsyncApi.Components.CorrelationIds.ToDictionary(p => p.Key, p => p.Value);
-            asyncApiSchema.Components.ServerBindings = options.AsyncApi.Components.ServerBindings.ToDictionary(p => p.Key, p => p.Value);
-            asyncApiSchema.Components.ChannelBindings = options.AsyncApi.Components.ChannelBindings.ToDictionary(p => p.Key, p => p.Value);
-            asyncApiSchema.Components.OperationBindings = options.AsyncApi.Components.OperationBindings.ToDictionary(p => p.Key, p => p.Value);
-            asyncApiSchema.Components.MessageBindings = options.AsyncApi.Components.MessageBindings.ToDictionary(p => p.Key, p => p.Value);
-            asyncApiSchema.Components.OperationTraits = options.AsyncApi.Components.OperationTraits.ToDictionary(p => p.Key, p => p.Value);
-            asyncApiSchema.Components.MessageTraits = options.AsyncApi.Components.MessageTraits.ToDictionary(p => p.Key, p => p.Value);
+            var asyncApiSchema = options.AsyncApi.Clone();
 
             var schemaResolver = new AsyncApiSchemaResolver(asyncApiSchema, options.JsonSchemaGeneratorSettings);
 
