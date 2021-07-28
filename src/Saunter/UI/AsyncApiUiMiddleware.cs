@@ -1,3 +1,5 @@
+#if !NETSTANDARD2_0
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -20,11 +22,8 @@ namespace Saunter.UI
         private readonly AsyncApiOptions _options;
         private readonly StaticFileMiddleware _staticFiles;
 
-#if NETSTANDARD2_0
-        public AsyncApiUiMiddleware(RequestDelegate next, IOptionsSnapshot<AsyncApiOptions> options, IHostingEnvironment env, ILoggerFactory loggerFactory, string apiName = null)
-#else
+
         public AsyncApiUiMiddleware(RequestDelegate next, IOptionsSnapshot<AsyncApiOptions> options, IWebHostEnvironment env, ILoggerFactory loggerFactory, string apiName = null)
-#endif
         {
             if (apiName == null)
             {
@@ -105,3 +104,4 @@ namespace Saunter.UI
         private string UiBaseRoute => _options.Middleware.UiBaseRoute?.TrimEnd('/') ?? string.Empty;
     }
 }
+#endif
