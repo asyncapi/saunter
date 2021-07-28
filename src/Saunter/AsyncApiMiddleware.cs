@@ -2,13 +2,10 @@
 
 using System;
 using System.Net;
-using System.Net.Mime;
-using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
-using Saunter.AsyncApiSchema.v2;
-using Saunter.Utils;
+using Saunter.Serialization;
 
 namespace Saunter
 {
@@ -38,12 +35,11 @@ namespace Saunter
 
         private async Task RespondWithAsyncApiSchemaJson(HttpResponse response, AsyncApiSchema.v2.AsyncApiDocument asyncApiSchema, IAsyncApiDocumentSerializer asyncApiDocumentSerializer)
         {
-            var asyncApiSchemaSerialized = asyncApiDocumentSerializer.Serialize(asyncApiSchema);
-
+            var asyncApiSchemaJson = asyncApiDocumentSerializer.Serialize(asyncApiSchema);
             response.StatusCode = (int)HttpStatusCode.OK;
             response.ContentType = asyncApiDocumentSerializer.ContentType;
 
-            await response.WriteAsync(asyncApiSchemaSerialized);
+            await response.WriteAsync(asyncApiSchemaJson);
         }
 
         private bool IsRequestingAsyncApiSchema(HttpRequest request)

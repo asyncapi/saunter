@@ -46,7 +46,7 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.0.0" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="3.0.0" />
     <PackageReference Include="Namotion.Reflection" Version="1.0.23" />
-    <PackageReference Include="System.Text.Json" Version="5.0.2" />
+    <PackageReference Include="NJsonSchema" Version="10.4.6" />
 
     <!-- Development Dependencies -->
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />

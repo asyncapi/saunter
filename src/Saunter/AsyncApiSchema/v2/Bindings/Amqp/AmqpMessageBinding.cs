@@ -1,20 +1,28 @@
-using System.Text.Json;
-using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 
 namespace Saunter.AsyncApiSchema.v2.Bindings.Amqp
 {
     /// <remarks>
     /// See: https://github.com/asyncapi/bindings/blob/master/amqp/README.md#message-binding-object
     /// </remarks>
-    public class AmqpMessageBinding : IMessageBinding
+    public class AmqpMessageBinding
     {
-        [JsonPropertyName("contentEncoding")]
+        /// <summary>
+        /// A MIME encoding for the message content.
+        /// </summary>
+        [JsonProperty("contentEncoding", NullValueHandling = NullValueHandling.Ignore)]
         public string ContentEncoding { get; set; }
 
-        [JsonPropertyName("messageType")]
+        /// <summary>
+        /// Application-specific message type.
+        /// </summary>
+        [JsonProperty("messageType", NullValueHandling = NullValueHandling.Ignore)]
         public string MessageType { get; set; }
 
-        [JsonPropertyName("bindingVersion")]
+        /// <summary>
+        /// The version of this binding. If omitted, "latest" MUST be assumed.
+        /// </summary>
+        [JsonProperty("bindingVersion", NullValueHandling = NullValueHandling.Ignore)]
         public string BindingVersion { get; set; }
     }
 }

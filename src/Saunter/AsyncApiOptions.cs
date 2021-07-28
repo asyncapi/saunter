@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reflection;
-using System.Runtime.Serialization;
-using System.Text.Json;
-using System.Text.Json.Serialization;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using NJsonSchema.Generation;
 using Saunter.AsyncApiSchema.v2;
-using Saunter.Generation;
 using Saunter.Generation.Filters;
-using Saunter.Utils;
+using Saunter.Generation.SchemaGeneration;
 
 namespace Saunter
 {
@@ -25,61 +23,6 @@ namespace Saunter
         public IList<Type> AssemblyMarkerTypes { get; set; } = new List<Type>();
 
         /// <summary>
-        /// A function to select a schemaId for a type.
-        /// </summary>
-        public Func<Type, string> SchemaIdSelector { get; set; } = DefaultSchemaIdFactory.Generate;
-
-        /// <summary>
-        /// A function that specifies if the member name of the enum should be used instead of its value.
-        /// </summary>
-        public Func<Type, bool> UseEnumMemberName { get; set; } = type =>
-        {
-            var jsonConverterAttribute = type.GetCustomAttribute<JsonConverterAttribute>();
-            return jsonConverterAttribute?.ConverterType == typeof(JsonStringEnumConverter)
-                || jsonConverterAttribute?.ConverterType?.FullName == "System.Text.Json.Serialization.JsonStringEnumMemberConverter"
-                || jsonConverterAttribute?.ConverterType == typeof(EnumMemberConverter);
-        };
-
-        /// <summary>
-        /// A function that returns the enum member name.
-        /// </summary>
-        public Func<Type, Enum, string> EnumMemberNameSelector { get; set; } = (type, val) =>
-        {
-            var converterType = type.GetCustomAttribute<JsonConverterAttribute>()?.ConverterType;
-            if (converterType?.FullName == "System.Text.Json.Serialization.JsonStringEnumMemberConverter"
-                || converterType == typeof(EnumMemberConverter))
-            {
-                var enumMemberAttribute = val.GetCustomAttribute<EnumMemberAttribute>();
-                if (enumMemberAttribute?.Value != null)
-                {
-                    return enumMemberAttribute.Value;
-                }
-            }
-
-            return val.ToString();
-        };
-
-        /// <summary>
-        /// A function to select the name for a property.
-        /// </summary>
-        public Func<MemberInfo, string> PropertyNameSelector { get; set; } = prop =>
-        {
-            var jsonPropertyAttribute = prop.GetCustomAttribute<JsonPropertyNameAttribute>();
-            if (jsonPropertyAttribute?.Name != null)
-            {
-                return jsonPropertyAttribute.Name;
-            }
-
-            return JsonNamingPolicy.CamelCase.ConvertName(prop.Name);
-        };
-
-        /// <summary>
-        /// A function to filter the properties which will be included.
-        /// </summary>
-        public Func<MemberInfo, bool> PropertyFilter { get; set; } = prop => prop.GetCustomAttribute<JsonIgnoreAttribute>() == null;
-
-
-        /// <summary>
         /// A list of filters that will be applied to the generated AsyncAPI document.
         /// </summary>
         public IList<IDocumentFilter> DocumentFilters { get; } = new List<IDocumentFilter>();
@@ -95,9 +38,23 @@ namespace Saunter
         public IList<IOperationFilter> OperationFilters { get; } = new List<IOperationFilter>();
 
         /// <summary>
-        /// Options related to the Saunter middleware
+        /// Options related to the Saunter middleware.
         /// </summary>
         public AsyncApiMiddlewareOptions Middleware { get; } = new AsyncApiMiddlewareOptions();
+
+        /// <summary>
+        /// Settings related to the JSON Schema generation.
+        /// </summary>
+        public JsonSchemaGeneratorSettings JsonSchemaGeneratorSettings { get; set; } = new JsonSchemaGeneratorSettings()
+        {
+            TypeNameGenerator = new CamelCaseTypeNameGenerator(),
+            SerializerSettings = new JsonSerializerSettings()
+            {
+                ContractResolver = new CamelCasePropertyNamesContractResolver(),
+                NullValueHandling = NullValueHandling.Ignore,
+                DefaultValueHandling = DefaultValueHandling.Ignore
+            },
+        };
     }
 
     public class AsyncApiMiddlewareOptions

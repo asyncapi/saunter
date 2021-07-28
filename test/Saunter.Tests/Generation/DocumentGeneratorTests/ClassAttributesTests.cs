@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Reflection;
 using Microsoft.Extensions.Options;
+using NJsonSchema.Generation;
 using Saunter.AsyncApiSchema.v2;
 using Saunter.Attributes;
 using Saunter.Generation;
@@ -18,9 +19,8 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
         {
             // Arrange
             var options = new AsyncApiOptions();
-            var schemaGenerator = new SchemaGenerator(Options.Create(options));
-            var documentGenerator = new DocumentGenerator(Options.Create(options), schemaGenerator);
-
+            var documentGenerator = new DocumentGenerator(Options.Create(options));
+            
             // Act
             var document = documentGenerator.GenerateDocument(new[] { typeof(TenantMessageConsumer).GetTypeInfo() });
 
@@ -40,9 +40,9 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
             var messages = subscribe.Message.ShouldBeOfType<Messages>();
             messages.OneOf.Count.ShouldBe(3);
 
-            messages.OneOf.ShouldContain(m => m.Name == "tenantCreated");
-            messages.OneOf.ShouldContain(m => m.Name == "tenantUpdated");
-            messages.OneOf.ShouldContain(m => m.Name == "tenantRemoved");
+            messages.OneOf.OfType<MessageReference>().ShouldContain(m => m.Id == "tenantCreated");
+            messages.OneOf.OfType<MessageReference>().ShouldContain(m => m.Id == "tenantUpdated");
+            messages.OneOf.OfType<MessageReference>().ShouldContain(m => m.Id == "tenantRemoved");
         }
 
 
@@ -51,9 +51,8 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
         {
             // Arrange
             var options = new AsyncApiOptions();
-            var schemaGenerator = new SchemaGenerator(Options.Create(options));
-            var documentGenerator = new DocumentGenerator(Options.Create(options), schemaGenerator);
-            
+            var documentGenerator = new DocumentGenerator(Options.Create(options));
+
             // Act
             var document = documentGenerator.GenerateDocument(new []{ typeof(TenantGenericMessagePublisher).GetTypeInfo() });
 
@@ -73,9 +72,9 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
             var messages = publish.Message.ShouldBeOfType<Messages>();
             messages.OneOf.Count.ShouldBe(3);
             
-            messages.OneOf.ShouldContain(m => m.Name == "anyTenantCreated");
-            messages.OneOf.ShouldContain(m => m.Name == "anyTenantUpdated");
-            messages.OneOf.ShouldContain(m => m.Name == "anyTenantRemoved");
+            messages.OneOf.OfType<MessageReference>().ShouldContain(m => m.Id == "anyTenantCreated");
+            messages.OneOf.OfType<MessageReference>().ShouldContain(m => m.Id == "anyTenantUpdated");
+            messages.OneOf.OfType<MessageReference>().ShouldContain(m => m.Id == "anyTenantRemoved");
         }
 
 
@@ -84,9 +83,8 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
         {
             // Arrange
             var options = new AsyncApiOptions();
-            var schemaGenerator = new SchemaGenerator(Options.Create(options));
-            var documentGenerator = new DocumentGenerator(Options.Create(options), schemaGenerator);
-            
+            var documentGenerator = new DocumentGenerator(Options.Create(options));
+
             // Act
             var document = documentGenerator.GenerateDocument(new []{ typeof(TenantSingleMessagePublisher).GetTypeInfo() });
 
@@ -103,8 +101,8 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
             publish.OperationId.ShouldBe("TenantSingleMessagePublisher");
             publish.Summary.ShouldBe("Publish single domain event about tenants.");
 
-            var message = publish.Message.ShouldBeOfType<Message>();
-            message.Name.ShouldBe("anyTenantCreated");
+            var message = publish.Message.ShouldBeOfType<MessageReference>();
+            message.Id.ShouldBe("anyTenantCreated");
         }
 
 
@@ -113,8 +111,7 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
         {
             // Arrange
             var options = new AsyncApiOptions();
-            var schemaGenerator = new SchemaGenerator(Options.Create(options));
-            var documentGenerator = new DocumentGenerator(Options.Create(options), schemaGenerator);
+            var documentGenerator = new DocumentGenerator(Options.Create(options));
 
             // Act
             var document = documentGenerator.GenerateDocument(new[]
@@ -145,16 +142,16 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
             var subscribeMessages = subscribe.Message.ShouldBeOfType<Messages>();
             subscribeMessages.OneOf.Count.ShouldBe(3);
 
-            subscribeMessages.OneOf.ShouldContain(m => m.Name == "tenantCreated");
-            subscribeMessages.OneOf.ShouldContain(m => m.Name == "tenantUpdated");
-            subscribeMessages.OneOf.ShouldContain(m => m.Name == "tenantRemoved");
+            subscribeMessages.OneOf.OfType<MessageReference>().ShouldContain(m => m.Id == "tenantCreated");
+            subscribeMessages.OneOf.OfType<MessageReference>().ShouldContain(m => m.Id == "tenantUpdated");
+            subscribeMessages.OneOf.OfType<MessageReference>().ShouldContain(m => m.Id == "tenantRemoved");
 
             var publishMessages = subscribe.Message.ShouldBeOfType<Messages>();
             publishMessages.OneOf.Count.ShouldBe(3);
 
-            publishMessages.OneOf.ShouldContain(m => m.Name == "tenantCreated");
-            publishMessages.OneOf.ShouldContain(m => m.Name == "tenantUpdated");
-            publishMessages.OneOf.ShouldContain(m => m.Name == "tenantRemoved");
+            publishMessages.OneOf.OfType<MessageReference>().ShouldContain(m => m.Id == "tenantCreated");
+            publishMessages.OneOf.OfType<MessageReference>().ShouldContain(m => m.Id == "tenantUpdated");
+            publishMessages.OneOf.OfType<MessageReference>().ShouldContain(m => m.Id == "tenantRemoved");
         }
 
 
@@ -163,9 +160,8 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
         {
             // Arrange
             var options = new AsyncApiOptions();
-            var schemaGenerator = new SchemaGenerator(Options.Create(options));
-            var documentGenerator = new DocumentGenerator(Options.Create(options), schemaGenerator);
-            
+            var documentGenerator = new DocumentGenerator(Options.Create(options));
+
             // Act
             var document = documentGenerator.GenerateDocument(new []{ typeof(OneTenantMessageConsumer).GetTypeInfo() });
             
@@ -177,8 +173,8 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
             channel.Key.ShouldBe("asw.tenant_service.{tenant_id}.{tenant_status}");
             channel.Value.Description.ShouldBe("A tenant events.");
             channel.Value.Parameters.Count.ShouldBe(2);
-            channel.Value.Parameters.ShouldContain(p => p.Key.ToString() == "tenant_id" && p.Value.Schema != null && p.Value.Description == "The tenant identifier.");
-            channel.Value.Parameters.ShouldContain(p => p.Key.ToString() == "tenant_status" && p.Value.Schema != null && p.Value.Description == "The tenant status.");
+            channel.Value.Parameters.Values.OfType<Parameter>().ShouldContain(p => p.Name == "tenant_id" && p.Schema != null && p.Description == "The tenant identifier.");
+            channel.Value.Parameters.Values.OfType<Parameter>().ShouldContain(p => p.Name == "tenant_status" && p.Schema != null && p.Description == "The tenant status.");
             
             var subscribe = channel.Value.Subscribe;
             subscribe.ShouldNotBeNull();
@@ -188,9 +184,9 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
             var messages = subscribe.Message.ShouldBeOfType<Messages>();
             messages.OneOf.Count.ShouldBe(3);
             
-            messages.OneOf.ShouldContain(m => m.Name == "tenantCreated");
-            messages.OneOf.ShouldContain(m => m.Name == "tenantUpdated");
-            messages.OneOf.ShouldContain(m => m.Name == "tenantRemoved");
+            messages.OneOf.OfType<MessageReference>().ShouldContain(m => m.Id == "tenantCreated");
+            messages.OneOf.OfType<MessageReference>().ShouldContain(m => m.Id == "tenantUpdated");
+            messages.OneOf.OfType<MessageReference>().ShouldContain(m => m.Id == "tenantRemoved");
         }
         
 

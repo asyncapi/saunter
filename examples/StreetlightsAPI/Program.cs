@@ -6,9 +6,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using Saunter;
 using Saunter.AsyncApiSchema.v2;
-using Saunter.Generation;
 
 namespace StreetlightsAPI
 {
@@ -53,8 +53,7 @@ namespace StreetlightsAPI
                 {
                     Info = new Info("Streetlights API", "1.0.0")
                     {
-                        Description =
-                            "The Smartylighting Streetlights API allows you\nto remotely manage the city lights.",
+                        Description = "The Smartylighting Streetlights API allows you to remotely manage the city lights.",
                         License = new License("Apache 2.0")
                         {
                             Url = "https://www.apache.org/licenses/LICENSE-2.0"
@@ -62,9 +61,11 @@ namespace StreetlightsAPI
                     },
                     Servers =
                     {
-                        {"mosquitto", new Server("test.mosquitto.org", "mqtt")}
+                        ["mosquitto"] = new Server("test.mosquitto.org", "mqtt")
                     }
                 };
+
+                options.JsonSchemaGeneratorSettings.SerializerSettings.Formatting = Formatting.Indented;
             });
 
 

@@ -7,6 +7,16 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 ## [Unreleased]
 
+
+## [v0.5.0] - 2021-07-28
+### Changed
+- Added ability to use bindings by specifying a BindingsRef in the attribute e.g. `[Channel("light.measured", BindingsRef = "my-amqp-binding")]`
+- Added MQTT bindings
+- Swapped custom JSON schema generation for NJsonSchema
+- Removed direct dependencies on System.Text.Json
+
+
+
 ## [v0.4.0] - 2021-07-27
 ### Changed
 - UI no longer proxies to playground.asyncapi.io, but instead uses the asyncapi standalone react component as an embedded resource.

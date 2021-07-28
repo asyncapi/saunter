@@ -1,37 +1,30 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Collections.Generic;
+using Newtonsoft.Json;
+using NJsonSchema;
 
 namespace Saunter.AsyncApiSchema.v2.Bindings.Kafka
 {
     /// <remarks>
     /// See: https://github.com/asyncapi/bindings/tree/master/kafka#Operation-binding-object
     /// </remarks>
-    public class KafkaOperationBinding : IOperationBinding
+    public class KafkaOperationBinding
     {
-        [JsonPropertyName("groupId")]
-        public KafkaOperationBindingGroupId GroupId { get; set; }
+        /// <summary>
+        /// Id of the consumer group.
+        /// </summary>
+        [JsonProperty("groupId", NullValueHandling = NullValueHandling.Ignore)]
+        public JsonSchema GroupId { get; set; }
 
-        [JsonPropertyName("clientId")]
-        public KafkaOperationBindingClientId ClientId { get; set; }
+        /// <summary>
+        /// Id of the consumer inside a consumer group.
+        /// </summary>
+        [JsonProperty("clientId", NullValueHandling = NullValueHandling.Ignore)]
+        public JsonSchema ClientId { get; set; }
 
-        [JsonPropertyName("bindingVersion")]
+        /// <summary>
+        /// The version of this binding. If omitted, "latest" MUST be assumed.
+        /// </summary>
+        [JsonProperty("bindingVersion", NullValueHandling = NullValueHandling.Ignore)]
         public string BindingVersion { get; set; }
-    }
-
-    public class KafkaOperationBindingGroupId
-    {
-        [JsonPropertyName("type")]
-        public string Type { get; set; }
-
-        [JsonPropertyName("enum")]
-        public string[] Enum { get; set; }
-    }
-
-    public class KafkaOperationBindingClientId
-    {
-        [JsonPropertyName("type")]
-        public string Type { get; set; }
-
-        [JsonPropertyName("enum")]
-        public string[] Enum { get; set; }
     }
 }

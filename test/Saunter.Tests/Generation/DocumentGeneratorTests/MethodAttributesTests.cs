@@ -5,7 +5,6 @@ using Microsoft.Extensions.Options;
 using Saunter.AsyncApiSchema.v2;
 using Saunter.Attributes;
 using Saunter.Generation;
-using Saunter.Generation.SchemaGeneration;
 using Shouldly;
 using Xunit;
 
@@ -18,9 +17,8 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
         {
             // Arrange
             var options = new AsyncApiOptions();
-            var schemaGenerator = new SchemaGenerator(Options.Create(options));
-            var documentGenerator = new DocumentGenerator(Options.Create(options), schemaGenerator);
-            
+            var documentGenerator = new DocumentGenerator(Options.Create(options));
+
             // Act
             var document = documentGenerator.GenerateDocument(new []{ typeof(TenantMessagePublisher).GetTypeInfo() });
             
@@ -40,9 +38,9 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
             var messages = publish.Message.ShouldBeOfType<Messages>();
             messages.OneOf.Count.ShouldBe(3);
             
-            messages.OneOf.ShouldContain(m => m.Name == "anyTenantCreated");
-            messages.OneOf.ShouldContain(m => m.Name == "anyTenantUpdated");
-            messages.OneOf.ShouldContain(m => m.Name == "anyTenantRemoved");
+            messages.OneOf.OfType<MessageReference>().ShouldContain(m => m.Id == "anyTenantCreated");
+            messages.OneOf.OfType<MessageReference>().ShouldContain(m => m.Id == "anyTenantUpdated");
+            messages.OneOf.OfType<MessageReference>().ShouldContain(m => m.Id == "anyTenantRemoved");
         }
 
         [AsyncApi]

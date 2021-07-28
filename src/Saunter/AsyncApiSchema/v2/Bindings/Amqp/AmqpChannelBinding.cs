@@ -1,64 +1,108 @@
 using System.Runtime.Serialization;
-using System.Text.Json.Serialization;
-using Saunter.Utils;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace Saunter.AsyncApiSchema.v2.Bindings.Amqp
 {
     /// <remarks>
     /// https://github.com/asyncapi/bindings/blob/master/amqp/README.md#channel
     /// </remarks>
-    public class AmqpChannelBinding : IChannelBinding
+    public class AmqpChannelBinding
     {
-        [JsonPropertyName("is")]
-        [JsonConverter(typeof(EnumMemberConverter))]
-        public AmqpChannelBindingIs Is { get; set; }
+        /// <summary>
+        /// Defines what type of channel is it. Can be either queue or routingKey (default).
+        /// </summary>
+        [JsonProperty("is", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonConverter(typeof(StringEnumConverter))]
+        public AmqpChannelBindingIs? Is { get; set; }
 
-        [JsonPropertyName("exchange")]
+        /// <summary>
+        /// When is=routingKey, this object defines the exchange properties.
+        /// </summary>
+        [JsonProperty("exchange", NullValueHandling = NullValueHandling.Ignore)]
         public AmqpChannelBindingExchange Exchange { get; set; }
 
-        [JsonPropertyName("queue")]
+        /// <summary>
+        /// When is=queue, this object defines the queue properties.
+        /// </summary>
+        [JsonProperty("queue", NullValueHandling = NullValueHandling.Ignore)]
         public AmqpChannelBindingQueue Queue { get; set; }
 
-        [JsonPropertyName("bindingVersion")]
+        /// <summary>
+        /// The version of this binding. If omitted, "latest" MUST be assumed.
+        /// </summary>
+        [JsonProperty("bindingVersion", NullValueHandling = NullValueHandling.Ignore)]
         public string BindingVersion { get; set; }
     }
 
     public class AmqpChannelBindingExchange
     {
-        [JsonPropertyName("name")]
+        /// <summary>
+        /// The name of the exchange. It MUST NOT exceed 255 characters long.
+        /// </summary>
+        [JsonProperty("name", NullValueHandling = NullValueHandling.Ignore)]
         public string Name { get; set; }
 
-        [JsonPropertyName("type")]
-        public string Type { get; set; }
+        /// <summary>
+        /// The type of the exchange. Can be either topic, direct, fanout, default or headers.
+        /// </summary>
+        [JsonProperty("type", NullValueHandling = NullValueHandling.Ignore)]
+        public AmqpChannelBindingExchangeType? Type { get; set; }
 
-        [JsonPropertyName("durable")]
+        /// <summary>
+        /// Whether the exchange should survive broker restarts or not.
+        /// </summary>
+        [JsonProperty("durable", NullValueHandling = NullValueHandling.Ignore)]
         public bool? Durable { get; set; }
 
-        [JsonPropertyName("autoDelete")]
+        /// <summary>
+        /// Whether the exchange should be deleted when the last queue is unbound from it.
+        /// </summary>
+        [JsonProperty("autoDelete", NullValueHandling = NullValueHandling.Ignore)]
         public bool? AutoDelete { get; set; }
 
-        [JsonPropertyName("vhost")]
+        /// <summary>
+        /// The virtual host of the exchange. Defaults to /.
+        /// </summary>
+        [JsonProperty("vhost", NullValueHandling = NullValueHandling.Ignore)]
         public string VirtualHost { get; set; }
     }
 
     public class AmqpChannelBindingQueue
     {
-        [JsonPropertyName("name")]
+        /// <summary>
+        /// The name of the queue. It MUST NOT exceed 255 characters long.
+        /// </summary>
+        [JsonProperty("name", NullValueHandling = NullValueHandling.Ignore)]
         public string Name { get; set; }
 
-        [JsonPropertyName("durable")]
+        /// <summary>
+        /// Whether the queue should survive broker restarts or not.
+        /// </summary>
+        [JsonProperty("durable", NullValueHandling = NullValueHandling.Ignore)]
         public bool? Durable { get; set; }
 
-        [JsonPropertyName("exclusive")]
+        /// <summary>
+        /// Whether the queue should be used only by one connection or not.
+        /// </summary>
+        [JsonProperty("exclusive", NullValueHandling = NullValueHandling.Ignore)]
         public bool? Exclusive { get; set; }
 
-        [JsonPropertyName("autoDelete")]
+        /// <summary>
+        /// Whether the queue should be deleted when the last consumer unsubscribes.
+        /// </summary>
+        [JsonProperty("autoDelete", NullValueHandling = NullValueHandling.Ignore)]
         public bool? AutoDelete { get; set; }
 
-        [JsonPropertyName("vhost")]
+        /// <summary>
+        /// The virtual host of the queue. Defaults to /.
+        /// </summary>
+        [JsonProperty("vhost", NullValueHandling = NullValueHandling.Ignore)]
         public string VirtualHost { get; set; }
     }
 
+
+    [JsonConverter(typeof(StringEnumConverter))]
     public enum AmqpChannelBindingIs
     {
         [EnumMember(Value = "routingKey")]
@@ -68,16 +112,22 @@ namespace Saunter.AsyncApiSchema.v2.Bindings.Amqp
         Queue,
     }
 
-    public static class AmqpChannelBindingExchangeType
+    [JsonConverter(typeof(StringEnumConverter))]
+    public enum AmqpChannelBindingExchangeType
     {
-        public const string Topic = "topic";
+        [EnumMember(Value = "topic")]
+        Topic,
 
-        public const string Direct = "direct";
+        [EnumMember(Value = "direct")]
+        Direct,
 
-        public const string Fanout = "fanout";
+        [EnumMember(Value = "fanout")]
+        Fanout,
 
-        public const string Default = "default";
+        [EnumMember(Value = "default")]
+        Default,
 
-        public const string Headers = "headers";
+        [EnumMember(Value = "headers")]
+        Headers,
     }
 }

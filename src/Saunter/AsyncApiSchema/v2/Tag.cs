@@ -1,6 +1,5 @@
 using System;
-using System.Text.Json;
-using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 
 namespace Saunter.AsyncApiSchema.v2
 {
@@ -11,13 +10,22 @@ namespace Saunter.AsyncApiSchema.v2
             Name = name ?? throw new ArgumentNullException(nameof(name));
         }
 
-        [JsonPropertyName("name")]
+        /// <summary>
+        /// The name of the tag.
+        /// </summary>
+        [JsonProperty("name")]
         public string Name { get; }
 
-        [JsonPropertyName("description")]
+        /// <summary>
+        /// A short description for the tag. CommonMark syntax can be used for rich text representation.
+        /// </summary>
+        [JsonProperty("description")]
         public string Description { get; set; }
 
-        [JsonPropertyName("externalDocs")]
+        /// <summary>
+        /// Additional external documentation for this tag.
+        /// </summary>
+        [JsonProperty("externalDocs")]
         public ExternalDocumentation ExternalDocs { get; set; }
 
         public static implicit operator Tag(string s)
