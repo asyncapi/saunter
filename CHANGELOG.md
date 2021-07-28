@@ -88,7 +88,7 @@ Microsoft.NET.Test.Sdk 16.8.3 -> 16.10.0
 When updating here set baseVersion to the previous tag and targetVersion to your new tag
 This link will be dead until after you have completed the pull request and tagged the new version in master
 -->
-[Unreleased]: https://github.com/tehmantra/saunter/compare/v0.5.0...master
+[Unreleased]: https://github.com/tehmantra/saunter/compare/v0.5.0...main
 [v0.5.0]: https://github.com/tehmantra/saunter/compare/v0.4.0...v0.5.0
 [v0.4.0]: https://github.com/tehmantra/saunter/compare/v0.3.1...v0.4.0
 [v0.3.1]: https://github.com/tehmantra/saunter/compare/v0.3.0...v0.3.1
