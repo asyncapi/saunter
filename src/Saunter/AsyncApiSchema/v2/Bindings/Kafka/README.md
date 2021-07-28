@@ -1,0 +1,1 @@
+https://github.com/asyncapi/bindings/blob/master/kafka/README.md

@@ -9,9 +9,6 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Saunter;
 using Saunter.AsyncApiSchema.v2;
-using Saunter.AsyncApiSchema.v2.Bindings;
-using Saunter.AsyncApiSchema.v2.Bindings.Mqtt;
-using Saunter.Generation;
 
 namespace StreetlightsAPI
 {

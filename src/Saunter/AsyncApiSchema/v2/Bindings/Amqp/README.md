@@ -1,0 +1,1 @@
+https://github.com/asyncapi/bindings/blob/master/amqp/README.md

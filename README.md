@@ -120,107 +120,48 @@ services.AddAsyncApiSchemaGeneration(options =>
 
 
 ## Bindings
-Bindings are used to describe protocol specific information. These can be added by creating a Filter which will be applied to each operation during the AsyncAPI document generation.
+Bindings are used to describe protocol specific information. These can be added to the AsyncAPI document and then applied to different components by setting the `BindingsRef` property in the relevant attributes `[OperationAttribute]`, `[MessageAttribute]`, `[ChannelAttribute]`
 
-To use a filter, create a class which implements `IOperationFilter` and register it in `Startup.cs` 
-
-In the filter you can set custom binding information.
 
 ```csharp
-public class MyCustomOperationFilter : IOperationFilter
-{
-    public void Apply(Operation operation, OperationFilterContext context)
-    {
-        // Here you have access to the generated Operation which you can modify.
-        // You are also provided with the Context which contains things like the MethodInfo and Attribute
-        // used to generate the Operation.
-        
-        operation.Bindings = new OperationBindings
-        {
-            Http = // set http binding info
-            Kafka = // set kafka binding info
-            // etc
-        }
-    }
-}
-```
-
-```csharp
+// Startup.cs
 services.AddAsyncApiSchemaGeneration(options =>
 {
-    options.OperationFilters.Add(new MyCustomOperationFilter());
+    options.AsyncApi = new AsyncApiDocument
+    {
+        Components = 
+        {
+            ChannelBindings = 
+            {
+                ["my-amqp-binding"] = new ChannelBindings
+                {
+                    Amqp = new AmqpChannelBinding
+                    {
+                        Is = AmqpChannelBindingIs.RoutingKey,
+                        Exchange = new AmqpChannelBindingExchange
+                        {
+                            Name = "example-exchange",
+                            VirtualHost = "/development"
+                        }
+                    }
+                }
+            }
+        }
+    }
 });
 ```
 
-Once these steps are complete, when you generate your documentation any class with a `[PublishOperation]` or `[SubscribeOperation]` attributes will have the binding information added to the documentation.
-
-
-### Http Bindings
-
-Example HTTP binding operation filter
- 
 ```csharp
-public class HttpOperationFilter : IOperationFilter
-{
-    public void Apply(Operation operation, OperationFilterContext context)
-    {
-        operation.Bindings = new OperationBindings
-        {
-            Http = new HttpOperationBinding
-            {
-                Type = "request",
-                Method = "GET",
-                Query = new HttpOperationBindingQuery
-                {
-                    Type = "object",
-                    Required = new string[] { "companyId" },
-                    Properties = new
-                    {
-                        CompanyId = new
-                        {
-                            Type = "number",
-                            Minimum = 1,
-                            Desciption = "The Id of the company."
-                        }
-                    },
-                    AdditionalProperties = false
-                },
-                BindingVersion = "0.1.0"
-            }
-        };
-    }
-}
+[Channel("light.measured", BindingsRef = "my-amqp-binding")] // Set the BindingsRef property
+public void PublishLightMeasuredEvent(Streetlight streetlight, int lumens) {}
 ```
 
-### Kafka Bindings
- 
-Example Kafka binding operation filter
+Available bindings:
+* [AMQP](./src/Saunter/AsyncApiSchema/v2/Bindings/Amqp)
+* [HTTP](./src/Saunter/AsyncApiSchema/v2/Bindings/Http)
+* [Kafka](./src/Saunter/AsyncApiSchema/v2/Bindings/Kafka)
+* [MQTT](./src/Saunter/AsyncApiSchema/v2/Bindings/Mqtt)
 
-```csharp
-public class KafkaOperationFilter : IOperationFilter
-{
-    public void Apply(Operation operation, OperationFilterContext context)
-    {
-        operation.Bindings = new OperationBindings
-        {
-            Kafka = new KafkaOperationBinding
-            {          
-                GroupId = new KafkaOperationBindingGroupId
-                {
-                    Type = "string",
-                    Enum = new string[] { "myGroupId" }     
-                },
-                ClientId = new KafkaOperationBindingClientId
-                {
-                    Type = "string",
-                    Enum = new string[] { "myClientId" }
-                },
-                BindingVersion = "0.1.0"
-            }
-        };
-    }
-}
-```
 
 ## Contributing
 
