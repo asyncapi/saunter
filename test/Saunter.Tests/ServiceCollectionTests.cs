@@ -59,7 +59,7 @@ namespace Saunter.Tests
 
             var provider = sp.GetRequiredService<IAsyncApiDocumentProvider>();
 
-            var document = provider.GetDocument(new AsyncApiOptions());
+            var document = provider.GetDocument(new AsyncApiOptions(), new AsyncApiDocument());
 
             document.ShouldNotBeNull();
         }

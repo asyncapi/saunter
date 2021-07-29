@@ -22,7 +22,7 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
             var documentGenerator = new DocumentGenerator();
             
             // Act
-            var document = documentGenerator.GenerateDocument(new[] { typeof(TenantMessageConsumer).GetTypeInfo() }, options);
+            var document = documentGenerator.GenerateDocument(new[] { typeof(TenantMessageConsumer).GetTypeInfo() }, options, options.AsyncApi);
 
             // Assert
             document.ShouldNotBeNull();
@@ -54,7 +54,7 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
             var documentGenerator = new DocumentGenerator();
 
             // Act
-            var document = documentGenerator.GenerateDocument(new []{ typeof(TenantGenericMessagePublisher).GetTypeInfo() }, options);
+            var document = documentGenerator.GenerateDocument(new []{ typeof(TenantGenericMessagePublisher).GetTypeInfo() }, options, options.AsyncApi);
 
             // Assert
             document.ShouldNotBeNull();
@@ -86,7 +86,7 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
             var documentGenerator = new DocumentGenerator();
 
             // Act
-            var document = documentGenerator.GenerateDocument(new []{ typeof(TenantSingleMessagePublisher).GetTypeInfo() }, options);
+            var document = documentGenerator.GenerateDocument(new []{ typeof(TenantSingleMessagePublisher).GetTypeInfo() }, options, options.AsyncApi);
 
             // Assert
             document.ShouldNotBeNull();
@@ -118,7 +118,7 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
             {
                 typeof(TenantMessageConsumer).GetTypeInfo(),
                 typeof(TenantMessagePublisher).GetTypeInfo()
-            }, options);
+            }, options, options.AsyncApi);
 
             // Assert
             document.ShouldNotBeNull();
@@ -163,7 +163,7 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
             var documentGenerator = new DocumentGenerator();
 
             // Act
-            var document = documentGenerator.GenerateDocument(new []{ typeof(OneTenantMessageConsumer).GetTypeInfo() }, options);
+            var document = documentGenerator.GenerateDocument(new []{ typeof(OneTenantMessageConsumer).GetTypeInfo() }, options, options.AsyncApi);
             
             // Assert
             document.ShouldNotBeNull();

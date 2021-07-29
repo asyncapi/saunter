@@ -37,7 +37,8 @@ namespace Saunter.Tests.Generation
             using (var serviceprovider = services.BuildServiceProvider())
             {
                 var documentProvider = serviceprovider.GetRequiredService<IAsyncApiDocumentProvider>();
-                var document = documentProvider.GetDocument(serviceprovider.GetRequiredService<IOptions<AsyncApiOptions>>().Value);
+                var options = serviceprovider.GetRequiredService<IOptions<AsyncApiOptions>>().Value;
+                var document = documentProvider.GetDocument(options, options.AsyncApi);
 
                 document.Components.OperationTraits.ShouldContainKey("exampleTrait");
             }

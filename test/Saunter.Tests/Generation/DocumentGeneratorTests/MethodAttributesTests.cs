@@ -20,7 +20,7 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
             var documentGenerator = new DocumentGenerator();
 
             // Act
-            var document = documentGenerator.GenerateDocument(new []{ typeof(TenantMessagePublisher).GetTypeInfo() }, options);
+            var document = documentGenerator.GenerateDocument(new []{ typeof(TenantMessagePublisher).GetTypeInfo() }, options, options.AsyncApi);
             
             // Assert
             document.ShouldNotBeNull();
