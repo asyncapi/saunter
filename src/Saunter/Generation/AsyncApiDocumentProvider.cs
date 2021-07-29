@@ -3,7 +3,6 @@ using System.Linq;
 using System.Reflection;
 using Saunter.AsyncApiSchema.v2;
 using Saunter.Attributes;
-using Saunter.Utils;
 
 namespace Saunter.Generation
 {
@@ -16,29 +15,29 @@ namespace Saunter.Generation
             _documentGenerator = documentGenerator;
         }
 
-        public AsyncApiDocument GetDocument(AsyncApiOptions options)
+        public AsyncApiDocument GetDocument(AsyncApiOptions options, AsyncApiDocument prototype)
         {
             if (options == null)
             {
                 throw new ArgumentNullException(nameof(options));
             }
-            var asyncApiTypes = GetAsyncApiTypes(options);
+            var asyncApiTypes = GetAsyncApiTypes(options, prototype);
 
-            var document = _documentGenerator.GenerateDocument(asyncApiTypes, options);
+            var document = _documentGenerator.GenerateDocument(asyncApiTypes, options, prototype);
 
             return document;
         }
-        
-        
+
+
         /// <summary>
-        /// Get all types with an <see cref="AsyncApiAttribute"/> from assemblies contAsyncApiOptionsef="SaunterOptions.AssemblyMarkerTypes"/>.
+        /// Get all types with an <see cref="AsyncApiAttribute"/> from assemblies <see cref="AsyncApiOptions.AssemblyMarkerTypes"/>.
         /// </summary>
-        private TypeInfo[] GetAsyncApiTypes(AsyncApiOptions options)
+        private static TypeInfo[] GetAsyncApiTypes(AsyncApiOptions options, AsyncApiDocument prototype)
         {
             var assembliesToScan = options.AssemblyMarkerTypes.Select(t => t.Assembly);
 
             var asyncApiTypes = assembliesToScan
-                .SelectMany(a => a.DefinedTypes.Where(t => t.GetCustomAttribute<AsyncApiAttribute>()?.ApiName == options.ApiName))
+                .SelectMany(a => a.DefinedTypes.Where(t => t.GetCustomAttribute<AsyncApiAttribute>()?.DocumentName == prototype.DocumentName))
                 .ToArray();
 
             return asyncApiTypes;

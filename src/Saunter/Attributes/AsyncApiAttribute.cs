@@ -8,12 +8,11 @@ namespace Saunter.Attributes
     [AttributeUsage(AttributeTargets.Class)]
     public sealed class AsyncApiAttribute : Attribute
     {
-        public string ApiName { get; }
-
-        // Just a marker.
-        public AsyncApiAttribute(string apiName = null)
+        public string DocumentName { get; }
+        
+        public AsyncApiAttribute(string documentName = null)
         {
-            ApiName = apiName;
+            DocumentName = documentName;
         }
     }
 }

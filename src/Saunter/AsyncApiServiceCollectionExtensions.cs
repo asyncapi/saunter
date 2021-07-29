@@ -1,6 +1,7 @@
 using System;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Saunter.AsyncApiSchema.v2;
 using Saunter.Generation;
 using Saunter.Serialization;
 using Saunter.Utils;
@@ -22,9 +23,14 @@ namespace Saunter
             return services;
         }
 
-        public static IServiceCollection ConfigureNamedAsyncApi(this IServiceCollection services, string apiName, Action<AsyncApiOptions> setupAction)
+        public static IServiceCollection ConfigureNamedAsyncApi(this IServiceCollection services, string documentName, Action<AsyncApiDocument> setupAction)
         {
-            services.Configure(apiName, setupAction);
+            services.Configure<AsyncApiOptions>(options =>
+            {
+                var document = options.NamedApis.GetOrAdd(documentName, _ => new AsyncApiDocument() {DocumentName = documentName});
+
+                setupAction(document);
+            });
             return services;
         }
     }

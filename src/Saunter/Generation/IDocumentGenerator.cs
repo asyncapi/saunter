@@ -5,6 +5,6 @@ namespace Saunter.Generation
 {
     public interface IDocumentGenerator
     {
-        AsyncApiDocument GenerateDocument(TypeInfo[] asyncApiTypes, AsyncApiOptions options);
+        AsyncApiDocument GenerateDocument(TypeInfo[] asyncApiTypes, AsyncApiOptions options, AsyncApiDocument prototype);
     }
 }
