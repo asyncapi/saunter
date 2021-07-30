@@ -23,7 +23,12 @@ namespace Saunter.Utils
 
             var values = new RouteValueDictionary();
             var matcher = new TemplateMatcher(template, values);
-            matcher.TryMatch(context.Request.Path, values);
+            if (!matcher.TryMatch(context.Request.Path, values))
+            {
+                template = TemplateParser.Parse(options.Middleware.UiBaseRoute + "{*wildcard}"); 
+                matcher = new TemplateMatcher(template, values);
+                matcher.TryMatch(context.Request.Path, values);
+            }
 #else
             var values = context.Request.RouteValues;
 #endif
