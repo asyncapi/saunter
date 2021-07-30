@@ -27,6 +27,8 @@ namespace Saunter
         {
             services.Configure<AsyncApiOptions>(options =>
             {
+                options.Middleware.Route = "/asyncapi/{document}/asyncapi.json";
+                options.Middleware.UiBaseRoute = "/asyncapi/{document}/ui/";
                 var document = options.NamedApis.GetOrAdd(documentName, _ => new AsyncApiDocument() {DocumentName = documentName});
 
                 setupAction(document);

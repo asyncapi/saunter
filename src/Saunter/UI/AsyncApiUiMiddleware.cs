@@ -72,7 +72,7 @@ namespace Saunter.UI
             {
                 if (context.TryGetDocument(_options, out var document))
                 {
-                    await RespondWithAsyncApiHtml(context.Response, "/" + _options.Middleware.Route.Replace("{document}", document));
+                    await RespondWithAsyncApiHtml(context.Response, _options.Middleware.Route.Replace("{document}", document));
                 }
                 else
                 {
