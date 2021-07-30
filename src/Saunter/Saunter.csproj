@@ -25,12 +25,13 @@
 
   <ItemGroup>
     <Compile Remove="UI\node_modules\**" />
-    <EmbeddedResource Remove="UI\node_modules\**" />
     <None Remove="UI\node_modules\**" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="UI/index.html" />
+    <EmbeddedResource Include="UI/node_modules/@asyncapi/react-component/browser/standalone/index.js" LogicalName="Saunter.UI.index.js" Condition="Exists('UI/node_modules')" />
+    <EmbeddedResource Include="UI/node_modules/@asyncapi/react-component/styles/default.min.css" LogicalName="Saunter.UI.default.min.css" Condition="Exists('UI/node_modules')" />
   </ItemGroup>
 
   <Target Name="NpmInstall" BeforeTargets="Build" Inputs="UI/package.json" Outputs="UI/node_modules/.install-stamp">

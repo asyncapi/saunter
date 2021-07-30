@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Saunter.Utils;
 
 namespace Saunter.UI
 {
@@ -30,10 +31,11 @@ namespace Saunter.UI
 #endif
         {
             _options = options.Value;
+            var fileProvider = new EmbeddedFileProvider(GetType().Assembly, GetType().Namespace);
             var staticFileOptions = new StaticFileOptions
             {
                 RequestPath = UiBaseRoute,
-                FileProvider = new EmbeddedFileProvider(GetType().Assembly, GetType().Namespace),
+                FileProvider = fileProvider,
             };
             _staticFiles = new StaticFileMiddleware(next, env, Options.Create(staticFileOptions), loggerFactory);
             _namedStaticFiles = new Dictionary<string, StaticFileMiddleware>();
@@ -43,7 +45,7 @@ namespace Saunter.UI
                 var namedStaticFileOptions = new StaticFileOptions
                 {
                     RequestPath = UiBaseRoute.Replace("{document}", namedApi.Key),
-                    FileProvider = new EmbeddedFileProvider(GetType().Assembly, GetType().Namespace),
+                    FileProvider = fileProvider,
                 };
                 _namedStaticFiles.Add(namedApi.Key, new StaticFileMiddleware(next, env, Options.Create(namedStaticFileOptions), loggerFactory));
             }
@@ -54,36 +56,32 @@ namespace Saunter.UI
             if (IsRequestingUiBase(context.Request))
             {
                 context.Response.StatusCode = (int) HttpStatusCode.MovedPermanently;
-                context.Response.Headers["Location"] = UiIndexRoute;
-                return;
-            }
 
-            {
-                if (IsRequestingNamedUiBase(context.Request, out var document))
+                if (context.TryGetDocument(_options, out var document))
                 {
-                    context.Response.StatusCode = (int)HttpStatusCode.MovedPermanently;
                     context.Response.Headers["Location"] = UiIndexRoute.Replace("{document}", document);
-                    return;
                 }
+                else
+                {
+                    context.Response.Headers["Location"] = UiIndexRoute;
+                }
+                return;
             }
 
             if (IsRequestingAsyncApiUi(context.Request))
             {
-                await RespondWithAsyncApiHtml(context.Response, _options.Middleware.Route);
-                return;
-            }
-
-            {
-
-                if (IsRequestingNamedAsyncApiUi(context.Request, out var document))
+                if (context.TryGetDocument(_options, out var document))
                 {
                     await RespondWithAsyncApiHtml(context.Response, "/" + _options.Middleware.Route.Replace("{document}", document));
-                    return;
                 }
+                else
+                {
+                    await RespondWithAsyncApiHtml(context.Response, _options.Middleware.Route);
+                }
+                return;
             }
-
-            var documentName = GetDocumentName(context.Request);
-            if (documentName == null)
+            
+            if (!context.TryGetDocument(_options, out var documentName))
             {
                 await _staticFiles.Invoke(context);
             }
@@ -125,65 +123,12 @@ namespace Saunter.UI
 
         private bool IsRequestingUiBase(HttpRequest request)
         {
-            return HttpMethods.IsGet(request.Method)
-                   && string.Equals(request.Path.Value?.TrimEnd('/'), UiBaseRoute, StringComparison.OrdinalIgnoreCase);
+            return HttpMethods.IsGet(request.Method) && request.Path.IsMatchingRoute(UiBaseRoute);
         }
-
-        private bool IsRequestingNamedUiBase(HttpRequest request, out string documentName)
-        {
-            var template = TemplateParser.Parse(UiBaseRoute);
-
-            var values = new RouteValueDictionary();
-            var matcher = new TemplateMatcher(template, values);
-
-            documentName = null;
-            var matching = matcher.TryMatch(request.Path, values);
-            if (values.TryGetValue("document", out var temp))
-            {
-                documentName = temp.ToString();
-            }
-
-            return HttpMethods.IsGet(request.Method) && matching;
-        }
-
-        private string GetDocumentName(HttpRequest request)
-        {
-            var template = TemplateParser.Parse(_options.Middleware.UiBaseRoute + "{*wildcard}");
-            var values = new RouteValueDictionary();
-            var matcher = new TemplateMatcher(template, values);
-
-            string documentName = null;
-            var matching = matcher.TryMatch(request.Path, values);
-            if (values.TryGetValue("document", out var temp))
-            {
-                documentName = temp.ToString();
-            }
-
-            return documentName;
-        }
-
+        
         private bool IsRequestingAsyncApiUi(HttpRequest request)
         {
-            return HttpMethods.IsGet(request.Method)
-                   && string.Equals(request.Path, UiIndexRoute, StringComparison.OrdinalIgnoreCase);
-        }
-
-
-        private bool IsRequestingNamedAsyncApiUi(HttpRequest request, out string documentName)
-        {
-            var template = TemplateParser.Parse(UiIndexRoute);
-
-            var values = new RouteValueDictionary();
-            var matcher = new TemplateMatcher(template, values);
-
-            documentName = null;
-            var matching = matcher.TryMatch(request.Path, values);
-            if (values.TryGetValue("document", out var temp))
-            {
-                documentName = temp.ToString();
-            }
-
-            return HttpMethods.IsGet(request.Method) && matching;
+            return HttpMethods.IsGet(request.Method) && request.Path.IsMatchingRoute(UiIndexRoute);
         }
 
         private string UiIndexRoute => _options.Middleware.UiBaseRoute?.TrimEnd('/') + "/index.html";

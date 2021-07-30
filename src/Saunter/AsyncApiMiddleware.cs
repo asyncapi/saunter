@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.Routing.Template;
 using Microsoft.Extensions.Options;
 using Saunter.Serialization;
+using Saunter.Utils;
 
 namespace Saunter
 {
@@ -26,21 +27,17 @@ namespace Saunter
 
         public async Task Invoke(HttpContext context)
         {
-            string documentName = null;
-            if (!IsRequestingAsyncApiSchema(context.Request) && !IsRequestingNamedApi(context.Request, out documentName))
+            if (!IsRequestingAsyncApiSchema(context.Request))
             {
                 await _next(context);
                 return;
             }
 
             var prototype = _options.AsyncApi;
-            if (documentName != null)
+            if (context.TryGetDocument(_options, out var documentName) && !_options.NamedApis.TryGetValue(documentName, out prototype))
             {
-                if (!_options.NamedApis.TryGetValue(documentName, out prototype))
-                {
-                    await _next(context);
-                    return;
-                }
+                await _next(context);
+                return;
             }
 
             var asyncApiSchema = _asyncApiDocumentProvider.GetDocument(_options, prototype);
@@ -59,25 +56,7 @@ namespace Saunter
 
         private bool IsRequestingAsyncApiSchema(HttpRequest request)
         {
-            return HttpMethods.IsGet(request.Method)
-                   && string.Equals(request.Path, _options.Middleware.Route, StringComparison.OrdinalIgnoreCase);
-        }
-
-        private bool IsRequestingNamedApi(HttpRequest request, out string documentName)
-        {
-            var template = TemplateParser.Parse(_options.Middleware.Route);
-
-            var values = new RouteValueDictionary();
-            var matcher = new TemplateMatcher(template, values);
-
-            documentName = null;
-            var matching = matcher.TryMatch(request.Path, values);
-            if (values.TryGetValue("document", out var temp))
-            {
-                documentName = temp.ToString();
-            }
-
-            return HttpMethods.IsGet(request.Method) && matching;
+            return HttpMethods.IsGet(request.Method) && request.Path.IsMatchingRoute(_options.Middleware.Route);
         }
     }
 }
