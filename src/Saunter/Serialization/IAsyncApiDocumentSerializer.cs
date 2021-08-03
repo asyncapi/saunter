@@ -6,6 +6,6 @@ namespace Saunter.Serialization
     {
         string ContentType { get; }
 
-        string Serialize(AsyncApiDocument document);
+        string Serialize(AsyncApiDocument document, AsyncApiOptions options);
     }
 }

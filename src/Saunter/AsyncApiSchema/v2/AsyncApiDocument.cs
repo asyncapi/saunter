@@ -1,11 +1,13 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json;
 using NJsonSchema.Converters;
 
 namespace Saunter.AsyncApiSchema.v2
 {
     [JsonConverter(typeof(JsonReferenceConverter))]
-    public class AsyncApiDocument
+    public class AsyncApiDocument : ICloneable
     {
         /// <summary>
         /// Specifies the AsyncAPI Specification version being used.
@@ -29,7 +31,7 @@ namespace Saunter.AsyncApiSchema.v2
         /// Provides connection details of servers.
         /// </summary>
         [JsonProperty("servers")]
-        public Dictionary<string, Server> Servers { get; } = new Dictionary<string, Server>();
+        public Dictionary<string, Server> Servers { get; set; } = new Dictionary<string, Server>();
 
         /// <summary>
         /// A string representing the default content type to use when encoding/decoding a message's payload.
@@ -63,6 +65,8 @@ namespace Saunter.AsyncApiSchema.v2
         [JsonProperty("externalDocs", NullValueHandling = NullValueHandling.Ignore)]
         public ExternalDocumentation ExternalDocs { get; set; }
 
+        [JsonIgnore]
+        public string DocumentName { get; set; }
 
 
         public bool ShouldSerializeTags()
@@ -73,6 +77,29 @@ namespace Saunter.AsyncApiSchema.v2
         public bool ShouldSerializeServers()
         {
             return Servers != null && Servers.Count > 0;
+        }
+
+        public AsyncApiDocument Clone()
+        {
+            var clone = new AsyncApiDocument();
+            clone.Info = Info;
+            clone.Id = Id;
+            clone.DefaultContentType = DefaultContentType;
+            clone.Channels = Channels.ToDictionary(p => p.Key, p => p.Value);
+            clone.Servers = Servers.ToDictionary(p => p.Key, p => p.Value);
+            foreach (var tag in Tags)
+            {
+                clone.Tags.Add(tag);
+            }
+            clone.ExternalDocs = ExternalDocs;
+            clone.Components = Components.Clone();
+
+            return clone;
+        }
+
+        object ICloneable.Clone()
+        {
+            return Clone();
         }
     }
 }

@@ -13,7 +13,14 @@ namespace Saunter.AsyncApiSchema.v2
     /// </summary>
     public class ParameterReference : Reference, IParameter
     {
-        public ParameterReference(string id) : base(id, "#/components/parameters/{0}") { }
+        private readonly AsyncApiDocument _document;
+        public ParameterReference(string id, AsyncApiDocument document) : base(id, "#/components/parameters/{0}")
+        {
+            _document = document;
+        }
+
+        [JsonIgnore]
+        public Parameter Value => _document.Components.Parameters[Id];
     }
     
     public class Parameter : IParameter
@@ -25,7 +32,7 @@ namespace Saunter.AsyncApiSchema.v2
         [JsonProperty("description", NullValueHandling = NullValueHandling.Ignore)]
         public string Description { get; set; }
 
-        [JsonProperty("name", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonIgnore]
         public string Name { get; set; }
         /// <summary>
         /// Definition of the parameter.

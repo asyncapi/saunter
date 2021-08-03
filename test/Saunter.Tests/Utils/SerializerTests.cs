@@ -17,16 +17,16 @@ namespace Saunter.Tests.Utils
         public SerializerTests()
         {
             _options = new AsyncApiOptions();
-            _documentGenerator = new DocumentGenerator(Options.Create(_options));
+            _documentGenerator = new DocumentGenerator();
         }
 
-        protected abstract IAsyncApiDocumentSerializer CreateSerializer(IOptions<AsyncApiOptions> options);
+        protected abstract IAsyncApiDocumentSerializer CreateSerializer();
 
         [Fact]
         public void TestSerialize()
         {
-            var doc = _documentGenerator.GenerateDocument(new[] { typeof(MethodAttributesTests.TenantMessagePublisher).GetTypeInfo() });
-            var serializedDoc = CreateSerializer(Options.Create(_options)).Serialize(doc);
+            var doc = _documentGenerator.GenerateDocument(new[] { typeof(MethodAttributesTests.TenantMessagePublisher).GetTypeInfo() }, _options, _options.AsyncApi);
+            var serializedDoc = CreateSerializer().Serialize(doc, _options);
 
             serializedDoc.ShouldNotBeNullOrWhiteSpace();
         }
@@ -34,9 +34,9 @@ namespace Saunter.Tests.Utils
 
     public class NewtonsoftSerializerTests : SerializerTests
     {
-        protected override IAsyncApiDocumentSerializer CreateSerializer(IOptions<AsyncApiOptions> options)
+        protected override IAsyncApiDocumentSerializer CreateSerializer()
         {
-            return new NewtonsoftAsyncApiDocumentSerializer(options);
+            return new NewtonsoftAsyncApiDocumentSerializer();
         }
     }
 }

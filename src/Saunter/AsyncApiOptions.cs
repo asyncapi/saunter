@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -41,6 +42,9 @@ namespace Saunter
         /// Options related to the Saunter middleware.
         /// </summary>
         public AsyncApiMiddlewareOptions Middleware { get; } = new AsyncApiMiddlewareOptions();
+
+        public ConcurrentDictionary<string, AsyncApiDocument> NamedApis { get; set; } =
+            new ConcurrentDictionary<string, AsyncApiDocument>();
 
         /// <summary>
         /// Settings related to the JSON Schema generation.

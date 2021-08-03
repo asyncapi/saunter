@@ -19,10 +19,10 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
         {
             // Arrange
             var options = new AsyncApiOptions();
-            var documentGenerator = new DocumentGenerator(Options.Create(options));
+            var documentGenerator = new DocumentGenerator();
             
             // Act
-            var document = documentGenerator.GenerateDocument(new[] { typeof(TenantMessageConsumer).GetTypeInfo() });
+            var document = documentGenerator.GenerateDocument(new[] { typeof(TenantMessageConsumer).GetTypeInfo() }, options, options.AsyncApi);
 
             // Assert
             document.ShouldNotBeNull();
@@ -51,10 +51,10 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
         {
             // Arrange
             var options = new AsyncApiOptions();
-            var documentGenerator = new DocumentGenerator(Options.Create(options));
+            var documentGenerator = new DocumentGenerator();
 
             // Act
-            var document = documentGenerator.GenerateDocument(new []{ typeof(TenantGenericMessagePublisher).GetTypeInfo() });
+            var document = documentGenerator.GenerateDocument(new []{ typeof(TenantGenericMessagePublisher).GetTypeInfo() }, options, options.AsyncApi);
 
             // Assert
             document.ShouldNotBeNull();
@@ -83,10 +83,10 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
         {
             // Arrange
             var options = new AsyncApiOptions();
-            var documentGenerator = new DocumentGenerator(Options.Create(options));
+            var documentGenerator = new DocumentGenerator();
 
             // Act
-            var document = documentGenerator.GenerateDocument(new []{ typeof(TenantSingleMessagePublisher).GetTypeInfo() });
+            var document = documentGenerator.GenerateDocument(new []{ typeof(TenantSingleMessagePublisher).GetTypeInfo() }, options, options.AsyncApi);
 
             // Assert
             document.ShouldNotBeNull();
@@ -111,14 +111,14 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
         {
             // Arrange
             var options = new AsyncApiOptions();
-            var documentGenerator = new DocumentGenerator(Options.Create(options));
+            var documentGenerator = new DocumentGenerator();
 
             // Act
             var document = documentGenerator.GenerateDocument(new[]
             {
                 typeof(TenantMessageConsumer).GetTypeInfo(),
                 typeof(TenantMessagePublisher).GetTypeInfo()
-            });
+            }, options, options.AsyncApi);
 
             // Assert
             document.ShouldNotBeNull();
@@ -160,10 +160,10 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
         {
             // Arrange
             var options = new AsyncApiOptions();
-            var documentGenerator = new DocumentGenerator(Options.Create(options));
+            var documentGenerator = new DocumentGenerator();
 
             // Act
-            var document = documentGenerator.GenerateDocument(new []{ typeof(OneTenantMessageConsumer).GetTypeInfo() });
+            var document = documentGenerator.GenerateDocument(new []{ typeof(OneTenantMessageConsumer).GetTypeInfo() }, options, options.AsyncApi);
             
             // Assert
             document.ShouldNotBeNull();
@@ -173,8 +173,8 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
             channel.Key.ShouldBe("asw.tenant_service.{tenant_id}.{tenant_status}");
             channel.Value.Description.ShouldBe("A tenant events.");
             channel.Value.Parameters.Count.ShouldBe(2);
-            channel.Value.Parameters.Values.OfType<Parameter>().ShouldContain(p => p.Name == "tenant_id" && p.Schema != null && p.Description == "The tenant identifier.");
-            channel.Value.Parameters.Values.OfType<Parameter>().ShouldContain(p => p.Name == "tenant_status" && p.Schema != null && p.Description == "The tenant status.");
+            channel.Value.Parameters.Values.OfType<ParameterReference>().ShouldContain(p => p.Id == "tenant_id" && p.Value.Schema != null && p.Value.Description == "The tenant identifier.");
+            channel.Value.Parameters.Values.OfType<ParameterReference>().ShouldContain(p => p.Id == "tenant_status" && p.Value.Schema != null && p.Value.Description == "The tenant status.");
             
             var subscribe = channel.Value.Subscribe;
             subscribe.ShouldNotBeNull();

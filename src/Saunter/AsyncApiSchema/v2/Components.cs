@@ -1,12 +1,14 @@
+using System;
 using NJsonSchema;
 using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json;
 using Saunter.AsyncApiSchema.v2.Bindings;
 using Saunter.AsyncApiSchema.v2.Traits;
 
 namespace Saunter.AsyncApiSchema.v2
 {
-    public class Components
+    public class Components : ICloneable
     {
         /// <summary>
         /// An object to hold reusable Schema Objects.
@@ -130,6 +132,30 @@ namespace Saunter.AsyncApiSchema.v2
         public bool ShouldSerializeSchemas()
         {
             return Schemas != null && Schemas.Count > 0;
+        }
+
+        object ICloneable.Clone()
+        {
+            return Clone();
+        }
+
+        public Components Clone()
+        {
+            var clone = new Components();
+
+            clone.Schemas = Schemas.ToDictionary(p => p.Key, p => p.Value);
+            clone.Messages = Messages.ToDictionary(p => p.Key, p => p.Value);
+            clone.SecuritySchemes = SecuritySchemes.ToDictionary(p => p.Key, p => p.Value);
+            clone.Parameters = Parameters.ToDictionary(p => p.Key, p => p.Value);
+            clone.CorrelationIds = CorrelationIds.ToDictionary(p => p.Key, p => p.Value);
+            clone.ServerBindings = ServerBindings.ToDictionary(p => p.Key, p => p.Value);
+            clone.ChannelBindings = ChannelBindings.ToDictionary(p => p.Key, p => p.Value);
+            clone.OperationBindings = OperationBindings.ToDictionary(p => p.Key, p => p.Value);
+            clone.MessageBindings = MessageBindings.ToDictionary(p => p.Key, p => p.Value);
+            clone.OperationTraits = OperationTraits.ToDictionary(p => p.Key, p => p.Value);
+            clone.MessageTraits = MessageTraits.ToDictionary(p => p.Key, p => p.Value);
+
+            return clone;
         }
     }
 }

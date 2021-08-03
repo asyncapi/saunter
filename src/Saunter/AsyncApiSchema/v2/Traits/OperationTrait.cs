@@ -26,38 +26,38 @@ namespace Saunter.AsyncApiSchema.v2.Traits
         /// Tools and libraries MAY use the operationId to uniquely identify an operation,
         /// therefore, it is RECOMMENDED to follow common programming naming conventions.
         /// </summary>
-        [JsonProperty("operationId")]
+        [JsonProperty("operationId", NullValueHandling = NullValueHandling.Ignore)]
         public string OperationId { get; set; }
 
         /// <summary>
         /// A short summary of what the operation is about.
         /// </summary>
-        [JsonProperty("summary")]
+        [JsonProperty("summary", NullValueHandling = NullValueHandling.Ignore)]
         public string Summary { get; set; }
 
         /// <summary>
         /// A verbose explanation of the operation.
         /// CommonMark syntax can be used for rich text representation.
         /// </summary>
-        [JsonProperty("description")]
+        [JsonProperty("description", NullValueHandling = NullValueHandling.Ignore)]
         public string Description { get; set; }
 
         /// <summary>
         /// A list of tags for API documentation control. Tags can be used for logical grouping of operations.
         /// </summary>
-        [JsonProperty("tags")]
+        [JsonProperty("tags", NullValueHandling = NullValueHandling.Ignore)]
         public ISet<Tag> Tags { get; set; }
 
         /// <summary>
         /// Additional external documentation for this operation.
         /// </summary>
-        [JsonProperty("externalDocs")]
+        [JsonProperty("externalDocs", NullValueHandling = NullValueHandling.Ignore)]
         public ExternalDocumentation ExternalDocs { get; set; }
 
         /// <summary>
         /// A free-form map where the keys describe the name of the protocol and the values describe protocol-specific definitions for the operation.
         /// </summary>
-        [JsonProperty("bindings")]
+        [JsonProperty("bindings", NullValueHandling = NullValueHandling.Ignore)]
         public IOperationBindings Bindings { get; set; }
     }
 }

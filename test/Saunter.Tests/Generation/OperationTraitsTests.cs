@@ -1,4 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Saunter.AsyncApiSchema.v2;
 using Saunter.AsyncApiSchema.v2.Traits;
 using Saunter.Generation;
@@ -36,7 +37,8 @@ namespace Saunter.Tests.Generation
             using (var serviceprovider = services.BuildServiceProvider())
             {
                 var documentProvider = serviceprovider.GetRequiredService<IAsyncApiDocumentProvider>();
-                var document = documentProvider.GetDocument();
+                var options = serviceprovider.GetRequiredService<IOptions<AsyncApiOptions>>().Value;
+                var document = documentProvider.GetDocument(options, options.AsyncApi);
 
                 document.Components.OperationTraits.ShouldContainKey("exampleTrait");
             }
