@@ -11,7 +11,7 @@ Saunter is an [AsyncAPI](https://github.com/asyncapi/asyncapi) documentation gen
 
 ## Getting Started
 
-See [examples/StreetlightsAPI](examples/StreetlightsAPI).
+See [examples/StreetlightsAPI](https://github.com/tehmantra/saunter/blob/main/examples/StreetlightsAPI).
 
 
 1. Install the Saunter package
