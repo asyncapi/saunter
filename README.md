@@ -163,6 +163,70 @@ Available bindings:
 * [MQTT](./src/Saunter/AsyncApiSchema/v2/Bindings/Mqtt)
 
 
+## Multiple AsyncAPI documents
+
+You can generate multiple AsyncAPI documents by using the `ConfigureNamedAsyncApi` extension method.
+
+```cs
+// Startup.cs
+
+// Add Saunter to the application services. 
+services.AddAsyncApiSchemaGeneration(options =>
+{
+    // Specify example type(s) from assemblies to scan.
+    options.AssemblyMarkerTypes = new[] {typeof(FooMessageBus)};
+}
+
+// Configure one or more named AsyncAPI documents
+services.ConfigureNamedAsyncApi("Foo", asyncApi => 
+{
+    asyncApi.Info = new Info("Foo API", "1.0.0");
+    // ...
+});
+
+services.ConfigureNamedAsyncApi("Bar", asyncApi => 
+{
+    asyncApi.Info = new Info("Bar API", "1.0.0");
+    // ...
+});
+```
+
+Classes need to be decorated with the `AsyncApiAttribute` specifying the name of the AsyncAPI document.
+
+```cs
+[AsyncApi("Foo")]
+public class FooMessageBus 
+{
+    // Any channels defined in this class will be added to the "Foo" document
+}
+
+
+[AsyncApi("Bar")]
+public class BarMessageBus 
+{
+    // Any channels defined in this class will be added to the "Bar" document
+}
+```
+
+Each document can be accessed by specifying the name in the URL
+
+```json
+// GET /asyncapi/foo/asyncapi.json
+{
+    "info": {
+        "title": "Foo API"
+    }
+}
+
+// GET /asyncapi/bar/asyncapi.json
+{
+    "info": {
+        "title": "Bar API"
+    }
+}
+```
+
+
 ## Contributing
 
 See our [contributing guide](./CONTRIBUTING.md).
