@@ -32,8 +32,7 @@ namespace Saunter.AsyncApiSchema.v2
         [JsonProperty("description", NullValueHandling = NullValueHandling.Ignore)]
         public string Description { get; set; }
 
-        [JsonIgnore]
-        public string Name { get; set; }
+
         /// <summary>
         /// Definition of the parameter.
         /// </summary>
@@ -47,5 +46,8 @@ namespace Saunter.AsyncApiSchema.v2
         /// </summary>
         [JsonProperty("location", NullValueHandling = NullValueHandling.Ignore)]
         public string Location { get; set; }
+
+        [JsonIgnore]
+        public string Name { get; set; }
     }
 }
