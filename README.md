@@ -96,11 +96,11 @@ See [examples/StreetlightsAPI](examples/StreetlightsAPI).
    
 6. Use the published AsyncAPI UI:
 
-    ![AsyncAPI UI](./assets/asyncapi-ui-screenshot.png)
+    ![AsyncAPI UI](https://raw.githubusercontent.com/tehmantra/saunter/main/assets/asyncapi-ui-screenshot.png)
 
 ## Configuration
 
-See [the options source code](./src/Saunter/AsyncApiOptions.cs) for detailed info.
+See [the options source code](https://github.com/tehmantra/saunter/blob/main/src/Saunter/AsyncApiOptions.cs) for detailed info.
 
 Common options are below:
 
@@ -157,10 +157,10 @@ public void PublishLightMeasuredEvent(Streetlight streetlight, int lumens) {}
 ```
 
 Available bindings:
-* [AMQP](./src/Saunter/AsyncApiSchema/v2/Bindings/Amqp)
-* [HTTP](./src/Saunter/AsyncApiSchema/v2/Bindings/Http)
-* [Kafka](./src/Saunter/AsyncApiSchema/v2/Bindings/Kafka)
-* [MQTT](./src/Saunter/AsyncApiSchema/v2/Bindings/Mqtt)
+* [AMQP](https://github.com/tehmantra/saunter/tree/main/src/Saunter/AsyncApiSchema/v2/Bindings/Amqp)
+* [HTTP](https://github.com/tehmantra/saunter/tree/main/src/Saunter/AsyncApiSchema/v2/Bindings/Http)
+* [Kafka](https://github.com/tehmantra/saunter/tree/main/src/Saunter/AsyncApiSchema/v2/Bindings/Kafka)
+* [MQTT](https://github.com/tehmantra/saunter/tree/main/src/Saunter/AsyncApiSchema/v2/Bindings/Mqtt)
 
 
 ## Multiple AsyncAPI documents
@@ -229,7 +229,7 @@ Each document can be accessed by specifying the name in the URL
 
 ## Contributing
 
-See our [contributing guide](./CONTRIBUTING.md).
+See our [contributing guide](https://github.com/tehmantra/saunter/blob/main/CONTRIBUTING.md/CONTRIBUTING.md).
 
 Feel free to get involved in the project by opening issues, or submitting pull requests.
 
