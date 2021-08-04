@@ -24,7 +24,12 @@
   <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
     <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
   </PropertyGroup>
- 
+
+  <PropertyGroup>
+    <DocumentationFile>bin\$(Configuration)\Saunter.xml</DocumentationFile>
+    <NoWarn>1701;1702;1591</NoWarn>
+  </PropertyGroup>
+
   <ItemGroup>
     <EmbeddedResource Include="UI/index.html" />
 

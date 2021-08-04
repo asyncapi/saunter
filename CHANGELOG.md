@@ -7,6 +7,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 ## [Unreleased]
 
+## [v0.7.1] - 2021-08-04
+### Fixed
+- Include XML documentation file in build (HOW HAD I NOT NOTICED THIS BEFORE?!)
+
 ## [v0.7.0] - 2021-08-04
 ### Changed
 - AsyncAPI spec version bumped to 2.1.0
@@ -98,7 +102,8 @@ Microsoft.NET.Test.Sdk 16.8.3 -> 16.10.0
 When updating here set baseVersion to the previous tag and targetVersion to your new tag
 This link will be dead until after you have completed the pull request and tagged the new version in master
 -->
-[Unreleased]: https://github.com/tehmantra/saunter/compare/v0.7.0...main
+[Unreleased]: https://github.com/tehmantra/saunter/compare/v0.7.1...main
+[v0.7.1]: https://github.com/tehmantra/saunter/compare/v0.7.0...v0.7.1
 [v0.7.0]: https://github.com/tehmantra/saunter/compare/v0.6.0...v0.7.0
 [v0.6.0]: https://github.com/tehmantra/saunter/compare/v0.5.0...v0.6.0
 [v0.5.0]: https://github.com/tehmantra/saunter/compare/v0.4.0...v0.5.0
