@@ -7,13 +7,13 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 ## [Unreleased]
 
-## [0.7.0] - 2021-08-04
+## [v0.7.0] - 2021-08-04
 ### Changed
 - AsyncAPI spec version bumped to 2.1.0
 - `Message.Examples` type changed from `IList<IDictionary<string, object>>` to `IList<MessageExample>` to allow specifying the new `name` and `summary` fields.
 - New security schemes added.
 
-## [0.6.0] - 2021-08-03
+## [v0.6.0] - 2021-08-03
 ### Added
 - Added ability to generate multiple AsyncAPI documents using the `ConfigureNamedAsyncApi` extension
 
