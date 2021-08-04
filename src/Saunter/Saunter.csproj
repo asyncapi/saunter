@@ -6,7 +6,8 @@
     <PackageId>Saunter</PackageId>
     <Title>Saunter</Title>
     <PackageIcon>logo.png</PackageIcon>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <!-- TODO: https://github.com/NuGet/Home/issues/10791 -->
+    <!-- <PackageReadmeFile>README.md</PackageReadmeFile> -->
     <Authors>tehmantra</Authors>
     <Description>Code-first AsyncAPI documentation</Description>
     <PackageTags>asyncapi;aspnetcore;openapi;documentation;amqp</PackageTags>
@@ -34,8 +35,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="..\..\assets\logo.png" Pack="true" PackagePath="\" />
-    <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+    <None Include="../../assets/logo.png" Pack="true" PackagePath="/" />
+    <None Include="../../README.md" Pack="true" PackagePath="/" />
   </ItemGroup>
 
   <ItemGroup>
