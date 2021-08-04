@@ -13,7 +13,7 @@ namespace Saunter.AsyncApiSchema.v2
         /// Specifies the AsyncAPI Specification version being used.
         /// </summary>
         [JsonProperty("asyncapi", NullValueHandling = NullValueHandling.Ignore)]
-        public string AsyncApi { get; } = "2.0.0";
+        public string AsyncApi { get; } = "2.1.0";
         
         /// <summary>
         /// Identifier of the application the AsyncAPI document is defining.
