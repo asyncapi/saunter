@@ -7,6 +7,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 ## [Unreleased]
 
+## [0.7.0] - 2021-08-04
+### Changed
+- AsyncAPI spec version bumped to 2.1.0
+- `Message.Examples` type changed from `IList<IDictionary<string, object>>` to `IList<MessageExample>` to allow specifying the new `name` and `summary` fields.
+- New security schemes added.
+
 ## [0.6.0] - 2021-08-03
 ### Added
 - Added ability to generate multiple AsyncAPI documents using the `ConfigureNamedAsyncApi` extension
@@ -92,7 +98,8 @@ Microsoft.NET.Test.Sdk 16.8.3 -> 16.10.0
 When updating here set baseVersion to the previous tag and targetVersion to your new tag
 This link will be dead until after you have completed the pull request and tagged the new version in master
 -->
-[Unreleased]: https://github.com/tehmantra/saunter/compare/v0.6.0...main
+[Unreleased]: https://github.com/tehmantra/saunter/compare/v0.7.0...main
+[v0.7.0]: https://github.com/tehmantra/saunter/compare/v0.6.0...v0.7.0
 [v0.6.0]: https://github.com/tehmantra/saunter/compare/v0.5.0...v0.6.0
 [v0.5.0]: https://github.com/tehmantra/saunter/compare/v0.4.0...v0.5.0
 [v0.4.0]: https://github.com/tehmantra/saunter/compare/v0.3.1...v0.4.0

@@ -77,7 +77,7 @@ See [examples/StreetlightsAPI](https://github.com/tehmantra/saunter/blob/main/ex
     // HTTP GET /asyncapi/asyncapi.json
     {
         // Properties from Startup.cs
-        "asyncapi": "2.0.0",
+        "asyncapi": "2.1.0",
         "info": {
             "title": "Streetlights API",
             "version": "1.0.0",

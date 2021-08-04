@@ -111,7 +111,7 @@ namespace Saunter.AsyncApiSchema.v2
         /// An array with examples of valid message objects.
         /// </summary>
         [JsonProperty("examples")]
-        public IList<IDictionary<string, object>> Examples { get; set; } = new List<IDictionary<string, object>>();
+        public IList<MessageExample> Examples { get; set; } = new List<MessageExample>();
         
         public bool ShouldSerializeExamples()
         {
@@ -130,5 +130,33 @@ namespace Saunter.AsyncApiSchema.v2
         {
             return Traits != null && Traits.Count > 0;
         }
+    }
+
+
+    public class MessageExample
+    {
+        /// <summary>
+        /// A machine friendly name for the example.
+        /// </summary>
+        [JsonProperty("name", NullValueHandling = NullValueHandling.Ignore)]
+        public string Name { get; set; }
+
+        /// <summary>
+        /// A short summary of what the example is about.
+        /// </summary>
+        [JsonProperty("summary", NullValueHandling = NullValueHandling.Ignore)]
+        public string Summary { get; set; }
+
+        /// <summary>
+        /// Example of headers that will be included in the message.
+        /// </summary>
+        [JsonProperty("headers", NullValueHandling = NullValueHandling.Ignore)]
+        public object Headers { get; set; }
+
+        /// <summary>
+        /// Example message payload.
+        /// </summary>
+        [JsonProperty("payload", NullValueHandling = NullValueHandling.Ignore)]
+        public object Payload { get; set; }
     }
 }

@@ -92,5 +92,17 @@ namespace Saunter.AsyncApiSchema.v2
         
         [EnumMember(Value = "openIdConnect")]
         OpenIdConnect,
+
+        [EnumMember(Value = "plain")]
+        Plain,
+
+        [EnumMember(Value = "scramSha256")]
+        ScramSha256,
+
+        [EnumMember(Value = "scramSha512")]
+        ScramSha512,
+
+        [EnumMember(Value = "gssapi")]
+        GSSAPI,
     }
 }
