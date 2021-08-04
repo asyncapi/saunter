@@ -119,7 +119,31 @@ services.AddAsyncApiSchemaGeneration(options =>
 ```
 
 
+## JSON Schema Settings
+
+The JSON schema generation can be customized using the `options.JsonSchemaGeneratorSettings`. Saunter defaults to the popular `camelCase` naming strategy for both properties and types.
+
+For example, setting to use PascalCase:
+
+```c#
+services.AddAsyncApiSchemaGeneration(options =>
+{
+    options.JsonSchemaGeneratorSettings.TypeNameGenerator = new DefaultTypeNameGenerator();
+
+    // Note: need to assign a new JsonSerializerSettings, not just set the properties within it.
+    options.JsonSchemaGeneratorSettings.SerializerSettings = new JsonSerializerSettings 
+    {
+        ContractResolver = new DefaultContractResolver(),
+        Formatting = Formatting.Indented;
+    };
+}
+```
+
+You have access to the full range of both [NJsonSchema](https://github.com/RicoSuter/NJsonSchema) and [JSON.NET](https://github.com/JamesNK/Newtonsoft.Json) settings to configure the JSON schema generation, including custom ContractResolvers.
+
+
 ## Bindings
+
 Bindings are used to describe protocol specific information. These can be added to the AsyncAPI document and then applied to different components by setting the `BindingsRef` property in the relevant attributes `[OperationAttribute]`, `[MessageAttribute]`, `[ChannelAttribute]`
 
 
