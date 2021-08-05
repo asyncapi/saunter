@@ -1,9 +1,6 @@
-using System;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Routing;
-using Microsoft.AspNetCore.Routing.Template;
 using Microsoft.Extensions.Options;
 using Saunter.Serialization;
 using Saunter.Utils;
@@ -47,7 +44,7 @@ namespace Saunter
 
         private static async Task RespondWithAsyncApiSchemaJson(HttpResponse response, AsyncApiSchema.v2.AsyncApiDocument asyncApiSchema, IAsyncApiDocumentSerializer asyncApiDocumentSerializer, AsyncApiOptions options)
         {
-            var asyncApiSchemaJson = asyncApiDocumentSerializer.Serialize(asyncApiSchema, options);
+            var asyncApiSchemaJson = asyncApiDocumentSerializer.Serialize(asyncApiSchema);
             response.StatusCode = (int)HttpStatusCode.OK;
             response.ContentType = asyncApiDocumentSerializer.ContentType;
 

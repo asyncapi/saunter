@@ -24,7 +24,7 @@ namespace Saunter.Tests.Generation.SchemaGeneration
 
         public SchemaGenerationTests()
         {
-            var settings = new JsonSchemaGeneratorSettings()
+            var settings = new AsyncApiSchemaOptions()
             {
                 TypeNameGenerator = new CamelCaseTypeNameGenerator(),
                 SerializerSettings = new JsonSerializerSettings()

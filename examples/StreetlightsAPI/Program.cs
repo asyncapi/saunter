@@ -64,8 +64,6 @@ namespace StreetlightsAPI
                         ["mosquitto"] = new Server("test.mosquitto.org", "mqtt")
                     }
                 };
-
-                options.JsonSchemaGeneratorSettings.SerializerSettings.Formatting = Formatting.Indented;
             });
 
 

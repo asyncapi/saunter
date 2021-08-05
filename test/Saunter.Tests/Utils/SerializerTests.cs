@@ -26,7 +26,7 @@ namespace Saunter.Tests.Utils
         public void TestSerialize()
         {
             var doc = _documentGenerator.GenerateDocument(new[] { typeof(MethodAttributesTests.TenantMessagePublisher).GetTypeInfo() }, _options, _options.AsyncApi);
-            var serializedDoc = CreateSerializer().Serialize(doc, _options);
+            var serializedDoc = CreateSerializer().Serialize(doc);
 
             serializedDoc.ShouldNotBeNullOrWhiteSpace();
         }
