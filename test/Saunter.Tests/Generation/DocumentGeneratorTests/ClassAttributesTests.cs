@@ -1,12 +1,9 @@
 using System;
 using System.Linq;
 using System.Reflection;
-using Microsoft.Extensions.Options;
-using NJsonSchema.Generation;
 using Saunter.AsyncApiSchema.v2;
 using Saunter.Attributes;
 using Saunter.Generation;
-using Saunter.Generation.SchemaGeneration;
 using Shouldly;
 using Xunit;
 
@@ -22,7 +19,7 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
             var documentGenerator = new DocumentGenerator();
             
             // Act
-            var document = documentGenerator.GenerateDocument(new[] { typeof(TenantMessageConsumer).GetTypeInfo() }, options, options.AsyncApi);
+            var document = documentGenerator.GenerateDocument(new[] { typeof(TenantMessageConsumer).GetTypeInfo() }, options, options.AsyncApi, ActivatorServiceProvider.Instance);
 
             // Assert
             document.ShouldNotBeNull();
@@ -54,7 +51,7 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
             var documentGenerator = new DocumentGenerator();
 
             // Act
-            var document = documentGenerator.GenerateDocument(new []{ typeof(TenantGenericMessagePublisher).GetTypeInfo() }, options, options.AsyncApi);
+            var document = documentGenerator.GenerateDocument(new []{ typeof(TenantGenericMessagePublisher).GetTypeInfo() }, options, options.AsyncApi, ActivatorServiceProvider.Instance);
 
             // Assert
             document.ShouldNotBeNull();
@@ -86,7 +83,7 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
             var documentGenerator = new DocumentGenerator();
 
             // Act
-            var document = documentGenerator.GenerateDocument(new []{ typeof(TenantSingleMessagePublisher).GetTypeInfo() }, options, options.AsyncApi);
+            var document = documentGenerator.GenerateDocument(new []{ typeof(TenantSingleMessagePublisher).GetTypeInfo() }, options, options.AsyncApi, ActivatorServiceProvider.Instance);
 
             // Assert
             document.ShouldNotBeNull();
@@ -118,7 +115,7 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
             {
                 typeof(TenantMessageConsumer).GetTypeInfo(),
                 typeof(TenantMessagePublisher).GetTypeInfo()
-            }, options, options.AsyncApi);
+            }, options, options.AsyncApi, ActivatorServiceProvider.Instance);
 
             // Assert
             document.ShouldNotBeNull();
@@ -163,7 +160,7 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
             var documentGenerator = new DocumentGenerator();
 
             // Act
-            var document = documentGenerator.GenerateDocument(new []{ typeof(OneTenantMessageConsumer).GetTypeInfo() }, options, options.AsyncApi);
+            var document = documentGenerator.GenerateDocument(new []{ typeof(OneTenantMessageConsumer).GetTypeInfo() }, options, options.AsyncApi, ActivatorServiceProvider.Instance);
             
             // Assert
             document.ShouldNotBeNull();

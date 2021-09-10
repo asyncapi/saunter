@@ -1,4 +1,6 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Saunter.Generation;
 using Saunter.Serialization;
@@ -25,7 +27,7 @@ namespace Saunter.Tests.Utils
         [Fact]
         public void TestSerialize()
         {
-            var doc = _documentGenerator.GenerateDocument(new[] { typeof(MethodAttributesTests.TenantMessagePublisher).GetTypeInfo() }, _options, _options.AsyncApi);
+            var doc = _documentGenerator.GenerateDocument(new[] { typeof(MethodAttributesTests.TenantMessagePublisher).GetTypeInfo() }, _options, _options.AsyncApi, ActivatorServiceProvider.Instance);
             var serializedDoc = CreateSerializer().Serialize(doc, _options);
 
             serializedDoc.ShouldNotBeNullOrWhiteSpace();

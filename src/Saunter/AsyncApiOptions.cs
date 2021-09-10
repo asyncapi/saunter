@@ -12,6 +12,11 @@ namespace Saunter
 {
     public class AsyncApiOptions
     {
+        private readonly List<Type> _documentFilters = new List<Type>();
+        private readonly List<Type> _channelItemFilters = new List<Type>();
+        private readonly List<Type> _operationFilters = new List<Type>();
+
+
         /// <summary>
         /// The base asyncapi schema. This will be augmented with other information auto-discovered
         /// from attributes.
@@ -26,17 +31,44 @@ namespace Saunter
         /// <summary>
         /// A list of filters that will be applied to the generated AsyncAPI document.
         /// </summary>
-        public IList<IDocumentFilter> DocumentFilters { get; } = new List<IDocumentFilter>();
+        public IEnumerable<Type> DocumentFilters => _documentFilters;
 
         /// <summary>
         /// A list of filters that will be applied to any generated channels.
         /// </summary>
-        public IList<IChannelItemFilter> ChannelItemFilters { get; } = new List<IChannelItemFilter>();
+        public IEnumerable<Type> ChannelItemFilters => _channelItemFilters;
 
         /// <summary>
-        /// A list of filters that will be applied to any generated Publish operations.
+        /// A list of filters that will be applied to any generated Publish/Subscribe operations.
         /// </summary>
-        public IList<IOperationFilter> OperationFilters { get; } = new List<IOperationFilter>();
+        public IEnumerable<Type> OperationFilters => _operationFilters;
+
+
+        /// <summary>
+        /// Add a filter to be applied to the generated AsyncAPI document.
+        /// </summary>
+        public void AddDocumentFilter<T>() where T : IDocumentFilter
+        {
+            _documentFilters.Add(typeof(T));
+        }
+
+        /// <summary>
+        /// Add a filter to be applied to any generated channels.
+        /// </summary>
+        public void AddChannelItemFilter<T>() where T : IChannelItemFilter
+        {
+            _channelItemFilters.Add(typeof(T));
+        }
+
+        /// <summary>
+        /// Add a filter to be applied to any generated Publish/Subscribe operations.
+        /// </summary>
+        public void AddOperationFilter<T>() where T : IOperationFilter
+        {
+            _operationFilters.Add(typeof(T));
+        }
+
+
 
         /// <summary>
         /// Options related to the Saunter middleware.

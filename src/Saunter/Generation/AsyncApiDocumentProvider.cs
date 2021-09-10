@@ -9,10 +9,12 @@ namespace Saunter.Generation
     public class AsyncApiDocumentProvider : IAsyncApiDocumentProvider
     {
         private readonly IDocumentGenerator _documentGenerator;
+        private readonly IServiceProvider _serviceProvider;
 
-        public AsyncApiDocumentProvider(IDocumentGenerator documentGenerator)
+        public AsyncApiDocumentProvider(IDocumentGenerator documentGenerator, IServiceProvider serviceProvider)
         {
             _documentGenerator = documentGenerator;
+            _serviceProvider = serviceProvider;
         }
 
         public AsyncApiDocument GetDocument(AsyncApiOptions options, AsyncApiDocument prototype)
@@ -23,7 +25,7 @@ namespace Saunter.Generation
             }
             var asyncApiTypes = GetAsyncApiTypes(options, prototype);
 
-            var document = _documentGenerator.GenerateDocument(asyncApiTypes, options, prototype);
+            var document = _documentGenerator.GenerateDocument(asyncApiTypes, options, prototype, _serviceProvider);
 
             return document;
         }

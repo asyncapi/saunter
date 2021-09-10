@@ -31,7 +31,7 @@ namespace Saunter.Tests.Generation
                     }
                 };
 
-                o.OperationFilters.Add(new TestOperationTraitsFilter());
+                o.AddOperationFilter<TestOperationTraitsFilter>();
             });
 
             using (var serviceprovider = services.BuildServiceProvider())
