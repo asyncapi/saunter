@@ -8,7 +8,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using NJsonSchema;
 using Saunter.AsyncApiSchema.v2.Bindings;
 using Saunter.Utils;
 
@@ -20,19 +19,20 @@ namespace Saunter.Generation
         {
         }
 
-        public AsyncApiSchema.v2.AsyncApiDocument GenerateDocument(TypeInfo[] asyncApiTypes, AsyncApiOptions options, AsyncApiDocument prototype)
+        public AsyncApiSchema.v2.AsyncApiDocument GenerateDocument(TypeInfo[] asyncApiTypes, AsyncApiOptions options, AsyncApiDocument prototype, IServiceProvider serviceProvider)
         {
             var asyncApiSchema = prototype.Clone();
 
             var schemaResolver = new AsyncApiSchemaResolver(asyncApiSchema, options.JsonSchemaGeneratorSettings);
 
             var generator = new JsonSchemaGenerator(options.JsonSchemaGeneratorSettings);
-            asyncApiSchema.Channels = GenerateChannels(asyncApiTypes, schemaResolver, options, generator);
+            asyncApiSchema.Channels = GenerateChannels(asyncApiTypes, schemaResolver, options, generator, serviceProvider);
             
             var filterContext = new DocumentFilterContext(asyncApiTypes, schemaResolver, generator);
-            foreach (var filter in options.DocumentFilters)
+            foreach (var filterType in options.DocumentFilters)
             {
-                filter.Apply(asyncApiSchema, filterContext);
+                var filter = serviceProvider.GetService(filterType) as IDocumentFilter;
+                filter?.Apply(asyncApiSchema, filterContext);
             }
 
             return asyncApiSchema;
@@ -41,12 +41,12 @@ namespace Saunter.Generation
         /// <summary>
         /// Generate the Channels section of an AsyncApi schema.
         /// </summary>
-        private static IDictionary<string, ChannelItem> GenerateChannels(TypeInfo[] asyncApiTypes, AsyncApiSchemaResolver schemaResolver, AsyncApiOptions options, JsonSchemaGenerator jsonSchemaGenerator)
+        private static IDictionary<string, ChannelItem> GenerateChannels(TypeInfo[] asyncApiTypes, AsyncApiSchemaResolver schemaResolver, AsyncApiOptions options, JsonSchemaGenerator jsonSchemaGenerator, IServiceProvider serviceProvider)
         {
             var channels = new Dictionary<string, ChannelItem>();
             
-            channels.AddRange(GenerateChannelsFromMethods(asyncApiTypes, schemaResolver, options, jsonSchemaGenerator));
-            channels.AddRange(GenerateChannelsFromClasses(asyncApiTypes, schemaResolver, options, jsonSchemaGenerator));
+            channels.AddRange(GenerateChannelsFromMethods(asyncApiTypes, schemaResolver, options, jsonSchemaGenerator, serviceProvider));
+            channels.AddRange(GenerateChannelsFromClasses(asyncApiTypes, schemaResolver, options, jsonSchemaGenerator, serviceProvider));
             return channels;
         }
 
@@ -54,7 +54,7 @@ namespace Saunter.Generation
         /// Generate the Channels section of the AsyncApi schema from the
         /// <see cref="ChannelAttribute"/> on methods.
         /// </summary>
-        private static IDictionary<string, ChannelItem> GenerateChannelsFromMethods(IEnumerable<TypeInfo> asyncApiTypes, AsyncApiSchemaResolver schemaResolver, AsyncApiOptions options, JsonSchemaGenerator jsonSchemaGenerator)
+        private static IDictionary<string, ChannelItem> GenerateChannelsFromMethods(IEnumerable<TypeInfo> asyncApiTypes, AsyncApiSchemaResolver schemaResolver, AsyncApiOptions options, JsonSchemaGenerator jsonSchemaGenerator, IServiceProvider serviceProvider)
         {
             var channels = new Dictionary<string, ChannelItem>();
 
@@ -73,16 +73,17 @@ namespace Saunter.Generation
                 {
                     Description = mc.Channel.Description,
                     Parameters = GetChannelParametersFromAttributes(mc.Method, schemaResolver, jsonSchemaGenerator),
-                    Publish = GenerateOperationFromMethod(mc.Method, schemaResolver, OperationType.Publish, options, jsonSchemaGenerator),
-                    Subscribe = GenerateOperationFromMethod(mc.Method, schemaResolver, OperationType.Subscribe, options, jsonSchemaGenerator),
+                    Publish = GenerateOperationFromMethod(mc.Method, schemaResolver, OperationType.Publish, options, jsonSchemaGenerator, serviceProvider),
+                    Subscribe = GenerateOperationFromMethod(mc.Method, schemaResolver, OperationType.Subscribe, options, jsonSchemaGenerator, serviceProvider),
                     Bindings = mc.Channel.BindingsRef != null ? new ChannelBindingsReference(mc.Channel.BindingsRef) : null,
                 }; 
                 channels.Add(mc.Channel.Name, channelItem);
                 
                 var context = new ChannelItemFilterContext(mc.Method, schemaResolver, jsonSchemaGenerator, mc.Channel);
-                foreach (var filter in options.ChannelItemFilters)
+                foreach (var filterType in options.ChannelItemFilters)
                 {
-                    filter.Apply(channelItem, context);
+                    var filter = serviceProvider.GetService(filterType) as IChannelItemFilter;
+                    filter?.Apply(channelItem, context);
                 }
             }
 
@@ -93,7 +94,7 @@ namespace Saunter.Generation
         /// Generate the Channels section of the AsyncApi schema from the
         /// <see cref="ChannelAttribute"/> on classes.
         /// </summary>
-        private static IDictionary<string, ChannelItem> GenerateChannelsFromClasses(IEnumerable<TypeInfo> asyncApiTypes, AsyncApiSchemaResolver schemaResolver, AsyncApiOptions options, JsonSchemaGenerator jsonSchemaGenerator)
+        private static IDictionary<string, ChannelItem> GenerateChannelsFromClasses(IEnumerable<TypeInfo> asyncApiTypes, AsyncApiSchemaResolver schemaResolver, AsyncApiOptions options, JsonSchemaGenerator jsonSchemaGenerator, IServiceProvider serviceProvider)
         {
             var channels = new Dictionary<string, ChannelItem>();
 
@@ -119,9 +120,10 @@ namespace Saunter.Generation
                 channels.AddOrAppend(cc.Channel.Name, channelItem);
                 
                 var context = new ChannelItemFilterContext(cc.Type, schemaResolver, jsonSchemaGenerator, cc.Channel);
-                foreach (var filter in options.ChannelItemFilters)
+                foreach (var filterType in options.ChannelItemFilters)
                 {
-                    filter.Apply(channelItem, context);
+                    var filter = serviceProvider.GetService(filterType) as IChannelItemFilter;
+                    filter?.Apply(channelItem, context);
                 }
             }
 
@@ -131,7 +133,7 @@ namespace Saunter.Generation
         /// <summary>
         /// Generate the an operation of an AsyncApi Channel for the given method.
         /// </summary>
-        private static Operation GenerateOperationFromMethod(MethodInfo method, AsyncApiSchemaResolver schemaResolver, OperationType operationType, AsyncApiOptions options, JsonSchemaGenerator jsonSchemaGenerator)
+        private static Operation GenerateOperationFromMethod(MethodInfo method, AsyncApiSchemaResolver schemaResolver, OperationType operationType, AsyncApiOptions options, JsonSchemaGenerator jsonSchemaGenerator, IServiceProvider serviceProvider)
         {
             var operationAttribute = GetOperationAttribute(method, operationType);
             if (operationAttribute == null)
@@ -154,9 +156,10 @@ namespace Saunter.Generation
             };
 
             var filterContext = new OperationFilterContext(method, schemaResolver, jsonSchemaGenerator, operationAttribute);
-            foreach (var filter in options.OperationFilters)
+            foreach (var filterType in options.OperationFilters)
             {
-                filter.Apply(operation, filterContext);
+                var filter = serviceProvider.GetService(filterType) as IOperationFilter;
+                filter?.Apply(operation, filterContext);
             }
 
             return operation;
