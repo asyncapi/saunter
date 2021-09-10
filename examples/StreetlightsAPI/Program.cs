@@ -22,10 +22,11 @@ namespace StreetlightsAPI
         public static IHostBuilder CreateHostBuilder(string[] args)
         {
             return Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(builder =>
+                .ConfigureLogging(logging => logging.AddSimpleConsole(console => console.SingleLine = true))
+                .ConfigureWebHostDefaults(web =>
                 {
-                    builder.UseStartup<Startup>();
-                    builder.UseUrls("http://localhost:5000");
+                    web.UseStartup<Startup>();
+                    web.UseUrls("http://localhost:5000");
                 });
         }
     }
@@ -61,8 +62,10 @@ namespace StreetlightsAPI
                     },
                     Servers =
                     {
-                        ["mosquitto"] = new Server("test.mosquitto.org", "mqtt")
-                    }
+                        ["mosquitto"] = new Server("test.mosquitto.org", "mqtt"),
+                        ["webapi"] = new Server("localhost:5000", "http"),
+                    },
+
                 };
 
                 options.JsonSchemaGeneratorSettings.SerializerSettings.Formatting = Formatting.Indented;
