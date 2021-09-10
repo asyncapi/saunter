@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Microsoft.Extensions.DependencyInjection;
 using Saunter.AsyncApiSchema.v2.Bindings;
 using Saunter.Utils;
 
@@ -31,7 +32,7 @@ namespace Saunter.Generation
             var filterContext = new DocumentFilterContext(asyncApiTypes, schemaResolver, generator);
             foreach (var filterType in options.DocumentFilters)
             {
-                var filter = serviceProvider.GetService(filterType) as IDocumentFilter;
+                var filter = (IDocumentFilter)serviceProvider.GetRequiredService(filterType);
                 filter?.Apply(asyncApiSchema, filterContext);
             }
 
@@ -82,8 +83,8 @@ namespace Saunter.Generation
                 var context = new ChannelItemFilterContext(mc.Method, schemaResolver, jsonSchemaGenerator, mc.Channel);
                 foreach (var filterType in options.ChannelItemFilters)
                 {
-                    var filter = serviceProvider.GetService(filterType) as IChannelItemFilter;
-                    filter?.Apply(channelItem, context);
+                    var filter = (IChannelItemFilter)serviceProvider.GetRequiredService(filterType);
+                    filter.Apply(channelItem, context);
                 }
             }
 
@@ -122,8 +123,8 @@ namespace Saunter.Generation
                 var context = new ChannelItemFilterContext(cc.Type, schemaResolver, jsonSchemaGenerator, cc.Channel);
                 foreach (var filterType in options.ChannelItemFilters)
                 {
-                    var filter = serviceProvider.GetService(filterType) as IChannelItemFilter;
-                    filter?.Apply(channelItem, context);
+                    var filter = (IChannelItemFilter)serviceProvider.GetRequiredService(filterType);
+                    filter.Apply(channelItem, context);
                 }
             }
 
@@ -158,7 +159,7 @@ namespace Saunter.Generation
             var filterContext = new OperationFilterContext(method, schemaResolver, jsonSchemaGenerator, operationAttribute);
             foreach (var filterType in options.OperationFilters)
             {
-                var filter = serviceProvider.GetService(filterType) as IOperationFilter;
+                var filter = (IOperationFilter)serviceProvider.GetRequiredService(filterType);
                 filter?.Apply(operation, filterContext);
             }
 
