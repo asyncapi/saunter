@@ -77,6 +77,7 @@ namespace Saunter.Generation
                     Publish = GenerateOperationFromMethod(mc.Method, schemaResolver, OperationType.Publish, options, jsonSchemaGenerator, serviceProvider),
                     Subscribe = GenerateOperationFromMethod(mc.Method, schemaResolver, OperationType.Subscribe, options, jsonSchemaGenerator, serviceProvider),
                     Bindings = mc.Channel.BindingsRef != null ? new ChannelBindingsReference(mc.Channel.BindingsRef) : null,
+                    Servers = mc.Channel.Servers?.ToList(),
                 }; 
                 channels.Add(mc.Channel.Name, channelItem);
                 
@@ -116,6 +117,7 @@ namespace Saunter.Generation
                     Publish = GenerateOperationFromClass(cc.Type, schemaResolver, OperationType.Publish, jsonSchemaGenerator),
                     Subscribe = GenerateOperationFromClass(cc.Type, schemaResolver, OperationType.Subscribe, jsonSchemaGenerator),
                     Bindings = cc.Channel.BindingsRef != null ? new ChannelBindingsReference(cc.Channel.BindingsRef) : null,
+                    Servers = cc.Channel.Servers?.ToList(),
                 };
                 
                 channels.AddOrAppend(cc.Channel.Name, channelItem);

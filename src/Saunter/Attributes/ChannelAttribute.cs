@@ -24,6 +24,14 @@ namespace Saunter.Attributes
         /// </summary>
         public string BindingsRef { get; set; }
 
+        /// <summary>
+        /// The servers on which this channel is available, specified as an optional unordered
+        /// list of names (string keys) of Server Objects defined in the Servers Object (a map).
+        /// If servers is absent or empty then this channel must be available on all servers
+        /// defined in the Servers Object.
+        /// </summary>
+        public string[] Servers { get; set; }
+
         public ChannelAttribute(string name)
         {
             Name = name ?? throw new ArgumentNullException(nameof(name));

@@ -90,7 +90,7 @@ namespace StreetlightsAPI
         /// <summary>
         /// Inform about environmental lighting conditions for a particular streetlight.
         /// </summary>
-        [Channel(PublishLightMeasuredTopic)]
+        [Channel(PublishLightMeasuredTopic, Servers = new []{"webapi"})]
         [PublishOperation(typeof(LightMeasuredEvent))]
         [HttpPost]
         [Route(PublishLightMeasuredTopic)]

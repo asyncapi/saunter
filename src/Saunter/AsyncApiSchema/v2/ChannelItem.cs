@@ -44,10 +44,23 @@ namespace Saunter.AsyncApiSchema.v2
         [JsonProperty("bindings", NullValueHandling = NullValueHandling.Ignore)]
         public IChannelBindings Bindings { get; set; }
 
+        /// <summary>
+        /// The servers on which this channel is available, specified as an optional unordered
+        /// list of names (string keys) of Server Objects defined in the Servers Object (a map).
+        /// If servers is absent or empty then this channel must be available on all servers
+        /// defined in the Servers Object.
+        /// </summary>
+        [JsonProperty("servers", NullValueHandling = NullValueHandling.Ignore)]
+        public List<string> Servers { get; set; } = new List<string>();
 
         public bool ShouldSerializeParameters()
         {
             return Parameters != null && Parameters.Count > 0;
+        }
+
+        public bool ShouldSerializeServers()
+        {
+            return Servers != null && Servers.Count > 0;
         }
     }
 }

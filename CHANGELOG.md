@@ -5,7 +5,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 <!-- Please update the links section at the bottom when adding a new version. -->
 
-## [Unreleased]
+## [v0.9.0] - 2021-10-17
+### Changed
+- AsyncAPI spec version bumped to 2.2.0
+  - New optional property `string[] Servers` available on `ChannelAttribute`
+  - New optional property `List<string> Servers` available on `ChannelItem`
+- Bump UI library to v1.0.0-next.21
 
 ## [v0.8.0] - 2021-09-11
 ### Changed
