@@ -72,11 +72,11 @@ namespace Saunter.UI
             {
                 if (context.TryGetDocument(_options, out var document))
                 {
-                    await RespondWithAsyncApiHtml(context.Response, _options.Middleware.Route.Replace("{document}", document));
+                    await RespondWithAsyncApiHtml(context.Response, DocumentEndpoint.Replace("{document}", document));
                 }
                 else
                 {
-                    await RespondWithAsyncApiHtml(context.Response, _options.Middleware.Route);
+                    await RespondWithAsyncApiHtml(context.Response, DocumentEndpoint);
                 }
                 return;
             }
@@ -134,5 +134,7 @@ namespace Saunter.UI
         private string UiIndexRoute => _options.Middleware.UiBaseRoute?.TrimEnd('/') + "/index.html";
 
         private string UiBaseRoute => _options.Middleware.UiBaseRoute?.TrimEnd('/') ?? string.Empty;
+
+        private string DocumentEndpoint => _options.Middleware.Endpoint ?? _options.Middleware.Route;
     }
 }

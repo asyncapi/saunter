@@ -26,7 +26,7 @@ namespace StreetlightsAPI
                 .ConfigureWebHostDefaults(web =>
                 {
                     web.UseStartup<Startup>();
-                    web.UseUrls("http://localhost:5000");
+                    web.UseUrls("http://*:5000");
                 });
         }
     }
@@ -48,6 +48,9 @@ namespace StreetlightsAPI
             {
                 options.AssemblyMarkerTypes = new[] {typeof(StreetlightMessageBus)};
 
+                options.Middleware.Route = "/asyncapi/ui/asyncapi.json";
+                options.Middleware.Endpoint = "asyncapi.json";
+                options.Middleware.UiBaseRoute = "/asyncapi/ui/";
                 options.Middleware.UiTitle = "Streetlights API";
 
                 options.AsyncApi = new AsyncApiDocument

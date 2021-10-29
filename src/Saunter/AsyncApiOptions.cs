@@ -101,6 +101,12 @@ namespace Saunter
         public string Route { get; set; } = "/asyncapi/asyncapi.json";
 
         /// <summary>
+        /// The endpoint which the AsyncAPI UI will request the document
+        /// Defaults to <see cref="Route" />
+        /// </summary>
+        public string Endpoint { get; set; }
+
+        /// <summary>
         /// The base URL for the AsyncAPI UI
         /// </summary>
         public string UiBaseRoute { get; set; } = "/asyncapi/ui/";
@@ -111,3 +117,5 @@ namespace Saunter
         public string UiTitle { get; set; } = "AsyncAPI";
     }
 }
+
+

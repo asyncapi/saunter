@@ -112,7 +112,8 @@ services.AddAsyncApiSchemaGeneration(options =>
     options.AddChannelItemFilter<MyChannelItemFilter>();       // Dynamically update ChanelItems
     options.AddOperationFilter<MyOperationFilter>();           // Dynamically update Operations
     
-    options.Middleware.Route = "/asyncapi/asyncapi.json"       // AsyncAPI JSON document URL
+    options.Middleware.Route = "/asyncapi/asyncapi.json";      // AsyncAPI JSON document URL.
+    options.Middleware.Endpoint = "/asyncapi/asyncapi.json";   // AsyncAPI JSON document PATH used by UI to request the document, defaults to the "Route" property. 
     options.Middleware.UiBaseRoute = "/asyncapi/ui/";          // AsyncAPI UI URL
     options.Middleware.UiTitle = "My AsyncAPI Documentation";  // AsyncAPI UI page title
 }
