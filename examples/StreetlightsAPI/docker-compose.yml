@@ -5,11 +5,15 @@ services:
     build:
       context: .
     restart: always
+    environment:
+      - PATH_BASE=/service-a
 
   service-b:
     build:
       context: .
     restart: always
+    environment:
+      - PATH_BASE=/service-b
 
   nginx:
     restart: always

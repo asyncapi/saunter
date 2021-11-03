@@ -96,15 +96,14 @@ namespace Saunter
     public class AsyncApiMiddlewareOptions
     {
         /// <summary>
+        /// The base path where the application is running
+        /// </summary>
+        public string ReverseProxyBasePath { get; set; } = "/";
+
+        /// <summary>
         /// The route which the AsyncAPI document will be hosted
         /// </summary>
         public string Route { get; set; } = "/asyncapi/asyncapi.json";
-
-        /// <summary>
-        /// The endpoint which the AsyncAPI UI will request the document
-        /// Defaults to <see cref="Route" />
-        /// </summary>
-        public string Endpoint { get; set; }
 
         /// <summary>
         /// The base URL for the AsyncAPI UI

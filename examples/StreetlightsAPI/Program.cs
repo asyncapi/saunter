@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -49,7 +50,7 @@ namespace StreetlightsAPI
                 options.AssemblyMarkerTypes = new[] {typeof(StreetlightMessageBus)};
 
                 options.Middleware.Route = "/asyncapi/ui/asyncapi.json";
-                options.Middleware.Endpoint = "asyncapi.json";
+                options.Middleware.ReverseProxyBasePath = Environment.GetEnvironmentVariable("PATH_BASE");
                 options.Middleware.UiBaseRoute = "/asyncapi/ui/";
                 options.Middleware.UiTitle = "Streetlights API";
 

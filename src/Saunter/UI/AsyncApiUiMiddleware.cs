@@ -59,11 +59,11 @@ namespace Saunter.UI
 
                 if (context.TryGetDocument(_options, out var document))
                 {
-                    context.Response.Headers["Location"] = UiIndexRoute.Replace("{document}", document);
+                    context.Response.Headers["Location"] = UiIndexFullRoute.Replace("{document}", document);
                 }
                 else
                 {
-                    context.Response.Headers["Location"] = UiIndexRoute;
+                    context.Response.Headers["Location"] = UiIndexFullRoute;
                 }
                 return;
             }
@@ -72,11 +72,11 @@ namespace Saunter.UI
             {
                 if (context.TryGetDocument(_options, out var document))
                 {
-                    await RespondWithAsyncApiHtml(context.Response, DocumentEndpoint.Replace("{document}", document));
+                    await RespondWithAsyncApiHtml(context.Response, DocumentFullRoute.Replace("{document}", document));
                 }
                 else
                 {
-                    await RespondWithAsyncApiHtml(context.Response, DocumentEndpoint);
+                    await RespondWithAsyncApiHtml(context.Response, DocumentFullRoute);
                 }
                 return;
             }
@@ -133,8 +133,20 @@ namespace Saunter.UI
 
         private string UiIndexRoute => _options.Middleware.UiBaseRoute?.TrimEnd('/') + "/index.html";
 
+        private string UiIndexFullRoute => PrependProxyReverseBasePath(UiIndexRoute);
+
         private string UiBaseRoute => _options.Middleware.UiBaseRoute?.TrimEnd('/') ?? string.Empty;
 
-        private string DocumentEndpoint => _options.Middleware.Endpoint ?? _options.Middleware.Route;
+        private string DocumentFullRoute => PrependProxyReverseBasePath(_options.Middleware.Route);
+
+        private string PrependProxyReverseBasePath(string url)
+        {
+            if (string.IsNullOrEmpty(_options.Middleware.ReverseProxyBasePath))
+            {
+                return url;
+            }
+
+            return $"{_options.Middleware.ReverseProxyBasePath.TrimEnd('/')}/{url.TrimStart('/')}";
+        }
     }
 }

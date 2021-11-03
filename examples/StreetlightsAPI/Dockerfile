@@ -1,6 +1,6 @@
 FROM mcr.microsoft.com/dotnet/aspnet:5.0
 
-# Run "dotnet publish -c Release" before build this image
+# Run "dotnet publish -c Release" before building this image
 COPY bin/Release/net5.0/publish/ App/
 
 WORKDIR /App
