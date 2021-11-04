@@ -59,11 +59,11 @@ namespace Saunter.UI
 
                 if (context.TryGetDocument(_options, out var document))
                 {
-                    context.Response.Headers["Location"] = UiIndexFullRoute.Replace("{document}", document);
+                    context.Response.Headers["Location"] = GetUiIndexFullRoute(context.Request).Replace("{document}", document);
                 }
                 else
                 {
-                    context.Response.Headers["Location"] = UiIndexFullRoute;
+                    context.Response.Headers["Location"] = GetUiIndexFullRoute(context.Request);
                 }
                 return;
             }
@@ -72,11 +72,11 @@ namespace Saunter.UI
             {
                 if (context.TryGetDocument(_options, out var document))
                 {
-                    await RespondWithAsyncApiHtml(context.Response, DocumentFullRoute.Replace("{document}", document));
+                    await RespondWithAsyncApiHtml(context.Response, GetDocumentFullRoute(context.Request).Replace("{document}", document));
                 }
                 else
                 {
-                    await RespondWithAsyncApiHtml(context.Response, DocumentFullRoute);
+                    await RespondWithAsyncApiHtml(context.Response, GetDocumentFullRoute(context.Request));
                 }
                 return;
             }
@@ -133,20 +133,26 @@ namespace Saunter.UI
 
         private string UiIndexRoute => _options.Middleware.UiBaseRoute?.TrimEnd('/') + "/index.html";
 
-        private string UiIndexFullRoute => PrependProxyReverseBasePath(UiIndexRoute);
+        private string GetUiIndexFullRoute(HttpRequest request)
+        {
+            if (request.PathBase != null)
+            {
+                return request.PathBase.Add(UiIndexRoute);
+            }
+
+            return UiIndexRoute;
+        }
 
         private string UiBaseRoute => _options.Middleware.UiBaseRoute?.TrimEnd('/') ?? string.Empty;
 
-        private string DocumentFullRoute => PrependProxyReverseBasePath(_options.Middleware.Route);
-
-        private string PrependProxyReverseBasePath(string url)
+        private string GetDocumentFullRoute(HttpRequest request)
         {
-            if (string.IsNullOrEmpty(_options.Middleware.ReverseProxyBasePath))
+            if (request.PathBase != null)
             {
-                return url;
+                return request.PathBase.Add(_options.Middleware.Route);
             }
 
-            return $"{_options.Middleware.ReverseProxyBasePath.TrimEnd('/')}/{url.TrimStart('/')}";
+            return _options.Middleware.Route;
         }
     }
 }

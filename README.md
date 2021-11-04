@@ -112,8 +112,7 @@ services.AddAsyncApiSchemaGeneration(options =>
     options.AddChannelItemFilter<MyChannelItemFilter>();       // Dynamically update ChanelItems
     options.AddOperationFilter<MyOperationFilter>();           // Dynamically update Operations
     
-    options.Middleware.ReverseProxyBasePath = "/";             // BasePath of the application in a proxy-reverse environment.
-    options.Middleware.Route = "/asyncapi/asyncapi.json";      // AsyncAPI JSON document URL.
+    options.Middleware.Route = "/asyncapi/asyncapi.json";      // AsyncAPI JSON document URL
     options.Middleware.UiBaseRoute = "/asyncapi/ui/";          // AsyncAPI UI URL
     options.Middleware.UiTitle = "My AsyncAPI Documentation";  // AsyncAPI UI page title
 }

@@ -3,6 +3,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Hosting.Server.Features;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -49,9 +50,6 @@ namespace StreetlightsAPI
             {
                 options.AssemblyMarkerTypes = new[] {typeof(StreetlightMessageBus)};
 
-                options.Middleware.Route = "/asyncapi/ui/asyncapi.json";
-                options.Middleware.ReverseProxyBasePath = Environment.GetEnvironmentVariable("PATH_BASE");
-                options.Middleware.UiBaseRoute = "/asyncapi/ui/";
                 options.Middleware.UiTitle = "Streetlights API";
 
                 options.AsyncApi = new AsyncApiDocument
@@ -83,6 +81,12 @@ namespace StreetlightsAPI
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app)
         {
+            app.Use((context, next) =>
+            {
+                context.Request.PathBase = new PathString(Environment.GetEnvironmentVariable("PATH_BASE"));
+                return next();
+            });
+
             app.UseDeveloperExceptionPage();
 
             app.UseRouting();
