@@ -7,4 +7,4 @@ WORKDIR /App
 
 EXPOSE 5000
 
-ENTRYPOINT ["dotnet", "StreetlightsAPI.dll"]
+ENTRYPOINT ["dotnet", "Saunter.IntegrationTests.ReverseProxy.dll"]

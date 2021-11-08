@@ -1,16 +1,18 @@
+﻿using System;
 using System.Linq;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Hosting.Server.Features;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using Saunter;
 using Saunter.AsyncApiSchema.v2;
+using Saunter.Attributes;
 
-namespace StreetlightsAPI
+namespace Saunter.IntegrationTests.ReverseProxy
 {
     public class Program
     {
@@ -26,7 +28,7 @@ namespace StreetlightsAPI
                 .ConfigureWebHostDefaults(web =>
                 {
                     web.UseStartup<Startup>();
-                    web.UseUrls("http://localhost:5000");
+                    web.UseUrls("http://*:5000");
                 });
         }
     }
@@ -40,45 +42,31 @@ namespace StreetlightsAPI
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // Add Saunter to the application services. 
             services.AddAsyncApiSchemaGeneration(options =>
             {
-                options.AssemblyMarkerTypes = new[] {typeof(StreetlightMessageBus)};
-
-                options.Middleware.UiTitle = "Streetlights API";
+                options.AssemblyMarkerTypes = new[] {typeof(StreetlightsController)};
 
                 options.AsyncApi = new AsyncApiDocument
                 {
-                    Info = new Info("Streetlights API", "1.0.0")
-                    {
-                        Description = "The Smartylighting Streetlights API allows you to remotely manage the city lights.",
-                        License = new License("Apache 2.0")
-                        {
-                            Url = "https://www.apache.org/licenses/LICENSE-2.0"
-                        }
-                    },
-                    Servers =
-                    {
-                        ["mosquitto"] = new Server("test.mosquitto.org", "mqtt"),
-                        ["webapi"] = new Server("localhost:5000", "http"),
-                    },
-
+                    Info = new Info(Environment.GetEnvironmentVariable("PATH_BASE"), "1.0.0")
                 };
-
-                options.JsonSchemaGeneratorSettings.SerializerSettings.Formatting = Formatting.Indented;
             });
 
-
-            services.AddScoped<IStreetlightMessageBus, StreetlightMessageBus>();
             services.AddControllers();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app)
         {
+            // If running behind a reverse-proxy, you will be responsible for setting the context.Request.PathBase somehow.
+            // In this example we use an environment variable which is set from the docker-compose file.
+            app.Use((context, next) =>
+            {
+                context.Request.PathBase = new PathString(Environment.GetEnvironmentVariable("PATH_BASE"));
+                return next();
+            });
+
             app.UseDeveloperExceptionPage();
 
             app.UseRouting();
@@ -88,17 +76,36 @@ namespace StreetlightsAPI
             {
                 endpoints.MapAsyncApiDocuments();
                 endpoints.MapAsyncApiUi();
-                
+
                 endpoints.MapControllers();
             });
 
-            
+
             // Print the AsyncAPI doc location
             var logger = app.ApplicationServices.GetService<ILoggerFactory>().CreateLogger<Program>();
             var addresses = app.ServerFeatures.Get<IServerAddressesFeature>().Addresses;
-            
+
             logger.LogInformation("AsyncAPI doc available at: {URL}", $"{addresses.FirstOrDefault()}/asyncapi/asyncapi.json");
             logger.LogInformation("AsyncAPI UI available at: {URL}", $"{addresses.FirstOrDefault()}/asyncapi/ui/");
+        }
+    }
+
+
+    public class LightMeasuredEvent
+    {
+        public int Id { get; set; }
+        public int Lumens { get; set; }
+    }
+
+    [AsyncApi]
+    [ApiController]
+    [Route("")]
+    public class StreetlightsController
+    {
+        [Channel("publish/light/measured"), PublishOperation(typeof(LightMeasuredEvent))]
+        [HttpPost, Route("publish/light/measured")]
+        public void MeasureLight([FromBody] LightMeasuredEvent lightMeasuredEvent)
+        {
         }
     }
 }
