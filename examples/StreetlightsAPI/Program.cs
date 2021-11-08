@@ -1,7 +1,9 @@
+using System;
 using System.Linq;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Hosting.Server.Features;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -26,7 +28,7 @@ namespace StreetlightsAPI
                 .ConfigureWebHostDefaults(web =>
                 {
                     web.UseStartup<Startup>();
-                    web.UseUrls("http://localhost:5000");
+                    web.UseUrls("http://*:5000");
                 });
         }
     }
@@ -79,6 +81,12 @@ namespace StreetlightsAPI
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app)
         {
+            app.Use((context, next) =>
+            {
+                context.Request.PathBase = new PathString(Environment.GetEnvironmentVariable("PATH_BASE"));
+                return next();
+            });
+
             app.UseDeveloperExceptionPage();
 
             app.UseRouting();

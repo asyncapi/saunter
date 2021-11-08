@@ -59,11 +59,11 @@ namespace Saunter.UI
 
                 if (context.TryGetDocument(_options, out var document))
                 {
-                    context.Response.Headers["Location"] = UiIndexRoute.Replace("{document}", document);
+                    context.Response.Headers["Location"] = GetUiIndexFullRoute(context.Request).Replace("{document}", document);
                 }
                 else
                 {
-                    context.Response.Headers["Location"] = UiIndexRoute;
+                    context.Response.Headers["Location"] = GetUiIndexFullRoute(context.Request);
                 }
                 return;
             }
@@ -72,11 +72,11 @@ namespace Saunter.UI
             {
                 if (context.TryGetDocument(_options, out var document))
                 {
-                    await RespondWithAsyncApiHtml(context.Response, _options.Middleware.Route.Replace("{document}", document));
+                    await RespondWithAsyncApiHtml(context.Response, GetDocumentFullRoute(context.Request).Replace("{document}", document));
                 }
                 else
                 {
-                    await RespondWithAsyncApiHtml(context.Response, _options.Middleware.Route);
+                    await RespondWithAsyncApiHtml(context.Response, GetDocumentFullRoute(context.Request));
                 }
                 return;
             }
@@ -133,6 +133,26 @@ namespace Saunter.UI
 
         private string UiIndexRoute => _options.Middleware.UiBaseRoute?.TrimEnd('/') + "/index.html";
 
+        private string GetUiIndexFullRoute(HttpRequest request)
+        {
+            if (request.PathBase != null)
+            {
+                return request.PathBase.Add(UiIndexRoute);
+            }
+
+            return UiIndexRoute;
+        }
+
         private string UiBaseRoute => _options.Middleware.UiBaseRoute?.TrimEnd('/') ?? string.Empty;
+
+        private string GetDocumentFullRoute(HttpRequest request)
+        {
+            if (request.PathBase != null)
+            {
+                return request.PathBase.Add(_options.Middleware.Route);
+            }
+
+            return _options.Middleware.Route;
+        }
     }
 }
