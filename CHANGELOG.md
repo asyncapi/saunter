@@ -5,6 +5,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 <!-- Please update the links section at the bottom when adding a new version. -->
 
+## [v0.9.1] - 2021-11-08
+### Fixed
+- Hosting behind a reverse proxy now works correctly. See tests/Saunter.IntegrationTests.ReverseProxy/README.md for an example.
+
 ## [v0.9.0] - 2021-10-17
 ### Changed
 - AsyncAPI spec version bumped to 2.2.0
@@ -112,6 +116,7 @@ When updating here set baseVersion to the previous tag and targetVersion to your
 This link will be dead until after you have completed the pull request and tagged the new version in master
 -->
 
+[v0.9.1]: https://github.com/tehmantra/saunter/compare/v0.9.0...v0.9.1
 [v0.9.0]: https://github.com/tehmantra/saunter/compare/v0.8.0...v0.9.0
 [v0.8.0]: https://github.com/tehmantra/saunter/compare/v0.7.1...v0.8.0
 [v0.7.1]: https://github.com/tehmantra/saunter/compare/v0.7.0...v0.7.1
