@@ -47,7 +47,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.0.0" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="3.0.0" />
-    <PackageReference Include="NJsonSchema" Version="10.5.1" />
+    <PackageReference Include="NJsonSchema" Version="10.6.2" />
 
     <!-- Development Dependencies -->
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
