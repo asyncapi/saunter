@@ -1,0 +1,27 @@
+version: '3.7'
+
+services:
+  service-a:
+    build:
+      context: .
+    restart: always
+    environment:
+      - PATH_BASE=/service-a
+
+  service-b:
+    build:
+      context: .
+    restart: always
+    environment:
+      - PATH_BASE=/service-b
+
+  nginx:
+    restart: always
+    build:
+      dockerfile: Dockerfile
+      context: ./nginx
+    ports:
+      - '5000:80'
+    depends_on:
+      - service-a
+      - service-b

@@ -109,10 +109,10 @@ services.AddAsyncApiSchemaGeneration(options =>
 {
     options.AssemblyMarkerTypes = new[] { typeof(Startup) };   // Tell Saunter where to scan for your classes.
     
-    options.ChannelItemFilters.Add(new MyChannelItemFilter()); // Dynamically update ChanelItems
-    options.OperationFilters.Add(new MyOperationFilter());     // Dynamically update Operations
+    options.AddChannelItemFilter<MyChannelItemFilter>();       // Dynamically update ChanelItems
+    options.AddOperationFilter<MyOperationFilter>();           // Dynamically update Operations
     
-    options.Middleware.Route = "/asyncapi/asyncapi.json"       // AsyncAPI JSON document URL
+    options.Middleware.Route = "/asyncapi/asyncapi.json";      // AsyncAPI JSON document URL
     options.Middleware.UiBaseRoute = "/asyncapi/ui/";          // AsyncAPI UI URL
     options.Middleware.UiTitle = "My AsyncAPI Documentation";  // AsyncAPI UI page title
 }

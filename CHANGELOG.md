@@ -5,7 +5,20 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 <!-- Please update the links section at the bottom when adding a new version. -->
 
-## [Unreleased]
+## [v0.9.1] - 2021-11-08
+### Fixed
+- Hosting behind a reverse proxy now works correctly. See tests/Saunter.IntegrationTests.ReverseProxy/README.md for an example.
+
+## [v0.9.0] - 2021-10-17
+### Changed
+- AsyncAPI spec version bumped to 2.2.0
+  - New optional property `string[] Servers` available on `ChannelAttribute`
+  - New optional property `List<string> Servers` available on `ChannelItem`
+- Bump UI library to v1.0.0-next.21
+
+## [v0.8.0] - 2021-09-11
+### Changed
+- Filters are now registered as types (e.g. `options.AddOperationFilter<T>`) and resolved from an `IServiceProvider`
 
 ## [v0.7.1] - 2021-08-04
 ### Fixed
@@ -102,7 +115,10 @@ Microsoft.NET.Test.Sdk 16.8.3 -> 16.10.0
 When updating here set baseVersion to the previous tag and targetVersion to your new tag
 This link will be dead until after you have completed the pull request and tagged the new version in master
 -->
-[Unreleased]: https://github.com/tehmantra/saunter/compare/v0.7.1...main
+
+[v0.9.1]: https://github.com/tehmantra/saunter/compare/v0.9.0...v0.9.1
+[v0.9.0]: https://github.com/tehmantra/saunter/compare/v0.8.0...v0.9.0
+[v0.8.0]: https://github.com/tehmantra/saunter/compare/v0.7.1...v0.8.0
 [v0.7.1]: https://github.com/tehmantra/saunter/compare/v0.7.0...v0.7.1
 [v0.7.0]: https://github.com/tehmantra/saunter/compare/v0.6.0...v0.7.0
 [v0.6.0]: https://github.com/tehmantra/saunter/compare/v0.5.0...v0.6.0
