@@ -22,6 +22,5 @@ namespace Saunter.Tests.UI
             resources.ShouldContain("Saunter.UI.default.min.css", customMessage: err);
             resources.ShouldContain("Saunter.UI.index.js", customMessage: err);
         }
-
     }
 }
