@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp3.1;net5.0;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>netcoreapp3.1;net5.0;netstandard2.0;net6.0</TargetFrameworks>
     <IsPackable>true</IsPackable>
     <PackageId>Saunter</PackageId>
     <Title>Saunter</Title>
@@ -47,11 +47,11 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.0.0" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="3.0.0" />
-    <PackageReference Include="Namotion.Reflection" Version="1.0.23" />
-    <PackageReference Include="NJsonSchema" Version="10.4.6" />
+    <PackageReference Include="Namotion.Reflection" Version="2.0.9" />
+    <PackageReference Include="NJsonSchema" Version="10.6.6" />
 
     <!-- Development Dependencies -->
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' != 'netstandard2.0'">
