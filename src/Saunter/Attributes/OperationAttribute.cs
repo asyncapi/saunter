@@ -6,9 +6,9 @@ namespace Saunter.Attributes
     public abstract class OperationAttribute : Attribute
     {
         public OperationType OperationType { get; protected set; }
-        
+
         public Type MessagePayloadType { get; protected set; }
-        
+
         /// <summary>
         /// A short summary of what the operation is about.
         /// </summary>
@@ -22,7 +22,7 @@ namespace Saunter.Attributes
         /// therefore, it is RECOMMENDED to follow common programming naming conventions.
         /// </summary>
         public string OperationId { get; set; }
-        
+
         /// <summary>
         /// A verbose explanation of the operation.
         /// CommonMark syntax can be used for rich text representation.
@@ -34,10 +34,18 @@ namespace Saunter.Attributes
         /// The bindings must be added to components/operationBindings with the same name.
         /// </summary>
         public string BindingsRef { get; set; }
+
+        public string[] Tags { get; protected set; }
     }
 
     public class PublishOperationAttribute : OperationAttribute
     {
+        public PublishOperationAttribute(Type messagePayloadType, params string[] tags)
+        {
+            OperationType = OperationType.Publish;
+            MessagePayloadType = messagePayloadType;
+            Tags = tags;
+        }
         public PublishOperationAttribute(Type messagePayloadType)
         {
             OperationType = OperationType.Publish;
@@ -52,6 +60,13 @@ namespace Saunter.Attributes
 
     public class SubscribeOperationAttribute : OperationAttribute
     {
+        public SubscribeOperationAttribute(Type messagePayloadType, params string[] tags)
+        {
+            OperationType = OperationType.Publish;
+            MessagePayloadType = messagePayloadType;
+            Tags = tags;
+        }
+
         public SubscribeOperationAttribute(Type messagePayloadType)
         {
             OperationType = OperationType.Subscribe;
@@ -69,6 +84,6 @@ namespace Saunter.Attributes
         Publish,
         Subscribe
     }
-    
-    
+
+
 }
