@@ -24,11 +24,7 @@ namespace Saunter.UI
         private readonly StaticFileMiddleware _staticFiles;
         private readonly Dictionary<string, StaticFileMiddleware> _namedStaticFiles;
 
-#if NETSTANDARD2_0
-        public AsyncApiUiMiddleware(RequestDelegate next, IOptions<AsyncApiOptions> options, IHostingEnvironment env, ILoggerFactory loggerFactory)
-#else
         public AsyncApiUiMiddleware(RequestDelegate next, IOptions<AsyncApiOptions> options, IWebHostEnvironment env, ILoggerFactory loggerFactory)
-#endif
         {
             _options = options.Value;
             var fileProvider = new EmbeddedFileProvider(GetType().Assembly, GetType().Namespace);
@@ -57,7 +53,7 @@ namespace Saunter.UI
             {
                 context.Response.StatusCode = (int) HttpStatusCode.MovedPermanently;
 
-                if (context.TryGetDocument(_options, out var document))
+                if (context.TryGetDocument(out var document))
                 {
                     context.Response.Headers["Location"] = GetUiIndexFullRoute(context.Request).Replace("{document}", document);
                 }
@@ -70,7 +66,7 @@ namespace Saunter.UI
 
             if (IsRequestingAsyncApiUi(context.Request))
             {
-                if (context.TryGetDocument(_options, out var document))
+                if (context.TryGetDocument(out var document))
                 {
                     await RespondWithAsyncApiHtml(context.Response, GetDocumentFullRoute(context.Request).Replace("{document}", document));
                 }
@@ -81,7 +77,7 @@ namespace Saunter.UI
                 return;
             }
             
-            if (!context.TryGetDocument(_options, out var documentName))
+            if (!context.TryGetDocument(out var documentName))
             {
                 await _staticFiles.Invoke(context);
             }

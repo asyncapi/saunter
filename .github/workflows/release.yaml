@@ -14,14 +14,14 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
-    - uses: actions/setup-node@v2
+    - uses: actions/setup-node@v3
       with:
-        node-version: '16'
-    - uses: actions/setup-dotnet@v1
+        node-version: 'lts/*' # latest LTS version
+    - uses: actions/setup-dotnet@v2
       with:
-        dotnet-version: '5.0.x' # SDK Version to use; x will use the latest version of the channel
+        dotnet-version: '6.0.x' # SDK Version to use; x will use the latest version of the channel
 
     - name: Run NPM install
       run: npm install

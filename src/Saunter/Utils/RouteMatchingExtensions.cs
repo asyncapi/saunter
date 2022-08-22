@@ -15,25 +15,12 @@ namespace Saunter.Utils
             return matcher.TryMatch(path, values);
         }
 
-        public static bool TryGetDocument(this HttpContext context, AsyncApiOptions options, out string document)
+        public static bool TryGetDocument(this HttpContext context, out string document)
         {
-            document = null;
-#if NETSTANDARD2_0
-            var template = TemplateParser.Parse(options.Middleware.Route);
-
-            var values = new RouteValueDictionary();
-            var matcher = new TemplateMatcher(template, values);
-            if (!matcher.TryMatch(context.Request.Path, values))
-            {
-                template = TemplateParser.Parse(options.Middleware.UiBaseRoute + "{*wildcard}"); 
-                matcher = new TemplateMatcher(template, values);
-                matcher.TryMatch(context.Request.Path, values);
-            }
-#else
             var values = context.Request.RouteValues;
-#endif
-            if (!values.TryGetValue("document", out var value))
+            if (!values.TryGetValue("document", out var value) || value == null)
             {
+                document = null;
                 return false;
             }
 
