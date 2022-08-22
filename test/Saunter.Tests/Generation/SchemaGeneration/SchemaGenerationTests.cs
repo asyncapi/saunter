@@ -96,7 +96,7 @@ namespace Saunter.Tests.Generation.SchemaGeneration
             var petSchema = _schemaResolver.Schemas.FirstOrDefault(s => s.Id == "pet");
             petSchema.Discriminator.ShouldBe("petType");
 
-            Assert.True(schema.Properties["pet"].IsNullable(SchemaType.OpenApi3));
+            Assert.True(schema.Properties["pet"].IsNullable(SchemaType.JsonSchema));
 
             var catSchema = _schemaResolver.Schemas.FirstOrDefault(s => s.Id == "cat");
             var catProperties = catSchema.MergeAllProperties();
@@ -125,7 +125,7 @@ namespace Saunter.Tests.Generation.SchemaGeneration
             var ipetSchema = _schemaResolver.Schemas.FirstOrDefault(s => s.Id == "iPet");
             ipetSchema.Discriminator.ShouldBe("petType");
 
-            Assert.True(schema.Properties["pet"].IsNullable(SchemaType.OpenApi3));
+            Assert.True(schema.Properties["pet"].IsNullable(SchemaType.JsonSchema));
 
             var catSchema = _schemaResolver.Schemas.FirstOrDefault(s => s.Id == "cat");
             var catProperties = catSchema.MergeAllProperties();

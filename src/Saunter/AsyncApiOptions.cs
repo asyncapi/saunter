@@ -89,7 +89,7 @@ namespace Saunter
     {
         public AsyncApiSchemaOptions()
         {
-            SchemaType = SchemaType.OpenApi3; // AsyncAPI uses OpenAPI 3 schemas, see https://www.asyncapi.com/docs/getting-started/coming-from-openapi
+            SchemaType = SchemaType.JsonSchema; // AsyncAPI uses json-schema, see https://github.com/tehmantra/saunter/pull/103#issuecomment-893267360
             TypeNameGenerator = new CamelCaseTypeNameGenerator();
             SerializerSettings = new JsonSerializerSettings
             {
