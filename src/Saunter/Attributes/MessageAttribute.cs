@@ -42,5 +42,13 @@ namespace Saunter.Attributes
         /// The bindings must be added to components/messageBindings with the same name.
         /// </summary>
         public string BindingsRef { get; set; }
+
+        /// <summary>
+        /// Unique string used to identify the message. The id MUST be unique among all messages
+        /// described in the API. The messageId value is case-sensitive. Tools and libraries MAY
+        /// use the messageId to uniquely identify a message, therefore, it is RECOMMENDED to
+        /// follow common programming naming conventions.
+        /// </summary>
+        public string MessageId { get; set; }
     }
 }

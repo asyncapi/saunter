@@ -269,6 +269,7 @@ namespace Saunter.Generation
 
             var message = new Message
             {
+                MessageId = messageAttribute.MessageId,
                 Payload = jsonSchemaGenerator.Generate(messageAttribute.PayloadType, schemaResolver),
                 Title = messageAttribute.Title,
                 Summary = messageAttribute.Summary,

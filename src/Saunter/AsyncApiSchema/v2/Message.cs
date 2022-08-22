@@ -28,6 +28,15 @@ namespace Saunter.AsyncApiSchema.v2
     public class Message : IMessage
     {
         /// <summary>
+        /// Unique string used to identify the message. The id MUST be unique among all messages
+        /// described in the API. The messageId value is case-sensitive. Tools and libraries MAY
+        /// use the messageId to uniquely identify a message, therefore, it is RECOMMENDED to
+        /// follow common programming naming conventions.
+        /// </summary>
+        [JsonProperty("messageId", NullValueHandling = NullValueHandling.Ignore)]
+        public string MessageId { get; set; }
+
+        /// <summary>
         /// Schema definition of the application headers. Schema MUST be of type “object”.
         /// It MUST NOT define the protocol headers.
         /// </summary>
