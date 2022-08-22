@@ -5,7 +5,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 <!-- Please update the links section at the bottom when adding a new version. -->
 
-## [0.10.0] - 2022-08-22
+## [v0.10.0] - 2022-08-22
 ### Changed
 - AsyncAPI spec version bumped to 2.4.0
 - Added messageId to Message and MessageAttribute 
