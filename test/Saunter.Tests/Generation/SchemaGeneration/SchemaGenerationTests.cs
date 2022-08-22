@@ -8,10 +8,8 @@ using NJsonSchema;
 using NJsonSchema.Converters;
 using NJsonSchema.Generation;
 using Saunter.AsyncApiSchema.v2;
-using Saunter.Attributes;
 using Saunter.Generation.SchemaGeneration;
 using Saunter.Tests.Utils;
-using Saunter.Utils;
 using Shouldly;
 using Xunit;
 
@@ -24,7 +22,7 @@ namespace Saunter.Tests.Generation.SchemaGeneration
 
         public SchemaGenerationTests()
         {
-            var settings = new JsonSchemaGeneratorSettings()
+            var settings = new AsyncApiSchemaOptions()
             {
                 TypeNameGenerator = new CamelCaseTypeNameGenerator(),
                 SerializerSettings = new JsonSerializerSettings()
@@ -98,7 +96,7 @@ namespace Saunter.Tests.Generation.SchemaGeneration
             var petSchema = _schemaResolver.Schemas.FirstOrDefault(s => s.Id == "pet");
             petSchema.Discriminator.ShouldBe("petType");
 
-            schema.Properties["pet"].OneOf.Count().ShouldBe(2);
+            Assert.True(schema.Properties["pet"].IsNullable(SchemaType.OpenApi3));
 
             var catSchema = _schemaResolver.Schemas.FirstOrDefault(s => s.Id == "cat");
             var catProperties = catSchema.MergeAllProperties();
@@ -127,7 +125,7 @@ namespace Saunter.Tests.Generation.SchemaGeneration
             var ipetSchema = _schemaResolver.Schemas.FirstOrDefault(s => s.Id == "iPet");
             ipetSchema.Discriminator.ShouldBe("petType");
 
-            schema.Properties["pet"].OneOf.Count().ShouldBe(2);
+            Assert.True(schema.Properties["pet"].IsNullable(SchemaType.OpenApi3));
 
             var catSchema = _schemaResolver.Schemas.FirstOrDefault(s => s.Id == "cat");
             var catProperties = catSchema.MergeAllProperties();

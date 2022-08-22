@@ -1,4 +1,6 @@
 ﻿using Saunter.AsyncApiSchema.v2;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Saunter.Serialization
 {
@@ -6,6 +8,8 @@ namespace Saunter.Serialization
     {
         string ContentType { get; }
 
-        string Serialize(AsyncApiDocument document, AsyncApiOptions options);
+        string Serialize(AsyncApiDocument document);
+
+        Task<AsyncApiDocument> DeserializeAsync(string data, CancellationToken cancellationToken);
     }
 }

@@ -24,9 +24,9 @@ namespace Saunter.Generation
         {
             var asyncApiSchema = prototype.Clone();
 
-            var schemaResolver = new AsyncApiSchemaResolver(asyncApiSchema, options.JsonSchemaGeneratorSettings);
+            var schemaResolver = new AsyncApiSchemaResolver(asyncApiSchema, options.SchemaOptions);
 
-            var generator = new JsonSchemaGenerator(options.JsonSchemaGeneratorSettings);
+            var generator = new JsonSchemaGenerator(options.SchemaOptions);
             asyncApiSchema.Channels = GenerateChannels(asyncApiTypes, schemaResolver, options, generator, serviceProvider);
             
             var filterContext = new DocumentFilterContext(asyncApiTypes, schemaResolver, generator);

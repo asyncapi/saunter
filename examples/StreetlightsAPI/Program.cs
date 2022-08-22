@@ -6,7 +6,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using Saunter;
 using Saunter.AsyncApiSchema.v2;
 
@@ -46,7 +45,7 @@ namespace StreetlightsAPI
             // Add Saunter to the application services. 
             services.AddAsyncApiSchemaGeneration(options =>
             {
-                options.AssemblyMarkerTypes = new[] {typeof(StreetlightMessageBus)};
+                options.AssemblyMarkerTypes = new[] { typeof(StreetlightMessageBus) };
 
                 options.Middleware.UiTitle = "Streetlights API";
 
@@ -65,12 +64,8 @@ namespace StreetlightsAPI
                         ["mosquitto"] = new Server("test.mosquitto.org", "mqtt"),
                         ["webapi"] = new Server("localhost:5000", "http"),
                     },
-
                 };
-
-                options.JsonSchemaGeneratorSettings.SerializerSettings.Formatting = Formatting.Indented;
             });
-
 
             services.AddScoped<IStreetlightMessageBus, StreetlightMessageBus>();
             services.AddControllers();
@@ -88,15 +83,14 @@ namespace StreetlightsAPI
             {
                 endpoints.MapAsyncApiDocuments();
                 endpoints.MapAsyncApiUi();
-                
+
                 endpoints.MapControllers();
             });
 
-            
             // Print the AsyncAPI doc location
             var logger = app.ApplicationServices.GetService<ILoggerFactory>().CreateLogger<Program>();
             var addresses = app.ServerFeatures.Get<IServerAddressesFeature>().Addresses;
-            
+
             logger.LogInformation("AsyncAPI doc available at: {URL}", $"{addresses.FirstOrDefault()}/asyncapi/asyncapi.json");
             logger.LogInformation("AsyncAPI UI available at: {URL}", $"{addresses.FirstOrDefault()}/asyncapi/ui/");
         }
