@@ -14,14 +14,14 @@ namespace Saunter.Serialization
 
         public string Serialize(AsyncApiDocument document)
         {
-            var contractResolver = JsonSchema.CreateJsonSerializerContractResolver(SchemaType.OpenApi3);
-            return JsonSchemaSerialization.ToJson(document, SchemaType.OpenApi3, contractResolver, Formatting.Indented);
+            var contractResolver = JsonSchema.CreateJsonSerializerContractResolver(SchemaType.JsonSchema);
+            return JsonSchemaSerialization.ToJson(document, SchemaType.JsonSchema, contractResolver, Formatting.Indented);
         }
 
         public async Task<AsyncApiDocument> DeserializeAsync(string data, CancellationToken cancellationToken)
         {
-            var contractResolver = JsonSchema.CreateJsonSerializerContractResolver(SchemaType.OpenApi3);
-            return await JsonSchemaSerialization.FromJsonAsync<AsyncApiDocument>(data, SchemaType.OpenApi3, null, document =>
+            var contractResolver = JsonSchema.CreateJsonSerializerContractResolver(SchemaType.JsonSchema);
+            return await JsonSchemaSerialization.FromJsonAsync<AsyncApiDocument>(data, SchemaType.JsonSchema, null, document =>
             {
                 var schemaResolver = new AsyncApiSchemaResolver(document, new AsyncApiSchemaOptions());
                 return new JsonReferenceResolver(schemaResolver);
