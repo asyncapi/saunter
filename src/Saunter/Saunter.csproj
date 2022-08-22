@@ -6,8 +6,7 @@
     <PackageId>Saunter</PackageId>
     <Title>Saunter</Title>
     <PackageIcon>logo.png</PackageIcon>
-    <!-- TODO: https://github.com/NuGet/Home/issues/10791 -->
-    <!-- <PackageReadmeFile>README.md</PackageReadmeFile> -->
+    <PackageReadmeFile>README.md</PackageReadmeFile>
     <Authors>tehmantra</Authors>
     <Description>Code-first AsyncAPI documentation</Description>
     <PackageTags>asyncapi;aspnetcore;openapi;documentation;amqp</PackageTags>
