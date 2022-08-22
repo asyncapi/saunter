@@ -31,7 +31,7 @@ namespace Saunter
             }
 
             var prototype = _options.AsyncApi;
-            if (context.TryGetDocument(_options, out var documentName) && !_options.NamedApis.TryGetValue(documentName, out prototype))
+            if (context.TryGetDocument(out var documentName) && !_options.NamedApis.TryGetValue(documentName, out prototype))
             {
                 await _next(context);
                 return;
