@@ -9,11 +9,13 @@ namespace Saunter.Attributes
         {
             PayloadType = payloadType;
         }
+        
         public MessageAttribute(Type payloadType, params string[] tags)
         {
             PayloadType = payloadType;
             Tags = tags;
         }
+        
         /// <summary>
         /// The type to use to generate the message payload schema.
         /// </summary>
@@ -47,6 +49,17 @@ namespace Saunter.Attributes
         /// </summary>
         public string BindingsRef { get; set; }
 
+        /// <summary>
+        /// Unique string used to identify the message. The id MUST be unique among all messages
+        /// described in the API. The messageId value is case-sensitive. Tools and libraries MAY
+        /// use the messageId to uniquely identify a message, therefore, it is RECOMMENDED to
+        /// follow common programming naming conventions.
+        /// </summary>
+        public string MessageId { get; set; }
+
+        /// <summary>
+        /// A list of tags for API documentation control. Tags can be used for logical grouping of messages.
+        /// </summary>
         public string[] Tags { get; }
     }
 }

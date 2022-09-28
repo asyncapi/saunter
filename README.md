@@ -234,7 +234,7 @@ public class BarMessageBus
 
 Each document can be accessed by specifying the name in the URL
 
-```json
+```
 // GET /asyncapi/foo/asyncapi.json
 {
     "info": {
@@ -263,5 +263,4 @@ You can also find me on the [AsyncAPI community slack](https://asyncapi.com/slac
 
 * This project is heavily inspired by [Swashbuckle](https://github.com/domaindrivendev/Swashbuckle.AspNetCore).
 * We use [NJsonSchema](https://github.com/RicoSuter/NJsonSchema) for the JSON schema heavy lifting, 
-* and [Namotion.Reflection](https://github.com/RicoSuter/Namotion.Reflection) for pulling XML documentation.
 

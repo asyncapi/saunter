@@ -11,7 +11,7 @@ namespace Saunter.Generation.SchemaGeneration
         private readonly AsyncApiDocument _document;
         private readonly JsonSchemaGeneratorSettings _settings;
 
-        public AsyncApiSchemaResolver(AsyncApiDocument document, JsonSchemaGeneratorSettings settings) 
+        public AsyncApiSchemaResolver(AsyncApiDocument document, AsyncApiSchemaOptions settings) 
             : base(document, settings)
         {
             _document = document;

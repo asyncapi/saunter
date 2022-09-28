@@ -5,6 +5,21 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 <!-- Please update the links section at the bottom when adding a new version. -->
 
+## [v0.10.0] - 2022-08-22
+### Changed
+- AsyncAPI spec version bumped to 2.4.0
+- Added messageId to Message and MessageAttribute 
+- Updated @asyncapi/react-component to v1.0.0-next.40
+- Target net6.0 only - multitargeting was painful to test & maintain
+- Updated NJsonSchema to v10.7.2
+- [Add README to NuGet package #110](https://github.com/tehmantra/saunter/issues/110)
+
+### Fixed
+- [Saunter breaks when you try register two same channels #133](https://github.com/tehmantra/saunter/issues/133)
+- [NJsonSchema uses unsupported Json Schema. #138](https://github.com/tehmantra/saunter/issues/138)
+- [Use NJsonSchema for the JSON Schema implementation #60](https://github.com/tehmantra/saunter/issues/60)
+- [Error: Maximum call stack size exceeded #123](https://github.com/tehmantra/saunter/issues/123)
+
 ## [v0.9.1] - 2021-11-08
 ### Fixed
 - Hosting behind a reverse proxy now works correctly. See tests/Saunter.IntegrationTests.ReverseProxy/README.md for an example.
@@ -116,6 +131,7 @@ When updating here set baseVersion to the previous tag and targetVersion to your
 This link will be dead until after you have completed the pull request and tagged the new version in master
 -->
 
+[v0.10.0]: https://github.com/tehmantra/saunter/compare/v0.9.1...v0.10.0
 [v0.9.1]: https://github.com/tehmantra/saunter/compare/v0.9.0...v0.9.1
 [v0.9.0]: https://github.com/tehmantra/saunter/compare/v0.8.0...v0.9.0
 [v0.8.0]: https://github.com/tehmantra/saunter/compare/v0.7.1...v0.8.0

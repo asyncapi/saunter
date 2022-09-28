@@ -24,11 +24,11 @@ namespace Saunter.Generation
         {
             var asyncApiSchema = prototype.Clone();
 
-            var schemaResolver = new AsyncApiSchemaResolver(asyncApiSchema, options.JsonSchemaGeneratorSettings);
+            var schemaResolver = new AsyncApiSchemaResolver(asyncApiSchema, options.SchemaOptions);
 
-            var generator = new JsonSchemaGenerator(options.JsonSchemaGeneratorSettings);
+            var generator = new JsonSchemaGenerator(options.SchemaOptions);
             asyncApiSchema.Channels = GenerateChannels(asyncApiTypes, schemaResolver, options, generator, serviceProvider);
-
+            
             var filterContext = new DocumentFilterContext(asyncApiTypes, schemaResolver, generator);
             foreach (var filterType in options.DocumentFilters)
             {
@@ -45,7 +45,7 @@ namespace Saunter.Generation
         private static IDictionary<string, ChannelItem> GenerateChannels(TypeInfo[] asyncApiTypes, AsyncApiSchemaResolver schemaResolver, AsyncApiOptions options, JsonSchemaGenerator jsonSchemaGenerator, IServiceProvider serviceProvider)
         {
             var channels = new Dictionary<string, ChannelItem>();
-
+            
             channels.AddRange(GenerateChannelsFromMethods(asyncApiTypes, schemaResolver, options, jsonSchemaGenerator, serviceProvider));
             channels.AddRange(GenerateChannelsFromClasses(asyncApiTypes, schemaResolver, options, jsonSchemaGenerator, serviceProvider));
             return channels;
@@ -70,6 +70,8 @@ namespace Saunter.Generation
 
             foreach (var mc in methodsWithChannelAttribute)
             {
+                if (mc.Channel == null) continue;
+                
                 var channelItem = new ChannelItem
                 {
                     Description = mc.Channel.Description,
@@ -78,9 +80,9 @@ namespace Saunter.Generation
                     Subscribe = GenerateOperationFromMethod(mc.Method, schemaResolver, OperationType.Subscribe, options, jsonSchemaGenerator, serviceProvider),
                     Bindings = mc.Channel.BindingsRef != null ? new ChannelBindingsReference(mc.Channel.BindingsRef) : null,
                     Servers = mc.Channel.Servers?.ToList(),
-                };
-                channels.Add(mc.Channel.Name, channelItem);
-
+                }; 
+                channels.AddOrAppend(mc.Channel.Name, channelItem);
+                
                 var context = new ChannelItemFilterContext(mc.Method, schemaResolver, jsonSchemaGenerator, mc.Channel);
                 foreach (var filterType in options.ChannelItemFilters)
                 {
@@ -110,6 +112,8 @@ namespace Saunter.Generation
 
             foreach (var cc in classesWithChannelAttribute)
             {
+                if (cc.Channel == null) continue;
+                
                 var channelItem = new ChannelItem
                 {
                     Description = cc.Channel.Description,
@@ -119,9 +123,9 @@ namespace Saunter.Generation
                     Bindings = cc.Channel.BindingsRef != null ? new ChannelBindingsReference(cc.Channel.BindingsRef) : null,
                     Servers = cc.Channel.Servers?.ToList(),
                 };
-
+                
                 channels.AddOrAppend(cc.Channel.Name, channelItem);
-
+                
                 var context = new ChannelItemFilterContext(cc.Type, schemaResolver, jsonSchemaGenerator, cc.Channel);
                 foreach (var filterType in options.ChannelItemFilters)
                 {
@@ -148,7 +152,7 @@ namespace Saunter.Generation
             var message = messageAttributes.Any()
                 ? GenerateMessageFromAttributes(messageAttributes, schemaResolver, jsonSchemaGenerator)
                 : GenerateMessageFromType(operationAttribute.MessagePayloadType, schemaResolver, jsonSchemaGenerator);
-
+            
             var operation = new Operation
             {
                 OperationId = operationAttribute.OperationId ?? method.Name,
@@ -221,11 +225,11 @@ namespace Saunter.Generation
             {
                 case OperationType.Publish:
                     var publishOperationAttribute = typeOrMethod.GetCustomAttribute<PublishOperationAttribute>();
-                    return (OperationAttribute)publishOperationAttribute;
+                    return (OperationAttribute) publishOperationAttribute;
 
                 case OperationType.Subscribe:
                     var subscribeOperationAttribute = typeOrMethod.GetCustomAttribute<SubscribeOperationAttribute>();
-                    return (OperationAttribute)subscribeOperationAttribute;
+                    return (OperationAttribute) subscribeOperationAttribute;
 
                 default:
                     return null;
@@ -266,6 +270,7 @@ namespace Saunter.Generation
 
             var message = new Message
             {
+                MessageId = messageAttribute.MessageId,
                 Payload = jsonSchemaGenerator.Generate(messageAttribute.PayloadType, schemaResolver),
                 Title = messageAttribute.Title,
                 Summary = messageAttribute.Summary,
@@ -277,7 +282,7 @@ namespace Saunter.Generation
 
             return schemaResolver.GetMessageOrReference(message);
         }
-
+        
 
         private static IMessage GenerateMessageFromType(Type payloadType, AsyncApiSchemaResolver schemaResolver, JsonSchemaGenerator jsonSchemaGenerator)
         {
@@ -310,7 +315,7 @@ namespace Saunter.Generation
                         Schema = jsonSchemaGenerator.Generate(attribute.Type, schemaResolver),
                         Location = attribute.Location,
                     });
-
+                    
                     parameters.Add(attribute.Name, parameter);
                 }
             }
