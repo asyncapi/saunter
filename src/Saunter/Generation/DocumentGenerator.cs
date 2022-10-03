@@ -1,16 +1,16 @@
+using Microsoft.Extensions.DependencyInjection;
 using Namotion.Reflection;
 using NJsonSchema.Generation;
 using Saunter.AsyncApiSchema.v2;
+using Saunter.AsyncApiSchema.v2.Bindings;
 using Saunter.Attributes;
 using Saunter.Generation.Filters;
 using Saunter.Generation.SchemaGeneration;
+using Saunter.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Microsoft.Extensions.DependencyInjection;
-using Saunter.AsyncApiSchema.v2.Bindings;
-using Saunter.Utils;
 
 namespace Saunter.Generation
 {
@@ -160,6 +160,7 @@ namespace Saunter.Generation
                 Description = operationAttribute.Description ?? (method.GetXmlDocsRemarks() != "" ? method.GetXmlDocsRemarks() : null),
                 Message = message,
                 Bindings = operationAttribute.BindingsRef != null ? new OperationBindingsReference(operationAttribute.BindingsRef) : null,
+                Tags = new HashSet<Tag>(operationAttribute.Tags?.Select(x => new Tag(x)) ?? new List<Tag>())
             };
 
             var filterContext = new OperationFilterContext(method, schemaResolver, jsonSchemaGenerator, operationAttribute);
@@ -275,6 +276,7 @@ namespace Saunter.Generation
                 Summary = messageAttribute.Summary,
                 Description = messageAttribute.Description,
                 Bindings = messageAttribute.BindingsRef != null ? new MessageBindingsReference(messageAttribute.BindingsRef) : null,
+                Tags = new HashSet<Tag>(messageAttribute.Tags?.Select(x => new Tag(x)) ?? new List<Tag>())
             };
             message.Name = messageAttribute.Name ?? message.Payload.ActualSchema.Id;
 
@@ -298,7 +300,7 @@ namespace Saunter.Generation
             return schemaResolver.GetMessageOrReference(message);
         }
 
-        private static IDictionary<string,IParameter> GetChannelParametersFromAttributes(MemberInfo memberInfo, AsyncApiSchemaResolver schemaResolver, JsonSchemaGenerator jsonSchemaGenerator)
+        private static IDictionary<string, IParameter> GetChannelParametersFromAttributes(MemberInfo memberInfo, AsyncApiSchemaResolver schemaResolver, JsonSchemaGenerator jsonSchemaGenerator)
         {
             IEnumerable<ChannelParameterAttribute> attributes = memberInfo.GetCustomAttributes<ChannelParameterAttribute>();
             var parameters = new Dictionary<string, IParameter>();

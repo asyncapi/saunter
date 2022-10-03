@@ -9,7 +9,13 @@ namespace Saunter.Attributes
         {
             PayloadType = payloadType;
         }
-
+        
+        public MessageAttribute(Type payloadType, params string[] tags)
+        {
+            PayloadType = payloadType;
+            Tags = tags;
+        }
+        
         /// <summary>
         /// The type to use to generate the message payload schema.
         /// </summary>
@@ -30,7 +36,7 @@ namespace Saunter.Attributes
         /// A short summary of what the message is about.
         /// </summary>
         public string Summary { get; set; }
-        
+
         /// <summary>
         /// A verbose explanation of the message.
         /// CommonMark syntax can be used for rich text representation.
@@ -50,5 +56,10 @@ namespace Saunter.Attributes
         /// follow common programming naming conventions.
         /// </summary>
         public string MessageId { get; set; }
+
+        /// <summary>
+        /// A list of tags for API documentation control. Tags can be used for logical grouping of messages.
+        /// </summary>
+        public string[] Tags { get; }
     }
 }
