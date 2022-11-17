@@ -56,6 +56,17 @@ namespace Saunter.Generation.SchemaGeneration
                 };
             }
 
+            if (message.Headers != null)
+            {
+                // the headers schema is stored under components/schema; make
+                // sure to use the reference in the message instead of storing
+                // the complete schema again
+                message.Headers = new JsonSchema()
+                {
+                    Reference = message.Headers
+                };
+            }
+
             return new MessageReference(id);
         }
 
