@@ -91,7 +91,7 @@ namespace StreetlightsAPI
         /// Inform about environmental lighting conditions for a particular streetlight.
         /// </summary>
         [Channel(PublishLightMeasuredTopic, Servers = new []{"webapi"})]
-        [PublishOperation(typeof(LightMeasuredEvent))]
+        [PublishOperation(typeof(LightMeasuredEvent), "Light")]
         [HttpPost]
         [Route(PublishLightMeasuredTopic)]
         public void MeasureLight([FromBody] LightMeasuredEvent lightMeasuredEvent)

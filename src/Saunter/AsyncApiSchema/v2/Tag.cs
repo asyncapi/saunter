@@ -19,13 +19,13 @@ namespace Saunter.AsyncApiSchema.v2
         /// <summary>
         /// A short description for the tag. CommonMark syntax can be used for rich text representation.
         /// </summary>
-        [JsonProperty("description")]
+        [JsonProperty("description", NullValueHandling = NullValueHandling.Ignore)]
         public string Description { get; set; }
 
         /// <summary>
         /// Additional external documentation for this tag.
         /// </summary>
-        [JsonProperty("externalDocs")]
+        [JsonProperty("externalDocs", NullValueHandling = NullValueHandling.Ignore)]
         public ExternalDocumentation ExternalDocs { get; set; }
 
         public static implicit operator Tag(string s)
