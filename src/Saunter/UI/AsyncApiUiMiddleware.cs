@@ -53,7 +53,7 @@ namespace Saunter.UI
             {
                 context.Response.StatusCode = (int) HttpStatusCode.MovedPermanently;
 
-                if (context.TryGetDocument(out var document))
+                if (context.TryGetDocument(_options, out var document))
                 {
                     context.Response.Headers["Location"] = GetUiIndexFullRoute(context.Request).Replace("{document}", document);
                 }
@@ -66,7 +66,7 @@ namespace Saunter.UI
 
             if (IsRequestingAsyncApiUi(context.Request))
             {
-                if (context.TryGetDocument(out var document))
+                if (context.TryGetDocument(_options, out var document))
                 {
                     await RespondWithAsyncApiHtml(context.Response, GetDocumentFullRoute(context.Request).Replace("{document}", document));
                 }
@@ -77,7 +77,7 @@ namespace Saunter.UI
                 return;
             }
             
-            if (!context.TryGetDocument(out var documentName))
+            if (!context.TryGetDocument(_options, out var documentName))
             {
                 await _staticFiles.Invoke(context);
             }
@@ -119,12 +119,12 @@ namespace Saunter.UI
 
         private bool IsRequestingUiBase(HttpRequest request)
         {
-            return HttpMethods.IsGet(request.Method) && request.Path.IsMatchingRoute(UiBaseRoute);
+            return HttpMethods.IsGet(request.Method) && request.IsMatchingRoute(UiBaseRoute);
         }
         
         private bool IsRequestingAsyncApiUi(HttpRequest request)
         {
-            return HttpMethods.IsGet(request.Method) && request.Path.IsMatchingRoute(UiIndexRoute);
+            return HttpMethods.IsGet(request.Method) && request.IsMatchingRoute(UiIndexRoute);
         }
 
         private string UiIndexRoute => _options.Middleware.UiBaseRoute?.TrimEnd('/') + "/index.html";

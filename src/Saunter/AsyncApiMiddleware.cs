@@ -31,7 +31,7 @@ namespace Saunter
             }
 
             var prototype = _options.AsyncApi;
-            if (context.TryGetDocument(out var documentName) && !_options.NamedApis.TryGetValue(documentName, out prototype))
+            if (context.TryGetDocument(_options, out var documentName) && !_options.NamedApis.TryGetValue(documentName, out prototype))
             {
                 await _next(context);
                 return;
@@ -53,7 +53,7 @@ namespace Saunter
 
         private bool IsRequestingAsyncApiSchema(HttpRequest request)
         {
-            return HttpMethods.IsGet(request.Method) && request.Path.IsMatchingRoute(_options.Middleware.Route);
+            return HttpMethods.IsGet(request.Method) && request.IsMatchingRoute(_options.Middleware.Route);
         }
     }
 }

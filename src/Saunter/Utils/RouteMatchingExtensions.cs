@@ -1,31 +1,37 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.Routing.Template;
 
 namespace Saunter.Utils
 {
     public static class RouteMatchingExtensions
     {
-        public static bool IsMatchingRoute(this PathString path, string pattern)
+        public static bool IsMatchingRoute(this HttpRequest request, string pattern)
         {
             var template = TemplateParser.Parse(pattern);
-
-            var values = new RouteValueDictionary();
-            var matcher = new TemplateMatcher(template, values);
-            return matcher.TryMatch(path, values);
+            
+            var matcher = new TemplateMatcher(template, request.RouteValues);
+            return matcher.TryMatch(request.Path, request.RouteValues);
         }
 
-        public static bool TryGetDocument(this HttpContext context, out string document)
+        public static bool TryGetDocument(this HttpContext context, AsyncApiOptions options, out string document)
         {
             var values = context.Request.RouteValues;
-            if (!values.TryGetValue("document", out var value) || value == null)
+
+            if (values.Count == 0)
             {
-                document = null;
-                return false;
+                var template = TemplateParser.Parse(options.Middleware.UiBaseRoute + "{*wildcard}");
+                var matcher = new TemplateMatcher(template, values);
+                matcher.TryMatch(context.Request.Path, values);
             }
 
-            document = value.ToString();
-            return true;
+            if (values.TryGetValue("document", out var value) && value != null)
+            {
+                document = value.ToString();
+                return true;
+            }
+
+            document = null;
+            return false;
         }
     }
 }
