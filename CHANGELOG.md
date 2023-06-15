@@ -5,9 +5,17 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 <!-- Please update the links section at the bottom when adding a new version. -->
 
-## [v0.11.1] - 2023-04-12
+## [v0.12.0] - 2023-06-15
+### Added
+- [Add support for message headers](https://github.com/tehmantra/saunter/issues/150)
+### Changed
+- Updated @asyncapi/react-component to v1.0.0-next.48
+- Updated NJsonSchema dependencies ([fixes compatibility with NSwag](https://github.com/tehmantra/saunter/issues/156))
 ### Fixed
 - [Duplicated operation when types of the same assembly are used in AssemblyMarkerTypes](https://github.com/tehmantra/saunter/issues/163)
+- [Tags do not work without description and external docs](https://github.com/tehmantra/saunter/issues/149)
+  - Updates Tag Description and ExternalDocs to ignore nulls to eliminate async api parser errors.
+  - Adds support for Tags from a class that was missing.
 
 ## [v0.11.0] - 2022-10-03
 ### Added
