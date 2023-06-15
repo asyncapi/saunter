@@ -5,6 +5,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 <!-- Please update the links section at the bottom when adding a new version. -->
 
+## [v0.11.1] - 2023-04-12
+### Fixed
+- [Duplicated operation when types of the same assembly are used in AssemblyMarkerTypes](https://github.com/tehmantra/saunter/issues/163)
+
 ## [v0.11.0] - 2022-10-03
 ### Added
 - Message and Operation attributes now allow setting tags
@@ -135,6 +139,7 @@ When updating here set baseVersion to the previous tag and targetVersion to your
 This link will be dead until after you have completed the pull request and tagged the new version in master
 -->
 
+[v0.11.1]: https://github.com/tehmantra/saunter/compare/v0.11.0...v0.11.1
 [v0.11.0]: https://github.com/tehmantra/saunter/compare/v0.10.0...v0.11.0
 [v0.10.0]: https://github.com/tehmantra/saunter/compare/v0.9.1...v0.10.0
 [v0.9.1]: https://github.com/tehmantra/saunter/compare/v0.9.0...v0.9.1

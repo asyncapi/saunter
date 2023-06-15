@@ -28,6 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Saunter.Tests.MarkerTypeTests\Saunter.Tests.MarkerTypeTests.csproj" />
     <ProjectReference Include="..\..\src\Saunter\Saunter.csproj" />
   </ItemGroup>
 
