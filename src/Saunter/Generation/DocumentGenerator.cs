@@ -192,6 +192,7 @@ namespace Saunter.Generation
                 Description = operationAttribute.Description ?? (type.GetXmlDocsRemarks() != "" ? type.GetXmlDocsRemarks() : null),
                 Message = messages,
                 Bindings = operationAttribute.BindingsRef != null ? new OperationBindingsReference(operationAttribute.BindingsRef) : null,
+                Tags = new HashSet<Tag>( operationAttribute.Tags?.Select(x => new Tag(x)) ?? new List<Tag>())
             };
 
             var methodsWithMessageAttribute = type.DeclaredMethods
