@@ -22,6 +22,11 @@ namespace Saunter.Attributes
         public Type PayloadType { get; }
 
         /// <summary>
+        /// The type to use to generate the message headers schema.
+        /// </summary>
+        public Type HeadersType { get; set; }
+
+        /// <summary>
         /// A machine-friendly name for the message.
         /// Defaults to the generated schemaId.
         /// </summary>

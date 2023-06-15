@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
 using Saunter.AsyncApiSchema.v2;
@@ -161,7 +162,7 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
 
             // Act
             var document = documentGenerator.GenerateDocument(new []{ typeof(OneTenantMessageConsumer).GetTypeInfo() }, options, options.AsyncApi, ActivatorServiceProvider.Instance);
-            
+
             // Assert
             document.ShouldNotBeNull();
             document.Channels.Count.ShouldBe(1);
@@ -185,7 +186,35 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
             messages.OneOf.OfType<MessageReference>().ShouldContain(m => m.Id == "tenantUpdated");
             messages.OneOf.OfType<MessageReference>().ShouldContain(m => m.Id == "tenantRemoved");
         }
-        
+
+
+        [Fact]
+        public void GenerateDocument_GeneratesDocumentWithMessageHeader()
+        {
+            // Arrange
+            var options = new AsyncApiOptions();
+            var documentGenerator = new DocumentGenerator();
+
+            // Act
+            var document = documentGenerator.GenerateDocument(new[] { typeof(MyMessagePublisher).GetTypeInfo() }, options, options.AsyncApi, ActivatorServiceProvider.Instance);
+            
+            // Assert
+            document.ShouldNotBeNull();
+
+            document.Components.Schemas.Values.ShouldContain(t => t.Id == "myMessageHeader");
+            var message = document.Components.Messages.Values.First();
+            message.Headers.Reference.Id.ShouldBe("myMessageHeader");
+        }
+
+
+        [AsyncApi]
+        [Channel("channel.my.message")]
+        [PublishOperation]
+        public class MyMessagePublisher
+        {
+            [Message(typeof(MyMessage), HeadersType = typeof(MyMessageHeader))]
+            public void PublishMyMessage() { }
+        }
 
         [AsyncApi]
         [Channel("asw.tenant_service.tenants_history", Description = "Tenant events.")]
@@ -265,4 +294,13 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
     public class TenantUpdated { }
 
     public class TenantRemoved { }
+
+    public class MyMessage { }
+
+    public class MyMessageHeader
+    {
+        [Required]
+        public string StringHeader { get; set; }
+        public int? NullableIntHeader { get; set; }
+    }
 }
