@@ -27,7 +27,24 @@ namespace Saunter.Tests.Generation.Filters
             document.Channels.ShouldContainKey("foo");
         }
 
+        [Fact]
+        public void DocumentNameIsAppliedToAsyncApiDocument()
+        {
+            // Arrange
+            const string documentName = "Test Document";
+            var options = new AsyncApiOptions();
+            options.AsyncApi.DocumentName = documentName;
+            var documentGenerator = new DocumentGenerator();
 
+            // Act
+            options.AddDocumentFilter<ExampleDocumentFilter>();
+            var document = documentGenerator.GenerateDocument(new[] { GetType().GetTypeInfo() }, options, options.AsyncApi, ActivatorServiceProvider.Instance);
+
+            // Assert
+            document.ShouldNotBeNull();
+            document.DocumentName.ShouldBe(documentName);
+        }   
+        
         private class ExampleDocumentFilter : IDocumentFilter
         {
             public void Apply(AsyncApiDocument document, DocumentFilterContext context)

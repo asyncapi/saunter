@@ -85,6 +85,7 @@ namespace Saunter.AsyncApiSchema.v2
             clone.Info = Info;
             clone.Id = Id;
             clone.DefaultContentType = DefaultContentType;
+            clone.DocumentName = DocumentName;
             clone.Channels = Channels.ToDictionary(p => p.Key, p => p.Value);
             clone.Servers = Servers.ToDictionary(p => p.Key, p => p.Value);
             foreach (var tag in Tags)
