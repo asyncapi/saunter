@@ -64,11 +64,7 @@ See [examples/StreetlightsAPI](https://github.com/tehmantra/saunter/blob/main/ex
 4. Add saunter middleware to host the AsyncApi json document. In the `Configure` method of `Startup.cs`:
 
     ```csharp
-    app.UseEndpoints(endpoints =>
-    {
-        endpoints.MapAsyncApiDocuments();
-        endpoints.MapAsyncApiUi();
-    });
+    app.UseAsyncApi();
     ```
 
 5. Use the published AsyncApi document:
@@ -253,7 +249,7 @@ Each document can be accessed by specifying the name in the URL
 
 ## Contributing
 
-See our [contributing guide](https://github.com/tehmantra/saunter/blob/main/CONTRIBUTING.md/CONTRIBUTING.md).
+See our [contributing guide](https://github.com/tehmantra/saunter/blob/main/CONTRIBUTING.md).
 
 Feel free to get involved in the project by opening issues, or submitting pull requests.
 
