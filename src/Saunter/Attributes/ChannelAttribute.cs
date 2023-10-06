@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Saunter.Attributes
 {
@@ -31,6 +32,12 @@ namespace Saunter.Attributes
         /// defined in the Servers Object.
         /// </summary>
         public string[] Servers { get; set; }
+
+        /// <summary>
+        /// Specification Extensions. The extensions properties are implemented as patterned fields that are always prefixed by "x-" and must be format 'key=value'
+        /// </summary>
+        public string[] XParams { get; set; }
+
 
         public ChannelAttribute(string name)
         {
