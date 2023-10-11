@@ -1,36 +1,36 @@
 using System;
+
 using Newtonsoft.Json;
 
-namespace Saunter.AsyncApiSchema.v2
+namespace Saunter.AsyncApiSchema.v2;
+
+public class Tag
 {
-    public class Tag
+    public Tag(string name)
     {
-        public Tag(string name)
-        {
-            Name = name ?? throw new ArgumentNullException(nameof(name));
-        }
+        Name = name ?? throw new ArgumentNullException(nameof(name));
+    }
 
-        /// <summary>
-        /// The name of the tag.
-        /// </summary>
-        [JsonProperty("name")]
-        public string Name { get; }
+    /// <summary>
+    /// The name of the tag.
+    /// </summary>
+    [JsonProperty("name")]
+    public string Name { get; }
 
-        /// <summary>
-        /// A short description for the tag. CommonMark syntax can be used for rich text representation.
-        /// </summary>
-        [JsonProperty("description", NullValueHandling = NullValueHandling.Ignore)]
-        public string Description { get; set; }
+    /// <summary>
+    /// A short description for the tag. CommonMark syntax can be used for rich text representation.
+    /// </summary>
+    [JsonProperty("description", NullValueHandling = NullValueHandling.Ignore)]
+    public string Description { get; set; }
 
-        /// <summary>
-        /// Additional external documentation for this tag.
-        /// </summary>
-        [JsonProperty("externalDocs", NullValueHandling = NullValueHandling.Ignore)]
-        public ExternalDocumentation ExternalDocs { get; set; }
+    /// <summary>
+    /// Additional external documentation for this tag.
+    /// </summary>
+    [JsonProperty("externalDocs", NullValueHandling = NullValueHandling.Ignore)]
+    public ExternalDocumentation ExternalDocs { get; set; }
 
-        public static implicit operator Tag(string s)
-        {
-            return new Tag(s);
-        }
+    public static implicit operator Tag(string s)
+    {
+        return new Tag(s);
     }
 }

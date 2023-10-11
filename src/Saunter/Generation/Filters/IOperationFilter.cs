@@ -1,33 +1,34 @@
 using System;
 using System.Reflection;
+
 using NJsonSchema.Generation;
+
 using Saunter.AsyncApiSchema.v2;
 using Saunter.Attributes;
 using Saunter.Generation.SchemaGeneration;
 
-namespace Saunter.Generation.Filters
+namespace Saunter.Generation.Filters;
+
+public interface IOperationFilter
 {
-    public interface IOperationFilter
+    void Apply(Operation operation, OperationFilterContext context);
+}
+
+public class OperationFilterContext
+{
+    public OperationFilterContext(MethodInfo method, JsonSchemaResolver schemaResolver, JsonSchemaGenerator schemaGenerator, OperationAttribute operation)
     {
-        void Apply(Operation operation, OperationFilterContext context);
+        Method = method;
+        SchemaResolver = schemaResolver;
+        SchemaGenerator = schemaGenerator;
+        Operation = operation;
     }
 
-    public class OperationFilterContext
-    {
-        public OperationFilterContext(MethodInfo method, JsonSchemaResolver schemaResolver, JsonSchemaGenerator schemaGenerator, OperationAttribute operation)
-        {
-            Method = method;
-            SchemaResolver = schemaResolver;
-            SchemaGenerator = schemaGenerator;
-            Operation = operation;
-        }
-        
-        public MethodInfo Method { get; }
+    public MethodInfo Method { get; }
 
-        public JsonSchemaResolver SchemaResolver { get; }
+    public JsonSchemaResolver SchemaResolver { get; }
 
-        public JsonSchemaGenerator SchemaGenerator { get; }
+    public JsonSchemaGenerator SchemaGenerator { get; }
 
-        public OperationAttribute Operation { get; }
-    }
+    public OperationAttribute Operation { get; }
 }
