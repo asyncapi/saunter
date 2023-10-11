@@ -13,20 +13,21 @@ Saunter is an [AsyncAPI](https://github.com/asyncapi/asyncapi) documentation gen
 
 1 priority:
 
-* Give the opportunity to work with multiple operations in the one class/method
-* Nullable enable
-* Add generator output validation
-* More unit
+* [X] Dotnet 7
+* [ ] Give the opportunity to work with multiple operations in the one class/method
+* [ ] Nullable enable
+* [ ] Add generator output validation
+* [ ] More unit
 
 2 priority:
 
-* Concat operations and channel to one attributes
-* Up asyncapi version
-* Nuget package
+* [ ] Concat operations and channel to one attributes
+* [ ] Up asyncapi version
+* [ ] Nuget package
 
 3 priority:
 
-* Destroy hell attributes and make a normal tool for describing a asyncapi document
+* [ ] Destroy hell attributes and make a normal tool for describing a asyncapi document
 
 ## Getting Started
 
