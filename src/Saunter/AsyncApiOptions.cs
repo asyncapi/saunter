@@ -72,8 +72,6 @@ public class AsyncApiOptions
         _operationFilters.Add(typeof(T));
     }
 
-
-
     /// <summary>
     /// Options related to the Saunter middleware.
     /// </summary>

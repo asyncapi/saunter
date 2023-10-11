@@ -20,7 +20,7 @@ public static class AsyncApiEndpointRouteBuilderExtensions
             .UseMiddleware<AsyncApiMiddleware>()
             .Build();
 
-        IOptions<AsyncApiOptions> options = endpoints.ServiceProvider.GetService<IOptions<AsyncApiOptions>>();
+        IOptions<AsyncApiOptions> options = endpoints.ServiceProvider.GetRequiredService<IOptions<AsyncApiOptions>>();
         string route = options.Value.Middleware.Route;
 
         return endpoints.MapGet(route, pipeline);
@@ -43,7 +43,7 @@ public static class AsyncApiEndpointRouteBuilderExtensions
             .UseMiddleware<AsyncApiUiMiddleware>()
             .Build();
 
-        IOptions<AsyncApiOptions> options = endpoints.ServiceProvider.GetService<IOptions<AsyncApiOptions>>();
+        IOptions<AsyncApiOptions> options = endpoints.ServiceProvider.GetRequiredService<IOptions<AsyncApiOptions>>();
         string route = options.Value.Middleware.UiBaseRoute + "{*wildcard}";
 
         return endpoints.MapGet(route, pipeline);

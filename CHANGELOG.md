@@ -26,7 +26,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 - AsyncAPI spec version bumped to 2.4.0
 - Added messageId to Message and MessageAttribute 
 - Updated @asyncapi/react-component to v1.0.0-next.40
-- Target net6.0 only - multitargeting was painful to test & maintain
+- Target net7.0 only - multitargeting was painful to test & maintain
 - Updated NJsonSchema to v10.7.2
 - [Add README to NuGet package #110](https://github.com/tehmantra/saunter/issues/110)
 

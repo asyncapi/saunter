@@ -1,44 +1,46 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
+
 using Saunter.AsyncApiSchema.v2;
 using Saunter.Generation;
 using Saunter.Generation.Filters;
+
 using Shouldly;
+
 using Xunit;
 
-namespace Saunter.Tests.Generation.Filters
+namespace Saunter.Tests.Generation.Filters;
+
+public class DocumentFilterTests
 {
-    public class DocumentFilterTests
+    [Fact]
+    public void DocumentFilterIsAppliedToAsyncApiDocument()
     {
-        [Fact]
-        public void DocumentFilterIsAppliedToAsyncApiDocument()
+        // Arrange
+        AsyncApiOptions options = new();
+        DocumentGenerator documentGenerator = new();
+
+        // Act
+        options.AddDocumentFilter<ExampleDocumentFilter>();
+        AsyncApiDocument document = documentGenerator.GenerateDocument(new[] { GetType().GetTypeInfo() }, options, options.AsyncApi, ActivatorServiceProvider.Instance);
+
+        // Assert
+        document.ShouldNotBeNull();
+        document.Channels.Count.ShouldBe(1);
+        document.Channels.ShouldContainKey("foo");
+    }
+
+
+    private class ExampleDocumentFilter : IDocumentFilter
+    {
+        public void Apply(AsyncApiDocument document, DocumentFilterContext context)
         {
-            // Arrange
-            var options = new AsyncApiOptions();
-            var documentGenerator = new DocumentGenerator();
-
-            // Act
-            options.AddDocumentFilter<ExampleDocumentFilter>();
-            var document = documentGenerator.GenerateDocument(new[] { GetType().GetTypeInfo() }, options, options.AsyncApi, ActivatorServiceProvider.Instance);
-
-            // Assert
-            document.ShouldNotBeNull();
-            document.Channels.Count.ShouldBe(1);
-            document.Channels.ShouldContainKey("foo");
-        }
-
-
-        private class ExampleDocumentFilter : IDocumentFilter
-        {
-            public void Apply(AsyncApiDocument document, DocumentFilterContext context)
+            ChannelItem channel = new()
             {
-                var channel = new ChannelItem
-                {
-                    Description = "an example channel for testing"
-                };
+                Description = "an example channel for testing"
+            };
 
-                document.Channels.Add(new KeyValuePair<string, ChannelItem>("foo", channel));
-            }
+            document.Channels.Add(new KeyValuePair<string, ChannelItem>("foo", channel));
         }
     }
 }

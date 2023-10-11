@@ -41,7 +41,7 @@ public class Message : IMessage
     /// It MUST NOT define the protocol headers.
     /// </summary>
     [JsonProperty("headers", NullValueHandling = NullValueHandling.Ignore)]
-    public JsonSchema Headers { get; set; }
+    public JsonSchema? Headers { get; set; }
 
     /// <summary>
     /// Definition of the message payload. It can be of any type but defaults to Schema object.

@@ -12,6 +12,7 @@ using Saunter.Generation.SchemaGeneration;
 using Saunter.Utils;
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -20,11 +21,7 @@ namespace Saunter.Generation;
 
 public class DocumentGenerator : IDocumentGenerator
 {
-    public DocumentGenerator()
-    {
-    }
-
-    public AsyncApiSchema.v2.AsyncApiDocument GenerateDocument(TypeInfo[] asyncApiTypes, AsyncApiOptions options, AsyncApiDocument prototype, IServiceProvider serviceProvider)
+    public AsyncApiDocument GenerateDocument(TypeInfo[] asyncApiTypes, AsyncApiOptions options, AsyncApiDocument prototype, IServiceProvider serviceProvider)
     {
         AsyncApiDocument asyncApiSchema = prototype.Clone();
 
@@ -74,24 +71,69 @@ public class DocumentGenerator : IDocumentGenerator
 
         foreach (var mc in methodsWithChannelAttribute)
         {
-            if (mc.Channel == null) continue;
-
-            ChannelItem channelItem = new()
+            if (mc.Channel == null)
             {
-                Description = mc.Channel.Description,
-                Parameters = GetChannelParametersFromAttributes(mc.Method, schemaResolver, jsonSchemaGenerator),
-                Publish = GenerateOperationFromMethod(mc.Method, schemaResolver, OperationType.Publish, options, jsonSchemaGenerator, serviceProvider),
-                Subscribe = GenerateOperationFromMethod(mc.Method, schemaResolver, OperationType.Subscribe, options, jsonSchemaGenerator, serviceProvider),
-                Bindings = mc.Channel.BindingsRef != null ? new ChannelBindingsReference(mc.Channel.BindingsRef) : null,
-                Servers = mc.Channel.Servers?.ToList(),
-            };
-            channels.AddOrAppend(mc.Channel.Name, channelItem);
+                continue;
+            }
 
-            ChannelItemFilterContext context = new(mc.Method, schemaResolver, jsonSchemaGenerator, mc.Channel);
-            foreach (Type filterType in options.ChannelItemFilters)
+            IEnumerable<Operation> pubs = GenerateOperationFromMethod(
+                mc.Method,
+                schemaResolver,
+                OperationType.Publish,
+                options,
+                jsonSchemaGenerator,
+                serviceProvider);
+
+            foreach (Operation pub in pubs)
             {
-                IChannelItemFilter filter = (IChannelItemFilter)serviceProvider.GetRequiredService(filterType);
-                filter.Apply(channelItem, context);
+                ChannelItem channelItem = new()
+                {
+                    Description = mc.Channel.Description,
+                    Parameters = GetChannelParametersFromAttributes(mc.Method, schemaResolver, jsonSchemaGenerator),
+                    Publish = pub,
+                    Subscribe = null,
+                    Bindings = mc.Channel.BindingsRef != null ? new ChannelBindingsReference(mc.Channel.BindingsRef) : null,
+                    Servers = mc.Channel.Servers?.ToList() ?? new List<string>(),
+                };
+
+                channels.AddOrAppend(mc.Channel.Name, channelItem);
+
+                ChannelItemFilterContext context = new(mc.Method, schemaResolver, jsonSchemaGenerator, mc.Channel);
+                foreach (Type filterType in options.ChannelItemFilters)
+                {
+                    IChannelItemFilter filter = (IChannelItemFilter)serviceProvider.GetRequiredService(filterType);
+                    filter.Apply(channelItem, context);
+                }
+            }
+
+            IEnumerable<Operation> subs = GenerateOperationFromMethod(
+                mc.Method,
+                schemaResolver,
+                OperationType.Subscribe,
+                options,
+                jsonSchemaGenerator,
+                serviceProvider);
+
+            foreach (Operation sub in subs)
+            {
+                ChannelItem channelItem = new()
+                {
+                    Description = mc.Channel.Description,
+                    Parameters = GetChannelParametersFromAttributes(mc.Method, schemaResolver, jsonSchemaGenerator),
+                    Publish = null,
+                    Subscribe = sub,
+                    Bindings = mc.Channel.BindingsRef != null ? new ChannelBindingsReference(mc.Channel.BindingsRef) : null,
+                    Servers = mc.Channel.Servers?.ToList() ?? new List<string>(),
+                };
+
+                channels.AddOrAppend(mc.Channel.Name, channelItem);
+
+                ChannelItemFilterContext context = new(mc.Method, schemaResolver, jsonSchemaGenerator, mc.Channel);
+                foreach (Type filterType in options.ChannelItemFilters)
+                {
+                    IChannelItemFilter filter = (IChannelItemFilter)serviceProvider.GetRequiredService(filterType);
+                    filter.Apply(channelItem, context);
+                }
             }
         }
 
@@ -116,25 +158,57 @@ public class DocumentGenerator : IDocumentGenerator
 
         foreach (var cc in classesWithChannelAttribute)
         {
-            if (cc.Channel == null) continue;
-
-            ChannelItem channelItem = new()
+            if (cc.Channel == null)
             {
-                Description = cc.Channel.Description,
-                Parameters = GetChannelParametersFromAttributes(cc.Type, schemaResolver, jsonSchemaGenerator),
-                Publish = GenerateOperationFromClass(cc.Type, schemaResolver, OperationType.Publish, jsonSchemaGenerator),
-                Subscribe = GenerateOperationFromClass(cc.Type, schemaResolver, OperationType.Subscribe, jsonSchemaGenerator),
-                Bindings = cc.Channel.BindingsRef != null ? new ChannelBindingsReference(cc.Channel.BindingsRef) : null,
-                Servers = cc.Channel.Servers?.ToList(),
-            };
+                continue;
+            }
 
-            channels.AddOrAppend(cc.Channel.Name, channelItem);
+            IEnumerable<Operation> pubs = GenerateOperationFromClass(cc.Type, schemaResolver, OperationType.Publish, jsonSchemaGenerator);
 
-            ChannelItemFilterContext context = new(cc.Type, schemaResolver, jsonSchemaGenerator, cc.Channel);
-            foreach (Type filterType in options.ChannelItemFilters)
+            foreach (Operation item in pubs)
             {
-                IChannelItemFilter filter = (IChannelItemFilter)serviceProvider.GetRequiredService(filterType);
-                filter.Apply(channelItem, context);
+                ChannelItem channelItem = new()
+                {
+                    Description = cc.Channel.Description,
+                    Parameters = GetChannelParametersFromAttributes(cc.Type, schemaResolver, jsonSchemaGenerator),
+                    Publish = item,
+                    Subscribe = null,
+                    Bindings = cc.Channel.BindingsRef != null ? new ChannelBindingsReference(cc.Channel.BindingsRef) : null,
+                    Servers = cc.Channel.Servers?.ToList() ?? new(),
+                };
+
+                channels.AddOrAppend(cc.Channel.Name, channelItem);
+
+                ChannelItemFilterContext context = new(cc.Type, schemaResolver, jsonSchemaGenerator, cc.Channel);
+                foreach (Type filterType in options.ChannelItemFilters)
+                {
+                    IChannelItemFilter filter = (IChannelItemFilter)serviceProvider.GetRequiredService(filterType);
+                    filter.Apply(channelItem, context);
+                }
+            }
+
+            IEnumerable<Operation> subs = GenerateOperationFromClass(cc.Type, schemaResolver, OperationType.Subscribe, jsonSchemaGenerator);
+
+            foreach (Operation item in subs)
+            {
+                ChannelItem channelItem = new()
+                {
+                    Description = cc.Channel.Description,
+                    Parameters = GetChannelParametersFromAttributes(cc.Type, schemaResolver, jsonSchemaGenerator),
+                    Publish = null,
+                    Subscribe = item,
+                    Bindings = cc.Channel.BindingsRef != null ? new ChannelBindingsReference(cc.Channel.BindingsRef) : null,
+                    Servers = cc.Channel.Servers?.ToList() ?? new(),
+                };
+
+                channels.AddOrAppend(cc.Channel.Name, channelItem);
+
+                ChannelItemFilterContext context = new(cc.Type, schemaResolver, jsonSchemaGenerator, cc.Channel);
+                foreach (Type filterType in options.ChannelItemFilters)
+                {
+                    IChannelItemFilter filter = (IChannelItemFilter)serviceProvider.GetRequiredService(filterType);
+                    filter.Apply(channelItem, context);
+                }
             }
         }
 
@@ -144,104 +218,107 @@ public class DocumentGenerator : IDocumentGenerator
     /// <summary>
     /// Generate the an operation of an AsyncApi Channel for the given method.
     /// </summary>
-    private static Operation GenerateOperationFromMethod(MethodInfo method, AsyncApiSchemaResolver schemaResolver, OperationType operationType, AsyncApiOptions options, JsonSchemaGenerator jsonSchemaGenerator, IServiceProvider serviceProvider)
+    private static IEnumerable<Operation> GenerateOperationFromMethod(MethodInfo method, AsyncApiSchemaResolver schemaResolver, OperationType operationType, AsyncApiOptions options, JsonSchemaGenerator jsonSchemaGenerator, IServiceProvider serviceProvider)
     {
-        OperationAttribute operationAttribute = GetOperationAttribute(method, operationType);
-        if (operationAttribute == null)
+        IEnumerable<OperationAttribute> operationAttributes = GetOperationAttribute(method, operationType);
+
+        if (!operationAttributes.Any())
         {
-            return null;
+            yield break;
         }
 
         IEnumerable<MessageAttribute> messageAttributes = method.GetCustomAttributes<MessageAttribute>();
-        IMessage message = messageAttributes.Any()
-            ? GenerateMessageFromAttributes(messageAttributes, schemaResolver, jsonSchemaGenerator)
-            : GenerateMessageFromType(operationAttribute.MessagePayloadType, schemaResolver, jsonSchemaGenerator);
 
-        Operation operation = new()
+        foreach (OperationAttribute operationAttribute in operationAttributes)
         {
-            OperationId = operationAttribute.OperationId ?? method.Name,
-            Summary = operationAttribute.Summary ?? method.GetXmlDocsSummary(),
-            Description = operationAttribute.Description ?? (method.GetXmlDocsRemarks() != "" ? method.GetXmlDocsRemarks() : null),
-            Message = message,
-            Bindings = operationAttribute.BindingsRef != null ? new OperationBindingsReference(operationAttribute.BindingsRef) : null,
-            Tags = new HashSet<Tag>(operationAttribute.Tags?.Select(x => new Tag(x)) ?? new List<Tag>())
-        };
+            IMessage message = messageAttributes.Any()
+                ? GenerateMessageFromAttributes(messageAttributes, schemaResolver, jsonSchemaGenerator)
+                : GenerateMessageFromType(operationAttribute.MessagePayloadType, schemaResolver, jsonSchemaGenerator);
 
-        OperationFilterContext filterContext = new(method, schemaResolver, jsonSchemaGenerator, operationAttribute);
-        foreach (Type filterType in options.OperationFilters)
-        {
-            IOperationFilter filter = (IOperationFilter)serviceProvider.GetRequiredService(filterType);
-            filter?.Apply(operation, filterContext);
+            Operation operation = new()
+            {
+                OperationId = operationAttribute.OperationId ?? method.Name,
+                Summary = operationAttribute.Summary ?? method.GetXmlDocsSummary(),
+                Description = operationAttribute.Description ?? (method.GetXmlDocsRemarks() != string.Empty ? method.GetXmlDocsRemarks() : string.Empty),
+                Message = message,
+                Bindings = operationAttribute.BindingsRef != null ? new OperationBindingsReference(operationAttribute.BindingsRef) : null,
+                Tags = new HashSet<Tag>(operationAttribute.Tags?.Select(x => new Tag(x)) ?? new List<Tag>())
+            };
+
+            OperationFilterContext filterContext = new(method, schemaResolver, jsonSchemaGenerator, operationAttribute);
+            
+            foreach (Type filterType in options.OperationFilters)
+            {
+                IOperationFilter filter = (IOperationFilter)serviceProvider.GetRequiredService(filterType);
+                filter?.Apply(operation, filterContext);
+            }
+
+            yield return operation;
         }
-
-        return operation;
     }
 
     /// <summary>
     /// Generate the an operation of an AsyncApi Channel for the given class.
     /// </summary>
-    private static Operation GenerateOperationFromClass(TypeInfo type, AsyncApiSchemaResolver schemaResolver, OperationType operationType, JsonSchemaGenerator jsonSchemaGenerator)
+    private static IEnumerable<Operation> GenerateOperationFromClass(TypeInfo type, AsyncApiSchemaResolver schemaResolver, OperationType operationType, JsonSchemaGenerator jsonSchemaGenerator)
     {
-        OperationAttribute operationAttribute = GetOperationAttribute(type, operationType);
-        if (operationAttribute == null)
+        IEnumerable<OperationAttribute> operationAttributes = GetOperationAttribute(type, operationType);
+
+        if (!operationAttributes.Any())
         {
-            return null;
+            yield break;
         }
 
-        Messages messages = new();
-        Operation operation = new()
+        foreach (var operationAttribute in operationAttributes)
         {
-            OperationId = operationAttribute.OperationId ?? type.Name,
-            Summary = operationAttribute.Summary ?? type.GetXmlDocsSummary(),
-            Description = operationAttribute.Description ?? (type.GetXmlDocsRemarks() != "" ? type.GetXmlDocsRemarks() : null),
-            Message = messages,
-            Bindings = operationAttribute.BindingsRef != null ? new OperationBindingsReference(operationAttribute.BindingsRef) : null,
-            Tags = new HashSet<Tag>(operationAttribute.Tags?.Select(x => new Tag(x)) ?? new List<Tag>())
-        };
-
-        var methodsWithMessageAttribute = type.DeclaredMethods
-            .Select(method => new
+            Messages messages = new();
+            Operation operation = new()
             {
-                MessageAttributes = method.GetCustomAttributes<MessageAttribute>(),
-                Method = method,
-            })
-            .Where(mm => mm.MessageAttributes.Any());
+                OperationId = operationAttribute.OperationId ?? type.Name,
+                Summary = operationAttribute.Summary ?? type.GetXmlDocsSummary(),
+                Description = operationAttribute.Description ?? (type.GetXmlDocsRemarks() != string.Empty ? type.GetXmlDocsRemarks() : string.Empty),
+                Message = messages,
+                Bindings = operationAttribute.BindingsRef != null ? new OperationBindingsReference(operationAttribute.BindingsRef) : null,
+                Tags = new HashSet<Tag>(operationAttribute.Tags?.Select(x => new Tag(x)) ?? new List<Tag>())
+            };
 
-        foreach (MessageAttribute messageAttribute in methodsWithMessageAttribute.SelectMany(x => x.MessageAttributes))
-        {
-            IMessage message = GenerateMessageFromAttribute(messageAttribute, schemaResolver, jsonSchemaGenerator);
-            if (message != null)
+            var methodsWithMessageAttribute = type.DeclaredMethods
+                .Select(method => new
+                {
+                    MessageAttributes = method.GetCustomAttributes<MessageAttribute>(),
+                    Method = method,
+                })
+                .Where(mm => mm.MessageAttributes.Any());
+
+            foreach (MessageAttribute messageAttribute in methodsWithMessageAttribute.SelectMany(x => x.MessageAttributes))
             {
-                messages.OneOf.Add(message);
+                IMessage message = GenerateMessageFromAttribute(messageAttribute, schemaResolver, jsonSchemaGenerator);
+                if (message != null)
+                {
+                    messages.OneOf.Add(message);
+                }
             }
-        }
 
-        if (messages.OneOf.Count == 1)
-        {
-            operation.Message = messages.OneOf.First();
-        }
+            if (messages.OneOf.Count == 1)
+            {
+                operation.Message = messages.OneOf[0];
+            }
 
-        return operation;
+            yield return operation;
+        }
     }
 
-    private static OperationAttribute GetOperationAttribute(MemberInfo typeOrMethod, OperationType operationType)
+    private static IEnumerable<OperationAttribute> GetOperationAttribute(MemberInfo typeOrMethod, OperationType operationType)
     {
-        switch (operationType)
+        return operationType switch
         {
-            case OperationType.Publish:
-                PublishOperationAttribute publishOperationAttribute = typeOrMethod.GetCustomAttribute<PublishOperationAttribute>();
-                return (OperationAttribute)publishOperationAttribute;
-
-            case OperationType.Subscribe:
-                SubscribeOperationAttribute subscribeOperationAttribute = typeOrMethod.GetCustomAttribute<SubscribeOperationAttribute>();
-                return (OperationAttribute)subscribeOperationAttribute;
-
-            default:
-                return null;
-        }
+            OperationType.Publish => typeOrMethod.GetCustomAttributes<PublishOperationAttribute>(),
+            OperationType.Subscribe => typeOrMethod.GetCustomAttributes<SubscribeOperationAttribute>(),
+            _ => Enumerable.Empty<OperationAttribute>(),
+        };
     }
 
-    private static IMessage GenerateMessageFromAttributes(IEnumerable<MessageAttribute> messageAttributes, AsyncApiSchemaResolver schemaResolver, JsonSchemaGenerator jsonSchemaGenerator)
+    private static IMessage? GenerateMessageFromAttributes(IEnumerable<MessageAttribute> messageAttributes, AsyncApiSchemaResolver schemaResolver, JsonSchemaGenerator jsonSchemaGenerator)
     {
         if (messageAttributes.Count() == 1)
         {
@@ -251,7 +328,7 @@ public class DocumentGenerator : IDocumentGenerator
         Messages messages = new();
         foreach (MessageAttribute messageAttribute in messageAttributes)
         {
-            IMessage message = GenerateMessageFromAttribute(messageAttribute, schemaResolver, jsonSchemaGenerator);
+            IMessage? message = GenerateMessageFromAttribute(messageAttribute, schemaResolver, jsonSchemaGenerator);
             if (message != null)
             {
                 messages.OneOf.Add(message);
@@ -260,13 +337,13 @@ public class DocumentGenerator : IDocumentGenerator
 
         if (messages.OneOf.Count == 1)
         {
-            return messages.OneOf.First();
+            return messages.OneOf[0];
         }
 
         return messages;
     }
 
-    private static IMessage GenerateMessageFromAttribute(MessageAttribute messageAttribute, AsyncApiSchemaResolver schemaResolver, JsonSchemaGenerator jsonSchemaGenerator)
+    private static IMessage? GenerateMessageFromAttribute(MessageAttribute messageAttribute, AsyncApiSchemaResolver schemaResolver, JsonSchemaGenerator jsonSchemaGenerator)
     {
         if (messageAttribute?.PayloadType == null)
         {

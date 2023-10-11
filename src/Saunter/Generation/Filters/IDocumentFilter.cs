@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using NJsonSchema.Generation;
 
 using Saunter.AsyncApiSchema.v2;
-using Saunter.Generation.SchemaGeneration;
 
 namespace Saunter.Generation.Filters;
 

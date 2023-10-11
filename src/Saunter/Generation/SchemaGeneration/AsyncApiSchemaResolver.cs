@@ -23,9 +23,14 @@ public class AsyncApiSchemaResolver : JsonSchemaResolver
     public override void AppendSchema(JsonSchema schema, string typeNameHint)
     {
         if (schema == null)
+        {
             throw new ArgumentNullException(nameof(schema));
+        }
+
         if (schema == RootObject)
+        {
             throw new ArgumentException("The root schema cannot be appended.");
+        }
 
         if (!_document.Components.Schemas.Values.Contains(schema))
         {
@@ -37,13 +42,16 @@ public class AsyncApiSchemaResolver : JsonSchemaResolver
                 schema.Id = schemaId;
             }
             else
+            {
                 _document.Components.Schemas.Add("ref_" + Guid.NewGuid().ToString().Replace("-", "_"), schema);
+            }
         }
     }
 
     public IMessage GetMessageOrReference(Message message)
     {
         string id = message.Name;
+
         if (id == null)
         {
             return message;

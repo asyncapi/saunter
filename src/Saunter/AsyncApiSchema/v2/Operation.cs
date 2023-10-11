@@ -21,20 +21,20 @@ public class Operation
     /// therefore, it is RECOMMENDED to follow common programming naming conventions.
     /// </summary>
     [JsonProperty("operationId", NullValueHandling = NullValueHandling.Ignore)]
-    public string OperationId { get; set; }
+    public required string OperationId { get; set; }
 
     /// <summary>
     /// A short summary of what the operation is about.
     /// </summary>
     [JsonProperty("summary", NullValueHandling = NullValueHandling.Ignore)]
-    public string Summary { get; set; }
+    public string Summary { get; set; } = string.Empty;
 
     /// <summary>
     /// A verbose explanation of the operation.
     /// CommonMark syntax can be used for rich text representation.
     /// </summary>
     [JsonProperty("description", NullValueHandling = NullValueHandling.Ignore)]
-    public string Description { get; set; }
+    public string Description { get; set; } = string.Empty;
 
     /// <summary>
     /// A list of tags for API documentation control. Tags can be used for logical grouping of operations.
@@ -51,14 +51,14 @@ public class Operation
     /// Additional external documentation for this operation.
     /// </summary>
     [JsonProperty("externalDocs", NullValueHandling = NullValueHandling.Ignore)]
-    public ExternalDocumentation ExternalDocs { get; set; }
+    public ExternalDocumentation? ExternalDocs { get; set; }
 
     /// <summary>
     /// A free-form map where the keys describe the name of the protocol and the values describe
     /// protocol-specific definitions for the operation.
     /// </summary>
     [JsonProperty("bindings", NullValueHandling = NullValueHandling.Ignore)]
-    public IOperationBindings Bindings { get; set; }
+    public IOperationBindings? Bindings { get; set; }
 
     /// <summary>
     /// A definition of the message that will be published or received on this channel.
@@ -66,7 +66,7 @@ public class Operation
     /// valid only against one of the referenced message objects.
     /// </summary>
     [JsonProperty("message")]
-    public IMessage Message { get; set; }
+    public required IMessage Message { get; set; }
 
     /// <summary>
     /// A list of traits to apply to the operation object. Traits MUST be merged into the operation
@@ -74,7 +74,6 @@ public class Operation
     /// </summary>
     [JsonProperty("traits", DefaultValueHandling = DefaultValueHandling.Ignore)]
     public IList<IOperationTrait> Traits { get; set; } = new List<IOperationTrait>();
-
 
     public bool ShouldSerializeTraits()
     {

@@ -41,10 +41,10 @@ public class AsyncApiMiddleware
 
         AsyncApiSchema.v2.AsyncApiDocument asyncApiSchema = _asyncApiDocumentProvider.GetDocument(_options, prototype);
 
-        await RespondWithAsyncApiSchemaJson(context.Response, asyncApiSchema, _asyncApiDocumentSerializer, _options);
+        await RespondWithAsyncApiSchemaJson(context.Response, asyncApiSchema, _asyncApiDocumentSerializer);
     }
 
-    private static async Task RespondWithAsyncApiSchemaJson(HttpResponse response, AsyncApiSchema.v2.AsyncApiDocument asyncApiSchema, IAsyncApiDocumentSerializer asyncApiDocumentSerializer, AsyncApiOptions options)
+    private static async Task RespondWithAsyncApiSchemaJson(HttpResponse response, AsyncApiSchema.v2.AsyncApiDocument asyncApiSchema, IAsyncApiDocumentSerializer asyncApiDocumentSerializer)
     {
         string asyncApiSchemaJson = asyncApiDocumentSerializer.Serialize(asyncApiSchema);
         response.StatusCode = (int)HttpStatusCode.OK;

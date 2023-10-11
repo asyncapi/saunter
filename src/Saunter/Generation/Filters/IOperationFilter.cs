@@ -1,11 +1,9 @@
-using System;
 using System.Reflection;
 
 using NJsonSchema.Generation;
 
 using Saunter.AsyncApiSchema.v2;
 using Saunter.Attributes;
-using Saunter.Generation.SchemaGeneration;
 
 namespace Saunter.Generation.Filters;
 

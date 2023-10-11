@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.ComponentModel;
 
 using Newtonsoft.Json;
 
@@ -17,19 +16,19 @@ public class ChannelItem
     /// CommonMark syntax can be used for rich text representation.
     /// </summary>
     [JsonProperty("description", NullValueHandling = NullValueHandling.Ignore)]
-    public string Description { get; set; }
+    public string Description { get; set; } = string.Empty;
 
     /// <summary>
     /// A definition of the SUBSCRIBE operation.
     /// </summary>
     [JsonProperty("subscribe", NullValueHandling = NullValueHandling.Ignore)]
-    public Operation Subscribe { get; set; }
+    public Operation? Subscribe { get; set; }
 
     /// <summary>
     /// A definition of the PUBLISH operation.
     /// </summary>
     [JsonProperty("publish", NullValueHandling = NullValueHandling.Ignore)]
-    public Operation Publish { get; set; }
+    public Operation? Publish { get; set; }
 
     /// <summary>
     /// A map of the parameters included in the channel name.
@@ -44,7 +43,7 @@ public class ChannelItem
     /// and the values describe protocol-specific definitions for the channel.
     /// </summary>
     [JsonProperty("bindings", NullValueHandling = NullValueHandling.Ignore)]
-    public IChannelBindings Bindings { get; set; }
+    public IChannelBindings? Bindings { get; set; }
 
     /// <summary>
     /// The servers on which this channel is available, specified as an optional unordered

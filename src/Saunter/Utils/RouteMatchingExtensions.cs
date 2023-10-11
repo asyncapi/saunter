@@ -15,10 +15,10 @@ public static class RouteMatchingExtensions
         return matcher.TryMatch(path, values);
     }
 
-    public static bool TryGetDocument(this HttpContext context, out string document)
+    public static bool TryGetDocument(this HttpContext context, out string? document)
     {
         RouteValueDictionary values = context.Request.RouteValues;
-        if (!values.TryGetValue("document", out object value) || value == null)
+        if (!values.TryGetValue("document", out object? value) || value == null)
         {
             document = null;
             return false;

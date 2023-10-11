@@ -2,8 +2,6 @@ using System;
 
 using Newtonsoft.Json;
 
-using Saunter.AsyncApiSchema.v2.Traits;
-
 namespace Saunter.AsyncApiSchema.v2;
 
 /// <summary>
