@@ -24,9 +24,9 @@ public class AsyncApiDocumentProvider : IAsyncApiDocumentProvider
         {
             throw new ArgumentNullException(nameof(options));
         }
-        var asyncApiTypes = GetAsyncApiTypes(options, prototype);
+        TypeInfo[] asyncApiTypes = GetAsyncApiTypes(options, prototype);
 
-        var document = _documentGenerator.GenerateDocument(asyncApiTypes, options, prototype, _serviceProvider);
+        AsyncApiDocument document = _documentGenerator.GenerateDocument(asyncApiTypes, options, prototype, _serviceProvider);
 
         return document;
     }
@@ -37,9 +37,9 @@ public class AsyncApiDocumentProvider : IAsyncApiDocumentProvider
     /// </summary>
     private static TypeInfo[] GetAsyncApiTypes(AsyncApiOptions options, AsyncApiDocument prototype)
     {
-        var assembliesToScan = options.AssemblyMarkerTypes.Select(t => t.Assembly).Distinct();
+        System.Collections.Generic.IEnumerable<Assembly> assembliesToScan = options.AssemblyMarkerTypes.Select(t => t.Assembly).Distinct();
 
-        var asyncApiTypes = assembliesToScan
+        TypeInfo[] asyncApiTypes = assembliesToScan
             .SelectMany(a => a.DefinedTypes.Where(t => t.GetCustomAttribute<AsyncApiAttribute>()?.DocumentName == prototype.DocumentName))
             .ToArray();
 

@@ -26,17 +26,17 @@ public class DocumentGenerator : IDocumentGenerator
 
     public AsyncApiSchema.v2.AsyncApiDocument GenerateDocument(TypeInfo[] asyncApiTypes, AsyncApiOptions options, AsyncApiDocument prototype, IServiceProvider serviceProvider)
     {
-        var asyncApiSchema = prototype.Clone();
+        AsyncApiDocument asyncApiSchema = prototype.Clone();
 
-        var schemaResolver = new AsyncApiSchemaResolver(asyncApiSchema, options.SchemaOptions);
+        AsyncApiSchemaResolver schemaResolver = new(asyncApiSchema, options.SchemaOptions);
 
-        var generator = new JsonSchemaGenerator(options.SchemaOptions);
+        JsonSchemaGenerator generator = new(options.SchemaOptions);
         asyncApiSchema.Channels = GenerateChannels(asyncApiTypes, schemaResolver, options, generator, serviceProvider);
 
-        var filterContext = new DocumentFilterContext(asyncApiTypes, schemaResolver, generator);
-        foreach (var filterType in options.DocumentFilters)
+        DocumentFilterContext filterContext = new(asyncApiTypes, schemaResolver, generator);
+        foreach (Type filterType in options.DocumentFilters)
         {
-            var filter = (IDocumentFilter)serviceProvider.GetRequiredService(filterType);
+            IDocumentFilter filter = (IDocumentFilter)serviceProvider.GetRequiredService(filterType);
             filter?.Apply(asyncApiSchema, filterContext);
         }
 
@@ -48,7 +48,7 @@ public class DocumentGenerator : IDocumentGenerator
     /// </summary>
     private static IDictionary<string, ChannelItem> GenerateChannels(TypeInfo[] asyncApiTypes, AsyncApiSchemaResolver schemaResolver, AsyncApiOptions options, JsonSchemaGenerator jsonSchemaGenerator, IServiceProvider serviceProvider)
     {
-        var channels = new Dictionary<string, ChannelItem>();
+        Dictionary<string, ChannelItem> channels = new();
 
         channels.AddRange(GenerateChannelsFromMethods(asyncApiTypes, schemaResolver, options, jsonSchemaGenerator, serviceProvider));
         channels.AddRange(GenerateChannelsFromClasses(asyncApiTypes, schemaResolver, options, jsonSchemaGenerator, serviceProvider));
@@ -61,7 +61,7 @@ public class DocumentGenerator : IDocumentGenerator
     /// </summary>
     private static IDictionary<string, ChannelItem> GenerateChannelsFromMethods(IEnumerable<TypeInfo> asyncApiTypes, AsyncApiSchemaResolver schemaResolver, AsyncApiOptions options, JsonSchemaGenerator jsonSchemaGenerator, IServiceProvider serviceProvider)
     {
-        var channels = new Dictionary<string, ChannelItem>();
+        Dictionary<string, ChannelItem> channels = new();
 
         var methodsWithChannelAttribute = asyncApiTypes
             .SelectMany(type => type.DeclaredMethods)
@@ -76,7 +76,7 @@ public class DocumentGenerator : IDocumentGenerator
         {
             if (mc.Channel == null) continue;
 
-            var channelItem = new ChannelItem
+            ChannelItem channelItem = new()
             {
                 Description = mc.Channel.Description,
                 Parameters = GetChannelParametersFromAttributes(mc.Method, schemaResolver, jsonSchemaGenerator),
@@ -87,10 +87,10 @@ public class DocumentGenerator : IDocumentGenerator
             };
             channels.AddOrAppend(mc.Channel.Name, channelItem);
 
-            var context = new ChannelItemFilterContext(mc.Method, schemaResolver, jsonSchemaGenerator, mc.Channel);
-            foreach (var filterType in options.ChannelItemFilters)
+            ChannelItemFilterContext context = new(mc.Method, schemaResolver, jsonSchemaGenerator, mc.Channel);
+            foreach (Type filterType in options.ChannelItemFilters)
             {
-                var filter = (IChannelItemFilter)serviceProvider.GetRequiredService(filterType);
+                IChannelItemFilter filter = (IChannelItemFilter)serviceProvider.GetRequiredService(filterType);
                 filter.Apply(channelItem, context);
             }
         }
@@ -104,7 +104,7 @@ public class DocumentGenerator : IDocumentGenerator
     /// </summary>
     private static IDictionary<string, ChannelItem> GenerateChannelsFromClasses(IEnumerable<TypeInfo> asyncApiTypes, AsyncApiSchemaResolver schemaResolver, AsyncApiOptions options, JsonSchemaGenerator jsonSchemaGenerator, IServiceProvider serviceProvider)
     {
-        var channels = new Dictionary<string, ChannelItem>();
+        Dictionary<string, ChannelItem> channels = new();
 
         var classesWithChannelAttribute = asyncApiTypes
             .Select(type => new
@@ -118,7 +118,7 @@ public class DocumentGenerator : IDocumentGenerator
         {
             if (cc.Channel == null) continue;
 
-            var channelItem = new ChannelItem
+            ChannelItem channelItem = new()
             {
                 Description = cc.Channel.Description,
                 Parameters = GetChannelParametersFromAttributes(cc.Type, schemaResolver, jsonSchemaGenerator),
@@ -130,10 +130,10 @@ public class DocumentGenerator : IDocumentGenerator
 
             channels.AddOrAppend(cc.Channel.Name, channelItem);
 
-            var context = new ChannelItemFilterContext(cc.Type, schemaResolver, jsonSchemaGenerator, cc.Channel);
-            foreach (var filterType in options.ChannelItemFilters)
+            ChannelItemFilterContext context = new(cc.Type, schemaResolver, jsonSchemaGenerator, cc.Channel);
+            foreach (Type filterType in options.ChannelItemFilters)
             {
-                var filter = (IChannelItemFilter)serviceProvider.GetRequiredService(filterType);
+                IChannelItemFilter filter = (IChannelItemFilter)serviceProvider.GetRequiredService(filterType);
                 filter.Apply(channelItem, context);
             }
         }
@@ -146,18 +146,18 @@ public class DocumentGenerator : IDocumentGenerator
     /// </summary>
     private static Operation GenerateOperationFromMethod(MethodInfo method, AsyncApiSchemaResolver schemaResolver, OperationType operationType, AsyncApiOptions options, JsonSchemaGenerator jsonSchemaGenerator, IServiceProvider serviceProvider)
     {
-        var operationAttribute = GetOperationAttribute(method, operationType);
+        OperationAttribute operationAttribute = GetOperationAttribute(method, operationType);
         if (operationAttribute == null)
         {
             return null;
         }
 
         IEnumerable<MessageAttribute> messageAttributes = method.GetCustomAttributes<MessageAttribute>();
-        var message = messageAttributes.Any()
+        IMessage message = messageAttributes.Any()
             ? GenerateMessageFromAttributes(messageAttributes, schemaResolver, jsonSchemaGenerator)
             : GenerateMessageFromType(operationAttribute.MessagePayloadType, schemaResolver, jsonSchemaGenerator);
 
-        var operation = new Operation
+        Operation operation = new()
         {
             OperationId = operationAttribute.OperationId ?? method.Name,
             Summary = operationAttribute.Summary ?? method.GetXmlDocsSummary(),
@@ -167,10 +167,10 @@ public class DocumentGenerator : IDocumentGenerator
             Tags = new HashSet<Tag>(operationAttribute.Tags?.Select(x => new Tag(x)) ?? new List<Tag>())
         };
 
-        var filterContext = new OperationFilterContext(method, schemaResolver, jsonSchemaGenerator, operationAttribute);
-        foreach (var filterType in options.OperationFilters)
+        OperationFilterContext filterContext = new(method, schemaResolver, jsonSchemaGenerator, operationAttribute);
+        foreach (Type filterType in options.OperationFilters)
         {
-            var filter = (IOperationFilter)serviceProvider.GetRequiredService(filterType);
+            IOperationFilter filter = (IOperationFilter)serviceProvider.GetRequiredService(filterType);
             filter?.Apply(operation, filterContext);
         }
 
@@ -182,14 +182,14 @@ public class DocumentGenerator : IDocumentGenerator
     /// </summary>
     private static Operation GenerateOperationFromClass(TypeInfo type, AsyncApiSchemaResolver schemaResolver, OperationType operationType, JsonSchemaGenerator jsonSchemaGenerator)
     {
-        var operationAttribute = GetOperationAttribute(type, operationType);
+        OperationAttribute operationAttribute = GetOperationAttribute(type, operationType);
         if (operationAttribute == null)
         {
             return null;
         }
 
-        var messages = new Messages();
-        var operation = new Operation
+        Messages messages = new();
+        Operation operation = new()
         {
             OperationId = operationAttribute.OperationId ?? type.Name,
             Summary = operationAttribute.Summary ?? type.GetXmlDocsSummary(),
@@ -209,7 +209,7 @@ public class DocumentGenerator : IDocumentGenerator
 
         foreach (MessageAttribute messageAttribute in methodsWithMessageAttribute.SelectMany(x => x.MessageAttributes))
         {
-            var message = GenerateMessageFromAttribute(messageAttribute, schemaResolver, jsonSchemaGenerator);
+            IMessage message = GenerateMessageFromAttribute(messageAttribute, schemaResolver, jsonSchemaGenerator);
             if (message != null)
             {
                 messages.OneOf.Add(message);
@@ -229,11 +229,11 @@ public class DocumentGenerator : IDocumentGenerator
         switch (operationType)
         {
             case OperationType.Publish:
-                var publishOperationAttribute = typeOrMethod.GetCustomAttribute<PublishOperationAttribute>();
+                PublishOperationAttribute publishOperationAttribute = typeOrMethod.GetCustomAttribute<PublishOperationAttribute>();
                 return (OperationAttribute)publishOperationAttribute;
 
             case OperationType.Subscribe:
-                var subscribeOperationAttribute = typeOrMethod.GetCustomAttribute<SubscribeOperationAttribute>();
+                SubscribeOperationAttribute subscribeOperationAttribute = typeOrMethod.GetCustomAttribute<SubscribeOperationAttribute>();
                 return (OperationAttribute)subscribeOperationAttribute;
 
             default:
@@ -248,10 +248,10 @@ public class DocumentGenerator : IDocumentGenerator
             return GenerateMessageFromAttribute(messageAttributes.First(), schemaResolver, jsonSchemaGenerator);
         }
 
-        var messages = new Messages();
+        Messages messages = new();
         foreach (MessageAttribute messageAttribute in messageAttributes)
         {
-            var message = GenerateMessageFromAttribute(messageAttribute, schemaResolver, jsonSchemaGenerator);
+            IMessage message = GenerateMessageFromAttribute(messageAttribute, schemaResolver, jsonSchemaGenerator);
             if (message != null)
             {
                 messages.OneOf.Add(message);
@@ -273,7 +273,7 @@ public class DocumentGenerator : IDocumentGenerator
             return null;
         }
 
-        var message = new Message
+        Message message = new()
         {
             MessageId = messageAttribute.MessageId,
             Payload = jsonSchemaGenerator.Generate(messageAttribute.PayloadType, schemaResolver),
@@ -297,7 +297,7 @@ public class DocumentGenerator : IDocumentGenerator
             return null;
         }
 
-        var message = new Message
+        Message message = new()
         {
             Payload = jsonSchemaGenerator.Generate(payloadType, schemaResolver),
         };
@@ -309,12 +309,12 @@ public class DocumentGenerator : IDocumentGenerator
     private static IDictionary<string, IParameter> GetChannelParametersFromAttributes(MemberInfo memberInfo, AsyncApiSchemaResolver schemaResolver, JsonSchemaGenerator jsonSchemaGenerator)
     {
         IEnumerable<ChannelParameterAttribute> attributes = memberInfo.GetCustomAttributes<ChannelParameterAttribute>();
-        var parameters = new Dictionary<string, IParameter>();
+        Dictionary<string, IParameter> parameters = new();
         if (attributes.Any())
         {
             foreach (ChannelParameterAttribute attribute in attributes)
             {
-                var parameter = schemaResolver.GetParameterOrReference(new Parameter
+                IParameter parameter = schemaResolver.GetParameterOrReference(new Parameter
                 {
                     Description = attribute.Description,
                     Name = attribute.Name,

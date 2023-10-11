@@ -16,9 +16,9 @@ namespace Saunter;
 
 public class AsyncApiOptions
 {
-    private readonly List<Type> _documentFilters = new List<Type>();
-    private readonly List<Type> _channelItemFilters = new List<Type>();
-    private readonly List<Type> _operationFilters = new List<Type>();
+    private readonly List<Type> _documentFilters = new();
+    private readonly List<Type> _channelItemFilters = new();
+    private readonly List<Type> _operationFilters = new();
 
 
     /// <summary>

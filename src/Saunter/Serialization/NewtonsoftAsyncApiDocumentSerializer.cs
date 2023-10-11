@@ -17,16 +17,16 @@ public class NewtonsoftAsyncApiDocumentSerializer : IAsyncApiDocumentSerializer
 
     public string Serialize(AsyncApiDocument document)
     {
-        var contractResolver = JsonSchema.CreateJsonSerializerContractResolver(SchemaType.JsonSchema);
+        PropertyRenameAndIgnoreSerializerContractResolver contractResolver = JsonSchema.CreateJsonSerializerContractResolver(SchemaType.JsonSchema);
         return JsonSchemaSerialization.ToJson(document, SchemaType.JsonSchema, contractResolver, Formatting.Indented);
     }
 
     public async Task<AsyncApiDocument> DeserializeAsync(string data, CancellationToken cancellationToken)
     {
-        var contractResolver = JsonSchema.CreateJsonSerializerContractResolver(SchemaType.JsonSchema);
+        PropertyRenameAndIgnoreSerializerContractResolver contractResolver = JsonSchema.CreateJsonSerializerContractResolver(SchemaType.JsonSchema);
         return await JsonSchemaSerialization.FromJsonAsync<AsyncApiDocument>(data, SchemaType.JsonSchema, null, document =>
         {
-            var schemaResolver = new AsyncApiSchemaResolver(document, new AsyncApiSchemaOptions());
+            AsyncApiSchemaResolver schemaResolver = new(document, new AsyncApiSchemaOptions());
             return new JsonReferenceResolver(schemaResolver);
         }, contractResolver, cancellationToken).ConfigureAwait(false);
     }

@@ -14,7 +14,7 @@ public static class ChannelItemExtensions
             return;
         }
 
-        foreach (var channel in channels)
+        foreach (KeyValuePair<string, ChannelItem> channel in channels)
         {
             source.AddOrAppend(channel.Key, channel.Value);
         }
@@ -22,7 +22,7 @@ public static class ChannelItemExtensions
 
     public static void AddOrAppend(this IDictionary<string, ChannelItem> source, string key, ChannelItem channel)
     {
-        if (source.TryGetValue(key, out var existing))
+        if (source.TryGetValue(key, out ChannelItem existing))
         {
             if (existing.Publish != null && channel.Publish != null)
                 throw new ArgumentException("An item with the same key and with an existing publish operation has already been added to the channel collection.");

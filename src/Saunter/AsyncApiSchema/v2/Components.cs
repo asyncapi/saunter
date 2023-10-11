@@ -141,7 +141,7 @@ public class Components : ICloneable
 
     public Components Clone()
     {
-        var clone = new Components();
+        Components clone = new();
 
         clone.Schemas = Schemas.ToDictionary(p => p.Key, p => p.Value);
         clone.Messages = Messages.ToDictionary(p => p.Key, p => p.Value);

@@ -32,21 +32,21 @@ public class AsyncApiMiddleware
             return;
         }
 
-        var prototype = _options.AsyncApi;
-        if (context.TryGetDocument(out var documentName) && !_options.NamedApis.TryGetValue(documentName, out prototype))
+        AsyncApiSchema.v2.AsyncApiDocument prototype = _options.AsyncApi;
+        if (context.TryGetDocument(out string documentName) && !_options.NamedApis.TryGetValue(documentName, out prototype))
         {
             await _next(context);
             return;
         }
 
-        var asyncApiSchema = _asyncApiDocumentProvider.GetDocument(_options, prototype);
+        AsyncApiSchema.v2.AsyncApiDocument asyncApiSchema = _asyncApiDocumentProvider.GetDocument(_options, prototype);
 
         await RespondWithAsyncApiSchemaJson(context.Response, asyncApiSchema, _asyncApiDocumentSerializer, _options);
     }
 
     private static async Task RespondWithAsyncApiSchemaJson(HttpResponse response, AsyncApiSchema.v2.AsyncApiDocument asyncApiSchema, IAsyncApiDocumentSerializer asyncApiDocumentSerializer, AsyncApiOptions options)
     {
-        var asyncApiSchemaJson = asyncApiDocumentSerializer.Serialize(asyncApiSchema);
+        string asyncApiSchemaJson = asyncApiDocumentSerializer.Serialize(asyncApiSchema);
         response.StatusCode = (int)HttpStatusCode.OK;
         response.ContentType = asyncApiDocumentSerializer.ContentType;
 

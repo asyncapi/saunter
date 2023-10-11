@@ -29,8 +29,8 @@ public class AsyncApiUiMiddleware
     public AsyncApiUiMiddleware(RequestDelegate next, IOptions<AsyncApiOptions> options, IWebHostEnvironment env, ILoggerFactory loggerFactory)
     {
         _options = options.Value;
-        var fileProvider = new EmbeddedFileProvider(GetType().Assembly, GetType().Namespace);
-        var staticFileOptions = new StaticFileOptions
+        EmbeddedFileProvider fileProvider = new(GetType().Assembly, GetType().Namespace);
+        StaticFileOptions staticFileOptions = new()
         {
             RequestPath = UiBaseRoute,
             FileProvider = fileProvider,
@@ -38,9 +38,9 @@ public class AsyncApiUiMiddleware
         _staticFiles = new StaticFileMiddleware(next, env, Options.Create(staticFileOptions), loggerFactory);
         _namedStaticFiles = new Dictionary<string, StaticFileMiddleware>();
 
-        foreach (var namedApi in _options.NamedApis)
+        foreach (KeyValuePair<string, AsyncApiSchema.v2.AsyncApiDocument> namedApi in _options.NamedApis)
         {
-            var namedStaticFileOptions = new StaticFileOptions
+            StaticFileOptions namedStaticFileOptions = new()
             {
                 RequestPath = UiBaseRoute.Replace("{document}", namedApi.Key),
                 FileProvider = fileProvider,
@@ -55,7 +55,7 @@ public class AsyncApiUiMiddleware
         {
             context.Response.StatusCode = (int)HttpStatusCode.MovedPermanently;
 
-            if (context.TryGetDocument(out var document))
+            if (context.TryGetDocument(out string document))
             {
                 context.Response.Headers["Location"] = GetUiIndexFullRoute(context.Request).Replace("{document}", document);
             }
@@ -68,7 +68,7 @@ public class AsyncApiUiMiddleware
 
         if (IsRequestingAsyncApiUi(context.Request))
         {
-            if (context.TryGetDocument(out var document))
+            if (context.TryGetDocument(out string document))
             {
                 await RespondWithAsyncApiHtml(context.Response, GetDocumentFullRoute(context.Request).Replace("{document}", document));
             }
@@ -79,13 +79,13 @@ public class AsyncApiUiMiddleware
             return;
         }
 
-        if (!context.TryGetDocument(out var documentName))
+        if (!context.TryGetDocument(out string documentName))
         {
             await _staticFiles.Invoke(context);
         }
         else
         {
-            if (_namedStaticFiles.TryGetValue(documentName, out var files))
+            if (_namedStaticFiles.TryGetValue(documentName, out StaticFileMiddleware files))
             {
                 await files.Invoke(context);
             }
@@ -98,13 +98,13 @@ public class AsyncApiUiMiddleware
 
     private async Task RespondWithAsyncApiHtml(HttpResponse response, string route)
     {
-        using (var stream = GetType().Assembly.GetManifestResourceStream($"{GetType().Namespace}.index.html"))
-        using (var reader = new StreamReader(stream))
+        using (Stream stream = GetType().Assembly.GetManifestResourceStream($"{GetType().Namespace}.index.html"))
+        using (StreamReader reader = new(stream))
         {
-            var indexHtml = new StringBuilder(await reader.ReadToEndAsync());
+            StringBuilder indexHtml = new(await reader.ReadToEndAsync());
 
             // Replace dynamic content such as the AsyncAPI document url
-            foreach (var replacement in new Dictionary<string, string>
+            foreach (KeyValuePair<string, string> replacement in new Dictionary<string, string>
             {
                 ["{{title}}"] = _options.Middleware.UiTitle,
                 ["{{asyncApiDocumentUrl}}"] = route,

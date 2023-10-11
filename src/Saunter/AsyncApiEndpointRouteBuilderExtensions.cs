@@ -16,12 +16,12 @@ public static class AsyncApiEndpointRouteBuilderExtensions
     public static IEndpointConventionBuilder MapAsyncApiDocuments(
         this IEndpointRouteBuilder endpoints)
     {
-        var pipeline = endpoints.CreateApplicationBuilder()
+        RequestDelegate pipeline = endpoints.CreateApplicationBuilder()
             .UseMiddleware<AsyncApiMiddleware>()
             .Build();
 
-        var options = endpoints.ServiceProvider.GetService<IOptions<AsyncApiOptions>>();
-        var route = options.Value.Middleware.Route;
+        IOptions<AsyncApiOptions> options = endpoints.ServiceProvider.GetService<IOptions<AsyncApiOptions>>();
+        string route = options.Value.Middleware.Route;
 
         return endpoints.MapGet(route, pipeline);
     }
@@ -32,7 +32,7 @@ public static class AsyncApiEndpointRouteBuilderExtensions
     /// </summary>
     public static IEndpointConventionBuilder MapAsyncApiUi(this IEndpointRouteBuilder endpoints)
     {
-        var pipeline = endpoints.CreateApplicationBuilder()
+        RequestDelegate pipeline = endpoints.CreateApplicationBuilder()
             // I don't really understand why...
             // https://github.com/dotnet/aspnetcore/issues/24252#issuecomment-663620294
             .Use((context, next) =>
@@ -43,8 +43,8 @@ public static class AsyncApiEndpointRouteBuilderExtensions
             .UseMiddleware<AsyncApiUiMiddleware>()
             .Build();
 
-        var options = endpoints.ServiceProvider.GetService<IOptions<AsyncApiOptions>>();
-        var route = options.Value.Middleware.UiBaseRoute + "{*wildcard}";
+        IOptions<AsyncApiOptions> options = endpoints.ServiceProvider.GetService<IOptions<AsyncApiOptions>>();
+        string route = options.Value.Middleware.UiBaseRoute + "{*wildcard}";
 
         return endpoints.MapGet(route, pipeline);
     }

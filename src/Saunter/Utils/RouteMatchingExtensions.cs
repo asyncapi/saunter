@@ -8,17 +8,17 @@ public static class RouteMatchingExtensions
 {
     public static bool IsMatchingRoute(this PathString path, string pattern)
     {
-        var template = TemplateParser.Parse(pattern);
+        RouteTemplate template = TemplateParser.Parse(pattern);
 
-        var values = new RouteValueDictionary();
-        var matcher = new TemplateMatcher(template, values);
+        RouteValueDictionary values = new();
+        TemplateMatcher matcher = new(template, values);
         return matcher.TryMatch(path, values);
     }
 
     public static bool TryGetDocument(this HttpContext context, out string document)
     {
-        var values = context.Request.RouteValues;
-        if (!values.TryGetValue("document", out var value) || value == null)
+        RouteValueDictionary values = context.Request.RouteValues;
+        if (!values.TryGetValue("document", out object value) || value == null)
         {
             document = null;
             return false;

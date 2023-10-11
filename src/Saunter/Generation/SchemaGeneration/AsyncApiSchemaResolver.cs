@@ -29,7 +29,7 @@ public class AsyncApiSchemaResolver : JsonSchemaResolver
 
         if (!_document.Components.Schemas.Values.Contains(schema))
         {
-            var schemaId = _settings.TypeNameGenerator.Generate(schema, typeNameHint, _document.Components.Schemas.Keys.Select(k => k.ToString()));
+            string schemaId = _settings.TypeNameGenerator.Generate(schema, typeNameHint, _document.Components.Schemas.Keys.Select(k => k.ToString()));
 
             if (!string.IsNullOrEmpty(schemaId) && !_document.Components.Schemas.ContainsKey(schemaId))
             {
@@ -43,7 +43,7 @@ public class AsyncApiSchemaResolver : JsonSchemaResolver
 
     public IMessage GetMessageOrReference(Message message)
     {
-        var id = message.Name;
+        string id = message.Name;
         if (id == null)
         {
             return message;
@@ -74,7 +74,7 @@ public class AsyncApiSchemaResolver : JsonSchemaResolver
 
     public IParameter GetParameterOrReference(Parameter parameter)
     {
-        var id = parameter.Name;
+        string id = parameter.Name;
         if (id == null)
         {
             return parameter;

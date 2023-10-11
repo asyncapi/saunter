@@ -83,13 +83,13 @@ public class AsyncApiDocument : ICloneable
 
     public AsyncApiDocument Clone()
     {
-        var clone = new AsyncApiDocument();
+        AsyncApiDocument clone = new();
         clone.Info = Info;
         clone.Id = Id;
         clone.DefaultContentType = DefaultContentType;
         clone.Channels = Channels.ToDictionary(p => p.Key, p => p.Value);
         clone.Servers = Servers.ToDictionary(p => p.Key, p => p.Value);
-        foreach (var tag in Tags)
+        foreach (Tag tag in Tags)
         {
             clone.Tags.Add(tag);
         }
