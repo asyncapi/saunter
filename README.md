@@ -1,15 +1,32 @@
 # Saunter
 
->! If you have ever used this hell creation - Saunter, then you will understand why I want to rewrite it
-
 ![CI](https://github.com/tehmantra/saunter/workflows/CI/badge.svg)
 [![NuGet Badge](https://buildstats.info/nuget/saunter?includePreReleases=true)](https://www.nuget.org/packages/Saunter/)
 
-Saunter is an [AsyncAPI](https://github.com/asyncapi/asyncapi) documentation generator for dotnet.
+> If you have ever used this hell creation - Saunter, then you will understand why I want to rewrite it
 
+Saunter is an [AsyncAPI](https://github.com/asyncapi/asyncapi) documentation generator for dotnet.
 
 ℹ Note that pre version 1.0.0, the API is regarded as unstable and **breaking changes may be introduced**.
 
+## TODO
+
+1 priority:
+
+* Give the opportunity to work with multiple operations in the one class/method
+* Nullable enable
+* Add generator output validation
+* More unit
+
+2 priority:
+
+* Concat operations and channel to one attributes
+* Up asyncapi version
+* Nuget package
+
+3 priority:
+
+* Destroy hell attributes and make a normal tool for describing a asyncapi document
 
 ## Getting Started
 
