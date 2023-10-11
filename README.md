@@ -1,5 +1,7 @@
 # Saunter
 
+>! If you have ever used this hell creation - Saunter, then you will understand why I want to rewrite it
+
 ![CI](https://github.com/tehmantra/saunter/workflows/CI/badge.svg)
 [![NuGet Badge](https://buildstats.info/nuget/saunter?includePreReleases=true)](https://www.nuget.org/packages/Saunter/)
 
