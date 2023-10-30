@@ -20,7 +20,7 @@ public class ParameterReference : Reference, IParameter
     }
 
     [JsonIgnore]
-    public Parameter Value => _document.Components?.Parameters[Id];
+    public Parameter Value => _document.Components.Parameters[Id];
 }
 
 public class Parameter : IParameter

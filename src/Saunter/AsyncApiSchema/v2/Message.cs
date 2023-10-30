@@ -34,7 +34,7 @@ public class Message : IMessage
     /// follow common programming naming conventions.
     /// </summary>
     [JsonProperty("messageId", NullValueHandling = NullValueHandling.Ignore)]
-    public string MessageId { get; set; }
+    public string? MessageId { get; set; }
 
     /// <summary>
     /// Schema definition of the application headers. Schema MUST be of type “object”.

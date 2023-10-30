@@ -14,11 +14,11 @@ public class HttpMessageBinding
     /// This schema MUST be of type object and have a properties key.
     /// </summary>
     [JsonProperty("headers", NullValueHandling = NullValueHandling.Ignore)]
-    public JsonSchema Headers { get; set; }
+    public JsonSchema? Headers { get; set; }
 
     /// <summary>
     /// The version of this binding. If omitted, "latest" MUST be assumed.
     /// </summary>
     [JsonProperty("bindingVersion", NullValueHandling = NullValueHandling.Ignore)]
-    public string BindingVersion { get; set; }
+    public string? BindingVersion { get; set; }
 }

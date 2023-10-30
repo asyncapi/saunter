@@ -22,7 +22,7 @@ public static class ChannelItemExtensions
 
     public static void AddOrAppend(this IDictionary<string, ChannelItem> source, string key, ChannelItem channel)
     {
-        if (source.TryGetValue(key, out ChannelItem existing))
+        if (source.TryGetValue(key, out ChannelItem? existing))
         {
             if (existing.Publish != null && channel.Publish != null)
             {

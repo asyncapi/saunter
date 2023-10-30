@@ -25,14 +25,14 @@ public class MessageBindingsReference : Reference, IMessageBindings
 public class MessageBindings : IMessageBindings
 {
     [JsonProperty("amqp", NullValueHandling = NullValueHandling.Ignore)]
-    public AmqpMessageBinding Amqp { get; set; }
+    public AmqpMessageBinding? Amqp { get; set; }
 
     [JsonProperty("http", NullValueHandling = NullValueHandling.Ignore)]
-    public HttpMessageBinding Http { get; set; }
+    public HttpMessageBinding? Http { get; set; }
 
     [JsonProperty("kafka", NullValueHandling = NullValueHandling.Ignore)]
-    public KafkaMessageBinding Kafka { get; set; }
+    public KafkaMessageBinding? Kafka { get; set; }
 
     [JsonProperty("mqtt", NullValueHandling = NullValueHandling.Ignore)]
-    public MqttMessageBinding Mqtt { get; set; }
+    public MqttMessageBinding? Mqtt { get; set; }
 }

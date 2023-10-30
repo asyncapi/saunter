@@ -52,7 +52,7 @@ public class AsyncApiUiMiddleware
         {
             context.Response.StatusCode = (int)HttpStatusCode.MovedPermanently;
 
-            if (context.TryGetDocument(out string document))
+            if (context.TryGetDocument(out string? document))
             {
                 context.Response.Headers["Location"] = GetUiIndexFullRoute(context.Request).Replace("{document}", document);
             }
@@ -65,7 +65,7 @@ public class AsyncApiUiMiddleware
 
         if (IsRequestingAsyncApiUi(context.Request))
         {
-            if (context.TryGetDocument(out string document))
+            if (context.TryGetDocument(out string? document))
             {
                 await RespondWithAsyncApiHtml(context.Response, GetDocumentFullRoute(context.Request).Replace("{document}", document));
             }
@@ -76,13 +76,13 @@ public class AsyncApiUiMiddleware
             return;
         }
 
-        if (!context.TryGetDocument(out string documentName))
+        if (!context.TryGetDocument(out string? documentName))
         {
             await _staticFiles.Invoke(context);
         }
-        else
+        else if (documentName is not null)
         {
-            if (_namedStaticFiles.TryGetValue(documentName, out StaticFileMiddleware files))
+            if (_namedStaticFiles.TryGetValue(documentName, out StaticFileMiddleware? files))
             {
                 await files.Invoke(context);
             }
@@ -95,25 +95,23 @@ public class AsyncApiUiMiddleware
 
     private async Task RespondWithAsyncApiHtml(HttpResponse response, string route)
     {
-        using (Stream stream = GetType().Assembly.GetManifestResourceStream($"{GetType().Namespace}.index.html"))
-        using (StreamReader reader = new(stream))
+        using Stream stream = GetType().Assembly.GetManifestResourceStream($"{GetType().Namespace}.index.html")!;
+        using StreamReader reader = new(stream);
+        StringBuilder indexHtml = new(await reader.ReadToEndAsync());
+
+        // Replace dynamic content such as the AsyncAPI document url
+        foreach (KeyValuePair<string, string> replacement in new Dictionary<string, string>
         {
-            StringBuilder indexHtml = new(await reader.ReadToEndAsync());
-
-            // Replace dynamic content such as the AsyncAPI document url
-            foreach (KeyValuePair<string, string> replacement in new Dictionary<string, string>
-            {
-                ["{{title}}"] = _options.Middleware.UiTitle,
-                ["{{asyncApiDocumentUrl}}"] = route,
-            })
-            {
-                indexHtml.Replace(replacement.Key, replacement.Value);
-            }
-
-            response.StatusCode = (int)HttpStatusCode.OK;
-            response.ContentType = MediaTypeNames.Text.Html;
-            await response.WriteAsync(indexHtml.ToString(), Encoding.UTF8);
+            ["{{title}}"] = _options.Middleware.UiTitle,
+            ["{{asyncApiDocumentUrl}}"] = route,
+        })
+        {
+            indexHtml.Replace(replacement.Key, replacement.Value);
         }
+
+        response.StatusCode = (int)HttpStatusCode.OK;
+        response.ContentType = MediaTypeNames.Text.Html;
+        await response.WriteAsync(indexHtml.ToString(), Encoding.UTF8);
     }
 
     private bool IsRequestingUiBase(HttpRequest request)

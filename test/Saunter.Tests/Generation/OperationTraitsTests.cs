@@ -36,22 +36,20 @@ public class OperationTraitsTests
             o.AddOperationFilter<TestOperationTraitsFilter>();
         });
 
-        using (ServiceProvider serviceprovider = services.BuildServiceProvider())
-        {
-            IAsyncApiDocumentProvider documentProvider = serviceprovider.GetRequiredService<IAsyncApiDocumentProvider>();
-            AsyncApiOptions options = serviceprovider.GetRequiredService<IOptions<AsyncApiOptions>>().Value;
-            AsyncApiDocument document = documentProvider.GetDocument(options, options.AsyncApi);
+        using ServiceProvider serviceprovider = services.BuildServiceProvider();
+        IAsyncApiDocumentProvider documentProvider = serviceprovider.GetRequiredService<IAsyncApiDocumentProvider>();
+        AsyncApiOptions options = serviceprovider.GetRequiredService<IOptions<AsyncApiOptions>>().Value;
+        AsyncApiDocument document = documentProvider.GetDocument(options, options.AsyncApi);
 
-            document.Components.OperationTraits.ShouldContainKey("exampleTrait");
-        }
+        document.Components.OperationTraits.ShouldContainKey("exampleTrait");
     }
 
 
     private class TestOperationTraitsFilter : IOperationFilter
     {
-        public void Apply(Operation publishOperation, OperationFilterContext context)
+        public void Apply(Operation operation, OperationFilterContext context)
         {
-            publishOperation.Traits.Add(new OperationTraitReference("exampleTrait"));
+            operation.Traits.Add(new OperationTraitReference("exampleTrait"));
         }
     }
 }

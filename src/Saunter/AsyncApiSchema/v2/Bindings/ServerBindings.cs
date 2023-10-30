@@ -25,14 +25,14 @@ public class ServerBindingsReference : Reference, IServerBindings
 public class ServerBindings : IServerBindings
 {
     [JsonProperty("amqp", NullValueHandling = NullValueHandling.Ignore)]
-    public AmqpServerBinding Amqp { get; set; }
+    public AmqpServerBinding? Amqp { get; set; }
 
     [JsonProperty("http", NullValueHandling = NullValueHandling.Ignore)]
-    public HttpServerBinding Http { get; set; }
+    public HttpServerBinding? Http { get; set; }
 
     [JsonProperty("kafka", NullValueHandling = NullValueHandling.Ignore)]
-    public KafkaServerBinding Kafka { get; set; }
+    public KafkaServerBinding? Kafka { get; set; }
 
     [JsonProperty("mqtt", NullValueHandling = NullValueHandling.Ignore)]
-    public MqttServerBinding Mqtt { get; set; }
+    public MqttServerBinding? Mqtt { get; set; }
 }

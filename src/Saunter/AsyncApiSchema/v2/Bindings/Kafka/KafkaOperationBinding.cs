@@ -13,17 +13,17 @@ public class KafkaOperationBinding
     /// Id of the consumer group.
     /// </summary>
     [JsonProperty("groupId", NullValueHandling = NullValueHandling.Ignore)]
-    public JsonSchema GroupId { get; set; }
+    public JsonSchema? GroupId { get; set; }
 
     /// <summary>
     /// Id of the consumer inside a consumer group.
     /// </summary>
     [JsonProperty("clientId", NullValueHandling = NullValueHandling.Ignore)]
-    public JsonSchema ClientId { get; set; }
+    public JsonSchema? ClientId { get; set; }
 
     /// <summary>
     /// The version of this binding. If omitted, "latest" MUST be assumed.
     /// </summary>
     [JsonProperty("bindingVersion", NullValueHandling = NullValueHandling.Ignore)]
-    public string BindingVersion { get; set; }
+    public string? BindingVersion { get; set; }
 }

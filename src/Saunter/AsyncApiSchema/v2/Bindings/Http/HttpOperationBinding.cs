@@ -16,7 +16,7 @@ public class HttpOperationBinding
     /// Required. Type of operation. Its value MUST be either request or response.
     /// </summary>
     [JsonProperty("type")]
-    public HttpOperationBindingType Type { get; set; }
+    public HttpOperationBindingType? Type { get; set; }
 
     /// <summary>
     /// When type is request, this is the HTTP method, otherwise it MUST be ignored.
@@ -30,13 +30,13 @@ public class HttpOperationBinding
     /// This schema MUST be of type object and have a properties key.
     /// </summary>
     [JsonProperty("query", NullValueHandling = NullValueHandling.Ignore)]
-    public JsonSchema Query { get; set; }
+    public JsonSchema? Query { get; set; }
 
     /// <summary>
     /// The version of this binding. If omitted, "latest" MUST be assumed.
     /// </summary>
     [JsonProperty("bindingVersion", NullValueHandling = NullValueHandling.Ignore)]
-    public string BindingVersion { get; set; }
+    public string? BindingVersion { get; set; }
 }
 
 

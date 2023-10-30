@@ -11,7 +11,7 @@ public class MqttServerBinding
     /// The client identifier.
     /// </summary>
     [JsonProperty("clientId", NullValueHandling = NullValueHandling.Ignore)]
-    public string ClientId { get; set; }
+    public string? ClientId { get; set; }
 
     /// <summary>
     /// Whether to create a persistent connection or not. When false, the connection will be persistent.
@@ -23,7 +23,7 @@ public class MqttServerBinding
     /// Last Will and Testament configuration.
     /// </summary>
     [JsonProperty("lastWill", NullValueHandling = NullValueHandling.Ignore)]
-    public MqttServerBindingLastWill LastWill { get; set; }
+    public MqttServerBindingLastWill? LastWill { get; set; }
 
     /// <summary>
     /// Interval in seconds of the longest period of time the broker and the client can endure without sending a message.
@@ -35,7 +35,7 @@ public class MqttServerBinding
     /// The version of this binding. If omitted, "latest" MUST be assumed.
     /// </summary>
     [JsonProperty("bindingVersion", NullValueHandling = NullValueHandling.Ignore)]
-    public string BindingVersion { get; set; }
+    public string? BindingVersion { get; set; }
 }
 
 public class MqttServerBindingLastWill
@@ -44,7 +44,7 @@ public class MqttServerBindingLastWill
     /// The topic where the Last Will and Testament message will be sent.
     /// </summary>
     [JsonProperty("topic", NullValueHandling = NullValueHandling.Ignore)]
-    public string Topic { get; set; }
+    public string? Topic { get; set; }
 
     /// <summary>
     /// Defines how hard the broker/client will try to ensure that the Last Will and Testament message is received. Its value MUST be either 0, 1 or 2.
@@ -56,7 +56,7 @@ public class MqttServerBindingLastWill
     /// Last Will message.
     /// </summary>
     [JsonProperty("message", NullValueHandling = NullValueHandling.Ignore)]
-    public string Message { get; set; }
+    public string? Message { get; set; }
 
     /// <summary>
     /// Whether the broker should retain the Last Will and Testament message or not.

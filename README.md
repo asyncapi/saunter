@@ -15,7 +15,7 @@ Saunter is an [AsyncAPI](https://github.com/asyncapi/asyncapi) documentation gen
 
 * [X] Dotnet 7
 * [X] To asyncapi 2.6.0
-* [ ] Set required and nullable props to schema
+* [X] Set required and nullable props to schema
 * [ ] Give the opportunity to work with multiple operations in the one class/method
 * [ ] Kill channel attribute
 * [ ] Nuget package
@@ -28,7 +28,7 @@ Saunter is an [AsyncAPI](https://github.com/asyncapi/asyncapi) documentation gen
 
 3 priority:
 
-* [ ] Destroy hell attributes and make a normal tool for describing a asyncapi document
+* [ ] Make a normal tool for describing a asyncapi document (without attributes)
 
 ## Getting Started
 

@@ -206,7 +206,7 @@ public class PetOwner
     public Pet Pet { get; set; }
 }
 
-public class IPetOwner
+public interface IPetOwner
 {
     public IPet Pet { get; set; }
 }

@@ -32,8 +32,9 @@ public class AsyncApiMiddleware
             return;
         }
 
-        AsyncApiSchema.v2.AsyncApiDocument prototype = _options.AsyncApi;
-        if (context.TryGetDocument(out string documentName) && !_options.NamedApis.TryGetValue(documentName, out prototype))
+        AsyncApiSchema.v2.AsyncApiDocument? prototype = _options.AsyncApi;
+
+        if (context.TryGetDocument(out string? documentName) && documentName is not null && !_options.NamedApis.TryGetValue(documentName, out prototype))
         {
             await _next(context);
             return;

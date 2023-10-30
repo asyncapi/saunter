@@ -17,7 +17,7 @@ public static class AsyncApiServiceCollectionExtensions
     /// <param name="services">The collection to add services to.</param>
     /// <param name="setupAction">An action used to configure the AsyncAPI options.</param>
     /// <returns>The service collection so additional calls can be chained.</returns>
-    public static IServiceCollection AddAsyncApiSchemaGeneration(this IServiceCollection services, Action<AsyncApiOptions> setupAction = null)
+    public static IServiceCollection AddAsyncApiSchemaGeneration(this IServiceCollection services, Action<AsyncApiOptions>? setupAction = null)
     {
         services.AddOptions();
 

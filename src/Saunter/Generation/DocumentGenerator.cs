@@ -232,7 +232,7 @@ public class DocumentGenerator : IDocumentGenerator
 
         foreach (OperationAttribute operationAttribute in operationAttributes)
         {
-            IMessage message = messageAttributes.Any()
+            IMessage? message = messageAttributes.Any()
                 ? GenerateMessageFromAttributes(messageAttributes, schemaResolver, jsonSchemaGenerator)
                 : GenerateMessageFromType(operationAttribute.MessagePayloadType, schemaResolver, jsonSchemaGenerator);
 
@@ -241,9 +241,9 @@ public class DocumentGenerator : IDocumentGenerator
                 OperationId = operationAttribute.OperationId ?? method.Name,
                 Summary = operationAttribute.Summary ?? method.GetXmlDocsSummary(),
                 Description = operationAttribute.Description ?? (method.GetXmlDocsRemarks() != string.Empty ? method.GetXmlDocsRemarks() : string.Empty),
-                Message = message,
+                Message = message!,
                 Bindings = operationAttribute.BindingsRef != null ? new OperationBindingsReference(operationAttribute.BindingsRef) : null,
-                Tags = new HashSet<Tag>(operationAttribute.Tags?.Select(x => new Tag(x)) ?? new List<Tag>())
+                Tags = new(operationAttribute.Tags?.Select(x => (Tag)x) ?? new List<Tag>())
             };
 
             OperationFilterContext filterContext = new(method, schemaResolver, jsonSchemaGenerator, operationAttribute);
@@ -280,7 +280,7 @@ public class DocumentGenerator : IDocumentGenerator
                 Description = operationAttribute.Description ?? (type.GetXmlDocsRemarks() != string.Empty ? type.GetXmlDocsRemarks() : string.Empty),
                 Message = messages,
                 Bindings = operationAttribute.BindingsRef != null ? new OperationBindingsReference(operationAttribute.BindingsRef) : null,
-                Tags = new HashSet<Tag>(operationAttribute.Tags?.Select(x => new Tag(x)) ?? new List<Tag>())
+                Tags = new HashSet<Tag>(operationAttribute.Tags?.Select(x => (Tag)x) ?? new List<Tag>())
             };
 
             var methodsWithMessageAttribute = type.DeclaredMethods
@@ -293,7 +293,7 @@ public class DocumentGenerator : IDocumentGenerator
 
             foreach (MessageAttribute messageAttribute in methodsWithMessageAttribute.SelectMany(x => x.MessageAttributes))
             {
-                IMessage message = GenerateMessageFromAttribute(messageAttribute, schemaResolver, jsonSchemaGenerator);
+                IMessage? message = GenerateMessageFromAttribute(messageAttribute, schemaResolver, jsonSchemaGenerator);
                 if (message != null)
                 {
                     messages.OneOf.Add(message);
@@ -353,14 +353,14 @@ public class DocumentGenerator : IDocumentGenerator
 
         Message message = new()
         {
-            MessageId = messageAttribute.MessageId,
+            MessageId = messageAttribute.MessageId!,
             Payload = jsonSchemaGenerator.Generate(messageAttribute.PayloadType, schemaResolver),
             Headers = messageAttribute.HeadersType != null ? jsonSchemaGenerator.Generate(messageAttribute.HeadersType, schemaResolver) : null,
             Title = messageAttribute.Title,
             Summary = messageAttribute.Summary,
             Description = messageAttribute.Description,
             Bindings = messageAttribute.BindingsRef != null ? new MessageBindingsReference(messageAttribute.BindingsRef) : null,
-            Tags = new HashSet<Tag>(messageAttribute.Tags?.Select(x => new Tag(x)) ?? new List<Tag>())
+            Tags = new HashSet<Tag>(messageAttribute.Tags?.Select(x => (Tag)x) ?? new List<Tag>())
         };
         message.Name = messageAttribute.Name ?? message.Payload.ActualSchema.Id;
 
@@ -368,7 +368,7 @@ public class DocumentGenerator : IDocumentGenerator
     }
 
 
-    private static IMessage? GenerateMessageFromType(Type payloadType, AsyncApiSchemaResolver schemaResolver, JsonSchemaGenerator jsonSchemaGenerator)
+    private static IMessage? GenerateMessageFromType(Type? payloadType, AsyncApiSchemaResolver schemaResolver, JsonSchemaGenerator jsonSchemaGenerator)
     {
         if (payloadType == null)
         {

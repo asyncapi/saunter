@@ -49,7 +49,7 @@ public class AsyncApiSchemaResolver : JsonSchemaResolver
 
     public IMessage GetMessageOrReference(Message message)
     {
-        string id = message.Name;
+        string? id = message.Name;
 
         if (id == null)
         {
@@ -81,7 +81,7 @@ public class AsyncApiSchemaResolver : JsonSchemaResolver
 
     public IParameter GetParameterOrReference(Parameter parameter)
     {
-        string id = parameter.Name;
+        string? id = parameter.Name;
         if (id == null)
         {
             return parameter;

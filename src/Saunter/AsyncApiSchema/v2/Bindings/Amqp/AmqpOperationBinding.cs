@@ -19,13 +19,13 @@ public class AmqpOperationBinding
     /// Identifies the user who has sent the message.
     /// </summary>
     [JsonProperty("userId", NullValueHandling = NullValueHandling.Ignore)]
-    public string UserId { get; set; }
+    public string? UserId { get; set; }
 
     /// <summary>
     /// The routing keys the message should be routed to at the time of publishing.
     /// </summary>
     [JsonProperty("cc", NullValueHandling = NullValueHandling.Ignore)]
-    public IList<string> Cc { get; set; }
+    public IList<string>? Cc { get; set; }
 
     /// <summary>
     /// A priority for the message.
@@ -49,13 +49,13 @@ public class AmqpOperationBinding
     /// Like cc but consumers will not receive this information.
     /// </summary>
     [JsonProperty("bcc", NullValueHandling = NullValueHandling.Ignore)]
-    public IList<string> Bcc { get; set; }
+    public IList<string>? Bcc { get; set; }
 
     /// <summary>
     /// Name of the queue where the consumer should send the response.
     /// </summary>
     [JsonProperty("replyTo", NullValueHandling = NullValueHandling.Ignore)]
-    public string ReplyTo { get; set; }
+    public string? ReplyTo { get; set; }
 
     /// <summary>
     /// Whether the message should include a timestamp or not.
@@ -73,5 +73,5 @@ public class AmqpOperationBinding
     /// The version of this binding. If omitted, "latest" MUST be assumed.
     /// </summary>
     [JsonProperty("bindingVersion", NullValueHandling = NullValueHandling.Ignore)]
-    public string BindingVersion { get; set; }
+    public string? BindingVersion { get; set; }
 }

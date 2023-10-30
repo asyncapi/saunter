@@ -26,14 +26,14 @@ public class ChannelBindingsReference : Reference, IChannelBindings
 public class ChannelBindings : IChannelBindings
 {
     [JsonProperty("amqp", NullValueHandling = NullValueHandling.Ignore)]
-    public AmqpChannelBinding Amqp { get; set; }
+    public AmqpChannelBinding? Amqp { get; set; }
 
     [JsonProperty("http", NullValueHandling = NullValueHandling.Ignore)]
-    public HttpChannelBinding Http { get; set; }
+    public HttpChannelBinding? Http { get; set; }
 
     [JsonProperty("kafka", NullValueHandling = NullValueHandling.Ignore)]
-    public KafkaChannelBinding Kafka { get; set; }
+    public KafkaChannelBinding? Kafka { get; set; }
 
     [JsonProperty("mqtt", NullValueHandling = NullValueHandling.Ignore)]
-    public MqttChannelBinding Mqtt { get; set; }
+    public MqttChannelBinding? Mqtt { get; set; }
 }

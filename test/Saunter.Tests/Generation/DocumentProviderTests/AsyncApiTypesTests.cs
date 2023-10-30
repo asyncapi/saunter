@@ -29,14 +29,12 @@ public class AsyncApiTypesTests
             o.AssemblyMarkerTypes = new[] { typeof(AnotherSamplePublisher), typeof(SampleConsumer) };
         });
 
-        using (ServiceProvider serviceprovider = services.BuildServiceProvider())
-        {
-            IAsyncApiDocumentProvider documentProvider = serviceprovider.GetRequiredService<IAsyncApiDocumentProvider>();
-            AsyncApiOptions options = serviceprovider.GetRequiredService<IOptions<AsyncApiOptions>>().Value;
-            AsyncApiDocument document = documentProvider.GetDocument(options, options.AsyncApi);
+        using ServiceProvider serviceprovider = services.BuildServiceProvider();
+        IAsyncApiDocumentProvider documentProvider = serviceprovider.GetRequiredService<IAsyncApiDocumentProvider>();
+        AsyncApiOptions options = serviceprovider.GetRequiredService<IOptions<AsyncApiOptions>>().Value;
+        AsyncApiDocument document = documentProvider.GetDocument(options, options.AsyncApi);
 
-            document.ShouldNotBeNull();
-        }
+        document.ShouldNotBeNull();
     }
 
 

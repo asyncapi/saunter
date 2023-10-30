@@ -21,19 +21,19 @@ public class AmqpChannelBinding
     /// When is=routingKey, this object defines the exchange properties.
     /// </summary>
     [JsonProperty("exchange", NullValueHandling = NullValueHandling.Ignore)]
-    public AmqpChannelBindingExchange Exchange { get; set; }
+    public AmqpChannelBindingExchange? Exchange { get; set; }
 
     /// <summary>
     /// When is=queue, this object defines the queue properties.
     /// </summary>
     [JsonProperty("queue", NullValueHandling = NullValueHandling.Ignore)]
-    public AmqpChannelBindingQueue Queue { get; set; }
+    public AmqpChannelBindingQueue? Queue { get; set; }
 
     /// <summary>
     /// The version of this binding. If omitted, "latest" MUST be assumed.
     /// </summary>
     [JsonProperty("bindingVersion", NullValueHandling = NullValueHandling.Ignore)]
-    public string BindingVersion { get; set; }
+    public string? BindingVersion { get; set; }
 }
 
 public class AmqpChannelBindingExchange
@@ -42,7 +42,7 @@ public class AmqpChannelBindingExchange
     /// The name of the exchange. It MUST NOT exceed 255 characters long.
     /// </summary>
     [JsonProperty("name", NullValueHandling = NullValueHandling.Ignore)]
-    public string Name { get; set; }
+    public string? Name { get; set; }
 
     /// <summary>
     /// The type of the exchange. Can be either topic, direct, fanout, default or headers.
@@ -66,7 +66,7 @@ public class AmqpChannelBindingExchange
     /// The virtual host of the exchange. Defaults to /.
     /// </summary>
     [JsonProperty("vhost", NullValueHandling = NullValueHandling.Ignore)]
-    public string VirtualHost { get; set; }
+    public string? VirtualHost { get; set; }
 }
 
 public class AmqpChannelBindingQueue
@@ -75,7 +75,7 @@ public class AmqpChannelBindingQueue
     /// The name of the queue. It MUST NOT exceed 255 characters long.
     /// </summary>
     [JsonProperty("name", NullValueHandling = NullValueHandling.Ignore)]
-    public string Name { get; set; }
+    public string? Name { get; set; }
 
     /// <summary>
     /// Whether the queue should survive broker restarts or not.
@@ -99,7 +99,7 @@ public class AmqpChannelBindingQueue
     /// The virtual host of the queue. Defaults to /.
     /// </summary>
     [JsonProperty("vhost", NullValueHandling = NullValueHandling.Ignore)]
-    public string VirtualHost { get; set; }
+    public string? VirtualHost { get; set; }
 }
 
 

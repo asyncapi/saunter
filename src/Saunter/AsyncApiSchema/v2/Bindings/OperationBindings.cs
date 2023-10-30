@@ -25,14 +25,14 @@ public class OperationBindingsReference : Reference, IOperationBindings
 public class OperationBindings : IOperationBindings
 {
     [JsonProperty("http", NullValueHandling = NullValueHandling.Ignore)]
-    public HttpOperationBinding Http { get; set; }
+    public HttpOperationBinding? Http { get; set; }
 
     [JsonProperty("amqp", NullValueHandling = NullValueHandling.Ignore)]
-    public AmqpOperationBinding Amqp { get; set; }
+    public AmqpOperationBinding? Amqp { get; set; }
 
     [JsonProperty("kafka", NullValueHandling = NullValueHandling.Ignore)]
-    public KafkaOperationBinding Kafka { get; set; }
+    public KafkaOperationBinding? Kafka { get; set; }
 
     [JsonProperty("mqtt", NullValueHandling = NullValueHandling.Ignore)]
-    public MqttOperationBinding Mqtt { get; set; }
+    public MqttOperationBinding? Mqtt { get; set; }
 }
