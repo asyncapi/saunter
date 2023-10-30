@@ -16,16 +16,25 @@ public class ChannelItem
     /// CommonMark syntax can be used for rich text representation.
     /// </summary>
     [JsonProperty("description", NullValueHandling = NullValueHandling.Ignore)]
-    public string Description { get; set; } = string.Empty;
+    public string? Description { get; set; }
 
     /// <summary>
-    /// A definition of the SUBSCRIBE operation.
+    /// The servers on which this channel is available, specified as an optional unordered
+    /// list of names (string keys) of Server Objects defined in the Servers Object (a map).
+    /// If servers is absent or empty then this channel must be available on all servers
+    /// defined in the Servers Object.
+    /// </summary>
+    [JsonProperty("servers", NullValueHandling = NullValueHandling.Ignore)]
+    public List<string>? Servers { get; set; }
+
+    /// <summary>
+    /// A definition of the SUBSCRIBE operation, which defines the messages produced by the application and sent to the channel.
     /// </summary>
     [JsonProperty("subscribe", NullValueHandling = NullValueHandling.Ignore)]
     public Operation? Subscribe { get; set; }
 
     /// <summary>
-    /// A definition of the PUBLISH operation.
+    /// A definition of the PUBLISH operation, which defines the messages consumed by the application from the channel.
     /// </summary>
     [JsonProperty("publish", NullValueHandling = NullValueHandling.Ignore)]
     public Operation? Publish { get; set; }
@@ -36,7 +45,7 @@ public class ChannelItem
     /// (as defined by RFC 6570 section 2.2).
     /// </summary>
     [JsonProperty("parameters", DefaultValueHandling = DefaultValueHandling.Ignore)]
-    public IDictionary<string, IParameter> Parameters { get; set; } = new Dictionary<string, IParameter>();
+    public Dictionary<string, IParameter>? Parameters { get; set; }
 
     /// <summary>
     /// A free-form map where the keys describe the name of the protocol
@@ -44,23 +53,4 @@ public class ChannelItem
     /// </summary>
     [JsonProperty("bindings", NullValueHandling = NullValueHandling.Ignore)]
     public IChannelBindings? Bindings { get; set; }
-
-    /// <summary>
-    /// The servers on which this channel is available, specified as an optional unordered
-    /// list of names (string keys) of Server Objects defined in the Servers Object (a map).
-    /// If servers is absent or empty then this channel must be available on all servers
-    /// defined in the Servers Object.
-    /// </summary>
-    [JsonProperty("servers", NullValueHandling = NullValueHandling.Ignore)]
-    public List<string> Servers { get; set; } = new List<string>();
-
-    public bool ShouldSerializeParameters()
-    {
-        return Parameters != null && Parameters.Count > 0;
-    }
-
-    public bool ShouldSerializeServers()
-    {
-        return Servers != null && Servers.Count > 0;
-    }
 }

@@ -21,6 +21,6 @@ public class Reference
     [JsonProperty("$ref")]
     public string Ref => string.Format(_path, _id);
 
-    [JsonIgnore()]
+    [JsonIgnore]
     public string Id => _id;
 }

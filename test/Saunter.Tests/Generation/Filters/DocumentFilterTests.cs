@@ -17,7 +17,17 @@ public class DocumentFilterTests
     public void DocumentFilterIsAppliedToAsyncApiDocument()
     {
         // Arrange
-        AsyncApiOptions options = new();
+        AsyncApiOptions options = new()
+        {
+            AsyncApi = new()
+            {
+                Info = new()
+                {
+                    Version = "1.0.0",
+                    Title = GetType().FullName,
+                }
+            }
+        };
         DocumentGenerator documentGenerator = new();
 
         // Act
@@ -40,7 +50,7 @@ public class DocumentFilterTests
                 Description = "an example channel for testing"
             };
 
-            document.Channels.Add(new KeyValuePair<string, ChannelItem>("foo", channel));
+            document.Channels.Add("foo", channel);
         }
     }
 }

@@ -53,7 +53,17 @@ public static class AsyncApiServiceCollectionExtensions
                 options.Middleware.UiBaseRoute = "/asyncapi/{document}/ui/";
             }
 
-            AsyncApiDocument document = options.NamedApis.GetOrAdd(documentName, _ => new AsyncApiDocument() { DocumentName = documentName });
+            AsyncApiDocument document = options.NamedApis.GetOrAdd(documentName, k => new AsyncApiDocument
+            {
+                //TODO: fix set, remove dictionary?...
+                Info = new()
+                {
+                    Version = "set me pls",
+                    Title = k,
+                },
+                Channels = new(),
+                DocumentName = k,
+            });
 
             setupAction(document);
         });

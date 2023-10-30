@@ -18,7 +18,17 @@ public class MethodAttributesTests
     public void GenerateDocument_GeneratesDocumentWithMultipleMessagesPerChannel()
     {
         // Arrange
-        AsyncApiOptions options = new();
+        AsyncApiOptions options = new()
+        {
+            AsyncApi = new()
+            {
+                Info = new()
+                {
+                    Version = "1.0.0",
+                    Title = GetType().FullName,
+                }
+            }
+        };
         DocumentGenerator documentGenerator = new();
 
         // Act

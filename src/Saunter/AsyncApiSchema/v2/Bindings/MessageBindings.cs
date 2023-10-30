@@ -19,7 +19,9 @@ public class MessageBindingsReference : Reference, IMessageBindings
 {
     public MessageBindingsReference(string id) : base(id, "#/components/messageBindings/{0}") { }
 }
-
+/// <summary>
+/// TODO: need to implement
+/// </summary>
 public class MessageBindings : IMessageBindings
 {
     [JsonProperty("amqp", NullValueHandling = NullValueHandling.Ignore)]

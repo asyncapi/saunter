@@ -20,12 +20,11 @@ public class AsyncApiOptions
     private readonly List<Type> _channelItemFilters = new();
     private readonly List<Type> _operationFilters = new();
 
-
     /// <summary>
     /// The base asyncapi schema. This will be augmented with other information auto-discovered
     /// from attributes.
     /// </summary>
-    public AsyncApiDocument AsyncApi { get; set; } = new AsyncApiDocument();
+    public required AsyncApiDocument AsyncApi { get; set; }
 
     /// <summary>
     /// A list of marker types from assemblies to scan for Saunter attributes.
@@ -46,7 +45,6 @@ public class AsyncApiOptions
     /// A list of filters that will be applied to any generated Publish/Subscribe operations.
     /// </summary>
     public IEnumerable<Type> OperationFilters => _operationFilters;
-
 
     /// <summary>
     /// Add a filter to be applied to the generated AsyncAPI document.

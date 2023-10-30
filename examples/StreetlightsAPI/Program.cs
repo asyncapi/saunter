@@ -53,18 +53,29 @@ public class Startup
 
             options.AsyncApi = new AsyncApiDocument
             {
-                Info = new Info("Streetlights API", "1.0.0")
+                Info = new Info
                 {
+                    Title = "Streetlights API",
+                    Version = "1.0.0",
                     Description = "The Smartylighting Streetlights API allows you to remotely manage the city lights.",
-                    License = new License("Apache 2.0")
+                    License = new License
                     {
+                        Name = "Apache 2.0",
                         Url = "https://www.apache.org/licenses/LICENSE-2.0"
                     }
                 },
                 Servers =
                 {
-                    ["mosquitto"] = new Server("test.mosquitto.org", "mqtt"),
-                    ["webapi"] = new Server("localhost:5000", "http"),
+                    ["mosquitto"] = new Server
+                    {
+                        Url = "test.mosquitto.org",
+                        Protocol = "mqtt",
+                    },
+                    ["webapi"] = new Server
+                    {
+                        Url = "localhost:5000",
+                        Protocol = "http",
+                    },
                 },
             };
         });

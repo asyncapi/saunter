@@ -19,7 +19,17 @@ public class ClassAttributesTests
     public void GetDocument_GeneratesDocumentWithMultipleMessagesPerChannel()
     {
         // Arrange
-        AsyncApiOptions options = new();
+        AsyncApiOptions options = new()
+        {
+            AsyncApi = new() 
+            {
+                Info = new()
+                {
+                    Version = "1.0.0",
+                    Title = GetType().FullName,
+                }
+            }
+        };
         DocumentGenerator documentGenerator = new();
 
         // Act
@@ -51,7 +61,17 @@ public class ClassAttributesTests
     public void GenerateDocument_GeneratesDocumentWithMultipleMessagesPerChannelInTheSameMethod()
     {
         // Arrange
-        AsyncApiOptions options = new();
+        AsyncApiOptions options = new()
+        {
+            AsyncApi = new()
+            {
+                Info = new()
+                {
+                    Version = "1.0.0",
+                    Title = GetType().FullName,
+                }
+            }
+        };
         DocumentGenerator documentGenerator = new();
 
         // Act
@@ -83,7 +103,17 @@ public class ClassAttributesTests
     public void GenerateDocument_GeneratesDocumentWithSingleMessage()
     {
         // Arrange
-        AsyncApiOptions options = new();
+        AsyncApiOptions options = new()
+        {
+            AsyncApi = new()
+            {
+                Info = new()
+                {
+                    Version = "1.0.0",
+                    Title = GetType().FullName,
+                }
+            }
+        };
         DocumentGenerator documentGenerator = new();
 
         // Act
@@ -111,7 +141,17 @@ public class ClassAttributesTests
     public void GetDocument_WhenMultipleClassesUseSameChannelKey_GeneratesDocumentWithMultipleMessagesPerChannel()
     {
         // Arrange
-        AsyncApiOptions options = new();
+        AsyncApiOptions options = new()
+        {
+            AsyncApi = new()
+            {
+                Info = new()
+                {
+                    Version = "1.0.0",
+                    Title = GetType().FullName,
+                }
+            }
+        };
         DocumentGenerator documentGenerator = new();
 
         // Act
@@ -160,7 +200,17 @@ public class ClassAttributesTests
     public void GenerateDocument_GeneratesDocumentWithChannelParameters()
     {
         // Arrange
-        AsyncApiOptions options = new();
+        AsyncApiOptions options = new()
+        {
+            AsyncApi = new()
+            {
+                Info = new()
+                {
+                    Version = "1.0.0",
+                    Title = GetType().FullName,
+                }
+            }
+        };
         DocumentGenerator documentGenerator = new();
 
         // Act
@@ -195,7 +245,17 @@ public class ClassAttributesTests
     public void GenerateDocument_GeneratesDocumentWithMessageHeader()
     {
         // Arrange
-        AsyncApiOptions options = new();
+        AsyncApiOptions options = new()
+        {
+            AsyncApi = new()
+            {
+                Info = new()
+                {
+                    Version = "1.0.0",
+                    Title = GetType().FullName,
+                }
+            }
+        };
         DocumentGenerator documentGenerator = new();
 
         // Act

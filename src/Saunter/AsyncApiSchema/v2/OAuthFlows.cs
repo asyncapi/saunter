@@ -4,32 +4,66 @@ using Newtonsoft.Json;
 
 namespace Saunter.AsyncApiSchema.v2;
 
+/// <summary>
+/// Allows configuration of the supported OAuth Flows.
+/// </summary>
 public class OAuthFlows
 {
+    /// <summary>
+    /// Configuration for the OAuth Implicit flow.
+    /// </summary>
     [JsonProperty("implicit")]
-    public OAuthFlow Implicit { get; set; }
+    public OAuthFlow? Implicit { get; set; }
 
+    /// <summary>
+    /// Configuration for the OAuth Resource Owner Protected Credentials flow.
+    /// </summary>
     [JsonProperty("password")]
-    public OAuthFlow Password { get; set; }
+    public OAuthFlow? Password { get; set; }
 
+    /// <summary>
+    /// Configuration for the OAuth Client Credentials flow.
+    /// </summary>
     [JsonProperty("clientCredentials")]
-    public OAuthFlow ClientCredentials { get; set; }
+    public OAuthFlow? ClientCredentials { get; set; }
 
+    /// <summary>
+    /// Configuration for the OAuth Authorization Code flow.
+    /// </summary>
     [JsonProperty("authorizationCode")]
-    public OAuthFlow AuthorizationCode { get; set; }
+    public OAuthFlow? AuthorizationCode { get; set; }
 }
 
+/// <summary>
+/// Configuration details for a supported OAuth Flow
+/// </summary>
 public class OAuthFlow
 {
+    /// <summary>
+    /// REQUIRED. The authorization URL to be used for this flow. 
+    /// This MUST be in the form of an absolute URL.
+    /// </summary>
     [JsonProperty("authorizationUrl")]
-    public string AuthorizationUrl { get; set; }
+    public required string AuthorizationUrl { get; set; }
 
+    /// <summary>
+    /// REQUIRED. The token URL to be used for this flow. 
+    /// This MUST be in the form of an absolute URL.
+    /// </summary>
     [JsonProperty("tokenUrl")]
-    public string TokenUrl { get; set; }
+    public required string TokenUrl { get; set; }
 
+    /// <summary>
+    /// The URL to be used for obtaining refresh tokens. 
+    /// This MUST be in the form of an absolute URL.
+    /// </summary>
     [JsonProperty("refreshUrl")]
-    public string RefreshUrl { get; set; }
+    public string? RefreshUrl { get; set; }
 
+    /// <summary>
+    /// REQUIRED. The available scopes for the OAuth2 security scheme.
+    /// A map between the scope name and a short description for it.
+    /// </summary>
     [JsonProperty("scopes")]
-    public IDictionary<string, string> Scopes { get; set; } = new Dictionary<string, string>();
+    public required Dictionary<string, string> Scopes { get; set; }
 }

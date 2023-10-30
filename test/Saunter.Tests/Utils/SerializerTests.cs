@@ -15,9 +15,19 @@ public abstract class SerializerTests
     private readonly DocumentGenerator _documentGenerator;
     private readonly AsyncApiOptions _options;
 
-    public SerializerTests()
+    protected SerializerTests()
     {
-        _options = new AsyncApiOptions();
+        _options = new()
+        {
+            AsyncApi = new()
+            {
+                Info = new()
+                {
+                    Version = "1.0.0",
+                    Title = GetType().FullName,
+                }
+            }
+        };
         _documentGenerator = new DocumentGenerator();
     }
 

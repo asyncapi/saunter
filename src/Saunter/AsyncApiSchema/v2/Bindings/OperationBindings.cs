@@ -19,7 +19,9 @@ public class OperationBindingsReference : Reference, IOperationBindings
 {
     public OperationBindingsReference(string id) : base(id, "#/components/operationBindings/{0}") { }
 }
-
+/// <summary>
+/// TODO: need to implement
+/// </summary>
 public class OperationBindings : IOperationBindings
 {
     [JsonProperty("http", NullValueHandling = NullValueHandling.Ignore)]

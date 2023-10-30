@@ -16,12 +16,12 @@ public class ExternalDocumentation
     /// CommonMark syntax can be used for rich text representation.
     /// </summary>
     [JsonProperty("description")]
-    public string Description { get; set; }
+    public string? Description { get; set; }
 
     /// <summary>
     /// The URL for the target documentation.
     /// Value MUST be in the format of a URL.
     /// </summary>
     [JsonProperty("url")]
-    public string Url { get; }
+    public string? Url { get; }
 }

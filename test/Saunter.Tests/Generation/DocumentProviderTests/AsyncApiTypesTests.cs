@@ -20,7 +20,11 @@ public class AsyncApiTypesTests
         {
             o.AsyncApi = new AsyncApiDocument
             {
-                Info = new Info(GetType().FullName, "1.0.0")
+                Info = new Info
+                {
+                    Title = GetType().FullName,
+                    Version = "1.0.0",
+                }
             };
             o.AssemblyMarkerTypes = new[] { typeof(AnotherSamplePublisher), typeof(SampleConsumer) };
         });

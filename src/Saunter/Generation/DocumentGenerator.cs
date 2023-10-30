@@ -43,12 +43,13 @@ public class DocumentGenerator : IDocumentGenerator
     /// <summary>
     /// Generate the Channels section of an AsyncApi schema.
     /// </summary>
-    private static IDictionary<string, ChannelItem> GenerateChannels(TypeInfo[] asyncApiTypes, AsyncApiSchemaResolver schemaResolver, AsyncApiOptions options, JsonSchemaGenerator jsonSchemaGenerator, IServiceProvider serviceProvider)
+    private static Dictionary<string, ChannelItem> GenerateChannels(TypeInfo[] asyncApiTypes, AsyncApiSchemaResolver schemaResolver, AsyncApiOptions options, JsonSchemaGenerator jsonSchemaGenerator, IServiceProvider serviceProvider)
     {
         Dictionary<string, ChannelItem> channels = new();
 
         channels.AddRange(GenerateChannelsFromMethods(asyncApiTypes, schemaResolver, options, jsonSchemaGenerator, serviceProvider));
         channels.AddRange(GenerateChannelsFromClasses(asyncApiTypes, schemaResolver, options, jsonSchemaGenerator, serviceProvider));
+
         return channels;
     }
 
@@ -246,7 +247,7 @@ public class DocumentGenerator : IDocumentGenerator
             };
 
             OperationFilterContext filterContext = new(method, schemaResolver, jsonSchemaGenerator, operationAttribute);
-            
+
             foreach (Type filterType in options.OperationFilters)
             {
                 IOperationFilter filter = (IOperationFilter)serviceProvider.GetRequiredService(filterType);
@@ -367,7 +368,7 @@ public class DocumentGenerator : IDocumentGenerator
     }
 
 
-    private static IMessage GenerateMessageFromType(Type payloadType, AsyncApiSchemaResolver schemaResolver, JsonSchemaGenerator jsonSchemaGenerator)
+    private static IMessage? GenerateMessageFromType(Type payloadType, AsyncApiSchemaResolver schemaResolver, JsonSchemaGenerator jsonSchemaGenerator)
     {
         if (payloadType == null)
         {
@@ -378,12 +379,13 @@ public class DocumentGenerator : IDocumentGenerator
         {
             Payload = jsonSchemaGenerator.Generate(payloadType, schemaResolver),
         };
+
         message.Name = message.Payload.Id;
 
         return schemaResolver.GetMessageOrReference(message);
     }
 
-    private static IDictionary<string, IParameter> GetChannelParametersFromAttributes(MemberInfo memberInfo, AsyncApiSchemaResolver schemaResolver, JsonSchemaGenerator jsonSchemaGenerator)
+    private static Dictionary<string, IParameter> GetChannelParametersFromAttributes(MemberInfo memberInfo, AsyncApiSchemaResolver schemaResolver, JsonSchemaGenerator jsonSchemaGenerator)
     {
         IEnumerable<ChannelParameterAttribute> attributes = memberInfo.GetCustomAttributes<ChannelParameterAttribute>();
         Dictionary<string, IParameter> parameters = new();

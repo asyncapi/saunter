@@ -35,7 +35,7 @@ public class SchemaGenerationTests
                 ContractResolver = new CamelCasePropertyNamesContractResolver()
             },
         };
-        _schemaResolver = new AsyncApiSchemaResolver(new AsyncApiDocument(), settings);
+        _schemaResolver = new AsyncApiSchemaResolver(new AsyncApiDocument() { Info = new() { Title = "tester", Version = "1.0.0" } }, settings);
         _schemaGenerator = new JsonSchemaGenerator(settings);
     }
 

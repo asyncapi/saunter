@@ -23,12 +23,12 @@ public class OperationTraitsTests
         {
             o.AsyncApi = new AsyncApiDocument
             {
-                Info = new Info(GetType().FullName, "1.0.0"),
+                Info = new Info { Title = GetType().FullName, Version = "1.0.0" },
                 Components =
                 {
                     OperationTraits =
                     {
-                        ["exampleTrait"] = new OperationTrait { Description = "This is an example trait" }
+                        ["exampleTrait"] = new OperationTrait { OperationId = "exampleTrait", Description = "This is an example trait" }
                     }
                 }
             };

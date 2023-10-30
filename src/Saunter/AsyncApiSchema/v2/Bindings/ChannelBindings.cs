@@ -20,6 +20,9 @@ public class ChannelBindingsReference : Reference, IChannelBindings
     public ChannelBindingsReference(string id) : base(id, "#/components/channelBindings/{0}") { }
 }
 
+/// <summary>
+/// TODO: need to implement
+/// </summary>
 public class ChannelBindings : IChannelBindings
 {
     [JsonProperty("amqp", NullValueHandling = NullValueHandling.Ignore)]

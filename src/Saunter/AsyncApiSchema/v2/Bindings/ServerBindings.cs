@@ -19,7 +19,9 @@ public class ServerBindingsReference : Reference, IServerBindings
 {
     public ServerBindingsReference(string id) : base(id, "#/components/serverBindings/{0}") { }
 }
-
+/// <summary>
+/// TODO: need to implement
+/// </summary>
 public class ServerBindings : IServerBindings
 {
     [JsonProperty("amqp", NullValueHandling = NullValueHandling.Ignore)]

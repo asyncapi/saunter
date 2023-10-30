@@ -20,7 +20,7 @@ public class ParameterReference : Reference, IParameter
     }
 
     [JsonIgnore]
-    public Parameter Value => _document.Components.Parameters[Id];
+    public Parameter Value => _document.Components?.Parameters[Id];
 }
 
 public class Parameter : IParameter
@@ -30,14 +30,13 @@ public class Parameter : IParameter
     /// CommonMark syntax can be used for rich text representation.
     /// </summary>
     [JsonProperty("description", NullValueHandling = NullValueHandling.Ignore)]
-    public string Description { get; set; }
-
+    public string? Description { get; set; }
 
     /// <summary>
     /// Definition of the parameter.
     /// </summary>
     [JsonProperty("schema")]
-    public JsonSchema Schema { get; set; }
+    public JsonSchema? Schema { get; set; }
 
     /// <summary>
     /// A runtime expression that specifies the location of the parameter value.
@@ -45,8 +44,8 @@ public class Parameter : IParameter
     /// this parameter but, instead, the schema property MUST be used.
     /// </summary>
     [JsonProperty("location", NullValueHandling = NullValueHandling.Ignore)]
-    public string Location { get; set; }
+    public string? Location { get; set; }
 
     [JsonIgnore]
-    public string Name { get; set; }
+    internal string? Name { get; set; }
 }

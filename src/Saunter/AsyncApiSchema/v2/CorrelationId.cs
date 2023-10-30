@@ -17,7 +17,6 @@ public class CorrelationIdReference : Reference, ICorrelationId
     public CorrelationIdReference(string id) : base(id, "#/components/correlationIds/{0}") { }
 }
 
-
 public class CorrelationId : ICorrelationId
 {
     public CorrelationId(string location)
@@ -30,7 +29,7 @@ public class CorrelationId : ICorrelationId
     /// CommonMark syntax can be used for rich text representation.
     /// </summary>
     [JsonProperty("description")]
-    public string Description { get; set; }
+    public string? Description { get; set; }
 
     /// <summary>
     /// A runtime expression that specifies the location of the correlation ID.

@@ -52,7 +52,7 @@ public class Startup
 
             options.AsyncApi = new AsyncApiDocument
             {
-                Info = new Info(Environment.GetEnvironmentVariable("PATH_BASE"), "1.0.0")
+                Info = new Info { Version = "1.0.0", Title = Environment.GetEnvironmentVariable("PATH_BASE") }
             };
         });
 

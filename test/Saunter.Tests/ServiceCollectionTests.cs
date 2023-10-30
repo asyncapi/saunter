@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Net.Http.Headers;
 
 using Microsoft.Extensions.DependencyInjection;
 
@@ -15,7 +16,6 @@ namespace Saunter.Tests;
 /// </remarks>
 public class ServiceCollectionTests
 {
-
     [Fact]
     public void TestAddAsyncApiSchemaGeneration()
     {
@@ -25,8 +25,10 @@ public class ServiceCollectionTests
                 options.AsyncApi = new AsyncApiDocument
                 {
                     Id = "urn:com:example:example-events",
-                    Info = new Info("Example API", "2019.01.12345")
+                    Info = new Info
                     {
+                        Version = "2019.01.12345",
+                        Title = "Example API",
                         Description = "An example API with events",
                         Contact = new Contact
                         {
@@ -34,7 +36,10 @@ public class ServiceCollectionTests
                             Name = "Michael Wildman",
                             Url = "https://mwild.me/",
                         },
-                        License = new License("MIT"),
+                        License = new License
+                        {
+                            Name = "MIT",
+                        },
                         TermsOfService = "https://mwild.me/tos",
                     },
                     Tags = { "example", "event" },
@@ -42,8 +47,10 @@ public class ServiceCollectionTests
                     {
                         {
                             "development",
-                            new Server("rabbitmq.dev.mwild.me", "amqp")
+                            new Server
                             {
+                                Url = "rabbitmq.dev.mwild.me",
+                                Protocol = "amqp",
                                 Security = new List<Dictionary<string, List<string>>> { new Dictionary<string, List<string>> { { "user-password", new List<string>() } }}
                             }
                         }
@@ -52,7 +59,16 @@ public class ServiceCollectionTests
                     {
                         SecuritySchemes = new Dictionary<string, SecurityScheme>
                         {
-                            { "user-password", new SecurityScheme(SecuritySchemeType.Http) }
+                            { "user-password", new SecurityScheme
+                                {
+                                    Type = SecuritySchemeType.Http,
+                                    In = "header",
+                                    Scheme = "bearer",
+                                    Name = "authorization",
+                                    OpenIdConnectUrl = "https://helpme/pls",
+                                    Flows = new(),
+                                }
+                            }
                         }
                     }
                 };
@@ -62,7 +78,16 @@ public class ServiceCollectionTests
 
         IAsyncApiDocumentProvider provider = sp.GetRequiredService<IAsyncApiDocumentProvider>();
 
-        AsyncApiDocument document = provider.GetDocument(new AsyncApiOptions(), new AsyncApiDocument());
+        AsyncApiDocument prototype = new()
+        {
+            Info = new()
+            {
+                Title = "tester",
+                Version = "1.0",
+            }
+        };
+
+        AsyncApiDocument document = provider.GetDocument(new AsyncApiOptions() { AsyncApi = prototype }, prototype);
 
         document.ShouldNotBeNull();
     }
