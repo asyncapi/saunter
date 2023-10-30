@@ -13,7 +13,7 @@ Saunter is an [AsyncAPI](https://github.com/asyncapi/asyncapi) documentation gen
 
 1 priority:
 
-* [X] Dotnet 7
+* [X] To dotnet 7
 * [X] To asyncapi 2.6.0
 * [X] Set required and nullable props to schema
 * [ ] Give the opportunity to work with multiple operations in the one class/method
@@ -28,6 +28,7 @@ Saunter is an [AsyncAPI](https://github.com/asyncapi/asyncapi) documentation gen
 
 3 priority:
 
+* [ ] To dotnet 8
 * [ ] Make a normal tool for describing a asyncapi document (without attributes)
 
 ## Getting Started
