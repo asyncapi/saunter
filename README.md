@@ -17,15 +17,14 @@ Saunter is an [AsyncAPI](https://github.com/asyncapi/asyncapi) documentation gen
 * [X] To asyncapi 2.6.0
 * [ ] Set required and nullable props to schema
 * [ ] Give the opportunity to work with multiple operations in the one class/method
-* [ ] Nullable enable
-* [ ] Add generator output validation
-* [ ] More unit
+* [ ] Kill channel attribute
+* [ ] Nuget package
+* [ ] Release !!
 
 2 priority:
 
-* [ ] Concat operations and channel to one attributes
-* [ ] Up asyncapi version
-* [ ] Nuget package
+* [ ] Add generator output validation
+* [ ] More unit
 
 3 priority:
 
