@@ -21,7 +21,7 @@ public class ClassAttributesTests
         // Arrange
         AsyncApiOptions options = new()
         {
-            AsyncApi = new() 
+            AsyncApi = new()
             {
                 Info = new()
                 {

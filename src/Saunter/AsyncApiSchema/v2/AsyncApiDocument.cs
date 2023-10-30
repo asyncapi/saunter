@@ -52,7 +52,7 @@ public class AsyncApiDocument : ICloneable
     /// An element to hold various schemas for the specification.
     /// </summary>
     [JsonProperty("components")]
-    public Components? Components { get; set; }
+    public Components? Components { get; set; } = new();
 
     /// <summary>
     /// A list of tags used by the specification with additional metadata.

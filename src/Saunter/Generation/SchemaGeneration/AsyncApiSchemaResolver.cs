@@ -13,8 +13,7 @@ public class AsyncApiSchemaResolver : JsonSchemaResolver
     private readonly AsyncApiDocument _document;
     private readonly JsonSchemaGeneratorSettings _settings;
 
-    public AsyncApiSchemaResolver(AsyncApiDocument document, AsyncApiSchemaOptions settings)
-        : base(document, settings)
+    public AsyncApiSchemaResolver(AsyncApiDocument document, AsyncApiSchemaOptions settings) : base(document, settings)
     {
         _document = document;
         _settings = settings;
@@ -32,7 +31,7 @@ public class AsyncApiSchemaResolver : JsonSchemaResolver
             throw new ArgumentException("The root schema cannot be appended.");
         }
 
-        if (!_document.Components.Schemas.Values.Contains(schema))
+        if (_document.Components is not null && !_document.Components.Schemas.Values.Contains(schema))
         {
             string schemaId = _settings.TypeNameGenerator.Generate(schema, typeNameHint, _document.Components.Schemas.Keys.Select(k => k.ToString()));
 

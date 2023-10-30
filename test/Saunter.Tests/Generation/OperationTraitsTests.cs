@@ -24,7 +24,7 @@ public class OperationTraitsTests
             o.AsyncApi = new AsyncApiDocument
             {
                 Info = new Info { Title = GetType().FullName, Version = "1.0.0" },
-                Components =
+                Components = new()
                 {
                     OperationTraits =
                     {
