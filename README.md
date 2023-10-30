@@ -35,10 +35,9 @@ Saunter is an [AsyncAPI](https://github.com/asyncapi/asyncapi) documentation gen
 
 See [examples/StreetlightsAPI](https://github.com/tehmantra/saunter/blob/main/examples/StreetlightsAPI).
 
-
 1. Install the Saunter package
 
-    ```
+    ```csharp
     dotnet add package Saunter
     ```
 
@@ -115,7 +114,7 @@ See [examples/StreetlightsAPI](https://github.com/tehmantra/saunter/blob/main/ex
             //...
     }
     ```
-   
+
 6. Use the published AsyncAPI UI:
 
     ![AsyncAPI UI](https://raw.githubusercontent.com/tehmantra/saunter/main/assets/asyncapi-ui-screenshot.png)
@@ -140,7 +139,6 @@ services.AddAsyncApiSchemaGeneration(options =>
 }
 ```
 
-
 ## JSON Schema Settings
 
 The JSON schema generation can be customized using the `options.JsonSchemaGeneratorSettings`. Saunter defaults to the popular `camelCase` naming strategy for both properties and types.
@@ -163,11 +161,9 @@ services.AddAsyncApiSchemaGeneration(options =>
 
 You have access to the full range of both [NJsonSchema](https://github.com/RicoSuter/NJsonSchema) and [JSON.NET](https://github.com/JamesNK/Newtonsoft.Json) settings to configure the JSON schema generation, including custom ContractResolvers.
 
-
 ## Bindings
 
 Bindings are used to describe protocol specific information. These can be added to the AsyncAPI document and then applied to different components by setting the `BindingsRef` property in the relevant attributes `[OperationAttribute]`, `[MessageAttribute]`, `[ChannelAttribute]`
-
 
 ```csharp
 // Startup.cs
@@ -203,11 +199,11 @@ public void PublishLightMeasuredEvent(Streetlight streetlight, int lumens) {}
 ```
 
 Available bindings:
+
 * [AMQP](https://github.com/tehmantra/saunter/tree/main/src/Saunter/AsyncApiSchema/v2/Bindings/Amqp)
 * [HTTP](https://github.com/tehmantra/saunter/tree/main/src/Saunter/AsyncApiSchema/v2/Bindings/Http)
 * [Kafka](https://github.com/tehmantra/saunter/tree/main/src/Saunter/AsyncApiSchema/v2/Bindings/Kafka)
 * [MQTT](https://github.com/tehmantra/saunter/tree/main/src/Saunter/AsyncApiSchema/v2/Bindings/Mqtt)
-
 
 ## Multiple AsyncAPI documents
 
@@ -256,7 +252,7 @@ public class BarMessageBus
 
 Each document can be accessed by specifying the name in the URL
 
-```
+```json
 // GET /asyncapi/foo/asyncapi.json
 {
     "info": {
@@ -272,7 +268,6 @@ Each document can be accessed by specifying the name in the URL
 }
 ```
 
-
 ## Contributing
 
 See our [contributing guide](https://github.com/tehmantra/saunter/blob/main/CONTRIBUTING.md/CONTRIBUTING.md).
@@ -284,5 +279,4 @@ You can also find me on the [AsyncAPI community slack](https://asyncapi.com/slac
 ## Thanks
 
 * This project is heavily inspired by [Swashbuckle](https://github.com/domaindrivendev/Swashbuckle.AspNetCore).
-* We use [NJsonSchema](https://github.com/RicoSuter/NJsonSchema) for the JSON schema heavy lifting, 
-
+* We use [NJsonSchema](https://github.com/RicoSuter/NJsonSchema) for the JSON schema heavy lifting,
