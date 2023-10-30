@@ -18,6 +18,7 @@ Saunter is an [AsyncAPI](https://github.com/asyncapi/asyncapi) documentation gen
 * [X] Set required and nullable props to schema
 * [ ] Give the opportunity to work with multiple operations in the one class/method
 * [ ] Kill channel attribute
+* [ ] Rewrite usage docs
 * [ ] Nuget package
 * [ ] Release !!
 

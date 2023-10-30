@@ -2,7 +2,6 @@
 
 Feel free to get involved in the project by opening issues, or submitting pull requests.
 
-
 ## Build & Release Process
 
 Builds and releases managed with github actions.
@@ -14,7 +13,6 @@ Builds and releases managed with github actions.
 * [.github/workflows/ci.yaml](./.github/workflows/ci.yaml)
 * Build and tests MUST pass before merging to master
 
-
 ### Release
 
 * Locally, packages can be created using `dotnet pack ./src/Saunter/Saunter.csproj`
@@ -25,4 +23,3 @@ Builds and releases managed with github actions.
 * Tags for release (non-preproduction) should relate to commits on `master`
 * The repository owner is responsible for tagging and releasing
 * Packages are pushed to [nuget.org/packages/saunter](https://www.nuget.org/packages/saunter)
-
