@@ -34,6 +34,8 @@ Saunter is an [AsyncAPI](https://github.com/asyncapi/asyncapi) documentation gen
 * [ ] Nuget package
 * [ ] Release !!
 
+![imp](assets/1_priority.png)
+
 2 priority:
 
 * [ ] Add generator output validation

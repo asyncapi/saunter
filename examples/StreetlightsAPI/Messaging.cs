@@ -30,6 +30,7 @@ public class StreetlightMessageBus : IStreetlightMessageBus
         // Simulate publishing a message to the channel.
         // In reality this would call some kind of pub/sub client library and publish.
         // e.g. mqttClient.PublishAsync(message);
+
         _logger.LogInformation("Publishing message {Payload} to test.mosquitto.org/{Topic}", payload, SubscribeLightMeasuredTopic);
     }
 }
