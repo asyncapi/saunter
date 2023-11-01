@@ -55,11 +55,9 @@ public class MethodAttributesTests
         messages.OneOf.OfType<MessageReference>().ShouldContain(m => m.Id == "anyTenantRemoved");
     }
 
-    [AsyncApi]
     public class TenantMessagePublisher : ITenantMessagePublisher
     {
-        [Channel("asw.tenant_service.tenants_history", Description = "Tenant events.")]
-        [PublishOperation(OperationId = "TenantMessagePublisher", Summary = "Publish domains events about tenants.")]
+        [PublishOperation("asw.tenant_service.tenants_history", OperationId = "TenantMessagePublisher", Summary = "Publish domains events about tenants.", ChannelDescription = "Tenant events.")]
         [Message(typeof(AnyTenantCreated))]
         [Message(typeof(AnyTenantUpdated))]
         [Message(typeof(AnyTenantRemoved))]

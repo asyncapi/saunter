@@ -46,13 +46,11 @@ public class LightMeasuredEvent
     public DateTime SentAt { get; set; }
 }
 
-[AsyncApi]
 [ApiController]
 [Route("")]
 public class StreetlightsController
 {
     private const string PublishLightMeasuredTopic = "publish/light/measured";
-
 
     // Simulate a database of streetlights
     private static int StreetlightSeq = 2;
@@ -92,10 +90,9 @@ public class StreetlightsController
     /// <summary>
     /// Inform about environmental lighting conditions for a particular streetlight.
     /// </summary>
-    [Channel(PublishLightMeasuredTopic, Servers = new[] { "webapi" })]
-    [PublishOperation(typeof(LightMeasuredEvent), "Light")]
     [HttpPost]
     [Route(PublishLightMeasuredTopic)]
+    [PublishOperation<LightMeasuredEvent>(PublishLightMeasuredTopic, "Light", ChannelServers = new[] { "webapi" })]
     public void MeasureLight([FromBody] LightMeasuredEvent lightMeasuredEvent)
     {
         lightMeasuredEvent.SentAt = DateTime.Now;

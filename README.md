@@ -16,8 +16,9 @@ Saunter is an [AsyncAPI](https://github.com/asyncapi/asyncapi) documentation gen
 * [X] To dotnet 7
 * [X] To asyncapi 2.6.0
 * [X] Set required and nullable props to schema
-* [ ] Give the opportunity to work with multiple operations in the one class/method
-* [ ] Kill channel attribute
+* [X] Give the opportunity to work with multiple operations in the one class/method
+* [X] Kill channel attribute ([SubscribeOperation("asw.tenant_service.tenants_history", OperationId = "TenantMessageConsumer", Summary = "Subscribe to domains events about tenants.", ChannelDescription = "Tenant events.")])
+* [ ] Kill message attribute ([SubscribeOperation<TMessage>("asw.tenant_service.tenants_history", OperationId = "TenantMessageConsumer", Summary = "Subscribe to domains events about tenants.", ChannelDescription = "Tenant events.")])
 * [ ] Rewrite usage docs
 * [ ] Nuget package
 * [ ] Release !!

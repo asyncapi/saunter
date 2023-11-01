@@ -11,7 +11,6 @@ public interface IStreetlightMessageBus
     void PublishLightMeasurement(LightMeasuredEvent lightMeasuredEvent);
 }
 
-[AsyncApi]
 public class StreetlightMessageBus : IStreetlightMessageBus
 {
     private const string SubscribeLightMeasuredTopic = "subscribe/light/measured";
@@ -23,8 +22,7 @@ public class StreetlightMessageBus : IStreetlightMessageBus
         _logger = logger.CreateLogger("Streetlight");
     }
 
-    [Channel(SubscribeLightMeasuredTopic, Servers = new[] { "mosquitto" })]
-    [SubscribeOperation(typeof(LightMeasuredEvent), "Light", Summary = "Subscribe to environmental lighting conditions for a particular streetlight.")]
+    [SubscribeOperation<LightMeasuredEvent>(SubscribeLightMeasuredTopic, "Light", Summary = "Subscribe to environmental lighting conditions for a particular streetlight.", ChannelServers = new[] { "mosquitto" })]
     public void PublishLightMeasurement(LightMeasuredEvent lightMeasuredEvent)
     {
         string payload = JsonSerializer.Serialize(lightMeasuredEvent);

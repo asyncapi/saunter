@@ -64,7 +64,7 @@ public class Startup
                         Url = "https://www.apache.org/licenses/LICENSE-2.0"
                     }
                 },
-                Servers =
+                Servers = new()
                 {
                     ["mosquitto"] = new Server
                     {

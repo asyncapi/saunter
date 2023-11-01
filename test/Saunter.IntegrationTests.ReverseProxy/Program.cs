@@ -99,12 +99,11 @@ public class LightMeasuredEvent
     public int Lumens { get; set; }
 }
 
-[AsyncApi]
 [ApiController]
 [Route("")]
 public class StreetlightsController
 {
-    [Channel("publish/light/measured"), PublishOperation(typeof(LightMeasuredEvent))]
+    [PublishOperation("publish/light/measured", typeof(LightMeasuredEvent))]
     [HttpPost, Route("publish/light/measured")]
     public void MeasureLight([FromBody] LightMeasuredEvent lightMeasuredEvent)
     {

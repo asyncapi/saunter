@@ -1,5 +1,3 @@
-using System;
-
 using Newtonsoft.Json;
 
 namespace Saunter.AsyncApiSchema.v2;

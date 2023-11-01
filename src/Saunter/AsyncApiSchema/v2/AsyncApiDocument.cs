@@ -33,7 +33,7 @@ public class AsyncApiDocument : ICloneable
     /// Provides connection details of servers.
     /// </summary>
     [JsonProperty("servers")]
-    public Dictionary<string, Server>? Servers { get; set; }
+    public Dictionary<string, Server> Servers { get; set; } = new();
 
     /// <summary>
     /// A string representing the default content type to use when encoding/decoding a message's payload.
@@ -59,7 +59,7 @@ public class AsyncApiDocument : ICloneable
     /// Each tag name in the list MUST be unique.
     /// </summary>
     [JsonProperty("tags")]
-    public HashSet<Tag>? Tags { get; set; }
+    public HashSet<Tag> Tags { get; set; } = new();
 
     /// <summary>
     /// Additional external documentation.
@@ -80,17 +80,9 @@ public class AsyncApiDocument : ICloneable
             ExternalDocs = ExternalDocs,
             DocumentName = DocumentName,
             Channels = Channels.ToDictionary(c => c.Key, c => c.Value),
+            Servers = Servers.ToDictionary(p => p.Key, p => p.Value),
+            Components = Components.Clone()
         };
-
-        if (Servers is not null)
-        {
-            clone.Servers = Servers.ToDictionary(p => p.Key, p => p.Value);
-        }
-
-        if (Components is not null)
-        {
-            clone.Components = Components.Clone();
-        }
 
         if (Tags is not null)
         {

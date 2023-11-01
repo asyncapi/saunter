@@ -3,7 +3,6 @@ using System.Linq;
 using System.Reflection;
 
 using Saunter.AsyncApiSchema.v2;
-using Saunter.Attributes;
 
 namespace Saunter.Generation;
 
@@ -24,25 +23,18 @@ public class AsyncApiDocumentProvider : IAsyncApiDocumentProvider
         {
             throw new ArgumentNullException(nameof(options));
         }
-        TypeInfo[] asyncApiTypes = GetAsyncApiTypes(options, prototype);
+        TypeInfo[] asyncApiTypes = GetAsyncApiTypes(options);
 
         AsyncApiDocument document = _documentGenerator.GenerateDocument(asyncApiTypes, options, prototype, _serviceProvider);
 
         return document;
     }
 
-
-    /// <summary>
-    /// Get all types with an <see cref="AsyncApiAttribute"/> from assemblies <see cref="AsyncApiOptions.AssemblyMarkerTypes"/>.
-    /// </summary>
-    private static TypeInfo[] GetAsyncApiTypes(AsyncApiOptions options, AsyncApiDocument prototype)
+    private static TypeInfo[] GetAsyncApiTypes(AsyncApiOptions options)
     {
-        System.Collections.Generic.IEnumerable<Assembly> assembliesToScan = options.AssemblyMarkerTypes.Select(t => t.Assembly).Distinct();
-
-        TypeInfo[] asyncApiTypes = assembliesToScan
-            .SelectMany(a => a.DefinedTypes.Where(t => t.GetCustomAttribute<AsyncApiAttribute>()?.DocumentName == prototype.DocumentName))
+        return options.AssemblyMarkerTypes
+            .SelectMany(t => t.Assembly.DefinedTypes)
+            .Distinct()
             .ToArray();
-
-        return asyncApiTypes;
     }
 }

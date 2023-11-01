@@ -117,7 +117,7 @@ public class Message : IMessage
     /// An array with examples of valid message objects.
     /// </summary>
     [JsonProperty("examples")]
-    public List<MessageExample>? Examples { get; set; }
+    public List<MessageExample> Examples { get; set; } = new();
 
     /// <summary>
     /// A list of traits to apply to the message object.
@@ -125,9 +125,8 @@ public class Message : IMessage
     /// The resulting object MUST be a valid Message Object.
     /// </summary>
     [JsonProperty("traits")]
-    public List<IMessageTrait>? Traits { get; set; }
+    public List<IMessageTrait> Traits { get; set; } = new();
 }
-
 
 public class MessageExample
 {

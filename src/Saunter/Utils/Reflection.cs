@@ -5,8 +5,8 @@ namespace Saunter.Utils;
 
 internal static class Reflection
 {
-    public static bool HasCustomAttribute<T>(this TypeInfo typeInfo) where T : Attribute
+    public static bool HasCustomAttribute<T>(this Type type) where T : Attribute
     {
-        return typeInfo.GetCustomAttribute<T>() != null;
+        return type.GetCustomAttribute<T>() != null;
     }
 }

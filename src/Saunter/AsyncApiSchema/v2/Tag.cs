@@ -1,5 +1,3 @@
-using System;
-
 using Newtonsoft.Json;
 
 namespace Saunter.AsyncApiSchema.v2;
@@ -10,7 +8,7 @@ public class Tag
     /// The name of the tag.
     /// </summary>
     [JsonProperty("name")]
-    public required string Name { get; set;  }
+    public required string Name { get; set; }
 
     /// <summary>
     /// A short description for the tag. CommonMark syntax can be used for rich text representation.

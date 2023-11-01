@@ -1,20 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="utf-8">
     <title>{{title}}</title>
     <style>
-      body {
-        margin: 0;
-        font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
-      }
+        body {
+            margin: 0;
+            font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
+        }
     </style>
     <link rel="stylesheet" type="text/css" href="./default.min.css">
-  </head>
-  <body>
-    
-    <div id="asyncapi"></div>
+    <link rel="stylesheet" href="https://unpkg.com/@asyncapi/react-component@latest/styles/default.min.css">
+</head>
+<body>
 
+    <div id="asyncapi"></div>
     <script src="./index.js"></script>
     <script>
       AsyncApiStandalone.render({
@@ -30,5 +30,5 @@
       }, document.getElementById('asyncapi'));
     </script>
 
-  </body>
+</body>
 </html>

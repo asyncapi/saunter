@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Reflection;
+﻿using System.Reflection;
 
 using Saunter.AsyncApiSchema.v2;
 using Saunter.Generation;

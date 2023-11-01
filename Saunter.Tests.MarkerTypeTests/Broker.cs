@@ -2,18 +2,15 @@
 
 namespace Saunter.Tests.MarkerTypeTests;
 
-[AsyncApi]
-[Channel("asw.sample_service.anothersample", Description = "Another sample events.")]
-[PublishOperation(OperationId = "AnotherSampleMessagePublisher", Summary = "Publish another sample.")]
+[PublishOperation("asw.sample_service.anothersample", OperationId = "AnotherSampleMessagePublisher", Summary = "Publish another sample.", ChannelDescription = "Another sample events.")]
 public class AnotherSamplePublisher
 {
     [Message(typeof(AnotherSampleMesssage))]
     public void PublishTenantCreated(AnotherSampleMesssage @event) { }
 }
 
-[AsyncApi]
-[Channel("asw.sample_service.sample", Description = "Sample events.")]
-[SubscribeOperation(OperationId = "SampleMessageConsumer", Summary = "Consume sample messages.")]
+[PublishOperation("asw.sample_service.sample", OperationId = "AnotherSampleMessagePublisher", Summary = "Publish another sample.", ChannelDescription = "Sample events.")]
+[SubscribeOperation("asw.sample_service.sample", OperationId = "SampleMessageConsumer", Summary = "Consume sample messages.")]
 public class SampleConsumer
 {
     [Message(typeof(SampleMessage))]

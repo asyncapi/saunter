@@ -269,19 +269,14 @@ public class ClassAttributesTests
         message.Headers.Reference.Id.ShouldBe("myMessageHeader");
     }
 
-
-    [AsyncApi]
-    [Channel("channel.my.message")]
-    [PublishOperation]
+    [PublishOperation<MyMessage>("channel.my.message")]
     public class MyMessagePublisher
     {
         [Message(typeof(MyMessage), HeadersType = typeof(MyMessageHeader))]
         public void PublishMyMessage() { }
     }
 
-    [AsyncApi]
-    [Channel("asw.tenant_service.tenants_history", Description = "Tenant events.")]
-    [SubscribeOperation(OperationId = "TenantMessageConsumer", Summary = "Subscribe to domains events about tenants.")]
+    [SubscribeOperation("asw.tenant_service.tenants_history", OperationId = "TenantMessageConsumer", Summary = "Subscribe to domains events about tenants.", ChannelDescription = "Tenant events.")]
     public class TenantMessageConsumer
     {
         [Message(typeof(TenantCreated))]
@@ -294,9 +289,7 @@ public class ClassAttributesTests
         public void SubscribeTenantRemovedEvent(Guid tenantId, TenantRemoved evnt) { }
     }
 
-    [AsyncApi]
-    [Channel("asw.tenant_service.tenants_history", Description = "Tenant events.")]
-    [PublishOperation(OperationId = "TenantMessagePublisher", Summary = "Publish domains events about tenants.")]
+    [PublishOperation("asw.tenant_service.tenants_history", OperationId = "TenantMessagePublisher", Summary = "Publish domains events about tenants.", ChannelDescription = "Tenant events.")]
     public class TenantMessagePublisher
     {
         [Message(typeof(TenantCreated))]
@@ -309,9 +302,7 @@ public class ClassAttributesTests
         public void PublishTenantRemovedEvent(Guid tenantId, TenantRemoved evnt) { }
     }
 
-    [AsyncApi]
-    [Channel("asw.tenant_service.tenants_history", Description = "Tenant events.")]
-    [PublishOperation(OperationId = "TenantMessagePublisher", Summary = "Publish domains events about tenants.")]
+    [PublishOperation("asw.tenant_service.tenants_history", OperationId = "TenantMessagePublisher", Summary = "Publish domains events about tenants.", ChannelDescription = "Tenant events.")]
     public class TenantGenericMessagePublisher
     {
         [Message(typeof(AnyTenantCreated))]
@@ -323,9 +314,7 @@ public class ClassAttributesTests
         }
     }
 
-    [AsyncApi]
-    [Channel("asw.tenant_service.tenants_history", Description = "Tenant events.")]
-    [PublishOperation(OperationId = "TenantSingleMessagePublisher", Summary = "Publish single domain event about tenants.")]
+    [PublishOperation("asw.tenant_service.tenants_history", OperationId = "TenantSingleMessagePublisher", Summary = "Publish single domain event about tenants.", ChannelDescription = "Tenant events.")]
     public class TenantSingleMessagePublisher
     {
         [Message(typeof(AnyTenantCreated))]
@@ -334,11 +323,9 @@ public class ClassAttributesTests
         }
     }
 
-    [AsyncApi]
-    [Channel("asw.tenant_service.{tenant_id}.{tenant_status}", Description = "A tenant events.")]
+    [SubscribeOperation("asw.tenant_service.{tenant_id}.{tenant_status}", OperationId = "OneTenantMessageConsumer", Summary = "Subscribe to domains events about a tenant.", ChannelDescription = "A tenant events.")]
     [ChannelParameter("tenant_id", typeof(long), Description = "The tenant identifier.")]
     [ChannelParameter("tenant_status", typeof(string), Description = "The tenant status.")]
-    [SubscribeOperation(OperationId = "OneTenantMessageConsumer", Summary = "Subscribe to domains events about a tenant.")]
     public class OneTenantMessageConsumer
     {
         [Message(typeof(TenantCreated))]
