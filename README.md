@@ -23,15 +23,21 @@ Saunter is an [AsyncAPI](https://github.com/asyncapi/asyncapi) documentation gen
     [SubscribeOperation("asw.tenant_service.tenants_history", OperationId = "TenantMessageConsumer", Summary = "Subscribe to domains events about tenants.", ChannelDescription = "Tenant events.")]
     ```
 
-* [ ] Kill message attribute:
+* [X] Rework message attribute:
 
     ```csharp
-    [SubscribeOperation<TMessage>("asw.tenant_service.tenants_history", OperationId = "TenantMessageConsumer", Summary = "Subscribe to domains events about tenants.", ChannelDescription = "Tenant events.")]
+    [SubscribeOperation<BrokerHelloWorldDto>("asw.tenant_service.tenants_history", OperationId = "TenantMessageConsumer", Summary = "Subscribe to domains events about tenants.", ChannelDescription = "Tenant events.")]
     ```
 
-* [ ] Create messages and channels description tool
+    ```charp
+    [Message(Title = "Hello world, i class")]
+    public record BrokerHelloWorldDto(string content);
+    ```
+
+* [ ] Kill channel params attribute
 * [ ] Rewrite usage docs
 * [ ] Nuget package
+* [ ] Usability test on my environment
 * [ ] Release !!
 
 ![imp](assets/1_priority.png)
@@ -39,12 +45,14 @@ Saunter is an [AsyncAPI](https://github.com/asyncapi/asyncapi) documentation gen
 2 priority:
 
 * [ ] Add generator output validation
+* [ ] Add xml-comments to output model
 * [ ] More unit
+* [ ] Normal component test
 
 3 priority:
 
 * [ ] To dotnet 8
-* [ ] Make a normal tool for describing a asyncapi document (without attributes)
+* [ ] Make a normal tool for describing a asyncapi document (without attributes, static method on interface?....)
 
 ## Getting Started
 

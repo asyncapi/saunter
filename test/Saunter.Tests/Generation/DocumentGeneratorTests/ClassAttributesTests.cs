@@ -259,7 +259,11 @@ public class ClassAttributesTests
         DocumentGenerator documentGenerator = new();
 
         // Act
-        AsyncApiDocument document = documentGenerator.GenerateDocument(new[] { typeof(MyMessagePublisher).GetTypeInfo() }, options, options.AsyncApi, ActivatorServiceProvider.Instance);
+        AsyncApiDocument document = documentGenerator.GenerateDocument(
+            new[] { typeof(MyMessagePublisher).GetTypeInfo(), typeof(MyMessage).GetTypeInfo() },
+            options,
+            options.AsyncApi,
+            ActivatorServiceProvider.Instance);
 
         // Assert
         document.ShouldNotBeNull();
@@ -272,69 +276,55 @@ public class ClassAttributesTests
     [PublishOperation<MyMessage>("channel.my.message")]
     public class MyMessagePublisher
     {
-        [Message(typeof(MyMessage), HeadersType = typeof(MyMessageHeader))]
         public void PublishMyMessage() { }
     }
 
-    [SubscribeOperation("asw.tenant_service.tenants_history", OperationId = "TenantMessageConsumer", Summary = "Subscribe to domains events about tenants.", ChannelDescription = "Tenant events.")]
+    [SubscribeOperation<TenantCreated, TenantUpdated, TenantRemoved>("asw.tenant_service.tenants_history", OperationId = "TenantMessageConsumer", Summary = "Subscribe to domains events about tenants.", ChannelDescription = "Tenant events.")]
     public class TenantMessageConsumer
     {
-        [Message(typeof(TenantCreated))]
         public void SubscribeTenantCreatedEvent(Guid tenantId, TenantCreated evnt) { }
 
-        [Message(typeof(TenantUpdated))]
         public void SubscribeTenantUpdatedEvent(Guid tenantId, TenantUpdated evnt) { }
 
-        [Message(typeof(TenantRemoved))]
         public void SubscribeTenantRemovedEvent(Guid tenantId, TenantRemoved evnt) { }
     }
 
-    [PublishOperation("asw.tenant_service.tenants_history", OperationId = "TenantMessagePublisher", Summary = "Publish domains events about tenants.", ChannelDescription = "Tenant events.")]
+    [PublishOperation<TenantCreated, TenantUpdated, TenantRemoved>("asw.tenant_service.tenants_history", OperationId = "TenantMessagePublisher", Summary = "Publish domains events about tenants.", ChannelDescription = "Tenant events.")]
     public class TenantMessagePublisher
     {
-        [Message(typeof(TenantCreated))]
         public void PublishTenantCreatedEvent(Guid tenantId, TenantCreated evnt) { }
 
-        [Message(typeof(TenantUpdated))]
         public void PublishTenantUpdatedEvent(Guid tenantId, TenantUpdated evnt) { }
 
-        [Message(typeof(TenantRemoved))]
         public void PublishTenantRemovedEvent(Guid tenantId, TenantRemoved evnt) { }
     }
 
-    [PublishOperation("asw.tenant_service.tenants_history", OperationId = "TenantMessagePublisher", Summary = "Publish domains events about tenants.", ChannelDescription = "Tenant events.")]
+    [PublishOperation<AnyTenantCreated, AnyTenantUpdated, AnyTenantRemoved>("asw.tenant_service.tenants_history", OperationId = "TenantMessagePublisher", Summary = "Publish domains events about tenants.", ChannelDescription = "Tenant events.")]
     public class TenantGenericMessagePublisher
     {
-        [Message(typeof(AnyTenantCreated))]
-        [Message(typeof(AnyTenantUpdated))]
-        [Message(typeof(AnyTenantRemoved))]
         public void PublishTenantEvent<TEvent>(Guid tenantId, TEvent @event)
             where TEvent : IEvent
         {
         }
     }
 
-    [PublishOperation("asw.tenant_service.tenants_history", OperationId = "TenantSingleMessagePublisher", Summary = "Publish single domain event about tenants.", ChannelDescription = "Tenant events.")]
+    [PublishOperation<AnyTenantCreated>("asw.tenant_service.tenants_history", OperationId = "TenantSingleMessagePublisher", Summary = "Publish single domain event about tenants.", ChannelDescription = "Tenant events.")]
     public class TenantSingleMessagePublisher
     {
-        [Message(typeof(AnyTenantCreated))]
         public void PublishTenantCreated(Guid tenantId, AnyTenantCreated @event)
         {
         }
     }
 
-    [SubscribeOperation("asw.tenant_service.{tenant_id}.{tenant_status}", OperationId = "OneTenantMessageConsumer", Summary = "Subscribe to domains events about a tenant.", ChannelDescription = "A tenant events.")]
+    [SubscribeOperation<TenantCreated, TenantUpdated, TenantRemoved>("asw.tenant_service.{tenant_id}.{tenant_status}", OperationId = "OneTenantMessageConsumer", Summary = "Subscribe to domains events about a tenant.", ChannelDescription = "A tenant events.")]
     [ChannelParameter("tenant_id", typeof(long), Description = "The tenant identifier.")]
     [ChannelParameter("tenant_status", typeof(string), Description = "The tenant status.")]
     public class OneTenantMessageConsumer
     {
-        [Message(typeof(TenantCreated))]
         public void SubscribeTenantCreatedEvent(Guid tenantId, TenantCreated evnt) { }
 
-        [Message(typeof(TenantUpdated))]
         public void SubscribeTenantUpdatedEvent(Guid tenantId, TenantUpdated evnt) { }
 
-        [Message(typeof(TenantRemoved))]
         public void SubscribeTenantRemovedEvent(Guid tenantId, TenantRemoved evnt) { }
     }
 }
@@ -345,6 +335,8 @@ public class TenantUpdated { }
 
 public class TenantRemoved { }
 
+
+[Message(HeadersType = typeof(MyMessageHeader))]
 public class MyMessage { }
 
 public class MyMessageHeader

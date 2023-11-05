@@ -12,7 +12,9 @@ using Saunter.Generation.SchemaGeneration;
 using Saunter.Utils;
 
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Reflection;
 
@@ -20,14 +22,30 @@ namespace Saunter.Generation;
 
 public class DocumentGenerator : IDocumentGenerator
 {
-    public AsyncApiDocument GenerateDocument(TypeInfo[] asyncApiTypes, AsyncApiOptions options, AsyncApiDocument prototype, IServiceProvider serviceProvider)
+    public AsyncApiDocument GenerateDocument(
+        TypeInfo[] asyncApiTypes,
+        AsyncApiOptions options,
+        AsyncApiDocument prototype,
+        IServiceProvider serviceProvider)
     {
         AsyncApiDocument asyncApiSchema = prototype.Clone();
 
         AsyncApiSchemaResolver schemaResolver = new(asyncApiSchema, options.SchemaOptions);
 
         JsonSchemaGenerator generator = new(options.SchemaOptions);
-        asyncApiSchema.Channels = GenerateChannels(asyncApiTypes, schemaResolver, options, generator, serviceProvider);
+
+        ConcurrentDictionary<TypeInfo, IMessage> messageMap = SelectAssemblyMessages(
+            asyncApiTypes,
+            schemaResolver,
+            generator);
+
+        asyncApiSchema.Channels = GenerateChannels(
+            asyncApiTypes,
+            schemaResolver,
+            options,
+            generator,
+            messageMap,
+            serviceProvider);
 
         DocumentFilterContext filterContext = new(asyncApiTypes, schemaResolver, generator);
         foreach (Type filterType in options.DocumentFilters)
@@ -39,10 +57,38 @@ public class DocumentGenerator : IDocumentGenerator
         return asyncApiSchema;
     }
 
+    private static ConcurrentDictionary<TypeInfo, IMessage> SelectAssemblyMessages(TypeInfo[] asyncApiTypes, AsyncApiSchemaResolver schemaResolver, JsonSchemaGenerator jsonSchemaGenerator)
+    {
+        ConcurrentDictionary<TypeInfo, IMessage> map = new();
+
+        foreach (TypeInfo payload in asyncApiTypes)
+        {
+            MessageAttribute? attribute = payload.GetCustomAttribute<MessageAttribute>();
+            if (attribute is null)
+            {
+                continue;
+            }
+
+            map[payload] = (GenerateMessageFromAttribute(
+                payload,
+                attribute,
+                schemaResolver,
+                jsonSchemaGenerator));
+        }
+
+        return map;
+    }
+
     /// <summary>
     /// Generate the Channels section of an AsyncApi schema.
     /// </summary>
-    private static Dictionary<string, ChannelItem> GenerateChannels(TypeInfo[] asyncApiTypes, AsyncApiSchemaResolver schemaResolver, AsyncApiOptions options, JsonSchemaGenerator jsonSchemaGenerator, IServiceProvider serviceProvider)
+    private static Dictionary<string, ChannelItem> GenerateChannels(
+        TypeInfo[] asyncApiTypes,
+        AsyncApiSchemaResolver schemaResolver,
+        AsyncApiOptions options,
+        JsonSchemaGenerator jsonSchemaGenerator,
+        ConcurrentDictionary<TypeInfo, IMessage> messageMap,
+        IServiceProvider serviceProvider)
     {
         Dictionary<string, ChannelItem> channels = new();
 
@@ -56,6 +102,7 @@ public class DocumentGenerator : IDocumentGenerator
                     schemaResolver,
                     options,
                     jsonSchemaGenerator,
+                    messageMap,
                     serviceProvider);
             }
 
@@ -65,6 +112,7 @@ public class DocumentGenerator : IDocumentGenerator
                 schemaResolver,
                 options,
                 jsonSchemaGenerator,
+                messageMap,
                 serviceProvider);
         }
 
@@ -74,7 +122,14 @@ public class DocumentGenerator : IDocumentGenerator
     /// <summary>
     /// Generate the an operation of an AsyncApi Channel for the given method.
     /// </summary>
-    private static void GenerateChannelsFromMethods(Dictionary<string, ChannelItem> channels, MethodInfo method, AsyncApiSchemaResolver schemaResolver, AsyncApiOptions options, JsonSchemaGenerator jsonSchemaGenerator, IServiceProvider serviceProvider)
+    private static void GenerateChannelsFromMethods(
+        Dictionary<string, ChannelItem> channels,
+        MethodInfo method,
+        AsyncApiSchemaResolver schemaResolver,
+        AsyncApiOptions options,
+        JsonSchemaGenerator jsonSchemaGenerator,
+        ConcurrentDictionary<TypeInfo, IMessage> messageMap,
+        IServiceProvider serviceProvider)
     {
         IEnumerable<OperationAttribute> operationAttributes = GetOperationAttribute(method);
 
@@ -83,20 +138,16 @@ public class DocumentGenerator : IDocumentGenerator
             return;
         }
 
-        IEnumerable<MessageAttribute> messageAttributes = method.GetCustomAttributes<MessageAttribute>();
-
         foreach (OperationAttribute operationAttribute in operationAttributes)
         {
-            IMessage? message = messageAttributes.Any()
-                ? GenerateMessageFromAttributes(messageAttributes, schemaResolver, jsonSchemaGenerator)
-                : GenerateMessageFromType(operationAttribute.MessagePayloadType, schemaResolver, jsonSchemaGenerator);
+            IMessage targetPayload = GenerateOperationMessage(schemaResolver, jsonSchemaGenerator, messageMap, operationAttribute);
 
             Operation operation = new()
             {
                 OperationId = operationAttribute.OperationId ?? method.Name,
                 Summary = operationAttribute.Summary ?? method.GetXmlDocsSummary(),
                 Description = operationAttribute.Description ?? (method.GetXmlDocsRemarks() != string.Empty ? method.GetXmlDocsRemarks() : string.Empty),
-                Message = message!,
+                Message = targetPayload,
                 Bindings = operationAttribute.BindingsRef != null ? new OperationBindingsReference(operationAttribute.BindingsRef) : null,
                 Tags = new(operationAttribute.Tags?.Select(x => (Tag)x) ?? new List<Tag>())
             };
@@ -144,7 +195,14 @@ public class DocumentGenerator : IDocumentGenerator
     /// <summary>
     /// Generate the an operation of an AsyncApi Channel for the given class.
     /// </summary>
-    private static void GenerateChannelsFromClasses(Dictionary<string, ChannelItem> channels, TypeInfo type, AsyncApiSchemaResolver schemaResolver, AsyncApiOptions options, JsonSchemaGenerator jsonSchemaGenerator, IServiceProvider serviceProvider)
+    private static void GenerateChannelsFromClasses(
+        Dictionary<string, ChannelItem> channels,
+        TypeInfo type,
+        AsyncApiSchemaResolver schemaResolver,
+        AsyncApiOptions options,
+        JsonSchemaGenerator jsonSchemaGenerator,
+        ConcurrentDictionary<TypeInfo, IMessage> messageMap,
+        IServiceProvider serviceProvider)
     {
         IEnumerable<OperationAttribute> operationAttributes = GetOperationAttribute(type);
 
@@ -155,38 +213,17 @@ public class DocumentGenerator : IDocumentGenerator
 
         foreach (OperationAttribute operationAttribute in operationAttributes)
         {
-            Messages messages = new();
+            IMessage targetPayload = GenerateOperationMessage(schemaResolver, jsonSchemaGenerator, messageMap, operationAttribute);
+
             Operation operation = new()
             {
                 OperationId = operationAttribute.OperationId ?? type.Name,
                 Summary = operationAttribute.Summary ?? type.GetXmlDocsSummary(),
                 Description = operationAttribute.Description ?? (type.GetXmlDocsRemarks() != string.Empty ? type.GetXmlDocsRemarks() : string.Empty),
-                Message = messages,
+                Message = targetPayload,
                 Bindings = operationAttribute.BindingsRef != null ? new OperationBindingsReference(operationAttribute.BindingsRef) : null,
                 Tags = new(operationAttribute.Tags?.Select(x => (Tag)x) ?? new List<Tag>())
             };
-
-            var methodsWithMessageAttribute = type.DeclaredMethods
-                .Select(method => new
-                {
-                    MessageAttributes = method.GetCustomAttributes<MessageAttribute>(),
-                    Method = method,
-                })
-                .Where(mm => mm.MessageAttributes.Any());
-
-            foreach (MessageAttribute messageAttribute in methodsWithMessageAttribute.SelectMany(x => x.MessageAttributes))
-            {
-                IMessage? message = GenerateMessageFromAttribute(messageAttribute, schemaResolver, jsonSchemaGenerator);
-                if (message != null)
-                {
-                    messages.OneOf.Add(message);
-                }
-            }
-
-            if (messages.OneOf.Count == 1)
-            {
-                operation.Message = messages.OneOf[0];
-            }
 
             ChannelItem channelItem = new()
             {
@@ -231,42 +268,45 @@ public class DocumentGenerator : IDocumentGenerator
                 .GetCustomAttributes<SubscribeOperationAttribute>());
     }
 
-    private static IMessage? GenerateMessageFromAttributes(IEnumerable<MessageAttribute> messageAttributes, AsyncApiSchemaResolver schemaResolver, JsonSchemaGenerator jsonSchemaGenerator)
+    private static IMessage GenerateOperationMessage(
+        AsyncApiSchemaResolver schemaResolver,
+        JsonSchemaGenerator jsonSchemaGenerator,
+        ConcurrentDictionary<TypeInfo, IMessage> messageMap,
+        OperationAttribute operationAttribute)
     {
-        if (messageAttributes.Count() == 1)
-        {
-            return GenerateMessageFromAttribute(messageAttributes.First(), schemaResolver, jsonSchemaGenerator);
-        }
+        IMessage targetPayload;
 
-        Messages messages = new();
-        foreach (MessageAttribute messageAttribute in messageAttributes)
+        if (operationAttribute.MessagePayloadTypes.Length > 1)
         {
-            IMessage? message = GenerateMessageFromAttribute(messageAttribute, schemaResolver, jsonSchemaGenerator);
-            if (message != null)
+            Messages messages = new();
+
+            foreach (TypeInfo messageType in operationAttribute.MessagePayloadTypes)
             {
+                IMessage message = messageMap.GetOrAdd(messageType, p =>
+                    GenerateMessageFromType(p, schemaResolver, jsonSchemaGenerator));
+
                 messages.OneOf.Add(message);
             }
-        }
 
-        if (messages.OneOf.Count == 1)
+            targetPayload = messages;
+        }
+        else
         {
-            return messages.OneOf[0];
+            TypeInfo type = operationAttribute.MessagePayloadTypes[0];
+
+            targetPayload = messageMap.GetOrAdd(type, p =>
+                GenerateMessageFromType(p, schemaResolver, jsonSchemaGenerator));
         }
 
-        return messages;
+        return targetPayload;
     }
 
-    private static IMessage? GenerateMessageFromAttribute(MessageAttribute messageAttribute, AsyncApiSchemaResolver schemaResolver, JsonSchemaGenerator jsonSchemaGenerator)
+    private static IMessage GenerateMessageFromAttribute(Type payloadType, MessageAttribute messageAttribute, AsyncApiSchemaResolver schemaResolver, JsonSchemaGenerator jsonSchemaGenerator)
     {
-        if (messageAttribute?.PayloadType == null)
-        {
-            return null;
-        }
-
         Message message = new()
         {
             MessageId = messageAttribute.MessageId!,
-            Payload = jsonSchemaGenerator.Generate(messageAttribute.PayloadType, schemaResolver),
+            Payload = jsonSchemaGenerator.Generate(payloadType, schemaResolver),
             Headers = messageAttribute.HeadersType != null ? jsonSchemaGenerator.Generate(messageAttribute.HeadersType, schemaResolver) : null,
             Title = messageAttribute.Title,
             Summary = messageAttribute.Summary,
@@ -279,14 +319,8 @@ public class DocumentGenerator : IDocumentGenerator
         return schemaResolver.GetMessageOrReference(message);
     }
 
-
-    private static IMessage? GenerateMessageFromType(Type? payloadType, AsyncApiSchemaResolver schemaResolver, JsonSchemaGenerator jsonSchemaGenerator)
+    private static IMessage GenerateMessageFromType(Type payloadType, AsyncApiSchemaResolver schemaResolver, JsonSchemaGenerator jsonSchemaGenerator)
     {
-        if (payloadType == null)
-        {
-            return null;
-        }
-
         Message message = new()
         {
             Payload = jsonSchemaGenerator.Generate(payloadType, schemaResolver),

@@ -103,7 +103,7 @@ public class LightMeasuredEvent
 [Route("")]
 public class StreetlightsController
 {
-    [PublishOperation("publish/light/measured", typeof(LightMeasuredEvent))]
+    [PublishOperation<LightMeasuredEvent>("publish/light/measured")]
     [HttpPost, Route("publish/light/measured")]
     public void MeasureLight([FromBody] LightMeasuredEvent lightMeasuredEvent)
     {

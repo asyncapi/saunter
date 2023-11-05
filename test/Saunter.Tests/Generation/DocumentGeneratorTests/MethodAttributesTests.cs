@@ -57,10 +57,7 @@ public class MethodAttributesTests
 
     public class TenantMessagePublisher : ITenantMessagePublisher
     {
-        [PublishOperation("asw.tenant_service.tenants_history", OperationId = "TenantMessagePublisher", Summary = "Publish domains events about tenants.", ChannelDescription = "Tenant events.")]
-        [Message(typeof(AnyTenantCreated))]
-        [Message(typeof(AnyTenantUpdated))]
-        [Message(typeof(AnyTenantRemoved))]
+        [PublishOperation<AnyTenantCreated, AnyTenantUpdated, AnyTenantRemoved>("asw.tenant_service.tenants_history", OperationId = "TenantMessagePublisher", Summary = "Publish domains events about tenants.", ChannelDescription = "Tenant events.")]
         public void PublishTenantEvent<TEvent>(Guid tenantId, TEvent @event)
             where TEvent : IEvent
         {

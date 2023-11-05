@@ -2,24 +2,13 @@ using System;
 
 namespace Saunter.Attributes;
 
-[AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
+[AttributeUsage(AttributeTargets.Class)]
 public class MessageAttribute : Attribute
 {
-    public MessageAttribute(Type payloadType)
+    public MessageAttribute(params string[] tags)
     {
-        PayloadType = payloadType;
-    }
-
-    public MessageAttribute(Type payloadType, params string[] tags)
-    {
-        PayloadType = payloadType;
         Tags = tags;
     }
-
-    /// <summary>
-    /// The type to use to generate the message payload schema.
-    /// </summary>
-    public Type PayloadType { get; }
 
     /// <summary>
     /// The type to use to generate the message headers schema.
@@ -65,5 +54,5 @@ public class MessageAttribute : Attribute
     /// <summary>
     /// A list of tags for API documentation control. Tags can be used for logical grouping of messages.
     /// </summary>
-    public string[] Tags { get; } = Array.Empty<string>();
+    public string[] Tags { get; }
 }

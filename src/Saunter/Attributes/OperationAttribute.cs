@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 
 namespace Saunter.Attributes;
 
@@ -23,9 +24,11 @@ public class ChannelParameterAttribute : Attribute
 [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class | AttributeTargets.Interface, AllowMultiple = true)]
 public abstract class OperationAttribute : Attribute
 {
-    protected OperationAttribute(string channelName)
+    protected OperationAttribute(string channelName, string[] tags, TypeInfo[] payloadTypes)
     {
         ChannelName = channelName;
+        MessagePayloadTypes = payloadTypes;
+        Tags = tags;
     }
 
     /// <summary>
@@ -57,7 +60,7 @@ public abstract class OperationAttribute : Attribute
 
     public OperationType OperationType { get; protected set; }
 
-    public Type? MessagePayloadType { get; protected set; }
+    public TypeInfo[] MessagePayloadTypes { get; protected set; }
 
     /// <summary>
     /// A short summary of what the operation is about.
@@ -88,80 +91,89 @@ public abstract class OperationAttribute : Attribute
     /// <summary>
     /// A list of tags for API documentation control. Tags can be used for logical grouping of operations.
     /// </summary>
-    public string[]? Tags { get; protected set; }
-}
-
-public class PublishOperationAttribute<TMessage> : PublishOperationAttribute where TMessage : notnull
-{
-    public PublishOperationAttribute(string channelName, params string[] tags) : base(channelName)
-    {
-        OperationType = OperationType.Publish;
-        MessagePayloadType = typeof(TMessage);
-        Tags = tags;
-    }
-
-    public PublishOperationAttribute(string channelName) : base(channelName)
-    {
-        OperationType = OperationType.Publish;
-        MessagePayloadType = typeof(TMessage);
-    }
+    public string[] Tags { get; protected set; }
 }
 
 public class PublishOperationAttribute : OperationAttribute
 {
-    public PublishOperationAttribute(string channelName, Type messagePayloadType, params string[] tags) : base(channelName)
-    {
-        OperationType = OperationType.Publish;
-        MessagePayloadType = messagePayloadType;
-        Tags = tags;
-    }
-    public PublishOperationAttribute(string channelName, Type messagePayloadType) : base(channelName)
-    {
-        OperationType = OperationType.Publish;
-        MessagePayloadType = messagePayloadType;
-    }
-
-    public PublishOperationAttribute(string channelName) : base(channelName)
+    public PublishOperationAttribute(string channelName, TypeInfo messagePayloadType, params string[] tags) :
+        base(channelName, tags, new TypeInfo[] { messagePayloadType })
     {
         OperationType = OperationType.Publish;
     }
-}
 
-public class SubscribeOperationAttribute<TMessage> : SubscribeOperationAttribute where TMessage : notnull
-{
-    public SubscribeOperationAttribute(string channelName, params string[] tags) : base(channelName)
+    public PublishOperationAttribute(string channelName, TypeInfo[] messagePayloadTypes, params string[] tags) :
+        base(channelName, tags, messagePayloadTypes)
     {
-        OperationType = OperationType.Subscribe;
-        MessagePayloadType = typeof(TMessage);
-        Tags = tags;
-    }
-
-    public SubscribeOperationAttribute(string channelName) : base(channelName)
-    {
-        OperationType = OperationType.Subscribe;
-        MessagePayloadType = typeof(TMessage);
+        OperationType = OperationType.Publish;
     }
 }
 
 public class SubscribeOperationAttribute : OperationAttribute
 {
-    public SubscribeOperationAttribute(string channelName, Type messagePayloadType, params string[] tags) : base(channelName)
+    public SubscribeOperationAttribute(string channelName, TypeInfo messagePayloadType, params string[] tags) :
+        base(channelName, tags, new TypeInfo[] { messagePayloadType })
     {
         OperationType = OperationType.Subscribe;
-        MessagePayloadType = messagePayloadType;
-        Tags = tags;
     }
 
-    public SubscribeOperationAttribute(string channelName, Type messagePayloadType) : base(channelName)
+    public SubscribeOperationAttribute(string channelName, TypeInfo[] messagePayloadTypes, params string[] tags) :
+        base(channelName, tags, messagePayloadTypes)
     {
         OperationType = OperationType.Subscribe;
-        MessagePayloadType = messagePayloadType;
     }
+}
 
-    public SubscribeOperationAttribute(string channelName) : base(channelName)
-    {
-        OperationType = OperationType.Subscribe;
-    }
+public class PublishOperationAttribute<TMessage> : PublishOperationAttribute where TMessage : notnull
+{
+    public PublishOperationAttribute(string channelName, params string[] tags) :
+        base(channelName, (TypeInfo)typeof(TMessage), tags)
+    { }
+}
+
+public class SubscribeOperationAttribute<TMessage> : SubscribeOperationAttribute where TMessage : notnull
+{
+    public SubscribeOperationAttribute(string channelName, params string[] tags) :
+        base(channelName, (TypeInfo)typeof(TMessage), tags)
+    { }
+}
+
+public class PublishOperationAttribute<TFirstMessage, TSecondMessage> : PublishOperationAttribute
+    where TFirstMessage : notnull
+    where TSecondMessage : notnull
+{
+    public PublishOperationAttribute(string channelName, params string[] tags) :
+        base(channelName, new TypeInfo[] { (TypeInfo)typeof(TFirstMessage), (TypeInfo)typeof(TSecondMessage) }, tags)
+    { }
+}
+
+public class SubscribeOperationAttribute<TFirstMessage, TSecondMessage> : SubscribeOperationAttribute
+    where TFirstMessage : notnull
+    where TSecondMessage : notnull
+{
+    public SubscribeOperationAttribute(string channelName, params string[] tags) :
+        base(channelName, new TypeInfo[] { (TypeInfo)typeof(TFirstMessage), (TypeInfo)typeof(TSecondMessage) }, tags)
+    { }
+}
+
+public class PublishOperationAttribute<TFirstMessage, TSecondMessage, TThirdMessage> : PublishOperationAttribute
+    where TFirstMessage : notnull
+    where TSecondMessage : notnull
+    where TThirdMessage : notnull
+{
+    public PublishOperationAttribute(string channelName, params string[] tags) :
+        base(channelName, new TypeInfo[] { (TypeInfo)typeof(TFirstMessage), (TypeInfo)typeof(TSecondMessage), (TypeInfo)typeof(TThirdMessage) }, tags)
+    { }
+}
+
+public class SubscribeOperationAttribute<TFirstMessage, TSecondMessage, TThirdMessage> : SubscribeOperationAttribute
+    where TFirstMessage : notnull
+    where TSecondMessage : notnull
+    where TThirdMessage : notnull
+{
+    public SubscribeOperationAttribute(string channelName, params string[] tags) :
+        base(channelName, new TypeInfo[] { (TypeInfo)typeof(TFirstMessage), (TypeInfo)typeof(TSecondMessage), (TypeInfo)typeof(TThirdMessage) }, tags)
+    { }
 }
 
 public enum OperationType
