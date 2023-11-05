@@ -35,7 +35,7 @@ Saunter is an [AsyncAPI](https://github.com/asyncapi/asyncapi) documentation gen
     ```
 
 * [ ] Kill channel params attribute
-* [ ] Rework multiply docs
+* [ ] Redo the processing of multiple documents in the application
 * [ ] Rewrite usage docs
 * [ ] Nuget package
 * [ ] Usability test on my environment
