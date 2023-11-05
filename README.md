@@ -53,6 +53,8 @@ Saunter is an [AsyncAPI](https://github.com/asyncapi/asyncapi) documentation gen
 
 * [ ] To dotnet 8
 * [ ] Make a normal tool for describing a asyncapi document (without attributes, static method on interface?....)
+* [ ] Rework the binding protocols (now it's done terribly)
+* [ ] Native work with `nats` and `signalR`
 
 ## Getting Started
 
