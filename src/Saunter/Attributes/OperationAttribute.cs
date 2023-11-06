@@ -4,24 +4,6 @@ using System.Reflection;
 namespace Saunter.Attributes;
 
 [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class | AttributeTargets.Interface, AllowMultiple = true)]
-public class ChannelParameterAttribute : Attribute
-{
-    public ChannelParameterAttribute(string name, Type type)
-    {
-        Name = name ?? throw new ArgumentNullException(nameof(name));
-        Type = type ?? throw new ArgumentNullException(nameof(type));
-    }
-
-    public string Name { get; }
-
-    public Type Type { get; }
-
-    public string? Description { get; set; }
-
-    public string? Location { get; set; }
-}
-
-[AttributeUsage(AttributeTargets.Method | AttributeTargets.Class | AttributeTargets.Interface, AllowMultiple = true)]
 public abstract class OperationAttribute : Attribute
 {
     protected OperationAttribute(string channelName, string[] tags, TypeInfo[] payloadTypes)
@@ -58,8 +40,15 @@ public abstract class OperationAttribute : Attribute
     /// </summary>
     public string[]? ChannelServers { get; set; }
 
+    /// <summary>
+    /// Operation Type (Sub/Pub)
+    /// </summary>
     public OperationType OperationType { get; protected set; }
 
+    /// <summary>
+    /// Message schema mark
+    /// Id for match with message attribute
+    /// </summary>
     public TypeInfo[] MessagePayloadTypes { get; protected set; }
 
     /// <summary>

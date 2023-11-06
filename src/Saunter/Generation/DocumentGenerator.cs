@@ -14,7 +14,6 @@ using Saunter.Utils;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Linq;
 using System.Reflection;
 
@@ -156,7 +155,7 @@ public class DocumentGenerator : IDocumentGenerator
             {
                 Servers = operationAttribute.ChannelServers?.ToList(),
                 Description = operationAttribute.ChannelDescription,
-                Parameters = GetChannelParametersFromAttributes(method, schemaResolver, jsonSchemaGenerator),
+                Parameters = GetChannelParametersFromAttributes(operationAttribute.ChannelName, schemaResolver, jsonSchemaGenerator),
             };
 
             if (operationAttribute.BindingsRef is not null)
@@ -229,7 +228,7 @@ public class DocumentGenerator : IDocumentGenerator
             {
                 Servers = operationAttribute.ChannelServers?.ToList(),
                 Description = operationAttribute.ChannelDescription,
-                Parameters = GetChannelParametersFromAttributes(type, schemaResolver, jsonSchemaGenerator),
+                Parameters = GetChannelParametersFromAttributes(operationAttribute.ChannelName, schemaResolver, jsonSchemaGenerator),
             };
 
             if (operationAttribute.BindingsRef is not null)
@@ -331,23 +330,27 @@ public class DocumentGenerator : IDocumentGenerator
         return schemaResolver.GetMessageOrReference(message);
     }
 
-    private static Dictionary<string, IParameter> GetChannelParametersFromAttributes(MemberInfo memberInfo, AsyncApiSchemaResolver schemaResolver, JsonSchemaGenerator jsonSchemaGenerator)
+    private static Dictionary<string, IParameter> GetChannelParametersFromAttributes(string channel, AsyncApiSchemaResolver schemaResolver, JsonSchemaGenerator jsonSchemaGenerator)
     {
-        IEnumerable<ChannelParameterAttribute> attributes = memberInfo.GetCustomAttributes<ChannelParameterAttribute>();
         Dictionary<string, IParameter> parameters = new();
-        if (attributes.Any())
-        {
-            foreach (ChannelParameterAttribute attribute in attributes)
-            {
-                IParameter parameter = schemaResolver.GetParameterOrReference(new Parameter
-                {
-                    Description = attribute.Description,
-                    Name = attribute.Name,
-                    Schema = jsonSchemaGenerator.Generate(attribute.Type, schemaResolver),
-                    Location = attribute.Location,
-                });
 
-                parameters.Add(attribute.Name, parameter);
+        int len = channel.Length;
+        for (int i = 0; i < len; i++)
+        {
+            char rune = channel[i];
+        
+            if (rune == '{')
+            {
+                int indexEnd = channel.IndexOf('}', i);
+                string parameter = channel[(i + 1)..indexEnd];
+
+                parameters.Add(parameter, schemaResolver.GetParameterOrReference(new Parameter
+                {
+                    Name = parameter,
+                    Schema = jsonSchemaGenerator.Generate(typeof(string), schemaResolver),
+                    Description = null, // TODO: fix me
+                    Location = null, // TODO: fix me
+                }));
             }
         }
 

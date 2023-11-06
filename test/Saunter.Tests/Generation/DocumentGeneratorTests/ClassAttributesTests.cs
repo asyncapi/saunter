@@ -208,13 +208,32 @@ public class ClassAttributesTests
                 {
                     Version = "1.0.0",
                     Title = GetType().FullName,
-                }
-            }
+                },
+                Components = new()
+                {
+                    Parameters = new()
+                    {
+                        {
+                            "tenant_id",
+                            new()
+                            {
+                                Description = "The tenant identifier.",
+                                Schema = NJsonSchema.JsonSchema.FromType(typeof(string)),
+                                Location = "tester",
+                            }
+                        }
+                    },
+                },
+            },
         };
         DocumentGenerator documentGenerator = new();
 
         // Act
-        AsyncApiDocument document = documentGenerator.GenerateDocument(new[] { typeof(OneTenantMessageConsumer).GetTypeInfo() }, options, options.AsyncApi, ActivatorServiceProvider.Instance);
+        AsyncApiDocument document = documentGenerator.GenerateDocument(
+            new[] { typeof(OneTenantMessageConsumer).GetTypeInfo() },
+            options, 
+            options.AsyncApi, 
+            ActivatorServiceProvider.Instance);
 
         // Assert
         document.ShouldNotBeNull();
@@ -224,8 +243,8 @@ public class ClassAttributesTests
         channel.Key.ShouldBe("asw.tenant_service.{tenant_id}.{tenant_status}");
         channel.Value.Description.ShouldBe("A tenant events.");
         channel.Value.Parameters.Count.ShouldBe(2);
-        channel.Value.Parameters.Values.OfType<ParameterReference>().ShouldContain(p => p.Id == "tenant_id" && p.Value.Schema != null && p.Value.Description == "The tenant identifier.");
-        channel.Value.Parameters.Values.OfType<ParameterReference>().ShouldContain(p => p.Id == "tenant_status" && p.Value.Schema != null && p.Value.Description == "The tenant status.");
+        channel.Value.Parameters.Values.OfType<ParameterReference>().ShouldContain(p => p.Id == "tenant_id" && p.Value.Schema != null && p.Value.Description == "The tenant identifier." && p.Value.Location == "tester");
+        channel.Value.Parameters.Values.OfType<ParameterReference>().ShouldContain(p => p.Id == "tenant_status" && p.Value.Schema != null && p.Value.Description == null);
 
         Operation subscribe = channel.Value.Subscribe;
         subscribe.ShouldNotBeNull();
@@ -317,8 +336,6 @@ public class ClassAttributesTests
     }
 
     [SubscribeOperation<TenantCreated, TenantUpdated, TenantRemoved>("asw.tenant_service.{tenant_id}.{tenant_status}", OperationId = "OneTenantMessageConsumer", Summary = "Subscribe to domains events about a tenant.", ChannelDescription = "A tenant events.")]
-    [ChannelParameter("tenant_id", typeof(long), Description = "The tenant identifier.")]
-    [ChannelParameter("tenant_status", typeof(string), Description = "The tenant status.")]
     public class OneTenantMessageConsumer
     {
         public void SubscribeTenantCreatedEvent(Guid tenantId, TenantCreated evnt) { }

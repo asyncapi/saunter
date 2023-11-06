@@ -82,6 +82,7 @@ public class AsyncApiSchemaResolver : JsonSchemaResolver
     public IParameter GetParameterOrReference(Parameter parameter)
     {
         string? id = parameter.Name;
+
         if (id == null)
         {
             return parameter;

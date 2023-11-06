@@ -26,15 +26,15 @@ Saunter is an [AsyncAPI](https://github.com/asyncapi/asyncapi) documentation gen
 * [X] Rework message attribute:
 
     ```csharp
-    [SubscribeOperation<BrokerHelloWorldDto>("asw.tenant_service.tenants_history", OperationId = "TenantMessageConsumer", Summary = "Subscribe to domains events about tenants.", ChannelDescription = "Tenant events.")]
+    [SubscribeOperation<BrokerHelloWorldDto>("asw.tenant_service.tenants_history.{tenant_id}", OperationId = "TenantMessageConsumer", Summary = "Subscribe to domains events about tenants.", ChannelDescription = "Tenant events.")]
     ```
 
-    ```charp
-    [Message(Title = "Hello world, i class")]
+    ```csharp
+    [Message(Title = "Hello world, i`m class")]
     public record BrokerHelloWorldDto(string content);
     ```
 
-* [ ] Kill channel params attribute
+* [X] Kill channel params attribute
 * [ ] Redo the processing of multiple documents in the application
 * [ ] Rewrite usage docs
 * [ ] Nuget package
