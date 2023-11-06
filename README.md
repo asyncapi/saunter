@@ -9,9 +9,17 @@ Saunter is an [AsyncAPI](https://github.com/asyncapi/asyncapi) documentation gen
 
 ℹ Note that pre version 1.0.0, the API is regarded as unstable and **breaking changes may be introduced**.
 
-## TODO
+## Roadmap
 
-1 priority:
+The current implementation has 3 goals.
+
+* Ease of implementation in any project without limitation
+* Providing an opportunity to describe any complex scheme
+* Support for the current version `asyncapi`(with the possibility of updating to 3.0.0 after release)
+
+### 1 priority
+
+The main purpose of the stage works is to make it possible to describe an operation in 1 attribute without restrictions on the number of operations per method/class
 
 * [X] To dotnet 7
 * [X] To asyncapi 2.6.0
@@ -26,7 +34,7 @@ Saunter is an [AsyncAPI](https://github.com/asyncapi/asyncapi) documentation gen
 * [X] Rework message attribute:
 
     ```csharp
-    [SubscribeOperation<BrokerHelloWorldDto>("asw.tenant_service.tenants_history.{tenant_id}", OperationId = "TenantMessageConsumer", Summary = "Subscribe to domains events about tenants.", ChannelDescription = "Tenant events.")]
+    [SubscribeOperation<BrokerHelloWorldDto>("asw.tenant_service.tenants_history", OperationId = "TenantMessageConsumer", Summary = "Subscribe to domains events about tenants.", ChannelDescription = "Tenant events.")]
     ```
 
     ```csharp
@@ -34,30 +42,51 @@ Saunter is an [AsyncAPI](https://github.com/asyncapi/asyncapi) documentation gen
     public record BrokerHelloWorldDto(string content);
     ```
 
-* [X] Kill channel params attribute
+* [X] Kill channel params attribute (auto detect parameters from channel name)
+
+    ```csharp
+    [SubscribeOperation<BrokerHelloWorldDto>("asw.tenant_service.{tenants_name}", OperationId = "TenantMessageConsumer")]
+    ```
+
 * [ ] Redo the processing of multiple documents in the application
 * [ ] Rewrite usage docs
 * [ ] Nuget package
 * [ ] Usability test on my environment
 * [ ] Release !!
 
+Known limitations of the version that will be received at this stage:
+
+* There is no support for description and location for channel parameters from attributes (only from components ref)
+
 ![imp](assets/1_priority.png)
 
-2 priority:
+### 2 priority
 
-* [ ] Add generator output validation
+The main goal of the stage works is to expand the automatically generated part of the schema through xml-comments and improve the quality of the product
+
+* [ ] Add generator output model validation
 * [ ] Add xml-comments to output model
-* [ ] More unit
-* [ ] Normal component test
+* [ ] Add `yaml` output document
+* [ ] Rework and enrich unit tests
+* [ ] Rework and enrich component tests with `TestHost`
 
-3 priority:
+### 3 priority
+
+The main goal of this stage is to refine the remaining features of the async api (such as binding protocol) and develop a tool for describing detailed and complex schemes (without using attributes)
+
+* [ ] Make a normal tool for describing a any complex asyncapi document (without attributes, static method on interface?....)
+* [ ] Rework the binding protocols (now it's done terribly)
+
+### 4 priority
+
+The main goal of this stage is to automatically generate part of the scheme from native library objects for the protocols I use (`nats`, `signalR`)
 
 * [ ] To dotnet 8
-* [ ] Make a normal tool for describing a asyncapi document (without attributes, static method on interface?....)
-* [ ] Rework the binding protocols (now it's done terribly)
-* [ ] Native work with `nats` and `signalR`
+* [ ] Native work with `nats`
+* [ ] Native work with `signalR`
+* [ ] Native work with `swagger` (or wait asyncapi 3.0.0 ...?)
 
-## Getting Started
+## Getting Started (rewrite me pls)
 
 See [examples/StreetlightsAPI](https://github.com/tehmantra/saunter/blob/main/examples/StreetlightsAPI).
 
