@@ -29,12 +29,14 @@ The main purpose of the stage works is to make it possible to describe an operat
 
     ```csharp
     [SubscribeOperation("asw.tenant_service.tenants_history", OperationId = "TenantMessageConsumer", Summary = "Subscribe to domains events about tenants.", ChannelDescription = "Tenant events.")]
+    public void PublishHelloWord(string content) { }
     ```
 
 * [X] Rework message attribute:
 
     ```csharp
     [SubscribeOperation<BrokerHelloWorldDto>("asw.tenant_service.tenants_history", OperationId = "TenantMessageConsumer", Summary = "Subscribe to domains events about tenants.", ChannelDescription = "Tenant events.")]
+    public void PublishHelloWord(string content) { }
     ```
 
     ```csharp
@@ -46,6 +48,7 @@ The main purpose of the stage works is to make it possible to describe an operat
 
     ```csharp
     [SubscribeOperation<BrokerHelloWorldDto>("asw.tenant_service.{tenants_name}", OperationId = "TenantMessageConsumer")]
+    public record BrokerHelloWorldDto(string content);
     ```
 
 * [ ] Redo the processing of multiple documents in the application
