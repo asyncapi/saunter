@@ -1,11 +1,11 @@
-# Saunter
+# AsyncApi.Net
 
 ![CI](https://github.com/tehmantra/saunter/workflows/CI/badge.svg)
 [![NuGet Badge](https://buildstats.info/nuget/saunter?includePreReleases=true)](https://www.nuget.org/packages/Saunter/)
 
 > If you have ever used this hell creation - Saunter, then you will understand why I want to rewrite it
 
-Saunter is an [AsyncAPI](https://github.com/asyncapi/asyncapi) documentation generator for dotnet.
+Is an [AsyncAPI](https://github.com/asyncapi/asyncapi) documentation generator for dotnet.
 
 ℹ Note that pre version 1.0.0, the API is regarded as unstable and **breaking changes may be introduced**.
 
