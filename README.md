@@ -61,7 +61,7 @@ Known limitations of the version that will be received at this stage:
 
 * There is no support for description and location for channel parameters from attributes (only from components ref)
 
-![imp](assets/1_priority.png)
+![img](assets/1_priority.png)
 
 ### 2 priority
 
