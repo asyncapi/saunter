@@ -231,8 +231,8 @@ public class ClassAttributesTests
         // Act
         AsyncApiDocument document = documentGenerator.GenerateDocument(
             new[] { typeof(OneTenantMessageConsumer).GetTypeInfo() },
-            options, 
-            options.AsyncApi, 
+            options,
+            options.AsyncApi,
             ActivatorServiceProvider.Instance);
 
         // Assert

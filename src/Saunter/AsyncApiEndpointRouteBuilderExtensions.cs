@@ -6,6 +6,8 @@ using Microsoft.Extensions.Options;
 
 using Saunter.UI;
 
+using System.Linq;
+
 namespace Saunter;
 
 public static class AsyncApiEndpointRouteBuilderExtensions
@@ -21,7 +23,13 @@ public static class AsyncApiEndpointRouteBuilderExtensions
             .Build();
 
         IOptions<AsyncApiOptions> options = endpoints.ServiceProvider.GetRequiredService<IOptions<AsyncApiOptions>>();
+
         string route = options.Value.Middleware.Route;
+
+        if (options.Value.NamedApis.Any())
+        {
+            endpoints.MapGet(route.Replace("/{document}", null), pipeline);
+        }
 
         return endpoints.MapGet(route, pipeline);
     }
@@ -45,6 +53,11 @@ public static class AsyncApiEndpointRouteBuilderExtensions
 
         IOptions<AsyncApiOptions> options = endpoints.ServiceProvider.GetRequiredService<IOptions<AsyncApiOptions>>();
         string route = options.Value.Middleware.UiBaseRoute + "{*wildcard}";
+
+        if (options.Value.NamedApis.Any())
+        {
+            endpoints.MapGet(route.Replace("/{document}", null), pipeline);
+        }
 
         return endpoints.MapGet(route, pipeline);
     }

@@ -22,7 +22,7 @@ namespace Saunter.Generation;
 public class DocumentGenerator : IDocumentGenerator
 {
     public AsyncApiDocument GenerateDocument(
-        TypeInfo[] asyncApiTypes,
+        TypeInfo[] assemblyTypes,
         AsyncApiOptions options,
         AsyncApiDocument prototype,
         IServiceProvider serviceProvider)
@@ -34,19 +34,20 @@ public class DocumentGenerator : IDocumentGenerator
         JsonSchemaGenerator generator = new(options.SchemaOptions);
 
         ConcurrentDictionary<TypeInfo, IMessage> messageMap = SelectAssemblyMessages(
-            asyncApiTypes,
+            assemblyTypes,
             schemaResolver,
             generator);
 
         asyncApiSchema.Channels = GenerateChannels(
-            asyncApiTypes,
+            asyncApiSchema.DocumentName,
+            assemblyTypes,
             schemaResolver,
             options,
             generator,
             messageMap,
             serviceProvider);
 
-        DocumentFilterContext filterContext = new(asyncApiTypes, schemaResolver, generator);
+        DocumentFilterContext filterContext = new(assemblyTypes, schemaResolver, generator);
         foreach (Type filterType in options.DocumentFilters)
         {
             IDocumentFilter filter = (IDocumentFilter)serviceProvider.GetRequiredService(filterType);
@@ -82,6 +83,7 @@ public class DocumentGenerator : IDocumentGenerator
     /// Generate the Channels section of an AsyncApi schema.
     /// </summary>
     private static Dictionary<string, ChannelItem> GenerateChannels(
+        string? documentName,
         TypeInfo[] asyncApiTypes,
         AsyncApiSchemaResolver schemaResolver,
         AsyncApiOptions options,
@@ -96,6 +98,7 @@ public class DocumentGenerator : IDocumentGenerator
             foreach (MethodInfo item in type.DeclaredMethods)
             {
                 GenerateChannelsFromMethods(
+                    documentName,
                     channels,
                     item,
                     schemaResolver,
@@ -106,6 +109,7 @@ public class DocumentGenerator : IDocumentGenerator
             }
 
             GenerateChannelsFromClasses(
+                documentName,
                 channels,
                 type,
                 schemaResolver,
@@ -122,6 +126,7 @@ public class DocumentGenerator : IDocumentGenerator
     /// Generate the an operation of an AsyncApi Channel for the given method.
     /// </summary>
     private static void GenerateChannelsFromMethods(
+        string? documentName,
         Dictionary<string, ChannelItem> channels,
         MethodInfo method,
         AsyncApiSchemaResolver schemaResolver,
@@ -139,6 +144,8 @@ public class DocumentGenerator : IDocumentGenerator
 
         foreach (OperationAttribute operationAttribute in operationAttributes)
         {
+            if (operationAttribute.DocumentName != documentName) { continue; }
+
             IMessage targetPayload = GenerateOperationMessage(schemaResolver, jsonSchemaGenerator, messageMap, operationAttribute);
 
             Operation operation = new()
@@ -195,6 +202,7 @@ public class DocumentGenerator : IDocumentGenerator
     /// Generate the an operation of an AsyncApi Channel for the given class.
     /// </summary>
     private static void GenerateChannelsFromClasses(
+        string? documentName,
         Dictionary<string, ChannelItem> channels,
         TypeInfo type,
         AsyncApiSchemaResolver schemaResolver,
@@ -212,6 +220,8 @@ public class DocumentGenerator : IDocumentGenerator
 
         foreach (OperationAttribute operationAttribute in operationAttributes)
         {
+            if (operationAttribute.DocumentName != documentName) { continue; }
+
             IMessage targetPayload = GenerateOperationMessage(schemaResolver, jsonSchemaGenerator, messageMap, operationAttribute);
 
             Operation operation = new()
@@ -338,7 +348,7 @@ public class DocumentGenerator : IDocumentGenerator
         for (int i = 0; i < len; i++)
         {
             char rune = channel[i];
-        
+
             if (rune == '{')
             {
                 int indexEnd = channel.IndexOf('}', i);

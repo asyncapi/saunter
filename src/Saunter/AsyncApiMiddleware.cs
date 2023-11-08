@@ -34,7 +34,7 @@ public class AsyncApiMiddleware
 
         AsyncApiSchema.v2.AsyncApiDocument? prototype = _options.AsyncApi;
 
-        if (context.TryGetDocument(out string? documentName) && documentName is not null && !_options.NamedApis.TryGetValue(documentName, out prototype))
+        if (context.TryGetDocument(out string? documentName) && documentName is not null && documentName != "{document}" && !_options.NamedApis.TryGetValue(documentName, out prototype))
         {
             await _next(context);
             return;
@@ -56,6 +56,8 @@ public class AsyncApiMiddleware
 
     private bool IsRequestingAsyncApiSchema(HttpRequest request)
     {
-        return HttpMethods.IsGet(request.Method) && request.Path.IsMatchingRoute(_options.Middleware.Route);
+        return HttpMethods.IsGet(request.Method) && (
+            request.Path.IsMatchingRoute(_options.Middleware.Route) ||
+            request.Path.IsMatchingRoute(_options.Middleware.Route.Replace("/{document}", null)));
     }
 }

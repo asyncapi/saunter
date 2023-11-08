@@ -93,6 +93,7 @@ public class StreetlightsController
     [HttpPost]
     [Route(PublishLightMeasuredTopic)]
     [PublishOperation<LightMeasuredEvent>(PublishLightMeasuredTopic, "Light", ChannelServers = new[] { "webapi" })]
+    [PublishOperation<LightMeasuredEvent>(PublishLightMeasuredTopic, "Light", ChannelServers = new[] { "webapi" }, DocumentName = "Foo")]
     public void MeasureLight([FromBody] LightMeasuredEvent lightMeasuredEvent)
     {
         lightMeasuredEvent.SentAt = DateTime.Now;

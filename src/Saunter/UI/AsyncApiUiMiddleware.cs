@@ -20,20 +20,30 @@ namespace Saunter.UI;
 public class AsyncApiUiMiddleware
 {
     private readonly AsyncApiOptions _options;
-    private readonly StaticFileMiddleware _staticFiles;
     private readonly Dictionary<string, StaticFileMiddleware> _namedStaticFiles;
+
+    private readonly StaticFileMiddleware _staticFiles;
+    private readonly StaticFileMiddleware _defaultStaticFiles;
 
     public AsyncApiUiMiddleware(RequestDelegate next, IOptions<AsyncApiOptions> options, IWebHostEnvironment env, ILoggerFactory loggerFactory)
     {
         _options = options.Value;
-        EmbeddedFileProvider fileProvider = new(GetType().Assembly, GetType().Namespace);
-        StaticFileOptions staticFileOptions = new()
-        {
-            RequestPath = UiBaseRoute,
-            FileProvider = fileProvider,
-        };
-        _staticFiles = new StaticFileMiddleware(next, env, Options.Create(staticFileOptions), loggerFactory);
         _namedStaticFiles = new Dictionary<string, StaticFileMiddleware>();
+
+        EmbeddedFileProvider fileProvider = new(GetType().Assembly, GetType().Namespace);
+
+        _staticFiles = new(next, env, Options.Create(new StaticFileOptions()
+        {
+            RequestPath = UiBaseRoute.Replace("/{document}", null),
+            //RequestPath = UiBaseRoute,
+            FileProvider = fileProvider,
+        }), loggerFactory);
+
+        _defaultStaticFiles = new(next, env, Options.Create(new StaticFileOptions()
+        {
+            RequestPath = UiBaseRoute.Replace("/{document}", null),
+            FileProvider = fileProvider,
+        }), loggerFactory);
 
         foreach (KeyValuePair<string, AsyncApiSchema.v2.AsyncApiDocument> namedApi in _options.NamedApis)
         {
@@ -116,12 +126,16 @@ public class AsyncApiUiMiddleware
 
     private bool IsRequestingUiBase(HttpRequest request)
     {
-        return HttpMethods.IsGet(request.Method) && request.Path.IsMatchingRoute(UiBaseRoute);
+        return HttpMethods.IsGet(request.Method) && (
+            request.Path.IsMatchingRoute(UiBaseRoute) ||
+            request.Path.IsMatchingRoute(UiBaseRoute.Replace("/{document}", null)));
     }
 
     private bool IsRequestingAsyncApiUi(HttpRequest request)
     {
-        return HttpMethods.IsGet(request.Method) && request.Path.IsMatchingRoute(UiIndexRoute);
+        return HttpMethods.IsGet(request.Method) && (
+            request.Path.IsMatchingRoute(UiIndexRoute) ||
+            request.Path.IsMatchingRoute(UiIndexRoute.Replace("/{document}", null)));
     }
 
     private string UiIndexRoute => _options.Middleware.UiBaseRoute?.TrimEnd('/') + "/index.html";

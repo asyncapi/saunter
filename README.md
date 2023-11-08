@@ -51,7 +51,14 @@ The main purpose of the stage works is to make it possible to describe an operat
     public record BrokerHelloWorldDto(string content);
     ```
 
-* [ ] Redo the processing of multiple documents in the application
+* [X] Redo the processing of multiple documents in the application (save default document with `null` name!!)
+
+    ```csharp
+    [SubscribeOperation<BrokerHelloWorldDto>("asw.tenant_service.{tenants_name}", OperationId = "TenantMessageConsumer", DocumentName = "Foo")]
+    [SubscribeOperation<BrokerHelloWorldDto>("asw.tenant_service.{tenants_name}", OperationId = "TenantMessageConsumer")]
+    public record BrokerHelloWorldDto(string content);
+    ```
+
 * [ ] Rewrite usage docs
 * [ ] Nuget package
 * [ ] Usability test on my environment

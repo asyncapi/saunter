@@ -19,18 +19,12 @@ public class AsyncApiDocumentProvider : IAsyncApiDocumentProvider
 
     public AsyncApiDocument GetDocument(AsyncApiOptions options, AsyncApiDocument prototype)
     {
-        if (options == null)
-        {
-            throw new ArgumentNullException(nameof(options));
-        }
-        TypeInfo[] asyncApiTypes = GetAsyncApiTypes(options);
+        TypeInfo[] types = GetAssemblyTypes(options);
 
-        AsyncApiDocument document = _documentGenerator.GenerateDocument(asyncApiTypes, options, prototype, _serviceProvider);
-
-        return document;
+        return _documentGenerator.GenerateDocument(types, options, prototype, _serviceProvider);
     }
 
-    private static TypeInfo[] GetAsyncApiTypes(AsyncApiOptions options)
+    private static TypeInfo[] GetAssemblyTypes(AsyncApiOptions options)
     {
         return options.AssemblyMarkerTypes
             .SelectMany(t => t.Assembly.DefinedTypes)

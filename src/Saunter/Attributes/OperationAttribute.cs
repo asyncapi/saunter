@@ -81,6 +81,11 @@ public abstract class OperationAttribute : Attribute
     /// A list of tags for API documentation control. Tags can be used for logical grouping of operations.
     /// </summary>
     public string[] Tags { get; protected set; }
+
+    /// <summary>
+    /// Name asyncapi document
+    /// </summary>
+    public string? DocumentName { get; set; }
 }
 
 public class PublishOperationAttribute : OperationAttribute

@@ -80,6 +80,28 @@ public class Startup
             };
         });
 
+        services.ConfigureNamedAsyncApi("Foo", asyncApi =>
+        {
+            asyncApi.Info = new Info()
+            {
+                Version = "1.0.0",
+                Title = "Foo",
+            };
+            asyncApi.Servers = new()
+            {
+                ["mosquitto"] = new Server
+                {
+                    Url = "test.mosquitto.org",
+                    Protocol = "mqtt",
+                },
+                ["webapi"] = new Server
+                {
+                    Url = "localhost:5000",
+                    Protocol = "http",
+                },
+            };
+        });
+
         services.AddScoped<IStreetlightMessageBus, StreetlightMessageBus>();
         services.AddControllers();
     }
