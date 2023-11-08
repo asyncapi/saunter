@@ -6,15 +6,6 @@ Is an [AsyncAPI](https://github.com/asyncapi/asyncapi) documentation generator f
 
 This is a fork of the [Sauner library](https://github.com/m-wild/saunter/tree/main), which was rewritten for the sake of ease of use and minimizing the cost of implementation in the project.
 
-## Docs todo list
-
-* Description of the basic config in di
-* Description of the operation attribute (+ description of working with channel parameters)
-* Description of the message attribute
-* Description of working with multiple documents
-* Description of the binding setup
-* Description of the json parser setup
-
 ## Simple start
 
 1. Install package from nuget - `TODO: add link`
@@ -97,7 +88,14 @@ The main purpose of the stage works is to make it possible to describe an operat
     public record BrokerHelloWorldDto(string content);
     ```
 
-* [ ] Rewrite usage docs
+* [ ] Rewrite usage docs:
+  * [ ] Fast start guide
+  * [ ] Description of the basic config in di
+  * [ ] Description of the operation attribute (+ description of working with channel parameters)
+  * [ ] Description of the message attribute
+  * [ ] Description of working with multiple documents
+  * [ ] Description of the binding setup
+  * [ ] Description of the json parser setup
 * [ ] Nuget package
 * [ ] Usability test on my environment
 * [ ] Release !!
