@@ -37,7 +37,7 @@ This is a fork of the [Sauner library](https://github.com/m-wild/saunter/tree/ma
 
 4. Set attributes to pub/sub methods:
 
-    ```charp
+    ```csharp
     [PublishOperation<MyPayloadMessageType>("my_queue_name")]
     [PublishOperation<MyPayloadMessageType, MySecondPayloadMessageType>("my_queue_second_name")]
     public void MyMethod()
