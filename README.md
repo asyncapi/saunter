@@ -8,6 +8,36 @@ Is an [AsyncAPI](https://github.com/asyncapi/asyncapi) documentation generator f
 
 This is a fork of the [Sauner library](https://github.com/m-wild/saunter/tree/main), which was rewritten for the sake of ease of use and minimizing the cost of implementation in the project.
 
+## Simple start
+
+1. Install package from nuget - `TODO: add link`
+2. Configure base generator params in `Program.cs`:
+
+    ```csharp
+       services.AddAsyncApiSchemaGeneration(o =>
+        {
+            o.AssemblyMarkerTypes = new[] { typeof(StreetlightsController) }; // add assemply marker
+            o.AsyncApi = new AsyncApiDocument { Info = new Info { Title = "My application" }}; // introduce your application
+        });
+    ```
+
+3. Map generator and ui in `Program.cs`:
+
+    ```csharp
+    app.MapAsyncApiDocuments();
+    app.MapAsyncApiUi();
+    ```
+
+4. Set attributes to pub/sub methods:
+
+    ```charp
+    [PublishOperation<MyPayloadMessageType>("my_queue_name")]
+    [PublishOperation<MyPayloadMessageType, MySecondPayloadMessageType>("my_queue_second_name")]
+    public void MyMethod()
+    ```
+
+5. Run application and open endpoint - `/asyncapi/ui/`
+
 ## Roadmap
 
 The current implementation has 3 goals.
@@ -94,36 +124,6 @@ The main goal of this stage is to automatically generate part of the scheme from
 * [ ] Native work with `nats`
 * [ ] Native work with `signalR`
 * [ ] Native work with `swagger` (or wait asyncapi 3.0.0 ...?)
-
-### Simple start
-
-1. Install package from nuget - `TODO: add link`
-2. Configure base generator params in `Program.cs`:
-
-    ```csharp
-       services.AddAsyncApiSchemaGeneration(o =>
-        {
-            o.AssemblyMarkerTypes = new[] { typeof(StreetlightsController) }; // add assemply marker
-            o.AsyncApi = new AsyncApiDocument { Info = new Info { Title = "My application" }}; // introduce your application
-        });
-    ```
-
-3. Map generator and ui in `Program.cs`:
-
-    ```csharp
-    app.MapAsyncApiDocuments();
-    app.MapAsyncApiUi();
-    ```
-
-4. Set attributes to pub/sub methods:
-
-    ```charp
-    [PublishOperation<MyPayloadMessageType>("my_queue_name")]
-    [PublishOperation<MyPayloadMessageType, MySecondPayloadMessageType>("my_queue_second_name")]
-    public void MyMethod()
-    ```
-
-5. Run application and open endpoint - `/asyncapi/ui/`
 
 ## Getting Started (rewrite me pls)
 
