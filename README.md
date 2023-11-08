@@ -1,12 +1,19 @@
 # AsyncApi.Net
 
-> If you have ever used this hell creation - Saunter, then you will understand why I want to rewrite it
-
 Is an [AsyncAPI](https://github.com/asyncapi/asyncapi) documentation generator for dotnet.
 
 ℹ Note that pre version 1.0.0, the API is regarded as unstable and **breaking changes may be introduced**.
 
 This is a fork of the [Sauner library](https://github.com/m-wild/saunter/tree/main), which was rewritten for the sake of ease of use and minimizing the cost of implementation in the project.
+
+## Docs todo list
+
+* Description of the basic config in di
+* Description of the operation attribute (+ description of working with channel parameters)
+* Description of the message attribute
+* Description of working with multiple documents
+* Description of the binding setup
+* Description of the json parser setup
 
 ## Simple start
 
@@ -36,7 +43,9 @@ This is a fork of the [Sauner library](https://github.com/m-wild/saunter/tree/ma
     public void MyMethod()
     ```
 
-5. Run application and open endpoint - `/asyncapi/ui/`
+5. Run application, open endpoint `/asyncapi/ui/` and view:
+
+    ![AsyncAPI UI](https://raw.githubusercontent.com/tehmantra/saunter/main/assets/asyncapi-ui-screenshot.png)
 
 ## Roadmap
 
