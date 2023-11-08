@@ -1,13 +1,12 @@
 # AsyncApi.Net
 
-![CI](https://github.com/tehmantra/saunter/workflows/CI/badge.svg)
-[![NuGet Badge](https://buildstats.info/nuget/saunter?includePreReleases=true)](https://www.nuget.org/packages/Saunter/)
-
 > If you have ever used this hell creation - Saunter, then you will understand why I want to rewrite it
 
 Is an [AsyncAPI](https://github.com/asyncapi/asyncapi) documentation generator for dotnet.
 
 ℹ Note that pre version 1.0.0, the API is regarded as unstable and **breaking changes may be introduced**.
+
+This is a fork of the [Sauner library](https://github.com/m-wild/saunter/tree/main), which was rewritten for the sake of ease of use and minimizing the cost of implementation in the project.
 
 ## Roadmap
 
@@ -96,22 +95,46 @@ The main goal of this stage is to automatically generate part of the scheme from
 * [ ] Native work with `signalR`
 * [ ] Native work with `swagger` (or wait asyncapi 3.0.0 ...?)
 
-## Getting Started (rewrite me pls)
+### Simple start
 
-See [examples/StreetlightsAPI](https://github.com/tehmantra/saunter/blob/main/examples/StreetlightsAPI).
-
-1. Install the Saunter package
+1. Install package from nuget - `TODO: add link`
+2. Configure base generator params in `Program.cs`:
 
     ```csharp
-    dotnet add package Saunter
+       services.AddAsyncApiSchemaGeneration(o =>
+        {
+            o.AssemblyMarkerTypes = new[] { typeof(StreetlightsController) }; // add assemply marker
+            o.AsyncApi = new AsyncApiDocument { Info = new Info { Title = "My application" }}; // introduce your application
+        });
     ```
 
-2. In the `ConfigureServices` method of `Startup.cs`, configure Saunter.
+3. Map generator and ui in `Program.cs`:
 
     ```csharp
-    // Add Saunter to the application services. 
+    app.MapAsyncApiDocuments();
+    app.MapAsyncApiUi();
+    ```
+
+4. Set attributes to pub/sub methods:
+
+    ```charp
+    [PublishOperation<MyPayloadMessageType>("my_queue_name")]
+    [PublishOperation<MyPayloadMessageType, MySecondPayloadMessageType>("my_queue_second_name")]
+    public void MyMethod()
+    ```
+
+5. Run application and open endpoint - `/asyncapi/ui/`
+
+## Getting Started (rewrite me pls)
+
+See [StreetlightsAPI](https://github.com/yurvon-screamo/asyncapi.net/tree/main/examples/StreetlightsAPI) as example.
+
+1. In the `ConfigureServices` method of `Startup.cs`, configure Saunter.
+
+    ```csharp
+    // Add generator to the application services. 
     services.AddAsyncApiSchemaGeneration(options =>
-    {
+    {   
         // Specify example type(s) from assemblies to scan.
         options.AssemblyMarkerTypes = new[] {typeof(StreetlightMessageBus)};
 
@@ -136,7 +159,7 @@ See [examples/StreetlightsAPI](https://github.com/tehmantra/saunter/blob/main/ex
     });
     ```
 
-3. Add attributes to your classes which publish or subscribe to messages.
+2. Add attributes to your classes which publish or subscribe to messages.
 
     ```csharp
     [AsyncApi] // Tells Saunter to scan this class.
@@ -147,7 +170,7 @@ See [examples/StreetlightsAPI](https://github.com/tehmantra/saunter/blob/main/ex
         public void PublishLightMeasuredEvent(Streetlight streetlight, int lumens) {}
     ```
 
-4. Add saunter middleware to host the AsyncApi json document. In the `Configure` method of `Startup.cs`:
+3. Add saunter middleware to host the AsyncApi json document. In the `Configure` method of `Startup.cs`:
 
     ```csharp
     app.UseEndpoints(endpoints =>
@@ -157,7 +180,7 @@ See [examples/StreetlightsAPI](https://github.com/tehmantra/saunter/blob/main/ex
     });
     ```
 
-5. Use the published AsyncApi document:
+4. Use the published AsyncApi document:
 
     ```jsonc
     // HTTP GET /asyncapi/asyncapi.json
@@ -180,7 +203,7 @@ See [examples/StreetlightsAPI](https://github.com/tehmantra/saunter/blob/main/ex
     }
     ```
 
-6. Use the published AsyncAPI UI:
+5. Use the published AsyncAPI UI:
 
     ![AsyncAPI UI](https://raw.githubusercontent.com/tehmantra/saunter/main/assets/asyncapi-ui-screenshot.png)
 

@@ -56,7 +56,6 @@ public class Startup
                 Info = new Info
                 {
                     Title = "Streetlights API",
-                    Version = "1.0.0",
                     Description = "The Smartylighting Streetlights API allows you to remotely manage the city lights.",
                     License = new License
                     {

@@ -58,7 +58,6 @@ public static class AsyncApiServiceCollectionExtensions
                 //TODO: fix set, remove dictionary?...
                 Info = new()
                 {
-                    Version = "set me pls",
                     Title = k,
                 },
                 Channels = new(),

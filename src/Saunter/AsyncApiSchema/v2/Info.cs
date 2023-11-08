@@ -14,7 +14,7 @@ public class Info
     /// (not to be confused with the specification version).
     /// </summary>
     [JsonProperty("version", NullValueHandling = NullValueHandling.Ignore)]
-    public required string Version { get; set; }
+    public string Version { get; set; } = "latest";
 
     /// <summary>
     /// A short description of the application.

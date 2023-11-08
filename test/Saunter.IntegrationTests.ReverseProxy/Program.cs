@@ -52,7 +52,7 @@ public class Startup
 
             options.AsyncApi = new AsyncApiDocument
             {
-                Info = new Info { Version = "1.0.0", Title = Environment.GetEnvironmentVariable("PATH_BASE") }
+                Info = new Info { Title = Environment.GetEnvironmentVariable("PATH_BASE") }
             };
         });
 
@@ -81,7 +81,6 @@ public class Startup
 
             endpoints.MapControllers();
         });
-
 
         // Print the AsyncAPI doc location
         ILogger<Program> logger = app.ApplicationServices.GetService<ILoggerFactory>().CreateLogger<Program>();
