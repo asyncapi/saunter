@@ -36,7 +36,7 @@ This is a fork of the [Sauner library](https://github.com/m-wild/saunter/tree/ma
 
 5. Run application, open endpoint `/asyncapi/ui/` and view:
 
-    ![AsyncAPI UI](https://raw.githubusercontent.com/tehmantra/saunter/main/assets/asyncapi-ui-screenshot.png)
+    ![example ui](assets/example-ui.png)
 
 ## Roadmap
 
