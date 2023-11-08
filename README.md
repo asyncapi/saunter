@@ -35,7 +35,7 @@ This is a fork of the [Sauner library](https://github.com/m-wild/saunter/tree/ma
     app.MapAsyncApiUi();
     ```
 
-4. Set attributes to pub/sub methods:
+4. Set attributes to pub/sub methods or classes:
 
     ```csharp
     [PublishOperation<MyPayloadMessageType>("my_queue_name")]
