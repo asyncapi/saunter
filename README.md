@@ -89,7 +89,7 @@ The main purpose of the stage works is to make it possible to describe an operat
     ```
 
 * [ ] Rewrite usage docs:
-  * [ ] Fast start guide
+  * [X] Fast start guide
   * [ ] Description of the basic config in di
   * [ ] Description of the operation attribute (+ description of working with channel parameters)
   * [ ] Description of the message attribute
