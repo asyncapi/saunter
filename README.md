@@ -96,6 +96,97 @@ services.AddAsyncApiSchemaGeneration(o =>
 });
 ```
 
+Additionally, to make it work, you need to add middleware and endpoints:
+
+```csharp
+app.MapAsyncApiDocuments();
+app.MapAsyncApiUi();
+```
+
+### Operation attribute
+
+The generator uses the `PublishOperation` and `SubscribeOperation` attributes as data sources, which can be added to any class/interface/method in any desired quantity with two constraints:
+
+1. The channel name must be unique.
+2. The operation ID must be unique.
+
+If the application has multiple subscribers to one channel, use the `oneOf` messages, for example:
+
+```csharp
+[PublishOperation<LightMeasuredEvent, LightMeasuredEvent2, LightMeasuredEvent3>("PublishLightMeasuredTopic")]
+```
+
+Or:
+
+```csharp
+[PublishOperation("PublishLightMeasuredTopic", new TypeInfo[] { typeof(LightMeasuredEvent), typeof(LightMeasuredEvent2), typeof(LightMeasuredEvent3), typeof(LightMeasuredEvent4) } )]
+```
+
+Unfortunately, this is a limitation of the AsyncAPI specification, which should be addressed in version 3.
+
+Additionally, when specifying the attribute, you can provide various parameters for both the operation and the channel to which this operation belongs.
+
+Channel parameters:
+
+* `ChannelName` - The name of the channel. The format depends on the conventions of the underlying messaging protocol. For example, AMQP uses dot-separated paths like 'light.measured'.
+* `ChannelDescription` - An optional description of this channel item. CommonMark syntax can be used for rich text representation.
+* `ChannelBindingsRef` - The name of a channel bindings item to reference. The bindings must be added to `components/channelBindings` with the same name.
+* `ChannelServers` - The servers on which this channel is available, specified as an optional unordered list of names (string keys) of Server Objects defined in the Servers Object.
+
+Operation parameters:
+
+* `MessagePayloadTypes` - Message schema mark ID for matching with the message attribute. Can be specified as a generic.
+* `Summary` - A short summary of what the operation is about.
+* `OperationId` - Unique string used to identify the operation. The id MUST be unique among all operations described in the API. The `operationId` value is case-sensitive. Tools and libraries MAY use the `operationId` to uniquely identify an operation, therefore, it is RECOMMENDED to follow common programming naming conventions.
+* `Description` - A verbose explanation of the operation. CommonMark syntax can be used for rich text representation.
+* `BindingsRef` - The name of an operation bindings item to reference. The bindings must be added to `components/operationBindings` with the same name.
+* `Tags` - A list of tags for API documentation control. Tags can be used for logical grouping of operations.
+* `DocumentName` - Name of the AsyncAPI document. More details are available in the section on multiple documents in one application.
+
+Examples:
+
+```csharp
+[PublishOperation<AnotherSampleMesssage>("asw.sample_service.anothersample", OperationId = "AnotherSampleMessagePublisher", Summary = "Publish another sample.", ChannelDescription = "Another sample events.")]
+[PublishOperation<SampleMessage>("messaging.sample", Summary = "Publish a sample message.", OperationId = "PublishSampleMessage", Description = "Publishes a sample message for demonstration purposes.", BindingsRef = "amqpBinding", Tags = new[] { "Messaging", "Publishing" })]
+```
+
+In case the channel name contains the `{*}` construction, for example, `qwerty.{my_id}.event`, the generator will create a channel parameter. It will then attempt to find its description and schema in the components. By default, the schema `string` and an empty description are used.
+
+Example:
+
+```csharp
+AsyncApiOptions options = new()
+{
+    AsyncApi = new()
+    {
+        Info = new()
+        {
+            Version = "1.0.0",
+            Title = GetType().FullName,
+        },
+        Components = new()
+        {
+            Parameters = new()
+            {
+                {
+                    "tenant_id",
+                    new()
+                    {
+                        Description = "The tenant identifier.",
+                        Schema = NJsonSchema.JsonSchema.FromType(typeof(string)),
+                        Location = "tester",
+                    }
+                }
+            },
+        },
+    },
+};
+
+// ...
+
+[SubscribeOperation<TenantCreated>("asw.tenant_service.{tenant_id}.{tenant_status}", OperationId = "OneTenantMessageConsumer", Summary = "Subscribe to domains events about a tenant.", ChannelDescription = "A tenant events.")]
+```
+
 ## Roadmap
 
 The current implementation has 3 goals.
@@ -148,8 +239,8 @@ The main purpose of the stage works is to make it possible to describe an operat
 
 * [ ] Rewrite usage docs:
   * [X] Fast start guide
-  * [ ] Description of the basic config in di
-  * [ ] Description of the operation attribute (+ description of working with channel parameters)
+  * [X] Description of the basic config in di
+  * [X] Description of the operation attribute (+ description of working with channel parameters)
   * [ ] Description of the message attribute
   * [ ] Description of working with multiple documents
   * [ ] Description of the binding setup
