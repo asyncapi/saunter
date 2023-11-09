@@ -40,6 +40,14 @@ This is a fork of the [Sauner library](https://github.com/m-wild/saunter/tree/ma
 
 ## Usage docs
 
+The overall concept looks like the following:
+
+1. Add attributes containing information about channels and operations to methods or classes that implement them.
+2. Optionally, provide additional information about messages using attributes on the DTO (Data Transfer Object) type representing the message.
+3. The generator will consolidate all this information, mapping messages to operations where they are used, and generating channel parameters when detected.
+
+![img](assets/1_priority.png)
+
 ### DI Configure
 
 You can configure the basic document parameters and generator operation in the `Program.cs` file.
@@ -274,8 +282,6 @@ The main purpose of the stage works is to make it possible to describe an operat
 Known limitations of the version that will be received at this stage:
 
 * There is no support for description and location for channel parameters from attributes (only from components ref)
-
-![img](assets/1_priority.png)
 
 ### 2 priority
 
