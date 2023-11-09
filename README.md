@@ -309,7 +309,7 @@ The main goal of this stage is to automatically generate part of the scheme from
 * [ ] Native work with `signalR`
 * [ ] Native work with `swagger` (or wait asyncapi 3.0.0 ...?)
 
-## Getting Started (rewrite me pls)
+## Legacy docs
 
 See [StreetlightsAPI](https://github.com/yurvon-screamo/asyncapi.net/tree/main/examples/StreetlightsAPI) as example.
 
