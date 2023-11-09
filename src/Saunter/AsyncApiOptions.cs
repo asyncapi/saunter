@@ -73,7 +73,7 @@ public class AsyncApiOptions
     /// <summary>
     /// Options related to the Saunter middleware.
     /// </summary>
-    public AsyncApiMiddlewareOptions Middleware { get; } = new AsyncApiMiddlewareOptions();
+    public AsyncApiMiddlewareOptions Middleware { get; } = new ();
 
     public ConcurrentDictionary<string, AsyncApiDocument> NamedApis { get; set; } =
         new ConcurrentDictionary<string, AsyncApiDocument>();
@@ -81,7 +81,7 @@ public class AsyncApiOptions
     /// <summary>
     /// Settings related to the JSON Schema generation.
     /// </summary>
-    public AsyncApiSchemaOptions SchemaOptions { get; set; } = new AsyncApiSchemaOptions();
+    public AsyncApiSchemaOptions SchemaOptions { get; set; } = new ();
 }
 
 public class AsyncApiSchemaOptions : JsonSchemaGeneratorSettings

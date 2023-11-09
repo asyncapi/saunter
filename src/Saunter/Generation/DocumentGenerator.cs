@@ -48,6 +48,7 @@ public class DocumentGenerator : IDocumentGenerator
             serviceProvider);
 
         DocumentFilterContext filterContext = new(assemblyTypes, schemaResolver, generator);
+        
         foreach (Type filterType in options.DocumentFilters)
         {
             IDocumentFilter filter = (IDocumentFilter)serviceProvider.GetRequiredService(filterType);

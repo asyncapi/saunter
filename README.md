@@ -38,6 +38,64 @@ This is a fork of the [Sauner library](https://github.com/m-wild/saunter/tree/ma
 
     ![example ui](assets/example-ui.png)
 
+## Usage docs
+
+### DI Configure
+
+You can configure the basic document parameters and generator operation in the `Program.cs` file.
+
+The `AddAsyncApiSchemaGeneration` method is used to add the generator, JSON serializer, and generator provider to the DI (Dependency Injection) container.
+
+The method also takes an optional parameter `setupAction`, which is used to customize the library settings.
+
+With it, you can configure:
+
+* The basic document prototype, where information about the application, its version (default is 'latest'), list of servers, channel bindings, and any other document fields will be specified.
+* A list of types to be used as assembly markers.
+* A list of filters implementing the `IDocumentFilter` interface to apply to the generated document.
+* A list of filters implementing the `IOperationFilter` interface to apply to the operations of the generated document.
+* Settings for the JSON generator, inherited from the `JsonSchemaGeneratorSettings` class in the `NJsonSchema` library.
+* Middleware parameters:
+  * Document endpoint (default is '/asyncapi/asyncapi.json').
+  * UI endpoint (default is '/asyncapi/ui/').
+  * UI title (default is 'AsyncAPI').
+
+Example:
+
+```csharp
+services.AddAsyncApiSchemaGeneration(o =>
+{
+    o.AssemblyMarkerTypes = new[] { typeof(StreetlightMessageBus) };
+    o.Middleware.UiTitle = "Streetlights API";
+    o.AsyncApi = new AsyncApiDocument
+    {
+        Info = new Info
+        {
+            Title = "Streetlights API",
+            Description = "The Smartylighting Streetlights API allows you to remotely manage the city lights.",
+            License = new License
+            {
+                Name = "Apache 2.0",
+                Url = "https://www.apache.org/licenses/LICENSE-2.0"
+            }
+        },
+        Servers = new()
+        {
+            ["mosquitto"] = new Server
+            {
+                Url = "test.mosquitto.org",
+                Protocol = "mqtt",
+            },
+            ["webapi"] = new Server
+            {
+                Url = "localhost:5000",
+                Protocol = "http",
+            },
+        },
+    };
+});
+```
+
 ## Roadmap
 
 The current implementation has 3 goals.
