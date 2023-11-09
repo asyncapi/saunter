@@ -187,6 +187,28 @@ AsyncApiOptions options = new()
 [SubscribeOperation<TenantCreated>("asw.tenant_service.{tenant_id}.{tenant_status}", OperationId = "OneTenantMessageConsumer", Summary = "Subscribe to domains events about a tenant.", ChannelDescription = "A tenant events.")]
 ```
 
+### Message attributes
+
+To add parameters to a message, the `MessageAttribute` is used.
+
+It is applied to the DTO class or interface, where message parameters are specified:
+
+* `HeadersType` - The type used to generate the message headers schema.
+* `Name` - A machine-friendly name for the message. Defaults to the generated schemaId.
+* `Title` - A human-friendly title for the message.
+* `Summary` - A brief summary of what the message is about.
+* `Description` - A detailed explanation of the message. CommonMark syntax can be used for rich text representation.
+* `BindingsRef` - The name of a message bindings item to reference. The bindings must be added to `components/messageBindings` with the same name.
+* `MessageId` - A unique string used to identify the message. The id MUST be unique among all messages described in the API. The `messageId` value is case-sensitive. Tools and libraries MAY use the `messageId` to uniquely identify a message, therefore, it is RECOMMENDED to follow common programming naming conventions.
+* `Tags` - A list of tags for API documentation control. Tags can be used for logical grouping of messages.
+
+Example:
+
+```csharp
+[Message(HeadersType = typeof(MyMessageHeader), Title = "hello world")]
+public record MyEvent(string content);
+```
+
 ## Roadmap
 
 The current implementation has 3 goals.
@@ -241,7 +263,7 @@ The main purpose of the stage works is to make it possible to describe an operat
   * [X] Fast start guide
   * [X] Description of the basic config in di
   * [X] Description of the operation attribute (+ description of working with channel parameters)
-  * [ ] Description of the message attribute
+  * [X] Description of the message attribute
   * [ ] Description of working with multiple documents
   * [ ] Description of the binding setup
   * [ ] Description of the json parser setup
