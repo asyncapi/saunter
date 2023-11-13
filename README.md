@@ -217,6 +217,49 @@ Example:
 public record MyEvent(string content);
 ```
 
+### Working with Multiple Documents within a Single Application
+
+You can create multiple `AsyncApi` documents within a single application in addition to the main one.
+
+To achieve this:
+
+1. Declare an additional document in `Program.cs` after adding the main configuration:
+
+    ```csharp
+        services.ConfigureNamedAsyncApi("Foo", asyncApi =>
+        {
+            asyncApi.Info = new Info()
+            {
+                Version = "1.0.0",
+                Title = "Foo",
+            };
+            asyncApi.Servers = new()
+            {
+                ["mosquitto"] = new Server
+                {
+                    Url = "test.mosquitto.org",
+                    Protocol = "mqtt",
+                },
+                ["webapi"] = new Server
+                {
+                    Url = "localhost:5000",
+                    Protocol = "http",
+                },
+            };
+        });
+    ```
+
+2. Declare operations for the document by specifying the `DocumentName` property in the attribute:
+
+    ```csharp
+    [PublishOperation<LightMeasuredEvent>(PublishLightMeasuredTopic, "Light", ChannelServers = new[] { "webapi" }, DocumentName = "Foo")]
+    ```
+
+In the running application, you can open a new document or its UI using the following paths:
+
+* asyncapi/{documentName}/asyncapi.json
+* asyncapi/{documentName}/ui/
+
 ## Roadmap
 
 The current implementation has 3 goals.
@@ -272,7 +315,7 @@ The main purpose of the stage works is to make it possible to describe an operat
   * [X] Description of the basic config in di
   * [X] Description of the operation attribute (+ description of working with channel parameters)
   * [X] Description of the message attribute
-  * [ ] Description of working with multiple documents
+  * [X] Description of working with multiple documents
   * [ ] Description of the binding setup
   * [ ] Description of the json parser setup
 * [ ] Nuget package
