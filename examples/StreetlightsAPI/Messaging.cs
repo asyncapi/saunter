@@ -2,7 +2,7 @@ using System.Text.Json;
 
 using Microsoft.Extensions.Logging;
 
-using Saunter.Attributes;
+using AsyncApi.Net.Generator.Attributes;
 
 namespace StreetlightsAPI;
 

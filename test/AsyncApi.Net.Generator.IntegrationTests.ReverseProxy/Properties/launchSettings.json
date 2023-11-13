@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "AsyncApi.Net.Generator.IntegrationTests.ReverseProxy": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:58518;http://localhost:58519"
+    }
+  }
+}

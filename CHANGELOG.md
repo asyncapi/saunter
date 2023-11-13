@@ -43,7 +43,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 ### Fixed
 
-- [Saunter breaks when you try register two same channels #133](https://github.com/tehmantra/saunter/issues/133)
+- [AsyncApi.Net.Generator breaks when you try register two same channels #133](https://github.com/tehmantra/saunter/issues/133)
 - [NJsonSchema uses unsupported Json Schema. #138](https://github.com/tehmantra/saunter/issues/138)
 - [Use NJsonSchema for the JSON Schema implementation #60](https://github.com/tehmantra/saunter/issues/60)
 - [Error: Maximum call stack size exceeded #123](https://github.com/tehmantra/saunter/issues/123)
@@ -52,7 +52,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 ### Fixed
 
-- Hosting behind a reverse proxy now works correctly. See tests/Saunter.IntegrationTests.ReverseProxy/README.md for an example.
+- Hosting behind a reverse proxy now works correctly. See tests/AsyncApi.Net.Generator.IntegrationTests.ReverseProxy/README.md for an example.
 
 ## [v0.9.0] - 2021-10-17
 

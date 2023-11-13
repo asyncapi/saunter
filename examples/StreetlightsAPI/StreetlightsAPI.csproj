@@ -16,7 +16,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Saunter\Saunter.csproj" />
+    <ProjectReference Include="..\..\src\AsyncApi.Net.Generator\AsyncApi.Net.Generator.csproj" />
   </ItemGroup>
 
 </Project>

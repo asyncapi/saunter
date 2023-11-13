@@ -45,7 +45,7 @@ channels:
 
 ## Running
 
-The example project references the Saunter project directly (for easy debugging), so we need to install the UI assets manually.
+The example project references the AsyncApi.Net.Generator project directly (for easy debugging), so we need to install the UI assets manually.
 This requires nodejs/npm, but neither are required when using the nuget package in your project.
 
 Run the sample with `dotnet run` and then use curl (or similar) to send test requests to the API.
@@ -53,7 +53,7 @@ Run the sample with `dotnet run` and then use curl (or similar) to send test req
 ```sh
 #### Install UI assets
 
-$ cd ~/saunter/src/Saunter.UI
+$ cd ~/saunter/src/AsyncApi.Net.Generator.UI
 $ npm install
 
 added 106 packages, and audited 107 packages in 2s
