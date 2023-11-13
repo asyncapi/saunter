@@ -1,4 +1,4 @@
-# AsyncApi.Net
+# AsyncApi.Net.Generator
 
 Is an [AsyncAPI](https://github.com/asyncapi/asyncapi) documentation generator for dotnet.
 
@@ -8,7 +8,7 @@ This is a fork of the [Sauner library](https://github.com/m-wild/saunter/tree/ma
 
 ## Simple start
 
-1. Install package from nuget - `TODO: add link`
+1. Install package from [nuget](https://www.nuget.org/packages/AsyncApi.Net.Generator)
 2. Configure base generator params in `Program.cs`:
 
     ```csharp

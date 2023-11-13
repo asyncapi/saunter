@@ -4,15 +4,14 @@
     <TargetFramework>net7.0</TargetFramework>
     <IsPackable>true</IsPackable>
     <PackageId>AsyncApi.Net.Generator</PackageId>
+	<Version>0.0.1-rc1</Version>
     <Title>AsyncApi.Net.Generator</Title>
-    <PackageIcon>logo.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <Authors>tehmantra</Authors>
     <Description>Code-first AsyncAPI documentation</Description>
     <PackageTags>asyncapi;aspnetcore;openapi;documentation;amqp</PackageTags>
-    <RepositoryUrl>https://github.com/tehmantra/saunter</RepositoryUrl>
+    <RepositoryUrl>https://github.com/yurvon-screamo/asyncapi.net</RepositoryUrl>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
-    <PackageProjectUrl>https://github.com/tehmantra/saunter</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/yurvon-screamo/asyncapi.net</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <IncludeSymbols>true</IncludeSymbols>
