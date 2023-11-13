@@ -386,7 +386,7 @@ The main purpose of the stage works is to make it possible to describe an operat
   * [X] Description of the operation attribute (+ description of working with channel parameters)
   * [X] Description of the message attribute
   * [X] Description of working with multiple documents
-* [ ] Nuget package
+* [X] Nuget package
 * [ ] Usability test on my environment
 * [ ] Release !!
 
