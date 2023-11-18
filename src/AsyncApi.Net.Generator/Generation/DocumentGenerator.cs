@@ -151,7 +151,8 @@ public class DocumentGenerator : IDocumentGenerator
 
             Operation operation = new()
             {
-                OperationId = operationAttribute.OperationId ?? method.Name,
+                OperationId = operationAttribute.OperationId ?? 
+                    (operationAttribute.ChannelName + '/' + string.Join('|',operationAttribute.MessagePayloadTypes.Select(t => t.Name))),
                 Summary = operationAttribute.Summary ?? method.GetXmlDocsSummary(),
                 Description = operationAttribute.Description ?? (method.GetXmlDocsRemarks() != string.Empty ? method.GetXmlDocsRemarks() : string.Empty),
                 Message = targetPayload,
@@ -227,7 +228,8 @@ public class DocumentGenerator : IDocumentGenerator
 
             Operation operation = new()
             {
-                OperationId = operationAttribute.OperationId ?? type.Name,
+                OperationId = operationAttribute.OperationId ??
+                    (operationAttribute.ChannelName + '/' + string.Join('|', operationAttribute.MessagePayloadTypes.Select(t => t.Name))),
                 Summary = operationAttribute.Summary ?? type.GetXmlDocsSummary(),
                 Description = operationAttribute.Description ?? (type.GetXmlDocsRemarks() != string.Empty ? type.GetXmlDocsRemarks() : string.Empty),
                 Message = targetPayload,

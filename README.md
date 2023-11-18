@@ -387,8 +387,29 @@ The main purpose of the stage works is to make it possible to describe an operat
   * [X] Description of the message attribute
   * [X] Description of working with multiple documents
 * [X] Nuget package
-* [ ] Usability test on my environment
-* [ ] Release !!
+* [X] Usability test on my environment
+  Based on the results of the check in my environment. Using the library has become much more convenient, but there is not enough flexibility in implementation. Next, I will develop the library towards tools WITHOUT attributes.
+  Example case:
+
+  ```csharp
+    public void SubsribeApplication() {
+        _js.SubByChannel<MyEvent1>("qwerty", _ => Console.Writeline("hello world"));
+        _js.SubByChannel<MyEvent2>("qwerty.123", _ => Console.Writeline("hello world"));
+        _js.SubByChannel<MyEvent3>("qwerty.zxc", _ => Console.Writeline("hello world"));
+        _js.SubByChannel<MyEvent4>("qwerty.qwerty", _ => Console.Writeline("hello world"));
+    }
+    
+    // ...
+
+    private void SubsribeByChannel<TEvent>(this IJetStream js, string channel, Action<TEvent> handler) {
+        // honestly, I want to define the operation here. 
+        // example:
+        // _operations += new PubOperation<TEvent>(channel);
+        js.PushSubscribe(channel, (_, m) => handler(_parser.From(m.Msg.Data)));
+    }
+  ```  
+
+* [X] Release !!
 
 Known limitations of the version that will be received at this stage:
 
