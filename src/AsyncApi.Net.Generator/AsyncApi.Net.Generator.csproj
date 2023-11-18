@@ -4,7 +4,7 @@
     <TargetFramework>net7.0</TargetFramework>
     <IsPackable>true</IsPackable>
     <PackageId>AsyncApi.Net.Generator</PackageId>
-	<Version>0.0.1-rc1</Version>
+	  <Version>0.0.1</Version>
     <Title>AsyncApi.Net.Generator</Title>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <Description>Code-first AsyncAPI documentation</Description>
