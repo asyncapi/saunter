@@ -1,12 +1,19 @@
-title: AsyncApi.Net.Generator
-description: Code-first AsyncAPI documentation generator and ui
-links:
-  repoUrl: https://github.com/yurvon-screamo/AsyncApi.Net.Generator
-  websiteUrl: https://www.nuget.org/packages/AsyncApi.Net.Generator
-filters:
-    language: C#
-    technology:
-        - .NET
-        - ASP.NET
-    categories:
-        - code-first
+{
+  "title": "AsyncApi.Net.Generator",
+  "description": "Code-first AsyncAPI documentation generator and ui",
+  "links": {
+    "websiteUrl": "https://github.com/yurvon-screamo/AsyncApi.Net.Generator",
+    "repoUrl": "https://www.nuget.org/packages/AsyncApi.Net.Generator"
+  },
+  "filters": {
+    "language": "C#",
+    "technology": [
+      ".NET",
+      "ASP.NET"
+    ],
+    "categories": [
+      "code-first"
+    ],
+    "hasCommercial": false
+  }
+}
