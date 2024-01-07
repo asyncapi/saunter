@@ -10,7 +10,7 @@ public static class RouteMatchingExtensions
     {
         RouteTemplate template = TemplateParser.Parse(pattern);
 
-        RouteValueDictionary values = new();
+        RouteValueDictionary values = [];
         TemplateMatcher matcher = new(template, values);
         return matcher.TryMatch(path, values);
     }

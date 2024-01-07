@@ -8,7 +8,7 @@ namespace AsyncApi.Net.Generator.Generation.Filters;
 
 public interface IChannelItemFilter
 {
-    void Apply(ChannelItem channelItem, ChannelItemFilterContext context);
+    void Apply(Channel channelItem, ChannelItemFilterContext context);
 }
 
 public class ChannelItemFilterContext

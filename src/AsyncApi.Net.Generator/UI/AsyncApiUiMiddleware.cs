@@ -28,7 +28,7 @@ public class AsyncApiUiMiddleware
     public AsyncApiUiMiddleware(RequestDelegate next, IOptions<AsyncApiOptions> options, IWebHostEnvironment env, ILoggerFactory loggerFactory)
     {
         _options = options.Value;
-        _namedStaticFiles = new Dictionary<string, StaticFileMiddleware>();
+        _namedStaticFiles = [];
 
         EmbeddedFileProvider fileProvider = new(GetType().Assembly, GetType().Namespace);
 

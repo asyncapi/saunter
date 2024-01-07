@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 namespace AsyncApi.Net.Generator.AsyncApiSchema.v2;
 
 /// <summary>
-/// A reference to some other object within the AsyncAPI document. 
+/// A reference to some other object within the AsyncAPI document.
 /// </summary>
 public class Reference
 {

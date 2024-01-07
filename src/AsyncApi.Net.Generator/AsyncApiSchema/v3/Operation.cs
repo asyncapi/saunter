@@ -9,7 +9,7 @@ namespace AsyncApi.Net.Generator.AsyncApiSchema.v2;
 
 /// <summary>
 /// Describes a publish or a subscribe operation.
-/// This provides a place to document how and why messages are sent and received. 
+/// This provides a place to document how and why messages are sent and received.
 /// </summary>
 public class Operation
 {
@@ -64,8 +64,8 @@ public class Operation
     public required IMessage Message { get; set; }
 
     /// <summary>
-    /// A declaration of which security mechanisms are associated with this operation. 
-    /// Only one of the security requirement objects MUST be satisfied to authorize an operation. 
+    /// A declaration of which security mechanisms are associated with this operation.
+    /// Only one of the security requirement objects MUST be satisfied to authorize an operation.
     /// In cases where Server Security also applies, it MUST also be satisfied.
     /// </summary>
     [JsonProperty("security", NullValueHandling = NullValueHandling.Ignore)]
@@ -80,8 +80,8 @@ public class Operation
 }
 
 /// <summary>
-/// Lists the required security schemes to execute this operation. 
-/// The name used for each property MUST correspond to a security scheme 
+/// Lists the required security schemes to execute this operation.
+/// The name used for each property MUST correspond to a security scheme
 /// declared in the Security Schemes under the Components Object.
 /// TODO: implement
 /// </summary>

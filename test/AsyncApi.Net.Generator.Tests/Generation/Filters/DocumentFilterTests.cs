@@ -44,7 +44,7 @@ public class DocumentFilterTests
     {
         public void Apply(AsyncApiDocument document, DocumentFilterContext context)
         {
-            ChannelItem channel = new()
+            Channel channel = new()
             {
                 Description = "an example channel for testing"
             };

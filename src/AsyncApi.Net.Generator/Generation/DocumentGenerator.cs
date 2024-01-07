@@ -48,7 +48,7 @@ public class DocumentGenerator : IDocumentGenerator
             serviceProvider);
 
         DocumentFilterContext filterContext = new(assemblyTypes, schemaResolver, generator);
-        
+
         foreach (Type filterType in options.DocumentFilters)
         {
             IDocumentFilter filter = (IDocumentFilter)serviceProvider.GetRequiredService(filterType);
@@ -83,7 +83,7 @@ public class DocumentGenerator : IDocumentGenerator
     /// <summary>
     /// Generate the Channels section of an AsyncApi schema.
     /// </summary>
-    private static Dictionary<string, ChannelItem> GenerateChannels(
+    private static Dictionary<string, Channel> GenerateChannels(
         string? documentName,
         TypeInfo[] asyncApiTypes,
         AsyncApiSchemaResolver schemaResolver,
@@ -92,7 +92,7 @@ public class DocumentGenerator : IDocumentGenerator
         ConcurrentDictionary<TypeInfo, IMessage> messageMap,
         IServiceProvider serviceProvider)
     {
-        Dictionary<string, ChannelItem> channels = new();
+        Dictionary<string, Channel> channels = [];
 
         foreach (TypeInfo type in asyncApiTypes)
         {
@@ -128,7 +128,7 @@ public class DocumentGenerator : IDocumentGenerator
     /// </summary>
     private static void GenerateChannelsFromMethods(
         string? documentName,
-        Dictionary<string, ChannelItem> channels,
+        Dictionary<string, Channel> channels,
         MethodInfo method,
         AsyncApiSchemaResolver schemaResolver,
         AsyncApiOptions options,
@@ -151,7 +151,7 @@ public class DocumentGenerator : IDocumentGenerator
 
             Operation operation = new()
             {
-                OperationId = operationAttribute.OperationId ?? 
+                OperationId = operationAttribute.OperationId ??
                     (operationAttribute.ChannelName + '/' + string.Join('|',operationAttribute.MessagePayloadTypes.Select(t => t.Name))),
                 Summary = operationAttribute.Summary ?? method.GetXmlDocsSummary(),
                 Description = operationAttribute.Description ?? (method.GetXmlDocsRemarks() != string.Empty ? method.GetXmlDocsRemarks() : string.Empty),
@@ -160,7 +160,7 @@ public class DocumentGenerator : IDocumentGenerator
                 Tags = new(operationAttribute.Tags?.Select(x => (Tag)x) ?? new List<Tag>())
             };
 
-            ChannelItem channelItem = new()
+            Channel channelItem = new()
             {
                 Servers = operationAttribute.ChannelServers?.ToList(),
                 Description = operationAttribute.ChannelDescription,
@@ -205,7 +205,7 @@ public class DocumentGenerator : IDocumentGenerator
     /// </summary>
     private static void GenerateChannelsFromClasses(
         string? documentName,
-        Dictionary<string, ChannelItem> channels,
+        Dictionary<string, Channel> channels,
         TypeInfo type,
         AsyncApiSchemaResolver schemaResolver,
         AsyncApiOptions options,
@@ -237,7 +237,7 @@ public class DocumentGenerator : IDocumentGenerator
                 Tags = new(operationAttribute.Tags?.Select(x => (Tag)x) ?? new List<Tag>())
             };
 
-            ChannelItem channelItem = new()
+            Channel channelItem = new()
             {
                 Servers = operationAttribute.ChannelServers?.ToList(),
                 Description = operationAttribute.ChannelDescription,
@@ -345,7 +345,7 @@ public class DocumentGenerator : IDocumentGenerator
 
     private static Dictionary<string, IParameter> GetChannelParametersFromAttributes(string channel, AsyncApiSchemaResolver schemaResolver, JsonSchemaGenerator jsonSchemaGenerator)
     {
-        Dictionary<string, IParameter> parameters = new();
+        Dictionary<string, IParameter> parameters = [];
 
         int len = channel.Length;
         for (int i = 0; i < len; i++)

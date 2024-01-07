@@ -9,13 +9,12 @@ namespace AsyncApi.Net.Generator.AsyncApiSchema.v2;
 public class Server
 {
     /// <summary>
-    /// A URL to the target host.
-    /// This URL supports Server Variables and MAY be relative, to indicate that the host
-    /// location is relative to the location where the AsyncAPI document is being served.
-    /// Variable substitutions will be made when a variable is named in { brackets }.
+    /// REQUIRED. The server host name. It MAY include the port.
+    /// This field supports Server Variables.
+    /// Variable substitutions will be made when a variable is named in {braces}.
     /// </summary>
-    [JsonProperty("url")]
-    public required string Url { get; set; }
+    [JsonProperty("host")]
+    public required string Host { get; set; }
 
     /// <summary>
     /// The protocol this URL supports for connection.
@@ -33,11 +32,31 @@ public class Server
     public string? ProtocolVersion { get; set; }
 
     /// <summary>
+    /// The path to a resource in the host.
+    /// This field supports Server Variables.
+    /// Variable substitutions will be made when a variable is named in {braces}.
+    /// </summary>
+    [JsonProperty("pathname", NullValueHandling = NullValueHandling.Ignore)]
+    public string? PathName { get; set; }
+
+    /// <summary>
     /// An optional string describing the host designated by the URL.
     /// CommonMark syntax MAY be used for rich text representation.
     /// </summary>
     [JsonProperty("description", NullValueHandling = NullValueHandling.Ignore)]
     public string? Description { get; set; }
+
+    /// <summary>
+    /// A human-friendly title for the server.
+    /// </summary>
+    [JsonProperty("title", NullValueHandling = NullValueHandling.Ignore)]
+    public string? Title { get; set; }
+
+    /// <summary>
+    /// A short summary of the server.
+    /// </summary>
+    [JsonProperty("summary", NullValueHandling = NullValueHandling.Ignore)]
+    public string? Summary { get; set; }
 
     /// <summary>
     /// A map between a variable name and its value.
@@ -56,10 +75,17 @@ public class Server
     public List<Dictionary<string, List<string>>>? Security { get; set; }
 
     /// <summary>
-    ///A list of tags for logical grouping and categorization of servers.
+    /// A list of tags used by the specification with additional metadata.
+    /// Each tag name in the list MUST be unique.
     /// </summary>
-    [JsonProperty("tags", DefaultValueHandling = DefaultValueHandling.Ignore)]
-    public HashSet<Tag>? Tags { get; set; }
+    [JsonProperty("tags")]
+    public HashSet<Tag> Tags { get; set; } = [];
+
+    /// <summary>
+    /// Additional external documentation.
+    /// </summary>
+    [JsonProperty("externalDocs", NullValueHandling = NullValueHandling.Ignore)]
+    public ExternalDocumentation? ExternalDocs { get; set; }
 
     /// <summary>
     /// A map where the keys describe the name of the protocol and the values describe protocol-specific definitions for the server.

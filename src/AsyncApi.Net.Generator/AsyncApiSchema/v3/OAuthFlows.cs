@@ -40,21 +40,21 @@ public class OAuthFlows
 public class OAuthFlow
 {
     /// <summary>
-    /// REQUIRED. The authorization URL to be used for this flow. 
+    /// REQUIRED. The authorization URL to be used for this flow.
     /// This MUST be in the form of an absolute URL.
     /// </summary>
     [JsonProperty("authorizationUrl")]
     public required string AuthorizationUrl { get; set; }
 
     /// <summary>
-    /// REQUIRED. The token URL to be used for this flow. 
+    /// REQUIRED. The token URL to be used for this flow.
     /// This MUST be in the form of an absolute URL.
     /// </summary>
     [JsonProperty("tokenUrl")]
     public required string TokenUrl { get; set; }
 
     /// <summary>
-    /// The URL to be used for obtaining refresh tokens. 
+    /// The URL to be used for obtaining refresh tokens.
     /// This MUST be in the form of an absolute URL.
     /// </summary>
     [JsonProperty("refreshUrl")]

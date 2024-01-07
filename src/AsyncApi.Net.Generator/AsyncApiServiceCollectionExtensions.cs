@@ -60,7 +60,7 @@ public static class AsyncApiServiceCollectionExtensions
                 {
                     Title = k,
                 },
-                Channels = new(),
+                Channels = [],
                 DocumentName = k,
             });
 

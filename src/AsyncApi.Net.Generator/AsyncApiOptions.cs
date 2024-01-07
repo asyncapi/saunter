@@ -16,9 +16,9 @@ namespace AsyncApi.Net.Generator;
 
 public class AsyncApiOptions
 {
-    private readonly List<Type> _documentFilters = new();
-    private readonly List<Type> _channelItemFilters = new();
-    private readonly List<Type> _operationFilters = new();
+    private readonly List<Type> _documentFilters = [];
+    private readonly List<Type> _channelItemFilters = [];
+    private readonly List<Type> _operationFilters = [];
 
     /// <summary>
     /// The base asyncapi schema. This will be augmented with other information auto-discovered

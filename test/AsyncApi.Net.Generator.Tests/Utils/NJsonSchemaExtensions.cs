@@ -8,7 +8,7 @@ public static class NJsonSchemaExtensions
 {
     public static IDictionary<string, JsonSchema> MergeAllProperties(this JsonSchema s)
     {
-        Dictionary<string, JsonSchema> result = new();
+        Dictionary<string, JsonSchema> result = [];
         foreach (KeyValuePair<string, JsonSchemaProperty> property in s.ActualProperties)
         {
             result[property.Key] = property.Value;

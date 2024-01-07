@@ -54,10 +54,10 @@ public class StreetlightsController
 
     // Simulate a database of streetlights
     private static int StreetlightSeq = 2;
-    private static readonly List<Streetlight> StreetlightDatabase = new()
-    {
-        new Streetlight { Id = 1, Position = new [] { -36.320320, 175.485986 }, LightIntensity = new() },
-    };
+    private static readonly List<Streetlight> StreetlightDatabase =
+    [
+        new Streetlight { Id = 1, Position = new [] { -36.320320, 175.485986 }, LightIntensity = [] },
+    ];
 
     private readonly IStreetlightMessageBus _streetlightMessageBus;
     private readonly ILogger _logger;

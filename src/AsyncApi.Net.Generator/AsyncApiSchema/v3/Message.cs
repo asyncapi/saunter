@@ -7,7 +7,7 @@ using AsyncApi.Net.Generator.AsyncApiSchema.v2.Traits;
 namespace AsyncApi.Net.Generator.AsyncApiSchema.v2;
 
 /// <remarks>
-/// Message can either be a list of messages, a single message, or a reference to a message. 
+/// Message can either be a list of messages, a single message, or a reference to a message.
 /// </remarks>
 public interface IMessage { }
 
@@ -22,7 +22,7 @@ public class MessageReference : Reference, IMessage
 public class Messages : IMessage
 {
     [JsonProperty("oneOf")]
-    public List<IMessage> OneOf { get; set; } = new List<IMessage>();
+    public List<IMessage> OneOf { get; set; } = [];
 }
 
 public class Message : IMessage
@@ -117,7 +117,7 @@ public class Message : IMessage
     /// An array with examples of valid message objects.
     /// </summary>
     [JsonProperty("examples")]
-    public List<MessageExample> Examples { get; set; } = new();
+    public List<MessageExample> Examples { get; set; } = [];
 
     /// <summary>
     /// A list of traits to apply to the message object.
@@ -125,7 +125,7 @@ public class Message : IMessage
     /// The resulting object MUST be a valid Message Object.
     /// </summary>
     [JsonProperty("traits")]
-    public List<IMessageTrait> Traits { get; set; } = new();
+    public List<IMessageTrait> Traits { get; set; } = [];
 }
 
 public class MessageExample

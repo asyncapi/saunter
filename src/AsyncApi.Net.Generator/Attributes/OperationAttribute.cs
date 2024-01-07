@@ -14,7 +14,7 @@ public abstract class OperationAttribute : Attribute
     }
 
     /// <summary>
-    /// The name of the channel. 
+    /// The name of the channel.
     /// Format depends on the underlying messaging protocol's conventions.
     /// For example, amqp uses dot-separated paths 'light.measured'.
     /// </summary>

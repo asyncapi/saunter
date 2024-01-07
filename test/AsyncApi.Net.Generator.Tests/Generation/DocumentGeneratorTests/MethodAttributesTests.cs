@@ -38,7 +38,7 @@ public class MethodAttributesTests
         document.ShouldNotBeNull();
         document.Channels.Count.ShouldBe(1);
 
-        System.Collections.Generic.KeyValuePair<string, ChannelItem> channel = document.Channels.First();
+        System.Collections.Generic.KeyValuePair<string, Channel> channel = document.Channels.First();
         channel.Key.ShouldBe("asw.tenant_service.tenants_history");
         channel.Value.Description.ShouldBe("Tenant events.");
 

@@ -7,22 +7,22 @@ namespace AsyncApi.Net.Generator.Utils;
 
 public static class ChannelItemExtensions
 {
-    public static void AddRange(this IDictionary<string, ChannelItem> source, IDictionary<string, ChannelItem> channels)
+    public static void AddRange(this IDictionary<string, Channel> source, IDictionary<string, Channel> channels)
     {
         if (channels == null)
         {
             return;
         }
 
-        foreach (KeyValuePair<string, ChannelItem> channel in channels)
+        foreach (KeyValuePair<string, Channel> channel in channels)
         {
             source.AddOrAppend(channel.Key, channel.Value);
         }
     }
 
-    public static void AddOrAppend(this IDictionary<string, ChannelItem> source, string key, ChannelItem channel)
+    public static void AddOrAppend(this IDictionary<string, Channel> source, string key, Channel channel)
     {
-        if (source.TryGetValue(key, out ChannelItem? existing))
+        if (source.TryGetValue(key, out Channel? existing))
         {
             if (existing.Publish != null && channel.Publish != null)
             {

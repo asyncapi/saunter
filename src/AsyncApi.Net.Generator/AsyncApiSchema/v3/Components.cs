@@ -14,67 +14,67 @@ public class Components : ICloneable
     /// An object to hold reusable Schema Objects.
     /// </summary>
     [JsonProperty("schemas", DefaultValueHandling = DefaultValueHandling.Ignore)]
-    public Dictionary<string, JsonSchema> Schemas { get; set; } = new Dictionary<string, JsonSchema>();
+    public Dictionary<string, JsonSchema> Schemas { get; set; } = [];
 
     /// <summary>
     /// An object to hold reusable Message Objects.
     /// </summary>
     [JsonProperty("messages", DefaultValueHandling = DefaultValueHandling.Ignore)]
-    public Dictionary<string, Message> Messages { get; set; } = new Dictionary<string, Message>();
+    public Dictionary<string, Message> Messages { get; set; } = [];
 
     /// <summary>
     /// An object to hold reusable Security Scheme Objects.
     /// </summary>
     [JsonProperty("securitySchemes", DefaultValueHandling = DefaultValueHandling.Ignore)]
-    public Dictionary<string, SecurityScheme> SecuritySchemes { get; set; } = new Dictionary<string, SecurityScheme>();
+    public Dictionary<string, SecurityScheme> SecuritySchemes { get; set; } = [];
 
     /// <summary>
     /// An object to hold reusable Parameter Objects.
     /// </summary>
     [JsonProperty("parameters", DefaultValueHandling = DefaultValueHandling.Ignore)]
-    public Dictionary<string, Parameter> Parameters { get; set; } = new Dictionary<string, Parameter>();
+    public Dictionary<string, Parameter> Parameters { get; set; } = [];
 
     /// <summary>
     /// An object to hold reusable Correlation ID Objects.
     /// </summary>
     [JsonProperty("correlationIds", DefaultValueHandling = DefaultValueHandling.Ignore)]
-    public Dictionary<string, CorrelationId> CorrelationIds { get; set; } = new Dictionary<string, CorrelationId>();
+    public Dictionary<string, CorrelationId> CorrelationIds { get; set; } = [];
 
     /// <summary>
     /// An object to hold reusable Server Binding Objects.
     /// </summary>
     [JsonProperty("serverBindings", DefaultValueHandling = DefaultValueHandling.Ignore)]
-    public Dictionary<string, ServerBindings> ServerBindings { get; set; } = new Dictionary<string, ServerBindings>();
+    public Dictionary<string, ServerBindings> ServerBindings { get; set; } = [];
 
     /// <summary>
     /// An object to hold reusable Channel Binding Objects.
     /// </summary>
     [JsonProperty("channelBindings", DefaultValueHandling = DefaultValueHandling.Ignore)]
-    public Dictionary<string, ChannelBindings> ChannelBindings { get; set; } = new Dictionary<string, ChannelBindings>();
+    public Dictionary<string, ChannelBindings> ChannelBindings { get; set; } = [];
 
     /// <summary>
     /// An object to hold reusable Operation Binding Objects.
     /// </summary>
     [JsonProperty("operationBindings", DefaultValueHandling = DefaultValueHandling.Ignore)]
-    public Dictionary<string, OperationBindings> OperationBindings { get; set; } = new Dictionary<string, OperationBindings>();
+    public Dictionary<string, OperationBindings> OperationBindings { get; set; } = [];
 
     /// <summary>
     /// An object to hold reusable Message Binding Objects.
     /// </summary>
     [JsonProperty("messageBindings", DefaultValueHandling = DefaultValueHandling.Ignore)]
-    public Dictionary<string, MessageBindings> MessageBindings { get; set; } = new Dictionary<string, MessageBindings>();
+    public Dictionary<string, MessageBindings> MessageBindings { get; set; } = [];
 
     /// <summary>
     /// An object to hold reusable Operation Trait Objects.
     /// </summary>
     [JsonProperty("operationTraits", DefaultValueHandling = DefaultValueHandling.Ignore)]
-    public Dictionary<string, OperationTrait> OperationTraits { get; set; } = new Dictionary<string, OperationTrait>();
+    public Dictionary<string, OperationTrait> OperationTraits { get; set; } = [];
 
     /// <summary>
     /// An object to hold reusable Message Trait Objects.
     /// </summary>
     [JsonProperty("messageTraits", DefaultValueHandling = DefaultValueHandling.Ignore)]
-    public Dictionary<string, MessageTrait> MessageTraits { get; set; } = new Dictionary<string, MessageTrait>();
+    public Dictionary<string, MessageTrait> MessageTraits { get; set; } = [];
 
     object ICloneable.Clone()
     {

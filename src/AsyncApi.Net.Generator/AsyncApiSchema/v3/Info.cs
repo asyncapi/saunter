@@ -1,5 +1,7 @@
 using Newtonsoft.Json;
 
+using System.Collections.Generic;
+
 namespace AsyncApi.Net.Generator.AsyncApiSchema.v2;
 public class Info
 {
@@ -41,6 +43,19 @@ public class Info
     /// </summary>
     [JsonProperty("license", NullValueHandling = NullValueHandling.Ignore)]
     public License? License { get; set; }
+
+    /// <summary>
+    /// A list of tags used by the specification with additional metadata.
+    /// Each tag name in the list MUST be unique.
+    /// </summary>
+    [JsonProperty("tags")]
+    public HashSet<Tag> Tags { get; set; } = [];
+
+    /// <summary>
+    /// Additional external documentation.
+    /// </summary>
+    [JsonProperty("externalDocs", NullValueHandling = NullValueHandling.Ignore)]
+    public ExternalDocumentation? ExternalDocs { get; set; }
 }
 
 public class Contact

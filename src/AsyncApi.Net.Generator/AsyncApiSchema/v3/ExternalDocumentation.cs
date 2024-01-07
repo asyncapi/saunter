@@ -6,11 +6,6 @@ namespace AsyncApi.Net.Generator.AsyncApiSchema.v2;
 
 public class ExternalDocumentation
 {
-    public ExternalDocumentation(string url)
-    {
-        Url = url ?? throw new ArgumentNullException(nameof(url));
-    }
-
     /// <summary>
     /// A short description of the target documentation.
     /// CommonMark syntax can be used for rich text representation.
@@ -23,5 +18,5 @@ public class ExternalDocumentation
     /// Value MUST be in the format of a URL.
     /// </summary>
     [JsonProperty("url")]
-    public string? Url { get; }
+    public required string? Url { get; set; }
 }

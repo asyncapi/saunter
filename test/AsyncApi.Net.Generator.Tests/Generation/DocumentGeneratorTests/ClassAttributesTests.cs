@@ -39,7 +39,7 @@ public class ClassAttributesTests
         document.ShouldNotBeNull();
         document.Channels.Count.ShouldBe(1);
 
-        System.Collections.Generic.KeyValuePair<string, ChannelItem> channel = document.Channels.First();
+        System.Collections.Generic.KeyValuePair<string, Channel> channel = document.Channels.First();
         channel.Key.ShouldBe("asw.tenant_service.tenants_history");
         channel.Value.Description.ShouldBe("Tenant events.");
 
@@ -81,7 +81,7 @@ public class ClassAttributesTests
         document.ShouldNotBeNull();
         document.Channels.Count.ShouldBe(1);
 
-        System.Collections.Generic.KeyValuePair<string, ChannelItem> channel = document.Channels.First();
+        System.Collections.Generic.KeyValuePair<string, Channel> channel = document.Channels.First();
         channel.Key.ShouldBe("asw.tenant_service.tenants_history");
         channel.Value.Description.ShouldBe("Tenant events.");
 
@@ -123,7 +123,7 @@ public class ClassAttributesTests
         document.ShouldNotBeNull();
         document.Channels.Count.ShouldBe(1);
 
-        System.Collections.Generic.KeyValuePair<string, ChannelItem> channel = document.Channels.First();
+        System.Collections.Generic.KeyValuePair<string, Channel> channel = document.Channels.First();
         channel.Key.ShouldBe("asw.tenant_service.tenants_history");
         channel.Value.Description.ShouldBe("Tenant events.");
 
@@ -165,7 +165,7 @@ public class ClassAttributesTests
         document.ShouldNotBeNull();
         document.Channels.Count.ShouldBe(1);
 
-        System.Collections.Generic.KeyValuePair<string, ChannelItem> channel = document.Channels.First();
+        System.Collections.Generic.KeyValuePair<string, Channel> channel = document.Channels.First();
         channel.Key.ShouldBe("asw.tenant_service.tenants_history");
         channel.Value.Description.ShouldBe("Tenant events.");
 
@@ -239,7 +239,7 @@ public class ClassAttributesTests
         document.ShouldNotBeNull();
         document.Channels.Count.ShouldBe(1);
 
-        System.Collections.Generic.KeyValuePair<string, ChannelItem> channel = document.Channels.First();
+        System.Collections.Generic.KeyValuePair<string, Channel> channel = document.Channels.First();
         channel.Key.ShouldBe("asw.tenant_service.{tenant_id}.{tenant_status}");
         channel.Value.Description.ShouldBe("A tenant events.");
         channel.Value.Parameters.Count.ShouldBe(2);
