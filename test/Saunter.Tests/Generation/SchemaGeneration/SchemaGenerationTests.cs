@@ -2,16 +2,23 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Runtime.Serialization;
+
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+
 using NJsonSchema;
-using NJsonSchema.Converters;
 using NJsonSchema.Generation;
+using NJsonSchema.NewtonsoftJson.Converters;
+
 using Saunter.AsyncApiSchema.v2;
 using Saunter.Generation.SchemaGeneration;
 using Saunter.Tests.Utils;
+
 using Shouldly;
+
 using Xunit;
+
+using JsonInheritanceAttribute = NJsonSchema.NewtonsoftJson.Converters.JsonInheritanceAttribute;
 
 namespace Saunter.Tests.Generation.SchemaGeneration
 {
@@ -91,7 +98,7 @@ namespace Saunter.Tests.Generation.SchemaGeneration
             var schema = _schemaGenerator.Generate(type, _schemaResolver);
 
             schema.ShouldNotBeNull();
-            
+
             _schemaResolver.Schemas.ShouldNotBeNull();
             var petSchema = _schemaResolver.Schemas.FirstOrDefault(s => s.Id == "pet");
             petSchema.Discriminator.ShouldBe("petType");

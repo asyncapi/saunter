@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+
 using NJsonSchema;
-using NJsonSchema.Generation;
+using NJsonSchema.NewtonsoftJson.Generation;
+
 using Saunter.AsyncApiSchema.v2;
 using Saunter.Generation.Filters;
 using Saunter.Generation.SchemaGeneration;
@@ -85,13 +88,13 @@ namespace Saunter
         public AsyncApiSchemaOptions SchemaOptions { get; set; } = new AsyncApiSchemaOptions();
     }
 
-    public class AsyncApiSchemaOptions : JsonSchemaGeneratorSettings
+    public class AsyncApiSchemaOptions : NewtonsoftJsonSchemaGeneratorSettings
     {
         public AsyncApiSchemaOptions()
         {
             SchemaType = SchemaType.JsonSchema; // AsyncAPI uses json-schema, see https://github.com/tehmantra/saunter/pull/103#issuecomment-893267360
             TypeNameGenerator = new CamelCaseTypeNameGenerator();
-            SerializerSettings = new JsonSerializerSettings
+            SerializerSettings = new JsonSerializerSettings()
             {
                 ContractResolver = new CamelCasePropertyNamesContractResolver(),
                 NullValueHandling = NullValueHandling.Ignore,
