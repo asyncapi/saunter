@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using Newtonsoft.Json;
-using NJsonSchema.Converters;
+
+using NJsonSchema.NewtonsoftJson.Converters;
 
 namespace Saunter.AsyncApiSchema.v2
 {
@@ -14,7 +16,7 @@ namespace Saunter.AsyncApiSchema.v2
         /// </summary>
         [JsonProperty("asyncapi", NullValueHandling = NullValueHandling.Ignore)]
         public string AsyncApi { get; } = "2.4.0";
-        
+
         /// <summary>
         /// Identifier of the application the AsyncAPI document is defining.
         /// </summary>

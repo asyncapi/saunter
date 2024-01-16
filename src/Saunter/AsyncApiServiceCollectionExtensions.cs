@@ -1,6 +1,8 @@
 using System;
+
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+
 using Saunter.AsyncApiSchema.v2;
 using Saunter.Generation;
 using Saunter.Serialization;
@@ -14,7 +16,7 @@ namespace Saunter
         /// </summary>
         /// <param name="services">The collection to add services to.</param>
         /// <param name="setupAction">An action used to configure the AsyncAPI options.</param>
-        /// <returns>The service collection so additional calls can be chained.</returns>
+        /// <returns>The service collection so additional calls can b e chained.</returns>
         public static IServiceCollection AddAsyncApiSchemaGeneration(this IServiceCollection services, Action<AsyncApiOptions> setupAction = null)
         {
             services.AddOptions();
@@ -48,7 +50,7 @@ namespace Saunter
                     options.Middleware.UiBaseRoute = "/asyncapi/{document}/ui/";
                 }
 
-                var document = options.NamedApis.GetOrAdd(documentName, _ => new AsyncApiDocument() {DocumentName = documentName});
+                var document = options.NamedApis.GetOrAdd(documentName, _ => new AsyncApiDocument() { DocumentName = documentName });
 
                 setupAction(document);
             });
