@@ -5,6 +5,14 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 <!-- Please update the links section at the bottom when adding a new version. -->
 
+
+## [v0.13.0] - 2024-01-16
+### Changed
+- [Updated NJsonSchema to v11.0.0](https://github.com/m-wild/saunter/issues/179)
+- [Document names are correctly copied to clones when using named docs](https://github.com/m-wild/saunter/issues/172)
+- Updated @asyncapi/react-component to v1.2.11
+- Use npm-ci instead of npm-install in ci scripts
+
 ## [v0.12.0] - 2023-06-15
 ### Added
 - [Add support for message headers](https://github.com/tehmantra/saunter/issues/150)

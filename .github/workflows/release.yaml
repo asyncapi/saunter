@@ -24,7 +24,7 @@ jobs:
         dotnet-version: '6.0.x' # SDK Version to use; x will use the latest version of the channel
 
     - name: Run NPM install
-      run: npm install
+      run: npm ci
       working-directory: ./src/Saunter.UI
     - name: Run dotnet build
       run: dotnet build --configuration Debug

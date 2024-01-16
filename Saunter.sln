@@ -25,7 +25,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Saunter.IntegrationTests.ReverseProxy", "test\Saunter.IntegrationTests.ReverseProxy\Saunter.IntegrationTests.ReverseProxy.csproj", "{7CD09B89-130A-41AF-ADAE-2166C4ED695B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Saunter.Tests.MarkerTypeTests", "Saunter.Tests.MarkerTypeTests\Saunter.Tests.MarkerTypeTests.csproj", "{02284473-6DE7-4EE0-8433-2AC295045549}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Saunter.Tests.MarkerTypeTests", "test\Saunter.Tests.MarkerTypeTests\Saunter.Tests.MarkerTypeTests.csproj", "{02284473-6DE7-4EE0-8433-2AC295045549}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
