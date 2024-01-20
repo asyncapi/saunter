@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace AsyncApi.Net.Generator;
+namespace AsyncApi.Net.Generator.Specification;
 
 /// <summary>
 /// Defines a security scheme that can be used by the operations.

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AsyncApi.Net.Generator;
+namespace AsyncApi.Net.Generator.Specification;
 
 /// <summary>
 /// Represents the root document object for the API specification.
