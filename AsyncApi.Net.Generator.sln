@@ -27,6 +27,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AsyncApi.Net.Generator.Inte
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AsyncApi.Net.Generator.Tests.MarkerTypeTests", "test\AsyncApi.Net.Generator.Tests.MarkerTypeTests\AsyncApi.Net.Generator.Tests.MarkerTypeTests.csproj", "{061365A4-63DD-4416-BA12-645B6B2C211F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AsyncApi.Net.Generator", "AsyncApi.Net.Generator\AsyncApi.Net.Generator.csproj", "{CC9B137B-F2D2-44DF-BC7A-9AB137C242C6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -97,6 +99,18 @@ Global
 		{061365A4-63DD-4416-BA12-645B6B2C211F}.Release|x64.Build.0 = Release|Any CPU
 		{061365A4-63DD-4416-BA12-645B6B2C211F}.Release|x86.ActiveCfg = Release|Any CPU
 		{061365A4-63DD-4416-BA12-645B6B2C211F}.Release|x86.Build.0 = Release|Any CPU
+		{CC9B137B-F2D2-44DF-BC7A-9AB137C242C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CC9B137B-F2D2-44DF-BC7A-9AB137C242C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CC9B137B-F2D2-44DF-BC7A-9AB137C242C6}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{CC9B137B-F2D2-44DF-BC7A-9AB137C242C6}.Debug|x64.Build.0 = Debug|Any CPU
+		{CC9B137B-F2D2-44DF-BC7A-9AB137C242C6}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{CC9B137B-F2D2-44DF-BC7A-9AB137C242C6}.Debug|x86.Build.0 = Debug|Any CPU
+		{CC9B137B-F2D2-44DF-BC7A-9AB137C242C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CC9B137B-F2D2-44DF-BC7A-9AB137C242C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CC9B137B-F2D2-44DF-BC7A-9AB137C242C6}.Release|x64.ActiveCfg = Release|Any CPU
+		{CC9B137B-F2D2-44DF-BC7A-9AB137C242C6}.Release|x64.Build.0 = Release|Any CPU
+		{CC9B137B-F2D2-44DF-BC7A-9AB137C242C6}.Release|x86.ActiveCfg = Release|Any CPU
+		{CC9B137B-F2D2-44DF-BC7A-9AB137C242C6}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
