@@ -1,4 +1,6 @@
-﻿namespace AsyncApi.Net.Generator.Specification;
+﻿using NJsonSchema;
+
+namespace AsyncApi.Net.Generator.Specification;
 
 /// <summary>
 /// This object contains information about the message representation in Kafka.
@@ -7,7 +9,7 @@ public class KafkaMessageBinding
 {
     // The message key.
     // NOTE: You can also use the reference object way.
-    public object Key { get; set; }
+    public JsonSchema Key { get; set; }
 
     // If a Schema Registry is used when performing this operation, tells where the id of schema is stored (e.g. 'header' or 'payload').
     // OPTIONAL. MUST NOT be specified if schemaRegistryUrl is not specified at the Server level.

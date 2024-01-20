@@ -1,4 +1,6 @@
-﻿namespace AsyncApi.Net.Generator.Specification;
+﻿using NJsonSchema;
+
+namespace AsyncApi.Net.Generator.Specification;
 
 /// <summary>
 /// The Multi Format Schema Object represents a schema definition.
@@ -17,5 +19,5 @@ public class MultiFormatSchemaObject
     /// It MUST match the schema format defined in SchemaFormat, including the encoding type.
     /// Non-JSON-based schemas (e.g., Protobuf or XSD) MUST be inlined as a string.
     /// </summary>
-    public object Schema { get; set; }
+    public JsonSchema Schema { get; set; }
 }

@@ -1,4 +1,6 @@
-﻿namespace AsyncApi.Net.Generator.Specification;
+﻿using NJsonSchema;
+
+namespace AsyncApi.Net.Generator.Specification;
 
 /// <summary>
 /// Protocol-specific information for a WebSockets channel.
@@ -14,13 +16,13 @@ public class WebSocketsChannelBinding
     /// A Schema object containing the definitions for each query parameter.
     /// This schema MUST be of type `object` and have a `properties` key.
     /// </summary>
-    public object Query { get; set; }
+    public JsonSchema Query { get; set; }
 
     /// <summary>
     /// A Schema object containing the definitions of the HTTP headers to use when establishing the connection.
     /// This schema MUST be of type `object` and have a `properties` key.
     /// </summary>
-    public object Headers { get; set; }
+    public JsonSchema Headers { get; set; }
 
     /// <summary>
     /// The version of this binding. If omitted, "latest" MUST be assumed.

@@ -6,4 +6,8 @@
 	<LangVersion>12</LangVersion>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="NJsonSchema" Version="10.9.0" />
+  </ItemGroup>
+
 </Project>

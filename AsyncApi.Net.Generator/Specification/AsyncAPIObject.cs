@@ -1,4 +1,6 @@
-﻿using System;
+﻿using NJsonSchema;
+
+using System;
 
 namespace AsyncApi.Net.Generator.Specification;
 

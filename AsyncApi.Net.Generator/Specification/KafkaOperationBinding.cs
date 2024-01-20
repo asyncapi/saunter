@@ -1,4 +1,6 @@
-﻿namespace AsyncApi.Net.Generator.Specification;
+﻿using NJsonSchema;
+
+namespace AsyncApi.Net.Generator.Specification;
 
 /// <summary>
 /// Kafka operation binding information.
@@ -8,12 +10,12 @@ public class KafkaOperationBinding
     /// <summary>
     /// Gets or sets the Id of the consumer group.
     /// </summary>
-    public object GroupId { get; set; }
+    public JsonSchema GroupId { get; set; }
 
     /// <summary>
     /// Gets or sets the Id of the consumer inside a consumer group.
     /// </summary>
-    public object ClientId { get; set; }
+    public JsonSchema ClientId { get; set; }
 
     /// <summary>
     /// Gets or sets the version of this binding. If omitted, "latest" MUST be assumed.

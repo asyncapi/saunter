@@ -1,4 +1,6 @@
-﻿namespace AsyncApi.Net.Generator.Specification;
+﻿using NJsonSchema;
+
+namespace AsyncApi.Net.Generator.Specification;
 
 /// <summary>
 /// HTTP operation binding information.
@@ -13,7 +15,7 @@ public class HttpOperationBinding
     /// <summary>
     /// Gets or sets a Schema object containing the definitions for each query parameter. This schema MUST be of type object and have a properties key.
     /// </summary>
-    public object Query { get; set; }
+    public JsonSchema Query { get; set; }
 
     /// <summary>
     /// Gets or sets the version of this binding. If omitted, "latest" MUST be assumed.
