@@ -1,3 +1,3 @@
 ﻿namespace AsyncApi.Net.Generator.Specification;
 
-public class HTTPServerBinding;
+public class HttpServerBinding;

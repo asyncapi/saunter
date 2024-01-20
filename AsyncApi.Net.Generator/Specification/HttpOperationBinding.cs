@@ -7,6 +7,12 @@ namespace AsyncApi.Net.Generator.Specification;
 /// </summary>
 public class HttpOperationBinding
 {
+    public HttpOperationBinding(string method, JsonSchema query)
+    {
+        Method = method;
+        Query = query;
+    }
+
     /// <summary>
     /// Gets or sets the HTTP method for the request. Its value MUST be one of GET, POST, PUT, PATCH, DELETE, HEAD, OPTIONS, CONNECT, and TRACE.
     /// </summary>
@@ -20,5 +26,5 @@ public class HttpOperationBinding
     /// <summary>
     /// Gets or sets the version of this binding. If omitted, "latest" MUST be assumed.
     /// </summary>
-    public string BindingVersion { get; set; }
+    public string BindingVersion { get; set; } = "latest";
 }

@@ -5,6 +5,11 @@
 /// </summary>
 public class ContactObject
 {
+    public ContactObject(string name)
+    {
+        Name = name;
+    }
+
     /// <summary>
     /// Gets or sets the identifying name of the contact person/organization.
     /// </summary>
@@ -16,7 +21,7 @@ public class ContactObject
     /// <remarks>
     /// This MUST be in the form of an absolute URL.
     /// </remarks>
-    public string Url { get; set; }
+    public string? Url { get; set; }
 
     /// <summary>
     /// Gets or sets the email address of the contact person/organization.
@@ -24,5 +29,5 @@ public class ContactObject
     /// <remarks>
     /// MUST be in the format of an email address.
     /// </remarks>
-    public string Email { get; set; }
+    public string? Email { get; set; }
 }

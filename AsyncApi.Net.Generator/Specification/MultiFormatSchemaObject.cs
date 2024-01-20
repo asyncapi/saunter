@@ -8,6 +8,12 @@ namespace AsyncApi.Net.Generator.Specification;
 /// </summary>
 public class MultiFormatSchemaObject
 {
+    public MultiFormatSchemaObject(string schemaFormat, JsonSchema schema)
+    {
+        SchemaFormat = schemaFormat;
+        Schema = schema;
+    }
+
     /// <summary>
     /// Gets or sets the name of the schema format that is used to define the information.
     /// </summary>

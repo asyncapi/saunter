@@ -5,10 +5,15 @@
 /// </summary>
 public class CorrelationIdObject
 {
+    public CorrelationIdObject(string location)
+    {
+        Location = location;
+    }
+
     /// <summary>
     /// Gets or sets an optional description of the identifier.
     /// </summary>
-    public string Description { get; set; }
+    public string? Description { get; set; }
 
     /// <summary>
     /// Gets or sets a required runtime expression that specifies the location of the correlation ID.

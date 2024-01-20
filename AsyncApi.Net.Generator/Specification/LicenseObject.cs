@@ -5,6 +5,11 @@
 /// </summary>
 public class LicenseObject
 {
+    public LicenseObject(string name)
+    {
+        Name = name;
+    }
+
     /// <summary>
     /// Gets or sets the license name used for the API.
     /// </summary>
@@ -19,5 +24,5 @@ public class LicenseObject
     /// <remarks>
     /// This MUST be in the form of an absolute URL.
     /// </remarks>
-    public string Url { get; set; }
+    public string? Url { get; set; }
 }

@@ -8,7 +8,7 @@ public class ServerBindingsObject
     /// <summary>
     /// Gets or sets protocol-specific information for an HTTP server.
     /// </summary>
-    public HTTPServerBinding HTTP { get; set; }
+    public HttpServerBinding HTTP { get; set; }
 
     /// <summary>
     /// Gets or sets protocol-specific information for a WebSockets server.

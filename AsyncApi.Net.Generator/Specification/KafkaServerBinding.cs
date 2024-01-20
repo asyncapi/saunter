@@ -11,7 +11,7 @@ public class KafkaServerBinding
     /// <remarks>
     /// OPTIONAL. API URL for the Schema Registry used when producing Kafka messages (if a Schema Registry was used).
     /// </remarks>
-    public string SchemaRegistryUrl { get; set; }
+    public string? SchemaRegistryUrl { get; set; }
 
     /// <summary>
     /// Gets or sets the vendor of Schema Registry and Kafka serdes library that should be used.
@@ -22,7 +22,7 @@ public class KafkaServerBinding
     /// (e.g., "apicurio", "confluent", "ibm", or "karapace").
     /// MUST NOT be specified if `SchemaRegistryUrl` is not specified.
     /// </remarks>
-    public string SchemaRegistryVendor { get; set; }
+    public string? SchemaRegistryVendor { get; set; }
 
     /// <summary>
     /// Gets or sets the version of this binding.
