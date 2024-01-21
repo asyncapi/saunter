@@ -1,0 +1,7 @@
+{
+  "profiles": {
+    "Профиль 1": {
+      "commandName": "DebugRoslynComponent"
+    }
+  }
+}
