@@ -31,17 +31,24 @@ public class OAuthFlows
 /// </summary>
 public class OAuthFlow
 {
+    public OAuthFlow(string authorizationUrl, string tokenUrl, Dictionary<string, string> scopes)
+    {
+        AuthorizationUrl = authorizationUrl;
+        TokenUrl = tokenUrl;
+        Scopes = scopes;
+    }
+
     /// <summary>
     /// REQUIRED. The authorization URL to be used for this flow. 
     /// This MUST be in the form of an absolute URL.
     /// </summary>
-    public required string AuthorizationUrl { get; set; }
+    public string AuthorizationUrl { get; set; }
 
     /// <summary>
     /// REQUIRED. The token URL to be used for this flow. 
     /// This MUST be in the form of an absolute URL.
     /// </summary>
-    public required string TokenUrl { get; set; }
+    public string TokenUrl { get; set; }
 
     /// <summary>
     /// The URL to be used for obtaining refresh tokens. 
@@ -53,5 +60,5 @@ public class OAuthFlow
     /// REQUIRED. The available scopes for the OAuth2 security scheme.
     /// A map between the scope name and a short description for it.
     /// </summary>
-    public required Dictionary<string, string> Scopes { get; set; }
+    public Dictionary<string, string> Scopes { get; set; }
 }

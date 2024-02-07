@@ -2,10 +2,15 @@ namespace AsyncApiLibrary.Schema.v2;
 
 public class Info
 {
+    public Info(string title)
+    {
+        Title = title;
+    }
+
     /// <summary>
     /// The title of the application.
     /// </summary>
-    public required string Title { get; set; }
+    public string Title { get; set; }
 
     /// <summary>
     /// Provides the version of the application API
@@ -58,10 +63,15 @@ public class Contact
 
 public class License
 {
+    public License(string name)
+    {
+        Name = name;
+    }
+
     /// <summary>
     /// The license name used for the API.
     /// </summary>
-    public required string Name { get; set; }
+    public string Name { get; set; }
 
     /// <summary>
     /// A URL to the license used for the API.

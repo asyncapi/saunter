@@ -6,10 +6,20 @@ namespace AsyncApiLibrary.Schema.v2;
 
 public class SecurityScheme
 {
+    public SecurityScheme(SecuritySchemeType type, string name, string @in, string scheme, OAuthFlows flows, string openIdConnectUrl)
+    {
+        Type = type;
+        Name = name;
+        In = @in;
+        Scheme = scheme;
+        Flows = flows;
+        OpenIdConnectUrl = openIdConnectUrl;
+    }
+
     /// <summary>
     /// The type of the security scheme.
     /// </summary>
-    public required SecuritySchemeType Type { get; set; }
+    public SecuritySchemeType Type { get; set; }
 
     /// <summary>
     /// A short description for security scheme.
@@ -20,18 +30,18 @@ public class SecurityScheme
     /// <summary>
     /// The name of the header, query or cookie parameter to be used.
     /// </summary>
-    public required string Name { get; set; }
+    public string Name { get; set; }
 
     /// <summary>
     /// The location of the API key.
     /// Valid values are "user" and "password" for apiKey and "query", "header" or "cookie" for httpApiKey.
     /// </summary>
-    public required string In { get; set; }
+    public string In { get; set; }
 
     /// <summary>
     /// The name of the HTTP Authorization scheme to be used in the Authorization header as defined in RFC7235.
     /// </summary>
-    public required string Scheme { get; set; }
+    public string Scheme { get; set; }
 
     /// <summary>
     /// A hint to the client to identify how the bearer token is formatted. Bearer tokens are usually generated
@@ -42,12 +52,12 @@ public class SecurityScheme
     /// <summary>
     /// An object containing configuration information for the flow types supported.
     /// </summary>
-    public required OAuthFlows Flows { get; set; }
+    public OAuthFlows Flows { get; set; }
 
     /// <summary>
     /// OpenId Connect URL to discover OAuth2 configuration values. This MUST be in the form of a URL.
     /// </summary>
-    public required string OpenIdConnectUrl { get; set; }
+    public string OpenIdConnectUrl { get; set; }
 }
 
 public enum SecuritySchemeType

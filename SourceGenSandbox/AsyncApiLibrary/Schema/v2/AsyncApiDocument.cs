@@ -2,6 +2,11 @@ namespace AsyncApiLibrary.Schema.v2;
 
 public class AsyncApiDocument : ICloneable
 {
+    public AsyncApiDocument(Info info)
+    {
+        Info = info;
+    }
+
     /// <summary>
     /// Specifies the AsyncAPI Specification version being used.
     /// </summary>
@@ -15,7 +20,7 @@ public class AsyncApiDocument : ICloneable
     /// <summary>
     /// Provides metadata about the API. The metadata can be used by the clients if needed.
     /// </summary>
-    public required Info Info { get; set; }
+    public Info Info { get; set; }
 
     /// <summary>
     /// Provides connection details of servers.
@@ -51,10 +56,9 @@ public class AsyncApiDocument : ICloneable
 
     public AsyncApiDocument Clone()
     {
-        AsyncApiDocument clone = new()
+        AsyncApiDocument clone = new(Info)
         {
             Id = Id,
-            Info = Info,
             DefaultContentType = DefaultContentType,
             ExternalDocs = ExternalDocs,
             Channels = Channels.ToDictionary(c => c.Key, c => c.Value),

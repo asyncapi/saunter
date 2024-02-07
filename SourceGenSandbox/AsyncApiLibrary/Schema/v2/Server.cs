@@ -4,20 +4,26 @@ namespace AsyncApiLibrary.Schema.v2;
 
 public class Server
 {
+    public Server(string url, string protocol)
+    {
+        Url = url;
+        Protocol = protocol;
+    }
+
     /// <summary>
     /// A URL to the target host.
     /// This URL supports Server Variables and MAY be relative, to indicate that the host
     /// location is relative to the location where the AsyncAPI document is being served.
     /// Variable substitutions will be made when a variable is named in { brackets }.
     /// </summary>
-    public required string Url { get; set; }
+    public string Url { get; set; }
 
     /// <summary>
     /// The protocol this URL supports for connection.
     /// Supported protocol include, but are not limited to: amqp, amqps, http, https,
     /// jms, kafka, kafka-secure, mqtt, secure-mqtt, stomp, stomps, ws, wss.
     /// </summary>
-    public required string Protocol { get; set; }
+    public string Protocol { get; set; }
 
     /// <summary>
     /// The version of the protocol used for connection.

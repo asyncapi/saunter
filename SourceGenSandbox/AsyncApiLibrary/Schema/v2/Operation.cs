@@ -9,6 +9,12 @@ namespace AsyncApiLibrary.Schema.v2;
 /// </summary>
 public class Operation
 {
+    public Operation(string operationId, Message message)
+    {
+        OperationId = operationId;
+        Message = message;
+    }
+
     /// <summary>
     /// Unique string used to identify the operation.
     /// The id MUST be unique among all operations described in the API.
@@ -16,7 +22,7 @@ public class Operation
     /// Tools and libraries MAY use the operationId to uniquely identify an operation,
     /// therefore, it is RECOMMENDED to follow common programming naming conventions.
     /// </summary>
-    public required string OperationId { get; set; }
+    public string OperationId { get; set; }
 
     /// <summary>
     /// A short summary of what the operation is about.
@@ -50,7 +56,7 @@ public class Operation
     /// oneOf is allowed here to specify multiple messages, however, a message MUST be
     /// valid only against one of the referenced message objects.
     /// </summary>
-    public required Message Message { get; set; }
+    public Message Message { get; set; }
 
     /// <summary>
     /// A declaration of which security mechanisms are associated with this operation. 

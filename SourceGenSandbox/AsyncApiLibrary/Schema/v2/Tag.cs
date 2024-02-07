@@ -2,10 +2,15 @@ namespace AsyncApiLibrary.Schema.v2;
 
 public class Tag
 {
+    public Tag(string name)
+    {
+        Name = name;
+    }
+
     /// <summary>
     /// The name of the tag.
     /// </summary>
-    public required string Name { get; set; }
+    public string Name { get; set; }
 
     /// <summary>
     /// A short description for the tag. CommonMark syntax can be used for rich text representation.
@@ -17,5 +22,5 @@ public class Tag
     /// </summary>
     public ExternalDocumentation? ExternalDocs { get; set; }
 
-    public static implicit operator Tag(string s) => new() { Name = s };
+    public static implicit operator Tag(string s) => new(s);
 }
