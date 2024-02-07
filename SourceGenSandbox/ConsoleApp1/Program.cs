@@ -1,13 +1,20 @@
 ﻿using AsyncApi.Net.Generator;
 
-Console.WriteLine("helpme");
-Console.WriteLine(AsyncApiDocument.Operations.MyTester2);
+using AsyncApiLibrary.Schema.v2;
+
+AsyncApiDocument asyncApiDocument = new(new("tester")
+{
+    Version = "1.0.0",
+    License = new("helpme"),
+});
+
+Console.WriteLine(asyncApiDocument.Channels.MyTester2.Description);
 
 public class Tester
 {
-    [AsyncApiOperation]
-    public static readonly AsyncApiOperationDocument MyTester2 = new()
+    [AsyncApiChannel]
+    public static readonly ChannelItem MyTester2 = new()
     {
-        TestValue = "sss"
+        Description = "description",
     };
 }

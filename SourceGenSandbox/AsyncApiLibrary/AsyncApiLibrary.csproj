@@ -5,6 +5,9 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
 	<LangVersion>latest</LangVersion>
+	<EnableTrimAnalyzer>true</EnableTrimAnalyzer>
+	<EnableSingleFileAnalyzer>true</EnableSingleFileAnalyzer>
+	<EnableAotAnalyzer>true</EnableAotAnalyzer>
   </PropertyGroup>
 
   <ItemGroup>

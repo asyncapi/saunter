@@ -20,30 +20,80 @@ public readonly record struct FieldToGenerate
 
 public static class Attributes
 {
-    public const string AsyncApiOperationAttribute = @$"
+    public const string AsyncApiChannelAttribute = @$"
+using AsyncApiLibrary.Schema.v2;
+
 namespace AsyncApi.Net.Generator
 {{
     [AttributeUsage(AttributeTargets.Field)]
-    public class {nameof(AsyncApiOperationAttribute)} : Attribute;
+    public class {nameof(AsyncApiChannelAttribute)} : Attribute;
 }}
 ";
 
     public const string AsyncApiDocument = $@"
 #nullable enable
 
+using AsyncApiLibrary.Schema.v2;
+
 namespace AsyncApi.Net.Generator
 {{
-    public class AsyncApiOperationDocument
+    public class {nameof(AsyncApiDocument)} : IAsyncApiDocument
     {{
-        public string? TestValue {{ get; set; }}
+        public {nameof(AsyncApiDocument)}(Info info){{
+            Info = info;
+        }}
+
+        /// <summary>
+        /// Specifies the AsyncAPI Specification version being used.
+        /// </summary>
+        public string? AsyncApi {{ get; }} = ""2.6.0"";
+
+        /// <summary>
+        /// Identifier of the application the AsyncAPI document is defining.
+        /// </summary>
+        public string? Id {{ get; set; }}
+
+        /// <summary>
+        /// Provides metadata about the API. The metadata can be used by the clients if needed.
+        /// </summary>
+        public Info Info {{ get; set; }}
+
+        /// <summary>
+        /// Provides connection details of servers.
+        /// </summary>
+        public Dictionary<string, Server> Servers {{ get; set; }} = [];
+
+        /// <summary>
+        /// A string representing the default content type to use when encoding/decoding a message's payload.
+        /// The value MUST be a specific media type (e.g. application/json).
+        /// </summary>
+        public string? DefaultContentType {{ get; set; }} = ""application/json"";
+
+        /// <summary>
+        /// The available channels and messages for the API.
+        /// </summary>
+        public AsyncApiChannels Channels {{ get; set; }} = [];
+
+        IDictionary<string, ChannelItem> IAsyncApiDocument.Channels {{ get => this.Channels; }}
+
+        /// <summary>
+        /// An element to hold various schemas for the specification.
+        /// </summary>
+        public Components Components {{ get; set; }} = new();
+
+        /// <summary>
+        /// A list of tags used by the specification with additional metadata.
+        /// Each tag name in the list MUST be unique.
+        /// </summary>
+        public HashSet<Tag> Tags {{ get; set; }} = [];
+
+        /// <summary>
+        /// Additional external documentation.
+        /// </summary>
+        public ExternalDocumentation? ExternalDocs {{ get; set; }}
     }}
 
-    public static class {nameof(AsyncApiDocument)}
-    {{
-        public static AsyncApiOperations Operations => new();
-    }}
-
-    public partial class AsyncApiOperations;
+    public partial class AsyncApiChannels : Dictionary<string, ChannelItem>;
 }}
 ";
 }
@@ -54,8 +104,8 @@ public class IncrementalGenerator : IIncrementalGenerator
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
         context.RegisterPostInitializationOutput(c => 
-            c.AddSource($"{nameof(Attributes.AsyncApiOperationAttribute)}.Generated.cs", 
-            Attributes.AsyncApiOperationAttribute));
+            c.AddSource($"{nameof(Attributes.AsyncApiChannelAttribute)}.Generated.cs", 
+            Attributes.AsyncApiChannelAttribute));
 
         context.RegisterPostInitializationOutput(c => 
             c.AddSource($"{nameof(Attributes.AsyncApiDocument)}.Generated.cs", 
@@ -64,7 +114,7 @@ public class IncrementalGenerator : IIncrementalGenerator
         IncrementalValuesProvider<FieldToGenerate?> filedToGenerates = context.SyntaxProvider
              .CreateSyntaxProvider(
                  predicate: static (s, _) => IsSyntaxTargetForGeneration(s),
-                 transform: static (c, _) => GetSemanticTargetForGeneration(c, nameof(Attributes.AsyncApiOperationAttribute)))
+                 transform: static (c, _) => GetSemanticTargetForGeneration(c, nameof(Attributes.AsyncApiChannelAttribute)))
              .Where(static m => m is not null);
 
         context.RegisterSourceOutput(filedToGenerates, static (c, p) =>
@@ -97,6 +147,8 @@ public class IncrementalGenerator : IIncrementalGenerator
             }
 
             string source = $@"
+using AsyncApiLibrary.Schema.v2;
+
 namespace AsyncApi.Net.Generator
 {{
     public partial class {typeName}
