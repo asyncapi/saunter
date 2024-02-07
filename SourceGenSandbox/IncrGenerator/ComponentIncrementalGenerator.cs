@@ -20,16 +20,6 @@ public readonly record struct FieldToGenerate
 
 public static class Attributes
 {
-    public const string AsyncApiChannelAttribute = @$"
-using AsyncApiLibrary.Schema.v2;
-
-namespace AsyncApi.Net.Generator
-{{
-    [AttributeUsage(AttributeTargets.Field)]
-    public class {nameof(AsyncApiChannelAttribute)} : Attribute;
-}}
-";
-
     public const string AsyncApiDocument = $@"
 #nullable enable
 
@@ -92,20 +82,44 @@ namespace AsyncApi.Net.Generator
         /// </summary>
         public ExternalDocumentation? ExternalDocs {{ get; set; }}
     }}
-
-    public partial class AsyncApiChannels : Dictionary<string, ChannelItem>;
 }}
 ";
 }
 
 [Generator]
-public class IncrementalGenerator : IIncrementalGenerator
+public abstract class ComponentIncrementalGenerator : IIncrementalGenerator
 {
+    private readonly string _componentName;
+    private readonly string _attributeSrc;
+    private readonly string _mapSrc;
+
+    protected ComponentIncrementalGenerator(string componentName, string typeName)
+    {
+        _componentName = componentName;
+        _mapSrc = @$"
+using AsyncApiLibrary.Schema.v2;
+
+namespace AsyncApi.Net.Generator
+{{
+    public partial class {_componentName}s : Dictionary<string, {typeName}>;
+}}
+";    
+        _attributeSrc = @$"
+using AsyncApiLibrary.Schema.v2;
+
+namespace AsyncApi.Net.Generator
+{{
+    [AttributeUsage(AttributeTargets.Field)]
+    public class {_componentName} : Attribute;
+}}
+";
+    }
+
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
         context.RegisterPostInitializationOutput(c => 
-            c.AddSource($"{nameof(Attributes.AsyncApiChannelAttribute)}.Generated.cs", 
-            Attributes.AsyncApiChannelAttribute));
+            c.AddSource($"{_componentName}.Generated.cs", 
+            _attributeSrc));
 
         context.RegisterPostInitializationOutput(c => 
             c.AddSource($"{nameof(Attributes.AsyncApiDocument)}.Generated.cs", 
@@ -114,7 +128,7 @@ public class IncrementalGenerator : IIncrementalGenerator
         IncrementalValuesProvider<FieldToGenerate?> filedToGenerates = context.SyntaxProvider
              .CreateSyntaxProvider(
                  predicate: static (s, _) => IsSyntaxTargetForGeneration(s),
-                 transform: static (c, _) => GetSemanticTargetForGeneration(c, nameof(Attributes.AsyncApiChannelAttribute)))
+                 transform: (c, _) => GetSemanticTargetForGeneration(c, _componentName))
              .Where(static m => m is not null);
 
         context.RegisterSourceOutput(filedToGenerates, static (c, p) =>
