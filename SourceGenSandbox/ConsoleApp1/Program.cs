@@ -6,7 +6,7 @@ Console.WriteLine(AsyncApiDocument.Operations.MyTester2);
 public class Tester
 {
     [AsyncApiOperation]
-    private static readonly AsyncApiOperationDocument _myTester2 = new()
+    public static readonly AsyncApiOperationDocument MyTester2 = new()
     {
         TestValue = "sss"
     };

@@ -20,33 +20,32 @@ public readonly record struct FieldToGenerate
 
 public static class Attributes
 {
-    public const string AsyncApiOperationAttribute = @"
+    public const string AsyncApiOperationAttribute = @$"
 namespace AsyncApi.Net.Generator
-{
+{{
     [AttributeUsage(AttributeTargets.Field)]
-    public class AsyncApiOperationAttribute : Attribute;
-}
+    public class {nameof(AsyncApiOperationAttribute)} : Attribute;
+}}
 ";
 
-    public const string AsyncApiDocument = @"
+    public const string AsyncApiDocument = $@"
 #nullable enable
 
 namespace AsyncApi.Net.Generator
-{
+{{
     public class AsyncApiOperationDocument
-    {
-        public string? TestValue { get; set; }
-    }
+    {{
+        public string? TestValue {{ get; set; }}
+    }}
 
-    public static class AsyncApiDocument
-    {
+    public static class {nameof(AsyncApiDocument)}
+    {{
         public static AsyncApiOperations Operations => new();
-    };
+    }}
 
     public partial class AsyncApiOperations;
-}
+}}
 ";
-
 }
 
 [Generator]
@@ -54,8 +53,13 @@ public class IncrementalGenerator : IIncrementalGenerator
 {
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
-        context.RegisterPostInitializationOutput(c => c.AddSource($"{nameof(Attributes.AsyncApiOperationAttribute)}.Generated.cs", Attributes.AsyncApiOperationAttribute));
-        context.RegisterPostInitializationOutput(c => c.AddSource($"{nameof(Attributes.AsyncApiDocument)}.Generated.cs", Attributes.AsyncApiDocument));
+        context.RegisterPostInitializationOutput(c => 
+            c.AddSource($"{nameof(Attributes.AsyncApiOperationAttribute)}.Generated.cs", 
+            Attributes.AsyncApiOperationAttribute));
+
+        context.RegisterPostInitializationOutput(c => 
+            c.AddSource($"{nameof(Attributes.AsyncApiDocument)}.Generated.cs", 
+            Attributes.AsyncApiDocument));
 
         IncrementalValuesProvider<FieldToGenerate?> filedToGenerates = context.SyntaxProvider
              .CreateSyntaxProvider(
@@ -83,7 +87,7 @@ public class IncrementalGenerator : IIncrementalGenerator
 
             fieldName = fieldName.TrimStart('_');
 
-            string startValue = fieldName[0].ToString().ToUpperInvariant();
+            char startValue = char.ToUpperInvariant(fieldName[0]);
 
             fieldName = startValue + fieldName.Remove(0, 1);
 
