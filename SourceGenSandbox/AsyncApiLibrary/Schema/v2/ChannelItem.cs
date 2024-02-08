@@ -7,6 +7,16 @@ namespace AsyncApiLibrary.Schema.v2;
 /// </summary>
 public class ChannelItem
 {
+    public ChannelItem(string channelId)
+    {
+        ChannelId = channelId;
+    }
+
+    /// <summary>
+    /// Id channel, internal set as key to document map
+    /// </summary>
+    internal string ChannelId { get; set; }
+
     /// <summary>
     /// An optional description of this channel item.
     /// CommonMark syntax can be used for rich text representation.

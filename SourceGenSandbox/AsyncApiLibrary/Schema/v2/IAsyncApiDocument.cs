@@ -31,7 +31,7 @@ public interface IAsyncApiDocument
     /// <summary>
     /// The available channels and messages for the API.
     /// </summary>
-    IDictionary<string, ChannelItem> Channels { get; }
+    Dictionary<string, ChannelItem> Channels { get; }
 
     /// <summary>
     /// An element to hold various schemas for the specification.

@@ -30,7 +30,7 @@ public class Tester
             assemblyName: "Tests",
             syntaxTrees: new[] { syntaxTree });
 
-        var generator = new ComponentIncrementalGenerator();
+        var generator = new AsyncApiIncrementalGenerator();
 
         // The GeneratorDriver is used to run our generator against a compilation
         GeneratorDriver driver = CSharpGeneratorDriver.Create(generator);
