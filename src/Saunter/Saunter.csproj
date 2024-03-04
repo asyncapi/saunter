@@ -7,12 +7,12 @@
     <Title>Saunter</Title>
     <PackageIcon>logo.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <Authors>tehmantra</Authors>
+    <Authors>AsyncAPI Initiative</Authors>
     <Description>Code-first AsyncAPI documentation</Description>
     <PackageTags>asyncapi;aspnetcore;openapi;documentation;amqp</PackageTags>
-    <RepositoryUrl>https://github.com/tehmantra/saunter</RepositoryUrl>
+    <RepositoryUrl>https://github.com/asyncapi/saunter</RepositoryUrl>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
-    <PackageProjectUrl>https://github.com/tehmantra/saunter</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/asyncapi/saunter</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <IncludeSymbols>true</IncludeSymbols>
