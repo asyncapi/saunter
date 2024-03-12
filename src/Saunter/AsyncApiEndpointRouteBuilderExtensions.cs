@@ -1,3 +1,4 @@
+using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
@@ -12,6 +13,8 @@ namespace Saunter
         /// <summary>
         /// Maps the AsyncAPI document endpoint
         /// </summary>
+        ///
+        [Obsolete("This property is obsolete. Use UseAsyncApi instead.", false)]
         public static IEndpointConventionBuilder MapAsyncApiDocuments(
             this IEndpointRouteBuilder endpoints)
         {
@@ -29,6 +32,7 @@ namespace Saunter
         /// <summary>
         /// Maps the AsyncAPI UI endpoint(s)
         /// </summary>
+        [Obsolete("This property is obsolete. Use UseAsyncApi instead.", false)]
         public static IEndpointConventionBuilder MapAsyncApiUi(this IEndpointRouteBuilder endpoints)
         {
             var pipeline = endpoints.CreateApplicationBuilder()

@@ -79,13 +79,7 @@ namespace StreetlightsAPI
             app.UseRouting();
             app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyMethod());
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapAsyncApiDocuments();
-                endpoints.MapAsyncApiUi();
-
-                endpoints.MapControllers();
-            });
+            app.UseAsyncApi();
 
             // Print the AsyncAPI doc location
             var logger = app.ApplicationServices.GetService<ILoggerFactory>().CreateLogger<Program>();
