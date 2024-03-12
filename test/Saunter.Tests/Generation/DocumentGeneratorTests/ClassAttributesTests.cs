@@ -18,7 +18,7 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
             // Arrange
             var options = new AsyncApiOptions();
             var documentGenerator = new DocumentGenerator();
-            
+
             // Act
             var document = documentGenerator.GenerateDocument(new[] { typeof(TenantMessageConsumer).GetTypeInfo() }, options, options.AsyncApi, ActivatorServiceProvider.Instance);
 
@@ -52,7 +52,7 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
             var documentGenerator = new DocumentGenerator();
 
             // Act
-            var document = documentGenerator.GenerateDocument(new []{ typeof(TenantGenericMessagePublisher).GetTypeInfo() }, options, options.AsyncApi, ActivatorServiceProvider.Instance);
+            var document = documentGenerator.GenerateDocument(new[] { typeof(TenantGenericMessagePublisher).GetTypeInfo() }, options, options.AsyncApi, ActivatorServiceProvider.Instance);
 
             // Assert
             document.ShouldNotBeNull();
@@ -69,7 +69,7 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
 
             var messages = publish.Message.ShouldBeOfType<Messages>();
             messages.OneOf.Count.ShouldBe(3);
-            
+
             messages.OneOf.OfType<MessageReference>().ShouldContain(m => m.Id == "anyTenantCreated");
             messages.OneOf.OfType<MessageReference>().ShouldContain(m => m.Id == "anyTenantUpdated");
             messages.OneOf.OfType<MessageReference>().ShouldContain(m => m.Id == "anyTenantRemoved");
@@ -84,7 +84,7 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
             var documentGenerator = new DocumentGenerator();
 
             // Act
-            var document = documentGenerator.GenerateDocument(new []{ typeof(TenantSingleMessagePublisher).GetTypeInfo() }, options, options.AsyncApi, ActivatorServiceProvider.Instance);
+            var document = documentGenerator.GenerateDocument(new[] { typeof(TenantSingleMessagePublisher).GetTypeInfo() }, options, options.AsyncApi, ActivatorServiceProvider.Instance);
 
             // Assert
             document.ShouldNotBeNull();
@@ -93,7 +93,7 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
             var channel = document.Channels.First();
             channel.Key.ShouldBe("asw.tenant_service.tenants_history");
             channel.Value.Description.ShouldBe("Tenant events.");
-            
+
             var publish = channel.Value.Publish;
             publish.ShouldNotBeNull();
             publish.OperationId.ShouldBe("TenantSingleMessagePublisher");
@@ -161,7 +161,7 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
             var documentGenerator = new DocumentGenerator();
 
             // Act
-            var document = documentGenerator.GenerateDocument(new []{ typeof(OneTenantMessageConsumer).GetTypeInfo() }, options, options.AsyncApi, ActivatorServiceProvider.Instance);
+            var document = documentGenerator.GenerateDocument(new[] { typeof(OneTenantMessageConsumer).GetTypeInfo() }, options, options.AsyncApi, ActivatorServiceProvider.Instance);
 
             // Assert
             document.ShouldNotBeNull();
@@ -170,10 +170,12 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
             var channel = document.Channels.First();
             channel.Key.ShouldBe("asw.tenant_service.{tenant_id}.{tenant_status}");
             channel.Value.Description.ShouldBe("A tenant events.");
+            channel.Value.XParams.Length.ShouldBe(1);
+            channel.Value.XParams.First().ShouldBe("key=value");
             channel.Value.Parameters.Count.ShouldBe(2);
             channel.Value.Parameters.Values.OfType<ParameterReference>().ShouldContain(p => p.Id == "tenant_id" && p.Value.Schema != null && p.Value.Description == "The tenant identifier.");
             channel.Value.Parameters.Values.OfType<ParameterReference>().ShouldContain(p => p.Id == "tenant_status" && p.Value.Schema != null && p.Value.Description == "The tenant status.");
-            
+
             var subscribe = channel.Value.Subscribe;
             subscribe.ShouldNotBeNull();
             subscribe.OperationId.ShouldBe("OneTenantMessageConsumer");
@@ -181,7 +183,7 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
 
             var messages = subscribe.Message.ShouldBeOfType<Messages>();
             messages.OneOf.Count.ShouldBe(3);
-            
+
             messages.OneOf.OfType<MessageReference>().ShouldContain(m => m.Id == "tenantCreated");
             messages.OneOf.OfType<MessageReference>().ShouldContain(m => m.Id == "tenantUpdated");
             messages.OneOf.OfType<MessageReference>().ShouldContain(m => m.Id == "tenantRemoved");
@@ -197,7 +199,7 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
 
             // Act
             var document = documentGenerator.GenerateDocument(new[] { typeof(MyMessagePublisher).GetTypeInfo() }, options, options.AsyncApi, ActivatorServiceProvider.Instance);
-            
+
             // Assert
             document.ShouldNotBeNull();
 
@@ -272,7 +274,7 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
         }
 
         [AsyncApi]
-        [Channel("asw.tenant_service.{tenant_id}.{tenant_status}", Description = "A tenant events.")]
+        [Channel("asw.tenant_service.{tenant_id}.{tenant_status}", Description = "A tenant events.", XParams = new[] {"key=value"})]
         [ChannelParameter("tenant_id", typeof(long), Description = "The tenant identifier.")]
         [ChannelParameter("tenant_status", typeof(string), Description = "The tenant status.")]
         [SubscribeOperation(OperationId = "OneTenantMessageConsumer", Summary = "Subscribe to domains events about a tenant.")]

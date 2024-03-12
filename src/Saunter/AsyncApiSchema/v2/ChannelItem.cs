@@ -1,6 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Saunter.AsyncApiSchema.v2.Bindings;
 
 namespace Saunter.AsyncApiSchema.v2
@@ -8,6 +11,7 @@ namespace Saunter.AsyncApiSchema.v2
     /// <summary>
     /// Describes the operations available on a single channel.
     /// </summary>
+    [JsonConverter(typeof(XParamsConverter))]
     public class ChannelItem
     {
         /// <summary>
@@ -53,6 +57,12 @@ namespace Saunter.AsyncApiSchema.v2
         [JsonProperty("servers", NullValueHandling = NullValueHandling.Ignore)]
         public List<string> Servers { get; set; } = new List<string>();
 
+        /// <summary>
+        /// Specification Extensions. The extensions properties are implemented as patterned fields that are always prefixed by "x-" and must be format 'key=value'
+        /// </summary>
+        [JsonIgnore]
+        public string[] XParams { get; set; }
+
         public bool ShouldSerializeParameters()
         {
             return Parameters != null && Parameters.Count > 0;
@@ -61,6 +71,92 @@ namespace Saunter.AsyncApiSchema.v2
         public bool ShouldSerializeServers()
         {
             return Servers != null && Servers.Count > 0;
+        }
+    }
+
+    internal class XParamsConverter : JsonConverter
+    {
+        [ThreadStatic]
+        static bool cannotWrite;
+
+        // Disables the converter in a thread-safe manner.
+        bool CannotWrite { get { return cannotWrite; } set { cannotWrite = value; } }
+
+        public override bool CanWrite { get { return !CannotWrite; } }
+        public struct PushValue<T> : IDisposable
+        {
+            Action<T> setValue;
+            T oldValue;
+
+            public PushValue(T value, Func<T> getValue, Action<T> setValue)
+            {
+                if (getValue == null || setValue == null)
+                    throw new ArgumentNullException();
+                this.setValue = setValue;
+                this.oldValue = getValue();
+                setValue(value);
+            }
+
+            #region IDisposable Members
+
+            // By using a disposable struct we avoid the overhead of allocating and freeing an instance of a finalizable class.
+            public void Dispose()
+            {
+                if (setValue != null)
+                    setValue(oldValue);
+            }
+
+            #endregion
+        }
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        {
+            if (value == null)
+            {
+                writer.WriteNull();
+                return;
+            }
+
+            // Disabling writing prevents infinite recursion.
+            using (new PushValue<bool>(true, () => CannotWrite, val => CannotWrite = val))
+            {
+                var obj = JObject.FromObject(value, serializer);
+
+                var ci = value as ChannelItem;
+                if (ci != null && ci.XParams != null && ci.XParams.Any())
+                {
+                    foreach (var xparam in ci.XParams)
+                    {
+                        if (!string.IsNullOrEmpty(xparam) && xparam.Count(x => x == '=') == 1)
+                        {
+                            var splitParam = xparam.Trim().Split('=');
+                            if (splitParam.Length == 2)
+                            {
+                                var xParamNode = new JProperty($"x-{splitParam[0]}", new JValue(splitParam[1]));
+                                obj.Add(xParamNode);
+                            }
+                            else
+                            {
+                                throw new FormatException($"XParams format is not correct. Use 'key=value'");
+                            }
+                        }
+                        else
+                        {
+                            throw new FormatException($"XParams format is not correct. Use 'key=value'");
+                        }
+                    }
+                }
+                obj.WriteTo(writer);
+            }
+        }
+
+        public override bool CanConvert(Type objectType)
+        {
+            return typeof(ChannelItem).IsAssignableFrom(objectType);
+        }
+
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        {
+            throw new NotImplementedException();
         }
     }
 }

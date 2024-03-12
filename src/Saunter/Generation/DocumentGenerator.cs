@@ -71,7 +71,7 @@ namespace Saunter.Generation
             foreach (var mc in methodsWithChannelAttribute)
             {
                 if (mc.Channel == null) continue;
-                
+
                 var channelItem = new ChannelItem
                 {
                     Description = mc.Channel.Description,
@@ -80,7 +80,8 @@ namespace Saunter.Generation
                     Subscribe = GenerateOperationFromMethod(mc.Method, schemaResolver, OperationType.Subscribe, options, jsonSchemaGenerator, serviceProvider),
                     Bindings = mc.Channel.BindingsRef != null ? new ChannelBindingsReference(mc.Channel.BindingsRef) : null,
                     Servers = mc.Channel.Servers?.ToList(),
-                }; 
+                    XParams = mc.Channel.XParams
+                };
                 channels.AddOrAppend(mc.Channel.Name, channelItem);
                 
                 var context = new ChannelItemFilterContext(mc.Method, schemaResolver, jsonSchemaGenerator, mc.Channel);
@@ -122,6 +123,7 @@ namespace Saunter.Generation
                     Subscribe = GenerateOperationFromClass(cc.Type, schemaResolver, OperationType.Subscribe, jsonSchemaGenerator),
                     Bindings = cc.Channel.BindingsRef != null ? new ChannelBindingsReference(cc.Channel.BindingsRef) : null,
                     Servers = cc.Channel.Servers?.ToList(),
+                    XParams = cc.Channel.XParams
                 };
                 
                 channels.AddOrAppend(cc.Channel.Name, channelItem);
