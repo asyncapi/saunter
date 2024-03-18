@@ -34,7 +34,7 @@ namespace Saunter
         /// Add a named AsyncAPI document to the service collection.
         /// </summary>
         /// <param name="services">The collection to add the document to.</param>
-        /// <param name="documentName">The name used to refer to the document. Used in the <see cref="Saunter.Attributes.AsyncApiAttribute"/> and in middleware HTTP paths.</param>
+        /// <param name="documentName">The name used to refer to the document. Used in the <see cref="Attributes.AsyncApiAttribute"/> and in middleware HTTP paths.</param>
         /// <param name="setupAction">An action used to configure the named document.</param>
         /// <returns>The service collection so additional calls can be chained.</returns>
         public static IServiceCollection ConfigureNamedAsyncApi(this IServiceCollection services, string documentName, Action<AsyncApiDocument> setupAction)

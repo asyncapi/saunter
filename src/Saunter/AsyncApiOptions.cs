@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Reflection;
 
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -16,10 +17,9 @@ namespace Saunter
 {
     public class AsyncApiOptions
     {
-        private readonly List<Type> _documentFilters = new List<Type>();
-        private readonly List<Type> _channelItemFilters = new List<Type>();
-        private readonly List<Type> _operationFilters = new List<Type>();
-
+        private readonly List<Type> _documentFilters = new();
+        private readonly List<Type> _channelItemFilters = new();
+        private readonly List<Type> _operationFilters = new();
 
         /// <summary>
         /// The base asyncapi schema. This will be augmented with other information auto-discovered
@@ -31,6 +31,11 @@ namespace Saunter
         /// A list of marker types from assemblies to scan for Saunter attributes.
         /// </summary>
         public IList<Type> AssemblyMarkerTypes { get; set; } = new List<Type>();
+
+        /// <summary>
+        /// A list of assemblies to scan for Saunter attributes.
+        /// </summary>
+        public IList<Assembly> Assemblies { get; set; } = new List<Assembly>();
 
         /// <summary>
         /// A list of filters that will be applied to the generated AsyncAPI document.
@@ -71,7 +76,6 @@ namespace Saunter
         {
             _operationFilters.Add(typeof(T));
         }
-
 
 
         /// <summary>
