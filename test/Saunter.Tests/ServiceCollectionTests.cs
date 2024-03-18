@@ -19,7 +19,7 @@ namespace Saunter.Tests
             var services = new ServiceCollection() as IServiceCollection;
             services.AddAsyncApiSchemaGeneration(options =>
                 {
-                    options.AsyncApi = new AsyncApiSchema.v2.AsyncApiDocument
+                    options.AsyncApi = new AsyncApiDocument
                     {
                         Id = "urn:com:example:example-events",
                         Info = new Info("Example API", "2019.01.12345")

@@ -36,10 +36,16 @@ namespace Saunter.Generation
         /// </summary>
         private static TypeInfo[] GetAsyncApiTypes(AsyncApiOptions options, AsyncApiDocument prototype)
         {
-            var assembliesToScan = options.AssemblyMarkerTypes.Select(t => t.Assembly).Distinct();
+            options.Assemblies.AddRange(options
+                .AssemblyMarkerTypes
+                .Select(t => t.Assembly)
+                .Distinct());
 
-            var asyncApiTypes = assembliesToScan
-                .SelectMany(a => a.DefinedTypes.Where(t => t.GetCustomAttribute<AsyncApiAttribute>()?.DocumentName == prototype.DocumentName))
+            options.AssemblyMarkerTypes.Clear();
+
+            var asyncApiTypes = options.Assemblies
+                .SelectMany(a => a.DefinedTypes
+                    .Where(t => t.GetCustomAttribute<AsyncApiAttribute>()?.DocumentName == prototype.DocumentName))
                 .ToArray();
 
             return asyncApiTypes;

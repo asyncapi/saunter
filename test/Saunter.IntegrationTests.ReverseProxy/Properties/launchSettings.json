@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "Saunter.IntegrationTests.ReverseProxy": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:65155;http://localhost:65158"
+    }
+  }
+}
