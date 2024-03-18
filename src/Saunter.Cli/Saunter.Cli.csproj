@@ -14,14 +14,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EditorConfigFiles Remove="D:\github\saunter\src\Saunter.Cli\.editorconfig" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="D:\github\saunter\src\Saunter.Cli\.editorconfig" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Saunter\Saunter.csproj" />
   </ItemGroup>
 
