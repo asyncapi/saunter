@@ -35,7 +35,7 @@ namespace Saunter
         /// <summary>
         /// A list of assemblies to scan for Saunter attributes.
         /// </summary>
-        public List<Assembly> Assemblies { get; set; } = new List<Assembly>();
+        public IList<Assembly> Assemblies { get; set; } = new List<Assembly>();
 
         /// <summary>
         /// A list of filters that will be applied to the generated AsyncAPI document.
