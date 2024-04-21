@@ -57,5 +57,8 @@
       <Link>UI\package.json</Link>
     </None>
   </ItemGroup>
-  
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="Saunter.Tests" />
+  </ItemGroup>
 </Project>
