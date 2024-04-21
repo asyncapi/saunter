@@ -44,9 +44,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AsyncAPI.NET.Bindings" Version="5.2.1" />
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
-    <PackageReference Include="Namotion.Reflection" Version="3.1.1" />
+    <PackageReference Include="NJsonSchema" />
+    <PackageReference Include="NJsonSchema.NewtonsoftJson" />
   </ItemGroup>
 
   <ItemGroup>
