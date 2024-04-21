@@ -1,32 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <IsPackable>true</IsPackable>
     <PackageId>Saunter</PackageId>
     <Title>Saunter</Title>
-    <PackageIcon>logo.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <Authors>AsyncAPI Initiative</Authors>
     <Description>Code-first AsyncAPI documentation</Description>
-    <PackageTags>asyncapi;aspnetcore;openapi;documentation;amqp</PackageTags>
-    <RepositoryUrl>https://github.com/asyncapi/saunter</RepositoryUrl>
-    <PublishRepositoryUrl>true</PublishRepositoryUrl>
-    <PackageProjectUrl>https://github.com/asyncapi/saunter</PackageProjectUrl>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <IncludeSymbols>true</IncludeSymbols>
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    <EmbedUntrackedSources>true</EmbedUntrackedSources>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
-    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
-  </PropertyGroup>
-
-  <PropertyGroup>
-    <DocumentationFile>bin\$(Configuration)\Saunter.xml</DocumentationFile>
-    <NoWarn>1701;1702;1591</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
