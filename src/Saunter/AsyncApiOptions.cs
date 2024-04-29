@@ -88,7 +88,7 @@ namespace Saunter
         public AsyncApiSchemaOptions SchemaOptions { get; set; } = new AsyncApiSchemaOptions();
     }
 
-    public class AsyncApiSchemaOptions : NewtonsoftJsonSchemaGeneratorSettings
+    public class AsyncApiSchemaOptions : JsonSchemaGeneratorSettings
     {
         public AsyncApiSchemaOptions()
         {
