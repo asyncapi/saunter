@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
@@ -14,7 +14,7 @@ namespace StreetlightsAPI
         /// Id of the streetlight.
         /// </summary>
         public int Id { get; set; }
-        
+
         /// <summary>
         /// Lat-Long coordinates of the streetlight.
         /// </summary>
@@ -58,7 +58,7 @@ namespace StreetlightsAPI
         {
             new Streetlight { Id = 1, Position = new [] { -36.320320, 175.485986 }, LightIntensity = new() },
         };
-        
+
         private readonly IStreetlightMessageBus _streetlightMessageBus;
         private readonly ILogger _logger;
 
@@ -67,7 +67,7 @@ namespace StreetlightsAPI
             _streetlightMessageBus = streetlightMessageBus;
             _logger = loggerFactory.CreateLogger<StreetlightsController>();
         }
-        
+
         /// <summary>
         /// Get all streetlights
         /// </summary>
@@ -90,7 +90,7 @@ namespace StreetlightsAPI
         /// <summary>
         /// Inform about environmental lighting conditions for a particular streetlight.
         /// </summary>
-        [Channel(PublishLightMeasuredTopic, Servers = new []{"webapi"})]
+        [Channel(PublishLightMeasuredTopic, Servers = new[] { "webapi" })]
         [PublishOperation(typeof(LightMeasuredEvent), "Light")]
         [HttpPost]
         [Route(PublishLightMeasuredTopic)]

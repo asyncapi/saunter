@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Newtonsoft.Json;
 using Saunter.AsyncApiSchema.v2.Traits;
 
@@ -20,7 +20,7 @@ namespace Saunter.AsyncApiSchema.v2
 
         [JsonProperty("$ref")]
         public string Ref => string.Format(_path, _id);
-        
+
         [JsonIgnore()]
         public string Id => _id;
     }

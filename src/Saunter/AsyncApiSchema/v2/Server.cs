@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using Saunter.AsyncApiSchema.v2.Bindings;
@@ -67,7 +67,7 @@ namespace Saunter.AsyncApiSchema.v2
         [JsonProperty("bindings", NullValueHandling = NullValueHandling.Ignore)]
         public IServerBindings Bindings { get; set; }
     }
-    
+
     public class ServerVariable
     {
         /// <summary>

@@ -1,4 +1,4 @@
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace Saunter.AsyncApiSchema.v2.Bindings.Amqp
 {

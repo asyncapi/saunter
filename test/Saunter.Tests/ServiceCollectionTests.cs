@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Microsoft.Extensions.DependencyInjection;
 using Saunter.AsyncApiSchema.v2;
 using Saunter.Generation;
@@ -37,8 +37,8 @@ namespace Saunter.Tests
                         Tags = { "example", "event" },
                         Servers =
                         {
-                            { 
-                                "development", 
+                            {
+                                "development",
                                 new Server("rabbitmq.dev.mwild.me", "amqp")
                                 {
                                     Security = new List<Dictionary<string, List<string>>> { new Dictionary<string, List<string>> { { "user-password", new List<string>() } }}

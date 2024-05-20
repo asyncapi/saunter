@@ -1,4 +1,4 @@
-using Saunter.AsyncApiSchema.v2;
+﻿using Saunter.AsyncApiSchema.v2;
 
 namespace Saunter
 {

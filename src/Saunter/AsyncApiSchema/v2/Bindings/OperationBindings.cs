@@ -1,4 +1,4 @@
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Saunter.AsyncApiSchema.v2.Bindings.Amqp;
 using Saunter.AsyncApiSchema.v2.Bindings.Http;
 using Saunter.AsyncApiSchema.v2.Bindings.Kafka;
@@ -9,7 +9,7 @@ namespace Saunter.AsyncApiSchema.v2.Bindings
     /// <summary>
     /// OperationBindings can be either a the bindings or a reference to the bindings.
     /// </summary>
-    public interface IOperationBindings {}
+    public interface IOperationBindings { }
 
     /// <summary>
     /// A reference to the OperationBindings within the AsyncAPI components.
@@ -20,7 +20,7 @@ namespace Saunter.AsyncApiSchema.v2.Bindings
     }
 
     public class OperationBindings : IOperationBindings
-    {         
+    {
         [JsonProperty("http", NullValueHandling = NullValueHandling.Ignore)]
         public HttpOperationBinding Http { get; set; }
 

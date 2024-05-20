@@ -1,8 +1,8 @@
-using System;
-using NJsonSchema;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
+using NJsonSchema;
 using Saunter.AsyncApiSchema.v2.Bindings;
 using Saunter.AsyncApiSchema.v2.Traits;
 
@@ -39,7 +39,7 @@ namespace Saunter.AsyncApiSchema.v2
         /// </summary>
         [JsonProperty("correlationIds", DefaultValueHandling = DefaultValueHandling.Ignore)]
         public IDictionary<string, CorrelationId> CorrelationIds { get; set; } = new Dictionary<string, CorrelationId>();
-        
+
         /// <summary>
         /// An object to hold reusable Server Binding Objects.
         /// </summary>
@@ -64,7 +64,7 @@ namespace Saunter.AsyncApiSchema.v2
         [JsonProperty("messageBindings", DefaultValueHandling = DefaultValueHandling.Ignore)]
         public IDictionary<string, MessageBindings> MessageBindings { get; set; } = new Dictionary<string, MessageBindings>();
 
-        
+
         /// <summary>
         /// An object to hold reusable Operation Trait Objects.
         /// </summary>

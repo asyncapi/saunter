@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 using Saunter.AsyncApiSchema.v2.Bindings;
 using Saunter.AsyncApiSchema.v2.Traits;
@@ -57,7 +57,7 @@ namespace Saunter.AsyncApiSchema.v2
         /// </summary>
         [JsonProperty("bindings", NullValueHandling = NullValueHandling.Ignore)]
         public IOperationBindings Bindings { get; set; }
-        
+
         /// <summary>
         /// A definition of the message that will be published or received on this channel.
         /// oneOf is allowed here to specify multiple messages, however, a message MUST be

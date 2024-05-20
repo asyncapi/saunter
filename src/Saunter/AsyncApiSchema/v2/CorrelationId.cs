@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Newtonsoft.Json;
 
 namespace Saunter.AsyncApiSchema.v2
@@ -7,7 +7,7 @@ namespace Saunter.AsyncApiSchema.v2
     /// Can be either a <see cref="CorrelationId"/> or a <see cref="Reference"/> to a CorrelationId.
     /// </summary>
     public interface ICorrelationId { }
-    
+
     /// <summary>
     /// A reference to a CorrelationId within the AsyncAPI components.
     /// </summary>
@@ -15,7 +15,7 @@ namespace Saunter.AsyncApiSchema.v2
     {
         public CorrelationIdReference(string id) : base(id, "#/components/correlationIds/{0}") { }
     }
-    
+
 
     public class CorrelationId : ICorrelationId
     {

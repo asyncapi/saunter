@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
@@ -51,7 +51,7 @@ namespace Saunter.UI
         {
             if (IsRequestingUiBase(context.Request))
             {
-                context.Response.StatusCode = (int) HttpStatusCode.MovedPermanently;
+                context.Response.StatusCode = (int)HttpStatusCode.MovedPermanently;
 
                 if (context.TryGetDocument(out var document))
                 {
@@ -76,7 +76,7 @@ namespace Saunter.UI
                 }
                 return;
             }
-            
+
             if (!context.TryGetDocument(out var documentName))
             {
                 await _staticFiles.Invoke(context);
@@ -121,7 +121,7 @@ namespace Saunter.UI
         {
             return HttpMethods.IsGet(request.Method) && request.Path.IsMatchingRoute(UiBaseRoute);
         }
-        
+
         private bool IsRequestingAsyncApiUi(HttpRequest request)
         {
             return HttpMethods.IsGet(request.Method) && request.Path.IsMatchingRoute(UiIndexRoute);

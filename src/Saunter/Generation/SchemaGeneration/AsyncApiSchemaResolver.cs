@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using NJsonSchema;
 using NJsonSchema.Generation;
@@ -11,7 +11,7 @@ namespace Saunter.Generation.SchemaGeneration
         private readonly AsyncApiDocument _document;
         private readonly JsonSchemaGeneratorSettings _settings;
 
-        public AsyncApiSchemaResolver(AsyncApiDocument document, AsyncApiSchemaOptions settings) 
+        public AsyncApiSchemaResolver(AsyncApiDocument document, AsyncApiSchemaOptions settings)
             : base(document, settings)
         {
             _document = document;
@@ -24,7 +24,7 @@ namespace Saunter.Generation.SchemaGeneration
                 throw new ArgumentNullException(nameof(schema));
             if (schema == RootObject)
                 throw new ArgumentException("The root schema cannot be appended.");
-            
+
             if (!_document.Components.Schemas.Values.Contains(schema))
             {
                 var schemaId = _settings.TypeNameGenerator.Generate(schema, typeNameHint, _document.Components.Schemas.Keys.Select(k => k.ToString()));

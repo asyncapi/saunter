@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using Newtonsoft.Json;
 using Saunter.AsyncApiSchema.v2.Bindings;

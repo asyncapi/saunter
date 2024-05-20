@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using NJsonSchema.Generation;
 using Saunter.AsyncApiSchema.v2;
@@ -19,7 +19,7 @@ namespace Saunter.Generation.Filters
             SchemaResolver = schemaResolver;
             SchemaGenerator = schemaGenerator;
         }
-        
+
         public IEnumerable<Type> AsyncApiTypes { get; }
 
         public JsonSchemaResolver SchemaResolver { get; }
