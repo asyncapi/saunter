@@ -9,6 +9,7 @@ jobs:
   release:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
       - name: setup build
         uses: ./.github/workflows/setup-build.yaml
       - name: Set version

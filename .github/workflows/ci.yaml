@@ -7,6 +7,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
       - name: setup build
         uses: ./.github/workflows/setup-build.yaml
       - name: Run dotnet build
@@ -15,6 +16,7 @@ jobs:
   fmt:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
       - name: setup dotnet
         uses: ./.github/workflows/setup-dotnet.yaml
       - name: install dotnet-format
@@ -27,6 +29,7 @@ jobs:
   unit-test:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
       - name: setup build
         uses: ./.github/workflows/setup-build.yaml
       - name: unit test
