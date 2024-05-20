@@ -1,9 +1,8 @@
 using Saunter.AsyncApiSchema.v2;
 
-namespace Saunter
+namespace Saunter;
+
+public interface IAsyncApiDocumentProvider
 {
-    public interface IAsyncApiDocumentProvider
-    {
-        AsyncApiDocument GetDocument(AsyncApiOptions options, AsyncApiDocument prototype);
-    }
+    AsyncApiDocument GetDocument(AsyncApiOptions options, AsyncApiDocument prototype);
 }

@@ -1,89 +1,97 @@
 using System;
 using System.Linq;
+
 using NJsonSchema;
 using NJsonSchema.Generation;
+
 using Saunter.AsyncApiSchema.v2;
 
-namespace Saunter.Generation.SchemaGeneration
+namespace Saunter.Generation.SchemaGeneration;
+
+public class AsyncApiSchemaResolver : JsonSchemaResolver
 {
-    public class AsyncApiSchemaResolver : JsonSchemaResolver
+    private readonly AsyncApiDocument _document;
+    private readonly JsonSchemaGeneratorSettings _settings;
+
+    public AsyncApiSchemaResolver(AsyncApiDocument document, AsyncApiSchemaOptions settings)
+        : base(document, settings)
     {
-        private readonly AsyncApiDocument _document;
-        private readonly JsonSchemaGeneratorSettings _settings;
+        _document = document;
+        _settings = settings;
+    }
 
-        public AsyncApiSchemaResolver(AsyncApiDocument document, AsyncApiSchemaOptions settings) 
-            : base(document, settings)
+    public override void AppendSchema(JsonSchema schema, string typeNameHint)
+    {
+        if (schema == null)
         {
-            _document = document;
-            _settings = settings;
+            throw new ArgumentNullException(nameof(schema));
         }
 
-        public override void AppendSchema(JsonSchema schema, string typeNameHint)
+        if (schema == RootObject)
         {
-            if (schema == null)
-                throw new ArgumentNullException(nameof(schema));
-            if (schema == RootObject)
-                throw new ArgumentException("The root schema cannot be appended.");
-            
-            if (!_document.Components.Schemas.Values.Contains(schema))
-            {
-                var schemaId = _settings.TypeNameGenerator.Generate(schema, typeNameHint, _document.Components.Schemas.Keys.Select(k => k.ToString()));
-
-                if (!string.IsNullOrEmpty(schemaId) && !_document.Components.Schemas.ContainsKey(schemaId))
-                {
-                    _document.Components.Schemas.Add(schemaId, schema);
-                    schema.Id = schemaId;
-                }
-                else
-                    _document.Components.Schemas.Add("ref_" + Guid.NewGuid().ToString().Replace("-", "_"), schema);
-            }
+            throw new ArgumentException("The root schema cannot be appended.");
         }
 
-        public IMessage GetMessageOrReference(Message message)
+        if (!_document.Components.Schemas.Values.Contains(schema))
         {
-            var id = message.Name;
-            if (id == null)
-            {
-                return message;
-            }
+            string schemaId = _settings.TypeNameGenerator.Generate(schema, typeNameHint, _document.Components.Schemas.Keys.Select(k => k.ToString()));
 
-            if (!_document.Components.Messages.ContainsKey(id))
+            if (!string.IsNullOrEmpty(schemaId) && !_document.Components.Schemas.ContainsKey(schemaId))
             {
-                _document.Components.Messages.Add(id, message);
-                message.Payload = new JsonSchema()
-                {
-                    Reference = message.Payload
-                };
+                _document.Components.Schemas.Add(schemaId, schema);
+                schema.Id = schemaId;
             }
-
-            if (message.Headers != null)
+            else
             {
-                // the headers schema is stored under components/schema; make
-                // sure to use the reference in the message instead of storing
-                // the complete schema again
-                message.Headers = new JsonSchema()
-                {
-                    Reference = message.Headers
-                };
+                _document.Components.Schemas.Add("ref_" + Guid.NewGuid().ToString().Replace("-", "_"), schema);
             }
+        }
+    }
 
-            return new MessageReference(id);
+    public IMessage GetMessageOrReference(Message message)
+    {
+        string id = message.Name;
+        if (id == null)
+        {
+            return message;
         }
 
-        public IParameter GetParameterOrReference(Parameter parameter)
+        if (!_document.Components.Messages.ContainsKey(id))
         {
-            var id = parameter.Name;
-            if (id == null)
+            _document.Components.Messages.Add(id, message);
+            message.Payload = new JsonSchema()
             {
-                return parameter;
-            }
-
-            if (!_document.Components.Parameters.ContainsKey(id))
-            {
-                _document.Components.Parameters.Add(id, parameter);
-            }
-
-            return new ParameterReference(id, _document);
+                Reference = message.Payload
+            };
         }
+
+        if (message.Headers != null)
+        {
+            // the headers schema is stored under components/schema; make
+            // sure to use the reference in the message instead of storing
+            // the complete schema again
+            message.Headers = new JsonSchema()
+            {
+                Reference = message.Headers
+            };
+        }
+
+        return new MessageReference(id);
+    }
+
+    public IParameter GetParameterOrReference(Parameter parameter)
+    {
+        string id = parameter.Name;
+        if (id == null)
+        {
+            return parameter;
+        }
+
+        if (!_document.Components.Parameters.ContainsKey(id))
+        {
+            _document.Components.Parameters.Add(id, parameter);
+        }
+
+        return new ParameterReference(id, _document);
     }
 }

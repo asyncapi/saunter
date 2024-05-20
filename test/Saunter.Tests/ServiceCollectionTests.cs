@@ -1,67 +1,66 @@
 using System.Collections.Generic;
+
 using Microsoft.Extensions.DependencyInjection;
+
 using Saunter.AsyncApiSchema.v2;
-using Saunter.Generation;
+
 using Shouldly;
+
 using Xunit;
 
-namespace Saunter.Tests
-{
-    /// <remarks>
-    /// These are not real tests! Tests will be added once the API is semi-stable...
-    /// </remarks>
-    public class ServiceCollectionTests
-    {
+namespace Saunter.Tests;
 
-        [Fact]
-        public void TestAddAsyncApiSchemaGeneration()
+/// <remarks>
+/// These are not real tests! Tests will be added once the API is semi-stable...
+/// </remarks>
+public class ServiceCollectionTests
+{
+
+    [Fact]
+    public void TestAddAsyncApiSchemaGeneration()
+    {
+        IServiceCollection services = new ServiceCollection() as IServiceCollection;
+        services.AddAsyncApiSchemaGeneration(options => options.AsyncApi = new AsyncApiSchema.v2.AsyncApiDocument
         {
-            var services = new ServiceCollection() as IServiceCollection;
-            services.AddAsyncApiSchemaGeneration(options =>
+            Id = "urn:com:example:example-events",
+            Info = new Info("Example API", "2019.01.12345")
+            {
+                Description = "An example API with events",
+                Contact = new Contact
                 {
-                    options.AsyncApi = new AsyncApiSchema.v2.AsyncApiDocument
+                    Email = "michael@mwild.me",
+                    Name = "Michael Wildman",
+                    Url = "https://mwild.me/",
+                },
+                License = new License("MIT"),
+                TermsOfService = "https://mwild.me/tos",
+            },
+            Tags = { "example", "event" },
+            Servers =
                     {
-                        Id = "urn:com:example:example-events",
-                        Info = new Info("Example API", "2019.01.12345")
                         {
-                            Description = "An example API with events",
-                            Contact = new Contact
+                            "development",
+                            new Server("rabbitmq.dev.mwild.me", "amqp")
                             {
-                                Email = "michael@mwild.me",
-                                Name = "Michael Wildman",
-                                Url = "https://mwild.me/",
-                            },
-                            License = new License("MIT"),
-                            TermsOfService = "https://mwild.me/tos",
-                        },
-                        Tags = { "example", "event" },
-                        Servers =
-                        {
-                            { 
-                                "development", 
-                                new Server("rabbitmq.dev.mwild.me", "amqp")
-                                {
-                                    Security = new List<Dictionary<string, List<string>>> { new Dictionary<string, List<string>> { { "user-password", new List<string>() } }}
-                                }
-                            }
-                        },
-                        Components =
-                        {
-                            SecuritySchemes = new Dictionary<string, SecurityScheme>
-                            {
-                                { "user-password", new SecurityScheme(SecuritySchemeType.Http) }
+                                Security = new List<Dictionary<string, List<string>>> { new() { { "user-password", new List<string>() } }}
                             }
                         }
-                    };
-                });
+                    },
+            Components =
+                    {
+                        SecuritySchemes = new Dictionary<string, SecurityScheme>
+                        {
+                            { "user-password", new SecurityScheme(SecuritySchemeType.Http) }
+                        }
+                    }
+        });
 
-            var sp = services.BuildServiceProvider();
+        ServiceProvider sp = services.BuildServiceProvider();
 
-            var provider = sp.GetRequiredService<IAsyncApiDocumentProvider>();
+        IAsyncApiDocumentProvider provider = sp.GetRequiredService<IAsyncApiDocumentProvider>();
 
-            var document = provider.GetDocument(new AsyncApiOptions(), new AsyncApiDocument());
+        AsyncApiDocument document = provider.GetDocument(new AsyncApiOptions(), new AsyncApiDocument());
 
-            document.ShouldNotBeNull();
-        }
+        document.ShouldNotBeNull();
     }
 }

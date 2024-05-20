@@ -1,44 +1,42 @@
-﻿using System;
 using System.Reflection;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
+
 using Saunter.Generation;
 using Saunter.Serialization;
 using Saunter.Tests.Generation.DocumentGeneratorTests;
-using Saunter.Utils;
+
 using Shouldly;
+
 using Xunit;
 
-namespace Saunter.Tests.Utils
+namespace Saunter.Tests.Utils;
+
+public abstract class SerializerTests
 {
-    public abstract class SerializerTests
+    private readonly DocumentGenerator _documentGenerator;
+    private readonly AsyncApiOptions _options;
+
+    public SerializerTests()
     {
-        private readonly DocumentGenerator _documentGenerator;
-        private readonly AsyncApiOptions _options;
-
-        public SerializerTests()
-        {
-            _options = new AsyncApiOptions();
-            _documentGenerator = new DocumentGenerator();
-        }
-
-        protected abstract IAsyncApiDocumentSerializer CreateSerializer();
-
-        [Fact]
-        public void TestSerialize()
-        {
-            var doc = _documentGenerator.GenerateDocument(new[] { typeof(MethodAttributesTests.TenantMessagePublisher).GetTypeInfo() }, _options, _options.AsyncApi, ActivatorServiceProvider.Instance);
-            var serializedDoc = CreateSerializer().Serialize(doc);
-
-            serializedDoc.ShouldNotBeNullOrWhiteSpace();
-        }
+        _options = new AsyncApiOptions();
+        _documentGenerator = new DocumentGenerator();
     }
 
-    public class NewtonsoftSerializerTests : SerializerTests
+    protected abstract IAsyncApiDocumentSerializer CreateSerializer();
+
+    [Fact]
+    public void TestSerialize()
     {
-        protected override IAsyncApiDocumentSerializer CreateSerializer()
-        {
-            return new NewtonsoftAsyncApiDocumentSerializer();
-        }
+        AsyncApiSchema.v2.AsyncApiDocument doc = _documentGenerator.GenerateDocument(new[] { typeof(MethodAttributesTests.TenantMessagePublisher).GetTypeInfo() }, _options, _options.AsyncApi, ActivatorServiceProvider.Instance);
+        string serializedDoc = CreateSerializer().Serialize(doc);
+
+        serializedDoc.ShouldNotBeNullOrWhiteSpace();
+    }
+}
+
+public class NewtonsoftSerializerTests : SerializerTests
+{
+    protected override IAsyncApiDocumentSerializer CreateSerializer()
+    {
+        return new NewtonsoftAsyncApiDocumentSerializer();
     }
 }

@@ -1,38 +1,37 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
 using System.Reflection;
+
 using Saunter.Utils;
+
 using Shouldly;
+
 using Xunit;
 
-namespace Saunter.Tests.Utils
+namespace Saunter.Tests.Utils;
+
+public class ReflectionTests
 {
-    public class ReflectionTests
+    [AttributeUsage(AttributeTargets.Class)]
+    private class ExampleForTestingAttribute : Attribute { }
+
+    [ExampleForTesting]
+    private class TypeWithAttribute { }
+
+    [Fact]
+    public void HasCustomAttributeTrueWhenTypeHasCustomAttribute()
     {
-        private class ExampleForTestingAttribute : Attribute { }
+        TypeInfo type = typeof(TypeWithAttribute).GetTypeInfo();
 
-        [ExampleForTesting]
-        private class TypeWithAttribute { }
+        type.HasCustomAttribute<ExampleForTestingAttribute>().ShouldBeTrue();
+    }
 
-        [Fact]
-        public void HasCustomAttribute_True_WhenTypeHasCustomAttribute()
-        {
-            var type = typeof(TypeWithAttribute).GetTypeInfo();
+    private class TypeWithoutAttribute { }
 
-            type.HasCustomAttribute<ExampleForTestingAttribute>().ShouldBeTrue();
-        }
+    [Fact]
+    public void HasCustomAttributeFalseWhenTypeDoesNotHaveCustomAttribute()
+    {
+        TypeInfo type = typeof(TypeWithoutAttribute).GetTypeInfo();
 
-        private class TypeWithoutAttribute { }
-
-        [Fact]
-        public void HasCustomAttribute_False_WhenTypeDoesNotHaveCustomAttribute()
-        {
-            var type = typeof(TypeWithoutAttribute).GetTypeInfo();
-
-            type.HasCustomAttribute<ExampleForTestingAttribute>().ShouldBeFalse();
-        }
+        type.HasCustomAttribute<ExampleForTestingAttribute>().ShouldBeFalse();
     }
 }

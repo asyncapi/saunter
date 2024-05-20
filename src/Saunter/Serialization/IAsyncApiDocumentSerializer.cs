@@ -1,15 +1,15 @@
-﻿using Saunter.AsyncApiSchema.v2;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Saunter.Serialization
+using Saunter.AsyncApiSchema.v2;
+
+namespace Saunter.Serialization;
+
+public interface IAsyncApiDocumentSerializer
 {
-    public interface IAsyncApiDocumentSerializer
-    {
-        string ContentType { get; }
+    string ContentType { get; }
 
-        string Serialize(AsyncApiDocument document);
+    string Serialize(AsyncApiDocument document);
 
-        Task<AsyncApiDocument> DeserializeAsync(string data, CancellationToken cancellationToken);
-    }
+    Task<AsyncApiDocument> DeserializeAsync(string data, CancellationToken cancellationToken);
 }
