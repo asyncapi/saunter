@@ -1,0 +1,17 @@
+name: setup dotnet
+
+on: [workflow_call]
+
+jobs:
+  setup-dotnet:
+    runs-on: ubuntu-latest
+    outputs:
+      dotnet-version: ${{ steps.setup-dotnet.outputs.dotnet-version }}
+    steps:
+      - name: setup
+        id: setup-dotnet
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: "6.0.x"
+      - name: checkout
+        uses: actions/checkout@v2

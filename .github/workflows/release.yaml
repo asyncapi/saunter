@@ -1,6 +1,3 @@
-# Note: ci.yaml and release.yaml have some similar steps
-#       If updating dotnet-version, set in both.
-
 name: Release
 
 on:
@@ -12,21 +9,8 @@ jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: "lts/*" # latest LTS version
-      - uses: actions/setup-dotnet@v2
-        with:
-          dotnet-version: "6.0.x" # SDK Version to use; x will use the latest version of the channel
-      - name: Run NPM install
-        run: npm ci
-        working-directory: ./src/Saunter.UI
-      - name: Run dotnet build
-        run: dotnet build --configuration Debug
-      - name: Run dotnet test
-        run: dotnet test --no-build
-      # Below steps are only on release, not CI.
+      - name: setup build
+        uses: ./.github/workflows/setup-build.yaml
       - name: Set version
         # Gets the numeric version from a tag (e.g. v1.2.3 -> 1.2.3)
         run: echo "RELEASE_VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV

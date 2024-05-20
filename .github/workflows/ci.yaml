@@ -1,30 +1,36 @@
-name: CI
+name: ci
 
-on:
-  push:
-    branches:
-      - main
-  pull_request:
+on: [push, pull_request]
 
 jobs:
+
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: "lts/*" # latest LTS version
-      - uses: actions/setup-dotnet@v2
-        with:
-          dotnet-version: "6.0.x" # SDK Version to use; x will use the latest version of the channel
-      - name: Run NPM install
-        run: npm ci
-        working-directory: ./src/Saunter.UI
+      - name: setup build
+        uses: ./.github/workflows/setup-build.yaml
       - name: Run dotnet build
         run: dotnet build --configuration Debug
-      - name: Run dotnet test
-        run: dotnet test --no-build
-      - uses: actions/upload-artifact@v2 # Below steps run only on CI, not release
-        with:
-          name: saunter-bin
-          path: ./src/Saunter/bin
+
+  fmt:
+    runs-on: ubuntu-latest
+    steps:
+      - name: setup dotnet
+        uses: ./.github/workflows/setup-dotnet.yaml
+      - name: install dotnet-format
+        run: dotnet tool install -g dotnet-format
+      - name: dotnet format check
+        run: dotnet format --verify-no-changes *.sln
+        env:
+          PATH: ${{ github.env.PATH }}:/home/runner/.dotnet/tools
+
+  unit-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: setup build
+        uses: ./.github/workflows/setup-build.yaml
+      - name: unit test
+        run: dotnet test .\test\Saunter.Tests\Saunter.Tests.csproj
+      # TODO: why there are 2 of them....
+      - name: unit mark test
+        run: dotnet test .\test\Saunter.Tests.MarkerTypeTests\Saunter.Tests.MarkerTypeTests.csproj
