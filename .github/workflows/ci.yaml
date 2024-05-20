@@ -33,7 +33,7 @@ jobs:
       - name: setup build
         uses: ./.github/npm
       - name: unit test
-        run: dotnet test .\test\Saunter.Tests\Saunter.Tests.csproj
+        run: dotnet test ./test/Saunter.Tests/Saunter.Tests.csproj
       # TODO: why there are 2 of them....
       - name: unit mark test
-        run: dotnet test .\test\Saunter.Tests.MarkerTypeTests\Saunter.Tests.MarkerTypeTests.csproj
+        run: dotnet test ./test/Saunter.Tests.MarkerTypeTests/Saunter.Tests.MarkerTypeTests.csproj
