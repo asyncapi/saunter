@@ -11,7 +11,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: setup build
-        uses: ./.github/workflows/setup-build.yaml
+        uses: ./.github/npm
       - name: Set version
         # Gets the numeric version from a tag (e.g. v1.2.3 -> 1.2.3)
         run: echo "RELEASE_VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV

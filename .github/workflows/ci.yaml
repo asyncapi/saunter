@@ -9,7 +9,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: setup build
-        uses: ./.github/workflows/setup-build.yaml
+        uses: ./.github/npm
       - name: Run dotnet build
         run: dotnet build --configuration Debug
 
@@ -18,7 +18,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: setup dotnet
-        uses: ./.github/workflows/setup-dotnet.yaml
+        uses: ./.github/dotnet
       - name: install dotnet-format
         run: dotnet tool install -g dotnet-format
       - name: dotnet format check
@@ -31,7 +31,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: setup build
-        uses: ./.github/workflows/setup-build.yaml
+        uses: ./.github/npm
       - name: unit test
         run: dotnet test .\test\Saunter.Tests\Saunter.Tests.csproj
       # TODO: why there are 2 of them....
