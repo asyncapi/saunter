@@ -1,7 +1,8 @@
-using System;
+﻿using System;
 using Newtonsoft.Json;
 
-namespace Saunter.AsyncApiSchema.v2 {
+namespace Saunter.AsyncApiSchema.v2
+{
     public class Info
     {
         public Info(string title, string version)
@@ -49,7 +50,7 @@ namespace Saunter.AsyncApiSchema.v2 {
         [JsonProperty("license", NullValueHandling = NullValueHandling.Ignore)]
         public License License { get; set; }
     }
-    
+
     public class Contact
     {
         /// <summary>
@@ -72,14 +73,14 @@ namespace Saunter.AsyncApiSchema.v2 {
         [JsonProperty("email")]
         public string Email { get; set; }
     }
-    
+
     public class License
     {
         public License(string name)
         {
             Name = name;
         }
-        
+
         /// <summary>
         /// The license name used for the API.
         /// </summary>

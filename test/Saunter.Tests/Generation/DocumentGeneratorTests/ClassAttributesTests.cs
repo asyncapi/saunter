@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
@@ -18,7 +18,7 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
             // Arrange
             var options = new AsyncApiOptions();
             var documentGenerator = new DocumentGenerator();
-            
+
             // Act
             var document = documentGenerator.GenerateDocument(new[] { typeof(TenantMessageConsumer).GetTypeInfo() }, options, options.AsyncApi, ActivatorServiceProvider.Instance);
 
@@ -52,7 +52,7 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
             var documentGenerator = new DocumentGenerator();
 
             // Act
-            var document = documentGenerator.GenerateDocument(new []{ typeof(TenantGenericMessagePublisher).GetTypeInfo() }, options, options.AsyncApi, ActivatorServiceProvider.Instance);
+            var document = documentGenerator.GenerateDocument(new[] { typeof(TenantGenericMessagePublisher).GetTypeInfo() }, options, options.AsyncApi, ActivatorServiceProvider.Instance);
 
             // Assert
             document.ShouldNotBeNull();
@@ -69,7 +69,7 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
 
             var messages = publish.Message.ShouldBeOfType<Messages>();
             messages.OneOf.Count.ShouldBe(3);
-            
+
             messages.OneOf.OfType<MessageReference>().ShouldContain(m => m.Id == "anyTenantCreated");
             messages.OneOf.OfType<MessageReference>().ShouldContain(m => m.Id == "anyTenantUpdated");
             messages.OneOf.OfType<MessageReference>().ShouldContain(m => m.Id == "anyTenantRemoved");
@@ -84,7 +84,7 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
             var documentGenerator = new DocumentGenerator();
 
             // Act
-            var document = documentGenerator.GenerateDocument(new []{ typeof(TenantSingleMessagePublisher).GetTypeInfo() }, options, options.AsyncApi, ActivatorServiceProvider.Instance);
+            var document = documentGenerator.GenerateDocument(new[] { typeof(TenantSingleMessagePublisher).GetTypeInfo() }, options, options.AsyncApi, ActivatorServiceProvider.Instance);
 
             // Assert
             document.ShouldNotBeNull();
@@ -93,7 +93,7 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
             var channel = document.Channels.First();
             channel.Key.ShouldBe("asw.tenant_service.tenants_history");
             channel.Value.Description.ShouldBe("Tenant events.");
-            
+
             var publish = channel.Value.Publish;
             publish.ShouldNotBeNull();
             publish.OperationId.ShouldBe("TenantSingleMessagePublisher");
@@ -161,7 +161,7 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
             var documentGenerator = new DocumentGenerator();
 
             // Act
-            var document = documentGenerator.GenerateDocument(new []{ typeof(OneTenantMessageConsumer).GetTypeInfo() }, options, options.AsyncApi, ActivatorServiceProvider.Instance);
+            var document = documentGenerator.GenerateDocument(new[] { typeof(OneTenantMessageConsumer).GetTypeInfo() }, options, options.AsyncApi, ActivatorServiceProvider.Instance);
 
             // Assert
             document.ShouldNotBeNull();
@@ -173,7 +173,7 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
             channel.Value.Parameters.Count.ShouldBe(2);
             channel.Value.Parameters.Values.OfType<ParameterReference>().ShouldContain(p => p.Id == "tenant_id" && p.Value.Schema != null && p.Value.Description == "The tenant identifier.");
             channel.Value.Parameters.Values.OfType<ParameterReference>().ShouldContain(p => p.Id == "tenant_status" && p.Value.Schema != null && p.Value.Description == "The tenant status.");
-            
+
             var subscribe = channel.Value.Subscribe;
             subscribe.ShouldNotBeNull();
             subscribe.OperationId.ShouldBe("OneTenantMessageConsumer");
@@ -181,7 +181,7 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
 
             var messages = subscribe.Message.ShouldBeOfType<Messages>();
             messages.OneOf.Count.ShouldBe(3);
-            
+
             messages.OneOf.OfType<MessageReference>().ShouldContain(m => m.Id == "tenantCreated");
             messages.OneOf.OfType<MessageReference>().ShouldContain(m => m.Id == "tenantUpdated");
             messages.OneOf.OfType<MessageReference>().ShouldContain(m => m.Id == "tenantRemoved");
@@ -197,7 +197,7 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
 
             // Act
             var document = documentGenerator.GenerateDocument(new[] { typeof(MyMessagePublisher).GetTypeInfo() }, options, options.AsyncApi, ActivatorServiceProvider.Instance);
-            
+
             // Assert
             document.ShouldNotBeNull();
 
@@ -222,13 +222,13 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
         public class TenantMessageConsumer
         {
             [Message(typeof(TenantCreated))]
-            public void SubscribeTenantCreatedEvent(Guid tenantId, TenantCreated evnt) { }
+            public void SubscribeTenantCreatedEvent(Guid _, TenantCreated __) { }
 
             [Message(typeof(TenantUpdated))]
-            public void SubscribeTenantUpdatedEvent(Guid tenantId, TenantUpdated evnt) { }
+            public void SubscribeTenantUpdatedEvent(Guid _, TenantUpdated __) { }
 
             [Message(typeof(TenantRemoved))]
-            public void SubscribeTenantRemovedEvent(Guid tenantId, TenantRemoved evnt) { }
+            public void SubscribeTenantRemovedEvent(Guid _, TenantRemoved __) { }
         }
 
         [AsyncApi]
@@ -237,13 +237,13 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
         public class TenantMessagePublisher
         {
             [Message(typeof(TenantCreated))]
-            public void PublishTenantCreatedEvent(Guid tenantId, TenantCreated evnt) { }
+            public void PublishTenantCreatedEvent(Guid _, TenantCreated __) { }
 
             [Message(typeof(TenantUpdated))]
-            public void PublishTenantUpdatedEvent(Guid tenantId, TenantUpdated evnt) { }
+            public void PublishTenantUpdatedEvent(Guid _, TenantUpdated __) { }
 
             [Message(typeof(TenantRemoved))]
-            public void PublishTenantRemovedEvent(Guid tenantId, TenantRemoved evnt) { }
+            public void PublishTenantRemovedEvent(Guid _, TenantRemoved __) { }
         }
 
         [AsyncApi]
@@ -254,7 +254,7 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
             [Message(typeof(AnyTenantCreated))]
             [Message(typeof(AnyTenantUpdated))]
             [Message(typeof(AnyTenantRemoved))]
-            public void PublishTenantEvent<TEvent>(Guid tenantId, TEvent @event)
+            public void PublishTenantEvent<TEvent>(Guid _, TEvent __)
                 where TEvent : IEvent
             {
             }
@@ -266,7 +266,7 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
         public class TenantSingleMessagePublisher
         {
             [Message(typeof(AnyTenantCreated))]
-            public void PublishTenantCreated(Guid tenantId, AnyTenantCreated @event)
+            public void PublishTenantCreated(Guid _, AnyTenantCreated __)
             {
             }
         }
@@ -279,13 +279,13 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
         public class OneTenantMessageConsumer
         {
             [Message(typeof(TenantCreated))]
-            public void SubscribeTenantCreatedEvent(Guid tenantId, TenantCreated evnt) {}
+            public void SubscribeTenantCreatedEvent(Guid _, TenantCreated __) { }
 
             [Message(typeof(TenantUpdated))]
-            public void SubscribeTenantUpdatedEvent(Guid tenantId, TenantUpdated evnt) {}
+            public void SubscribeTenantUpdatedEvent(Guid _, TenantUpdated __) { }
 
             [Message(typeof(TenantRemoved))]
-            public void SubscribeTenantRemovedEvent(Guid tenantId, TenantRemoved evnt) {}
+            public void SubscribeTenantRemovedEvent(Guid _, TenantRemoved __) { }
         }
     }
 

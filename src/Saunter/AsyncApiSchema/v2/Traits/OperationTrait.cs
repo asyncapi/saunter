@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 using Saunter.AsyncApiSchema.v2.Bindings;
 
@@ -8,7 +8,7 @@ namespace Saunter.AsyncApiSchema.v2.Traits
     /// Can be either an <see cref="OperationTrait"/> or an <see cref="OperationTraitReference"/> reference to an operation trait.
     /// </summary>
     public interface IOperationTrait { }
-    
+
     /// <summary>
     /// A reference to an OperationTrait within the AsyncAPI components.
     /// </summary>
@@ -16,7 +16,7 @@ namespace Saunter.AsyncApiSchema.v2.Traits
     {
         public OperationTraitReference(string id) : base(id, "#/components/operationTraits/{0}") { }
     }
-    
+
     public class OperationTrait : IOperationTrait
     {
         /// <summary>

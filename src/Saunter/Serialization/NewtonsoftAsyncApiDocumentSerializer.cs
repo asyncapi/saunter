@@ -1,10 +1,10 @@
-﻿using Newtonsoft.Json;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
 using NJsonSchema;
 using NJsonSchema.Infrastructure;
 using Saunter.AsyncApiSchema.v2;
 using Saunter.Generation.SchemaGeneration;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Saunter.Serialization
 {

@@ -43,8 +43,8 @@ namespace Saunter.Tests.Generation.Filters
             // Assert
             document.ShouldNotBeNull();
             document.DocumentName.ShouldBe(documentName);
-        }   
-        
+        }
+
         private class ExampleDocumentFilter : IDocumentFilter
         {
             public void Apply(AsyncApiDocument document, DocumentFilterContext context)

@@ -1,4 +1,4 @@
-namespace Saunter.AsyncApiSchema.v2.Bindings.Amqp
+﻿namespace Saunter.AsyncApiSchema.v2.Bindings.Amqp
 {
     /// <summary>
     /// This object MUST NOT contain any properties. Its name is reserved for future use.

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Reflection;
 using NJsonSchema.Generation;
 using Saunter.AsyncApiSchema.v2;
@@ -21,7 +21,7 @@ namespace Saunter.Generation.Filters
             SchemaGenerator = schemaGenerator;
             Operation = operation;
         }
-        
+
         public MethodInfo Method { get; }
 
         public JsonSchemaResolver SchemaResolver { get; }

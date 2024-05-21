@@ -25,7 +25,7 @@ namespace Saunter.Utils
             {
                 if (existing.Publish != null && channel.Publish != null)
                     throw new ArgumentException("An item with the same key and with an existing publish operation has already been added to the channel collection.");
-                
+
                 if (existing.Subscribe != null && channel.Subscribe != null)
                     throw new ArgumentException("An item with the same key and with an existing subscribe operation has already been added to the channel collection.");
 

@@ -8,7 +8,7 @@ namespace Saunter.Tests.MarkerTypeTests
     public class AnotherSamplePublisher
     {
         [Message(typeof(AnotherSampleMesssage))]
-        public void PublishTenantCreated(AnotherSampleMesssage @event) { }
+        public void PublishTenantCreated(AnotherSampleMesssage _) { }
     }
 
     [AsyncApi]
@@ -17,7 +17,7 @@ namespace Saunter.Tests.MarkerTypeTests
     public class SampleConsumer
     {
         [Message(typeof(SampleMessage))]
-        public void SubscribeSampleMessage(SampleMessage evnt) { }
+        public void SubscribeSampleMessage(SampleMessage _) { }
     }
 
     public class SampleMessage { }

@@ -33,6 +33,6 @@ namespace Saunter.Tests.Generation.DocumentProviderTests
             }
         }
 
-        
+
     }
 }

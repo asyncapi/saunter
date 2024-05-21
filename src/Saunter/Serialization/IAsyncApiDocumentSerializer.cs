@@ -1,6 +1,6 @@
-﻿using Saunter.AsyncApiSchema.v2;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
+using Saunter.AsyncApiSchema.v2;
 
 namespace Saunter.Serialization
 {

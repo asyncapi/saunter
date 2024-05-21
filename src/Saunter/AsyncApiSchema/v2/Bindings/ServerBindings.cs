@@ -9,7 +9,7 @@ namespace Saunter.AsyncApiSchema.v2.Bindings
     /// <summary>
     /// ServerBindings can be either a the bindings or a reference to the bindings.
     /// </summary>
-    public interface IServerBindings {}
+    public interface IServerBindings { }
 
     /// <summary>
     /// A reference to the OperationBindings within the AsyncAPI components.
