@@ -1,6 +1,6 @@
-using NJsonSchema;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Newtonsoft.Json;
+using NJsonSchema;
 using Saunter.AsyncApiSchema.v2.Bindings;
 
 namespace Saunter.AsyncApiSchema.v2.Traits
@@ -9,7 +9,7 @@ namespace Saunter.AsyncApiSchema.v2.Traits
     /// Can be either a <see cref="MessageTrait"/> or <see cref="MessageTraitReference"/> reference to a message trait.
     /// </summary>
     public interface IMessageTrait { }
-    
+
     /// <summary>
     /// A reference to a MessageTrait within the AsyncAPI components.
     /// </summary>
@@ -17,7 +17,7 @@ namespace Saunter.AsyncApiSchema.v2.Traits
     {
         public MessageTraitReference(string id) : base(id, "#/components/messageTraits/{0}") { }
     }
-    
+
     public class MessageTrait : IMessageTrait
     {
         /// <summary>
@@ -78,8 +78,8 @@ namespace Saunter.AsyncApiSchema.v2.Traits
         /// Tags can be used for logical grouping of messages.
         /// </summary>
         [JsonProperty("tags")]
-        public ISet<Tag> Tags { get; set; } 
-            
+        public ISet<Tag> Tags { get; set; }
+
         /// <summary>
         /// Additional external documentation for this message.
         /// </summary>

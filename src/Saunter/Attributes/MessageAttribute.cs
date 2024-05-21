@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 
 namespace Saunter.Attributes
 {
@@ -9,13 +9,13 @@ namespace Saunter.Attributes
         {
             PayloadType = payloadType;
         }
-        
+
         public MessageAttribute(Type payloadType, params string[] tags)
         {
             PayloadType = payloadType;
             Tags = tags;
         }
-        
+
         /// <summary>
         /// The type to use to generate the message payload schema.
         /// </summary>

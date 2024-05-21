@@ -1,5 +1,5 @@
+﻿using Newtonsoft.Json;
 using NJsonSchema;
-using Newtonsoft.Json;
 
 namespace Saunter.AsyncApiSchema.v2
 {
@@ -22,7 +22,7 @@ namespace Saunter.AsyncApiSchema.v2
         [JsonIgnore]
         public Parameter Value => _document.Components.Parameters[Id];
     }
-    
+
     public class Parameter : IParameter
     {
         /// <summary>

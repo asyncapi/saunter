@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 
 namespace Saunter.Attributes
 {
@@ -9,7 +9,7 @@ namespace Saunter.Attributes
     public sealed class AsyncApiAttribute : Attribute
     {
         public string DocumentName { get; }
-        
+
         public AsyncApiAttribute(string documentName = null)
         {
             DocumentName = documentName;

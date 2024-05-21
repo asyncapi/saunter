@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Newtonsoft.Json;
 
 namespace Saunter.AsyncApiSchema.v2
@@ -16,7 +16,7 @@ namespace Saunter.AsyncApiSchema.v2
         /// </summary>
         [JsonProperty("description")]
         public string Description { get; set; }
-        
+
         /// <summary>
         /// The URL for the target documentation.
         /// Value MUST be in the format of a URL.

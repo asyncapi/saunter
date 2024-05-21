@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace Saunter.AsyncApiSchema.v2
@@ -17,7 +17,7 @@ namespace Saunter.AsyncApiSchema.v2
         [JsonProperty("authorizationCode")]
         public OAuthFlow AuthorizationCode { get; set; }
     }
-    
+
     public class OAuthFlow
     {
         [JsonProperty("authorizationUrl")]

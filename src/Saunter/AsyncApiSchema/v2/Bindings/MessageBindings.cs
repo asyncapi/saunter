@@ -9,7 +9,7 @@ namespace Saunter.AsyncApiSchema.v2.Bindings
     /// <summary>
     /// MessageBindings can be either a the bindings or a reference to the bindings.
     /// </summary>
-    public interface IMessageBindings {}
+    public interface IMessageBindings { }
 
     /// <summary>
     /// A reference to the MessageBindings within the AsyncAPI components.

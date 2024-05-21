@@ -46,7 +46,7 @@ namespace Saunter.IntegrationTests.ReverseProxy
         {
             services.AddAsyncApiSchemaGeneration(options =>
             {
-                options.AssemblyMarkerTypes = new[] {typeof(StreetlightsController)};
+                options.AssemblyMarkerTypes = new[] { typeof(StreetlightsController) };
 
                 options.AsyncApi = new AsyncApiDocument
                 {
@@ -104,7 +104,7 @@ namespace Saunter.IntegrationTests.ReverseProxy
     {
         [Channel("publish/light/measured"), PublishOperation(typeof(LightMeasuredEvent))]
         [HttpPost, Route("publish/light/measured")]
-        public void MeasureLight([FromBody] LightMeasuredEvent lightMeasuredEvent)
+        public void MeasureLight([FromBody] LightMeasuredEvent _)
         {
         }
     }

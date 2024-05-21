@@ -1,6 +1,6 @@
-using NJsonSchema;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Newtonsoft.Json;
+using NJsonSchema;
 using Saunter.AsyncApiSchema.v2.Bindings;
 using Saunter.AsyncApiSchema.v2.Traits;
 
@@ -9,8 +9,8 @@ namespace Saunter.AsyncApiSchema.v2
     /// <remarks>
     /// Message can either be a list of messages, a single message, or a reference to a message. 
     /// </remarks>
-    public interface IMessage {}
-    
+    public interface IMessage { }
+
     /// <summary>
     /// A reference to a Message within the AsyncAPI components.
     /// </summary>
@@ -18,13 +18,13 @@ namespace Saunter.AsyncApiSchema.v2
     {
         public MessageReference(string id) : base(id, "#/components/messages/{0}") { }
     }
-    
+
     public class Messages : IMessage
     {
         [JsonProperty("oneOf")]
         public List<IMessage> OneOf { get; set; } = new List<IMessage>();
     }
-    
+
     public class Message : IMessage
     {
         /// <summary>
@@ -121,7 +121,7 @@ namespace Saunter.AsyncApiSchema.v2
         /// </summary>
         [JsonProperty("examples")]
         public IList<MessageExample> Examples { get; set; } = new List<MessageExample>();
-        
+
         public bool ShouldSerializeExamples()
         {
             return Examples != null && Examples.Count > 0;

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using System.Reflection;
 using Microsoft.Extensions.Options;
@@ -20,8 +20,8 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
             var documentGenerator = new DocumentGenerator();
 
             // Act
-            var document = documentGenerator.GenerateDocument(new []{ typeof(TenantMessagePublisher).GetTypeInfo() }, options, options.AsyncApi, ActivatorServiceProvider.Instance);
-            
+            var document = documentGenerator.GenerateDocument(new[] { typeof(TenantMessagePublisher).GetTypeInfo() }, options, options.AsyncApi, ActivatorServiceProvider.Instance);
+
             // Assert
             document.ShouldNotBeNull();
             document.Channels.Count.ShouldBe(1);
@@ -29,7 +29,7 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
             var channel = document.Channels.First();
             channel.Key.ShouldBe("asw.tenant_service.tenants_history");
             channel.Value.Description.ShouldBe("Tenant events.");
-            
+
             var publish = channel.Value.Publish;
             publish.ShouldNotBeNull();
             publish.OperationId.ShouldBe("TenantMessagePublisher");
@@ -37,7 +37,7 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
 
             var messages = publish.Message.ShouldBeOfType<Messages>();
             messages.OneOf.Count.ShouldBe(3);
-            
+
             messages.OneOf.OfType<MessageReference>().ShouldContain(m => m.Id == "anyTenantCreated");
             messages.OneOf.OfType<MessageReference>().ShouldContain(m => m.Id == "anyTenantUpdated");
             messages.OneOf.OfType<MessageReference>().ShouldContain(m => m.Id == "anyTenantRemoved");
@@ -58,14 +58,14 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
         }
     }
 
-    public class AnyTenantCreated : IEvent {}
-    
-    public class AnyTenantUpdated : IEvent {}
-    
-    public class AnyTenantRemoved : IEvent {}
+    public class AnyTenantCreated : IEvent { }
 
-    public interface IEvent {}
-    
+    public class AnyTenantUpdated : IEvent { }
+
+    public class AnyTenantRemoved : IEvent { }
+
+    public interface IEvent { }
+
     public interface ITenantMessagePublisher
     {
         void PublishTenantEvent<TEvent>(Guid tenantId, TEvent @event)
