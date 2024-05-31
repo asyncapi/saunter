@@ -2,7 +2,7 @@
 
 namespace Saunter.Attributes
 {
-    [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class)]
+    [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class | AttributeTargets.Interface)]
     public abstract class OperationAttribute : Attribute
     {
         public OperationType OperationType { get; protected set; }
