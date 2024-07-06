@@ -31,7 +31,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Saunter.Tests.MarkerTypeTes
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AsyncAPI.Saunter.Generator.Cli", "src\AsyncAPI.Saunter.Generator.Cli\AsyncAPI.Saunter.Generator.Cli.csproj", "{6C102D4D-3DA4-4763-B75E-C15E33E7E94A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AsyncAPI.Saunter.Generator.Cli.Tests", "test\AsyncAPI.Saunter.Generator.Cli.Tests\AsyncAPI.Saunter.Generator.Cli.Tests.csproj", "{18AD0249-0436-4A26-9972-B97BA6905A54}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AsyncAPI.Saunter.Generator.Cli.Tests", "test\AsyncAPI.Saunter.Generator.Cli.Tests\AsyncAPI.Saunter.Generator.Cli.Tests.csproj", "{18AD0249-0436-4A26-9972-B97BA6905A54}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AsyncAPI.Saunter.Generator.Build", "src\AsyncAPI.Saunter.Generator.Build\AsyncAPI.Saunter.Generator.Build.csproj", "{A320E670-5CB0-4815-AF67-D8D09FC92A2A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -127,6 +129,18 @@ Global
 		{18AD0249-0436-4A26-9972-B97BA6905A54}.Release|x64.Build.0 = Release|Any CPU
 		{18AD0249-0436-4A26-9972-B97BA6905A54}.Release|x86.ActiveCfg = Release|Any CPU
 		{18AD0249-0436-4A26-9972-B97BA6905A54}.Release|x86.Build.0 = Release|Any CPU
+		{A320E670-5CB0-4815-AF67-D8D09FC92A2A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A320E670-5CB0-4815-AF67-D8D09FC92A2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A320E670-5CB0-4815-AF67-D8D09FC92A2A}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{A320E670-5CB0-4815-AF67-D8D09FC92A2A}.Debug|x64.Build.0 = Debug|Any CPU
+		{A320E670-5CB0-4815-AF67-D8D09FC92A2A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A320E670-5CB0-4815-AF67-D8D09FC92A2A}.Debug|x86.Build.0 = Debug|Any CPU
+		{A320E670-5CB0-4815-AF67-D8D09FC92A2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A320E670-5CB0-4815-AF67-D8D09FC92A2A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A320E670-5CB0-4815-AF67-D8D09FC92A2A}.Release|x64.ActiveCfg = Release|Any CPU
+		{A320E670-5CB0-4815-AF67-D8D09FC92A2A}.Release|x64.Build.0 = Release|Any CPU
+		{A320E670-5CB0-4815-AF67-D8D09FC92A2A}.Release|x86.ActiveCfg = Release|Any CPU
+		{A320E670-5CB0-4815-AF67-D8D09FC92A2A}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -139,6 +153,7 @@ Global
 		{02284473-6DE7-4EE0-8433-2AC295045549} = {6491E321-2D02-44AB-9116-D722FE169595}
 		{6C102D4D-3DA4-4763-B75E-C15E33E7E94A} = {28D4C365-FDED-49AE-A97D-36202E24A55A}
 		{18AD0249-0436-4A26-9972-B97BA6905A54} = {6491E321-2D02-44AB-9116-D722FE169595}
+		{A320E670-5CB0-4815-AF67-D8D09FC92A2A} = {28D4C365-FDED-49AE-A97D-36202E24A55A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2F85D9DA-DBCF-4F13-8C42-5719F1469B2E}

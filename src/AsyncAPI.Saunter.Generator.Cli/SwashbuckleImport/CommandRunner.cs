@@ -56,6 +56,7 @@ internal class CommandRunner
 
         if (_subRunners.Any() || !TryParseArgs(args, out IDictionary<string, string> namedArgs))
         {
+            _output.WriteLine($"Input: {string.Join(' ', args)}");
             PrintUsage();
             return 1;
         }

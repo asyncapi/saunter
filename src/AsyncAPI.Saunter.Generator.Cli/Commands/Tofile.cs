@@ -41,6 +41,6 @@ internal class Tofile
 
     private static string EscapePath(string path)
     {
-        return path.Contains(' ') ? "\"" + path + "\"" : path;
+        return (path.Contains(' ') || string.IsNullOrWhiteSpace(path)) ? "\"" + path + "\"" : path;
     }
 }

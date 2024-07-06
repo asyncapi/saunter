@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Diagnostics;
 using LEGO.AsyncAPI.Readers;
 using Microsoft.Extensions.Options;
 using Saunter.Serialization;
@@ -31,7 +32,7 @@ internal class TofileInternal
         var startupAssembly = AssemblyLoadContext.Default.LoadFromAssemblyPath(Path.Combine(Directory.GetCurrentDirectory(), namedArgs[StartupAssemblyArgument]));
 
         // 2) Build a service container that's based on the startup assembly
-        var envVars = namedArgs.TryGetValue(EnvOption, out var x) ? x.Split(',').Select(x => x.Trim()) : Array.Empty<string>();
+        var envVars = (namedArgs.TryGetValue(EnvOption, out var x) && !string.IsNullOrWhiteSpace(x)) ? x.Split(',').Select(x => x.Trim()) : Array.Empty<string>();
         foreach (var envVar in envVars.Select(x => x.Split('=').Select(x => x.Trim()).ToList()))
         {
             if (envVar.Count == 2)
@@ -50,8 +51,8 @@ internal class TofileInternal
         var asyncapiOptions = serviceProvider.GetService<IOptions<AsyncApiOptions>>().Value;
         var documentSerializer = serviceProvider.GetRequiredService<IAsyncApiDocumentSerializer>();
 
-        var documentNames = namedArgs.TryGetValue(DocOption, out var doc) ? [doc] : asyncapiOptions.NamedApis.Keys;
-        var fileTemplate = namedArgs.TryGetValue(FileNameOption, out var template) ? template : "{document}_asyncapi.{extension}";
+        var documentNames = (namedArgs.TryGetValue(DocOption, out var doc) && !string.IsNullOrWhiteSpace(doc)) ? [doc] : asyncapiOptions.NamedApis.Keys;
+        var fileTemplate = (namedArgs.TryGetValue(FileNameOption, out var template) && !string.IsNullOrWhiteSpace(template)) ? template : "{document}_asyncapi.{extension}";
        if (documentNames.Count == 0)
         {
             if (asyncapiOptions.AssemblyMarkerTypes.Any())
@@ -86,20 +87,16 @@ internal class TofileInternal
             }
 
             // 4) Serialize to specified output location or stdout
-            var outputPath = namedArgs.TryGetValue(OutputOption, out var arg1) ? Path.Combine(Directory.GetCurrentDirectory(), arg1) : null;
+            var outputPath = (namedArgs.TryGetValue(OutputOption, out var path) && !string.IsNullOrWhiteSpace(path)) ? Path.Combine(Directory.GetCurrentDirectory(), path) : null;
             if (!string.IsNullOrEmpty(outputPath))
             {
-                var directoryPath = Path.GetDirectoryName(outputPath);
-                if (!string.IsNullOrEmpty(directoryPath) && !Directory.Exists(directoryPath))
-                {
-                    Directory.CreateDirectory(directoryPath);
-                }
+                Directory.CreateDirectory(outputPath);
             }
 
             var exportJson = true;
             var exportYml = false;
             var exportYaml = false;
-            if (namedArgs.TryGetValue(FormatOption, out var format))
+            if (namedArgs.TryGetValue(FormatOption, out var format) && !string.IsNullOrWhiteSpace(format))
             {
                 var splitted = format.Split(',').Select(x => x.Trim()).ToList();
                 exportJson = splitted.Any(x => x.Equals("json", StringComparison.OrdinalIgnoreCase));

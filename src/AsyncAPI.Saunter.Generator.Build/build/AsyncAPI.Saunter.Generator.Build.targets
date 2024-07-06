@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<Project>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition=" '$(AsyncAPIGenerateDocumentsOnBuild)' == 'true' ">
+    <Message Text="AsyncAPI.Build; AsyncAPIDocumentFormats: $(AsyncAPIDocumentFormats)" />
+    <Message Text="AsyncAPI.Build; AsyncAPIDocumentOutputPath: $(AsyncAPIDocumentOutputPath)" />
+    <Message Text="AsyncAPI.Build; AsyncAPIDocumentNames: $(AsyncAPIDocumentNames)" />
+    <Message Text="AsyncAPI.Build; AsyncAPIDocumentFilename: $(AsyncAPIDocumentFilename)" />
+    <Message Text="AsyncAPI.Build; AsyncAPIDocumentEnvVars: $(AsyncAPIDocumentEnvVars)" />
+    <Message Text="AsyncAPI.Build; MSBuildThisFileDirectory: $(MSBuildThisFileDirectory)" />
+    <Message Text="AsyncAPI.Build; MSBuildProjectFullPath: $(MSBuildProjectFullPath)" />
+    <Message Text="AsyncAPI.Build; MSBuildProjectDirectory: $(MSBuildProjectDirectory)" />
+
+    <Exec Command="dotnet &quot;$(MSBuildThisFileDirectory)/../tools/net6.0/AsyncAPI.Saunter.Generator.Cli.dll&quot; tofile --output &quot;$(MSBuildProjectDirectory)/$(AsyncAPIDocumentOutputPath)&quot; --format &quot;$(AsyncAPIDocumentFormats)&quot; --doc &quot;$(AsyncAPIDocumentNames)&quot; --filename &quot;$(AsyncAPIDocumentFilename)&quot; --env &quot;$(AsyncAPIDocumentEnvVars)&quot; &quot;$(MSBuildProjectDirectory)/$(OutputPath)/$(AssemblyTitle).dll&quot;"/>
+  </Target>
+
+</Project>

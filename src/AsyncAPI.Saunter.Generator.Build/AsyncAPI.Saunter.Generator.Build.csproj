@@ -1,0 +1,63 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net6.0;net8.0</TargetFrameworks>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>12</LangVersion>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+
+    <Description>AsyncAPI Build Tools</Description>
+    <Authors>AsyncAPI Initiative</Authors>
+    <PackageId>AsyncAPI.Saunter.Generator.Build</PackageId>
+    <PackageTags>asyncapi;aspnetcore;openapi;documentation;amqp;generator;build;tool</PackageTags>
+    <PackageReadmeFile>readme.md</PackageReadmeFile>
+    <PackageIcon>logo.png</PackageIcon>
+    <RepositoryUrl>https://github.com/asyncapi/saunter</RepositoryUrl>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <IncludeSymbols>false</IncludeSymbols>
+    <PackageProjectUrl>https://github.com/asyncapi/saunter</PackageProjectUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <Version>0.0.24</Version>
+    <OutputPath>tools/$(Configuration)</OutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AsyncAPI.Saunter.Generator.Cli\AsyncAPI.Saunter.Generator.Cli.csproj" />
+    <ProjectReference Include="..\Saunter\Saunter.csproj" />
+    <ProjectReference Update="@(ProjectReference)" PrivateAssets="All" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' != 'netstandard2.0' ">
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AsyncAPI.NET.Readers" Version="5.2.1" />
+
+    <!-- Development Dependencies -->
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
+    <PackageReference Update="@(PackageReference)" PrivateAssets="All" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="readme.md" Pack="true" PackagePath="/" />
+    <None Include="../../assets/logo.png" Pack="true" PackagePath="/" />
+    <None Include="build/*" Pack="true" PackagePath="/build" />
+    <None Include="$(OutputPath)/net6.0/*" Pack="true" PackagePath="/tools/net6.0" />
+  </ItemGroup>
+
+  <!--ItemGroup>
+    <Compile Include="../AsyncAPI.Saunter.Generator.Cli/Commands/**/*.cs" />
+    <Compile Include="../AsyncAPI.Saunter.Generator.Cli/Internal/**/*.cs" />
+    <Compile Include="../AsyncAPI.Saunter.Generator.Cli/SwashbuckleImport/**/*.cs" />
+    <Compile Include="../AsyncAPI.Saunter.Generator.Cli/*.cs" />
+  </ItemGroup>-->
+
+  <ItemGroup>
+    <Folder Include="tools\" />
+  </ItemGroup>
+
+</Project>

@@ -3,6 +3,10 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <IsPackable>false</IsPackable>
+    <AsyncAPIGenerateDocumentsOnBuild>true</AsyncAPIGenerateDocumentsOnBuild>
+    <AsyncAPIDocumentFormats>json,yml</AsyncAPIDocumentFormats>
+    <AsyncAPIDocumentFilename>streetlights.{extension}</AsyncAPIDocumentFilename>
+    <AsyncAPIDocumentOutputPath>specs</AsyncAPIDocumentOutputPath>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
