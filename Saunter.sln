@@ -29,7 +29,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Saunter.IntegrationTests.Re
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Saunter.Tests.MarkerTypeTests", "test\Saunter.Tests.MarkerTypeTests\Saunter.Tests.MarkerTypeTests.csproj", "{02284473-6DE7-4EE0-8433-2AC295045549}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AsyncAPI.Saunter.Generator.Cli", "src\AsyncAPI.Saunter.Generator.Cli\AsyncAPI.Saunter.Generator.Cli.csproj", "{6C102D4D-3DA4-4763-B75E-C15E33E7E94A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AsyncAPI.Saunter.Generator.Cli", "src\AsyncAPI.Saunter.Generator.Cli\AsyncAPI.Saunter.Generator.Cli.csproj", "{6C102D4D-3DA4-4763-B75E-C15E33E7E94A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AsyncAPI.Saunter.Generator.Cli.Tests", "test\AsyncAPI.Saunter.Generator.Cli.Tests\AsyncAPI.Saunter.Generator.Cli.Tests.csproj", "{18AD0249-0436-4A26-9972-B97BA6905A54}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -113,6 +115,18 @@ Global
 		{6C102D4D-3DA4-4763-B75E-C15E33E7E94A}.Release|x64.Build.0 = Release|Any CPU
 		{6C102D4D-3DA4-4763-B75E-C15E33E7E94A}.Release|x86.ActiveCfg = Release|Any CPU
 		{6C102D4D-3DA4-4763-B75E-C15E33E7E94A}.Release|x86.Build.0 = Release|Any CPU
+		{18AD0249-0436-4A26-9972-B97BA6905A54}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{18AD0249-0436-4A26-9972-B97BA6905A54}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{18AD0249-0436-4A26-9972-B97BA6905A54}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{18AD0249-0436-4A26-9972-B97BA6905A54}.Debug|x64.Build.0 = Debug|Any CPU
+		{18AD0249-0436-4A26-9972-B97BA6905A54}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{18AD0249-0436-4A26-9972-B97BA6905A54}.Debug|x86.Build.0 = Debug|Any CPU
+		{18AD0249-0436-4A26-9972-B97BA6905A54}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{18AD0249-0436-4A26-9972-B97BA6905A54}.Release|Any CPU.Build.0 = Release|Any CPU
+		{18AD0249-0436-4A26-9972-B97BA6905A54}.Release|x64.ActiveCfg = Release|Any CPU
+		{18AD0249-0436-4A26-9972-B97BA6905A54}.Release|x64.Build.0 = Release|Any CPU
+		{18AD0249-0436-4A26-9972-B97BA6905A54}.Release|x86.ActiveCfg = Release|Any CPU
+		{18AD0249-0436-4A26-9972-B97BA6905A54}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -124,6 +138,7 @@ Global
 		{7CD09B89-130A-41AF-ADAE-2166C4ED695B} = {6491E321-2D02-44AB-9116-D722FE169595}
 		{02284473-6DE7-4EE0-8433-2AC295045549} = {6491E321-2D02-44AB-9116-D722FE169595}
 		{6C102D4D-3DA4-4763-B75E-C15E33E7E94A} = {28D4C365-FDED-49AE-A97D-36202E24A55A}
+		{18AD0249-0436-4A26-9972-B97BA6905A54} = {6491E321-2D02-44AB-9116-D722FE169595}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2F85D9DA-DBCF-4F13-8C42-5719F1469B2E}

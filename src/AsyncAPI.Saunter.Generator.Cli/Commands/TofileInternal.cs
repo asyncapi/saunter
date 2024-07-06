@@ -15,12 +15,16 @@ using AsyncApi.Saunter.Generator.Cli.SwashbuckleImport;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore;
 using Microsoft.Extensions.Hosting;
+using Saunter.AsyncApiSchema.v2;
 using static Program;
+using AsyncApiDocument = Saunter.AsyncApiSchema.v2.AsyncApiDocument;
 
 namespace AsyncApi.Saunter.Generator.Cli.Commands;
 
 internal class TofileInternal
 {
+    private const string defaultDocumentName = null;
+
     internal static int Run(IDictionary<string, string> namedArgs)
     {
         // 1) Configure host with provided startupassembly
@@ -43,24 +47,41 @@ internal class TofileInternal
 
         // 3) Retrieve AsyncAPI via configured provider
         var documentProvider = serviceProvider.GetService<IAsyncApiDocumentProvider>();
-        var asyncapiOptions = serviceProvider.GetService<IOptions<AsyncApiOptions>>();
+        var asyncapiOptions = serviceProvider.GetService<IOptions<AsyncApiOptions>>().Value;
         var documentSerializer = serviceProvider.GetRequiredService<IAsyncApiDocumentSerializer>();
 
-        var documentNames = namedArgs.TryGetValue(DocOption, out var doc) ? [doc] : asyncapiOptions.Value.NamedApis.Keys;
+        var documentNames = namedArgs.TryGetValue(DocOption, out var doc) ? [doc] : asyncapiOptions.NamedApis.Keys;
         var fileTemplate = namedArgs.TryGetValue(FileNameOption, out var template) ? template : "{document}_asyncapi.{extension}";
+       if (documentNames.Count == 0)
+        {
+            if (asyncapiOptions.AssemblyMarkerTypes.Any())
+            {
+                documentNames = [defaultDocumentName];
+            }
+            else
+            {
+                throw new ArgumentOutOfRangeException(DocOption, $"No AsyncAPI documents found: {DocOption} = '{doc}'. Known document(s): {string.Join(", ", asyncapiOptions.NamedApis.Keys)}.");
+            }
+        }
+
         foreach (var documentName in documentNames)
         {
-            if (!asyncapiOptions.Value.NamedApis.TryGetValue(documentName, out var prototype))
+            AsyncApiDocument prototype;
+            if (documentName == defaultDocumentName)
             {
-                throw new ArgumentOutOfRangeException(DocOption, documentName, $"Requested AsyncAPI document not found: '{documentName}'. Known document(s): {string.Join(", ", asyncapiOptions.Value.NamedApis.Keys)}.");
+                prototype = asyncapiOptions.AsyncApi;
+            }
+            else if (!asyncapiOptions.NamedApis.TryGetValue(documentName, out prototype))
+            {
+                throw new ArgumentOutOfRangeException(DocOption, documentName, $"Requested AsyncAPI document not found: '{documentName}'. Known document(s): {string.Join(", ", asyncapiOptions.NamedApis.Keys)}.");
             }
 
-            var asyncApiSchema = documentProvider.GetDocument(asyncapiOptions.Value, prototype);
-            var asyncApiSchemaJson = documentSerializer.Serialize(asyncApiSchema);
+            var schema = documentProvider.GetDocument(asyncapiOptions, prototype);
+            var asyncApiSchemaJson = documentSerializer.Serialize(schema);
             var asyncApiDocument = new AsyncApiStringReader().Read(asyncApiSchemaJson, out var diagnostic);
             if (diagnostic.Errors.Any())
             {
-                Console.Error.WriteLine($"AsyncAPI Schema '{documentName}' is not valid ({diagnostic.Errors.Count} Error(s), {diagnostic.Warnings.Count} Warning(s)):" +
+                Console.Error.WriteLine($"AsyncAPI Schema '{documentName ?? "default"}' is not valid ({diagnostic.Errors.Count} Error(s), {diagnostic.Warnings.Count} Warning(s)):" +
                                         $"{Environment.NewLine}{string.Join(Environment.NewLine, diagnostic.Errors.Select(x => $"- {x}"))}");
             }
 
@@ -123,7 +144,7 @@ internal class TofileInternal
             return outputPath;
         }
 
-        return Path.Combine(outputPath, fileTemplate.Replace("{document}", documentName).Replace("{extension}", extension));
+        return Path.Combine(outputPath, fileTemplate.Replace("{document}", documentName == defaultDocumentName ? "" : documentName).Replace("{extension}", extension).TrimStart('_'));
     }
 
     private static IServiceProvider GetServiceProvider(Assembly startupAssembly)
