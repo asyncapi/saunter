@@ -23,7 +23,7 @@ jobs:
     - uses: actions/setup-dotnet@v2
       with:
         dotnet-version: | 
-          6.0.x # SDK Version to use; x will use the latest version of the channel
+          6.0.x
           8.0.x
 
     - name: Run NPM install
