@@ -29,7 +29,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Saunter.IntegrationTests.Re
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Saunter.Tests.MarkerTypeTests", "test\Saunter.Tests.MarkerTypeTests\Saunter.Tests.MarkerTypeTests.csproj", "{02284473-6DE7-4EE0-8433-2AC295045549}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AsyncAPI.Saunter.Generator.Cli", "src\AsyncApi.Saunter.Generator.Cli\AsyncAPI.Saunter.Generator.Cli.csproj", "{6C102D4D-3DA4-4763-B75E-C15E33E7E94A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AsyncAPI.Saunter.Generator.Cli", "src\AsyncAPI.Saunter.Generator.Cli\AsyncAPI.Saunter.Generator.Cli.csproj", "{6C102D4D-3DA4-4763-B75E-C15E33E7E94A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
