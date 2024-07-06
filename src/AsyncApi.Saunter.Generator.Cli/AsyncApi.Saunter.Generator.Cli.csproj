@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <OutputType>Exe</OutputType>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>12</LangVersion>
+    <RootNamespace>AsyncAPI.Saunter.Generator.Cli</RootNamespace>
+
+    <Description>AsyncAPI Command Line Tools</Description>
+    <OutputType>Exe</OutputType>
+    <PackAsTool>true</PackAsTool>
+    <PackageId>AsyncAPI.Saunter.Generator.Cli</PackageId>
+    <!--<TargetFrameworks>net6.0;net7.0;net8.0</TargetFrameworks>-->
+    <ToolCommandName>asyncapi</ToolCommandName>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+  </PropertyGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' != 'netstandard2.0' ">
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AsyncAPI.NET.Readers" Version="5.2.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Saunter\Saunter.csproj" />
+  </ItemGroup>
+    
+</Project>
