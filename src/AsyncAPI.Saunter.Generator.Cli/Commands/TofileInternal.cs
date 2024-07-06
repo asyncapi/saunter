@@ -27,6 +27,18 @@ internal class TofileInternal
         var startupAssembly = AssemblyLoadContext.Default.LoadFromAssemblyPath(Path.Combine(Directory.GetCurrentDirectory(), namedArgs[StartupAssemblyArgument]));
 
         // 2) Build a service container that's based on the startup assembly
+        var envVars = namedArgs.TryGetValue(EnvOption, out var x) ? x.Split(',').Select(x => x.Trim()) : Array.Empty<string>();
+        foreach (var envVar in envVars.Select(x => x.Split('=').Select(x => x.Trim()).ToList()))
+        {
+            if (envVar.Count == 2)
+            {
+                Environment.SetEnvironmentVariable(envVar[0], envVar[1], EnvironmentVariableTarget.Process);
+            }
+            else
+            {
+                throw new ArgumentOutOfRangeException(EnvOption, namedArgs[EnvOption], "Environment variable should be in the format: env1=value1,env2=value2");
+            }
+        }
         var serviceProvider = GetServiceProvider(startupAssembly);
 
         // 3) Retrieve AsyncAPI via configured provider
@@ -34,55 +46,60 @@ internal class TofileInternal
         var asyncapiOptions = serviceProvider.GetService<IOptions<AsyncApiOptions>>();
         var documentSerializer = serviceProvider.GetRequiredService<IAsyncApiDocumentSerializer>();
 
-        if (!asyncapiOptions.Value.NamedApis.TryGetValue(namedArgs[DocArgument], out var prototype))
+        var documentNames = namedArgs.TryGetValue(DocOption, out var doc) ? [doc] : asyncapiOptions.Value.NamedApis.Keys;
+        var fileTemplate = namedArgs.TryGetValue(FileNameOption, out var template) ? template : "{document}_asyncapi.{extension}";
+        foreach (var documentName in documentNames)
         {
-            throw new ArgumentOutOfRangeException(DocArgument, namedArgs[DocArgument], $"Requested AsyncAPI document not found: '{namedArgs[DocArgument]}'. Known document(s): {string.Join(", ", asyncapiOptions.Value.NamedApis.Keys)}.");
-        }
-        var asyncApiSchema = documentProvider.GetDocument(asyncapiOptions.Value, prototype);
-        var asyncApiSchemaJson = documentSerializer.Serialize(asyncApiSchema);
-        var asyncApiDocument = new AsyncApiStringReader().Read(asyncApiSchemaJson, out var diagnostic);
-        if (diagnostic.Errors.Any())
-        {
-            Console.Error.WriteLine($"AsyncAPI Schema is not valid ({diagnostic.Errors.Count} Error(s), {diagnostic.Warnings.Count} Warning(s)):" +
-                                    $"{Environment.NewLine}{string.Join(Environment.NewLine, diagnostic.Errors.Select(x => $"- {x}"))}");
-        }
-
-        // 4) Serialize to specified output location or stdout
-        var outputPath = namedArgs.TryGetValue(OutputOption, out var arg1) ? Path.Combine(Directory.GetCurrentDirectory(), arg1) : null;
-
-        if (!string.IsNullOrEmpty(outputPath))
-        {
-            var directoryPath = Path.GetDirectoryName(outputPath);
-            if (!string.IsNullOrEmpty(directoryPath) && !Directory.Exists(directoryPath))
+            if (!asyncapiOptions.Value.NamedApis.TryGetValue(documentName, out var prototype))
             {
-                Directory.CreateDirectory(directoryPath);
+                throw new ArgumentOutOfRangeException(DocOption, documentName, $"Requested AsyncAPI document not found: '{documentName}'. Known document(s): {string.Join(", ", asyncapiOptions.Value.NamedApis.Keys)}.");
             }
-        }
 
-        var exportJson = true;
-        var exportYml = false;
-        var exportYaml = false;
-        if (namedArgs.TryGetValue(FormatOption, out var format))
-        {
-            var splitted = format.Split(',').Select(x => x.Trim()).ToList();
-            exportJson = splitted.Any(x => x.Equals("json", StringComparison.OrdinalIgnoreCase));
-            exportYml = splitted.Any(x => x.Equals("yml", StringComparison.OrdinalIgnoreCase));
-            exportYaml = splitted.Any(x => x.Equals("yaml", StringComparison.OrdinalIgnoreCase));
-        }
+            var asyncApiSchema = documentProvider.GetDocument(asyncapiOptions.Value, prototype);
+            var asyncApiSchemaJson = documentSerializer.Serialize(asyncApiSchema);
+            var asyncApiDocument = new AsyncApiStringReader().Read(asyncApiSchemaJson, out var diagnostic);
+            if (diagnostic.Errors.Any())
+            {
+                Console.Error.WriteLine($"AsyncAPI Schema '{documentName}' is not valid ({diagnostic.Errors.Count} Error(s), {diagnostic.Warnings.Count} Warning(s)):" +
+                                        $"{Environment.NewLine}{string.Join(Environment.NewLine, diagnostic.Errors.Select(x => $"- {x}"))}");
+            }
 
-        if (exportJson)
-        {
-            WriteFile(AddFileExtension(outputPath, "json"), stream => asyncApiDocument.SerializeAsJson(stream, AsyncApiVersion.AsyncApi2_0));
-        }
+            // 4) Serialize to specified output location or stdout
+            var outputPath = namedArgs.TryGetValue(OutputOption, out var arg1) ? Path.Combine(Directory.GetCurrentDirectory(), arg1) : null;
+            if (!string.IsNullOrEmpty(outputPath))
+            {
+                var directoryPath = Path.GetDirectoryName(outputPath);
+                if (!string.IsNullOrEmpty(directoryPath) && !Directory.Exists(directoryPath))
+                {
+                    Directory.CreateDirectory(directoryPath);
+                }
+            }
 
-        if (exportYml)
-        {
-            WriteFile(AddFileExtension(outputPath, "yml"), stream => asyncApiDocument.SerializeAsYaml(stream, AsyncApiVersion.AsyncApi2_0));
-        }
+            var exportJson = true;
+            var exportYml = false;
+            var exportYaml = false;
+            if (namedArgs.TryGetValue(FormatOption, out var format))
+            {
+                var splitted = format.Split(',').Select(x => x.Trim()).ToList();
+                exportJson = splitted.Any(x => x.Equals("json", StringComparison.OrdinalIgnoreCase));
+                exportYml = splitted.Any(x => x.Equals("yml", StringComparison.OrdinalIgnoreCase));
+                exportYaml = splitted.Any(x => x.Equals("yaml", StringComparison.OrdinalIgnoreCase));
+            }
 
-        if (exportYaml)
-        {
-            WriteFile(AddFileExtension(outputPath, "yaml"), stream => asyncApiDocument.SerializeAsYaml(stream, AsyncApiVersion.AsyncApi2_0));
+            if (exportJson)
+            {
+                WriteFile(AddFileExtension(outputPath, fileTemplate, documentName, "json"), stream => asyncApiDocument.SerializeAsJson(stream, AsyncApiVersion.AsyncApi2_0));
+            }
+
+            if (exportYml)
+            {
+                WriteFile(AddFileExtension(outputPath, fileTemplate, documentName, "yml"), stream => asyncApiDocument.SerializeAsYaml(stream, AsyncApiVersion.AsyncApi2_0));
+            }
+
+            if (exportYaml)
+            {
+                WriteFile(AddFileExtension(outputPath, fileTemplate, documentName, "yaml"), stream => asyncApiDocument.SerializeAsYaml(stream, AsyncApiVersion.AsyncApi2_0));
+            }
         }
 
         return 0;
@@ -99,31 +116,14 @@ internal class TofileInternal
         }
     }
 
-    private static string AddFileExtension(string outputPath, string extension)
+    private static string AddFileExtension(string outputPath, string fileTemplate, string documentName, string extension)
     {
         if (outputPath == null)
         {
             return outputPath;
         }
 
-        if (outputPath.EndsWith(extension, StringComparison.OrdinalIgnoreCase))
-        {
-            return outputPath;
-        }
-
-        return $"{TrimEnd(outputPath, ".json", ".yml", ".yaml")}.{extension}";
-    }
-
-    private static string TrimEnd(string str, params string[] trims)
-    {
-        foreach (var trim in trims)
-        {
-            if (str.EndsWith(trim, StringComparison.OrdinalIgnoreCase))
-            {
-                str = str[..^trim.Length];
-            }
-        }
-        return str;
+        return Path.Combine(outputPath, fileTemplate.Replace("{document}", documentName).Replace("{extension}", extension));
     }
 
     private static IServiceProvider GetServiceProvider(Assembly startupAssembly)

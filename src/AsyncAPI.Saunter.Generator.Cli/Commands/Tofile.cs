@@ -27,24 +27,16 @@ internal class Tofile
             Array.Copy(args, 1, subProcessArguments, 0, subProcessArguments.Length);
         }
 
+        var assembly = typeof(Program).GetTypeInfo().Assembly;
         var subProcessCommandLine =
             $"exec --depsfile {EscapePath(depsFile)} " +
             $"--runtimeconfig {EscapePath(runtimeConfig)} " +
-            $"--additional-deps AsyncAPI.Saunter.Generator.Cli.deps.json " +
-            //$"--additionalprobingpath {EscapePath(typeof(Program).GetTypeInfo().Assembly.Location)} " +
-            $"{EscapePath(typeof(Program).GetTypeInfo().Assembly.Location)} " +
+            $"{EscapePath(assembly.Location)} " +
             $"_{commandName} {string.Join(" ", subProcessArguments.Select(EscapePath))}";
 
-        try
-        {
-            var subProcess = Process.Start("dotnet", subProcessCommandLine);
-            subProcess.WaitForExit();
-            return subProcess.ExitCode;
-        }
-        catch (Exception e)
-        {
-            throw new Exception("Running internal _tofile failed.", e);
-        }
+        var subProcess = Process.Start("dotnet", subProcessCommandLine);
+        subProcess.WaitForExit();
+        return subProcess.ExitCode;
     };
 
     private static string EscapePath(string path)
