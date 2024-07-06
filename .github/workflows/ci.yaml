@@ -22,7 +22,7 @@ jobs:
         node-version: 'lts/*' # latest LTS version
     - uses: actions/setup-dotnet@v2
       with:
-        dotnet-version: '8.0.x' # SDK Version to use; x will use the latest version of the channel
+        dotnet-version: '6.0.x' # SDK Version to use; x will use the latest version of the channel
 
     - name: Run NPM install
       run: npm ci

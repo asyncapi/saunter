@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <OutputType>Exe</OutputType>
     <ImplicitUsings>enable</ImplicitUsings>
     <LangVersion>12</LangVersion>
@@ -11,7 +11,6 @@
     <OutputType>Exe</OutputType>
     <PackAsTool>true</PackAsTool>
     <PackageId>AsyncAPI.Saunter.Generator.Cli</PackageId>
-    <!--<TargetFrameworks>net6.0;net7.0;net8.0</TargetFrameworks>-->
     <ToolCommandName>asyncapi</ToolCommandName>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
