@@ -6,6 +6,7 @@
       <AsyncAPIBuildToolBuildDir>$([System.IO.Path]::GetDirectoryName($(MSBuildThisFileDirectory)))</AsyncAPIBuildToolBuildDir>
       <AsyncAPIBuildToolRoot>$([System.IO.Path]::GetDirectoryName($(AsyncAPIBuildToolBuildDir)))</AsyncAPIBuildToolRoot>
       <LocalToolConfigFile>./.config/dotnet-tools.json</LocalToolConfigFile>
+      <LocalToolConfigFillFullPath>$([System.IO.Path]::GetFullPath($([System.IO.Path]::Combine($(AsyncAPIBuildToolRoot), $(LocalToolConfigFile)))))</LocalToolConfigFillFullPath>
     </PropertyGroup>
 
     <Message Text="AsyncAPI.Build; AsyncAPIDocumentFormats: $(AsyncAPIDocumentFormats)" />
@@ -19,12 +20,16 @@
     <Message Text="AsyncAPI.Build; MSBuildThisFileDirectory: $(MSBuildThisFileDirectory)" />
     <Message Text="AsyncAPI.Build; MSBuildProjectFullPath: $(MSBuildProjectFullPath)" />
     <Message Text="AsyncAPI.Build; MSBuildProjectDirectory: $(MSBuildProjectDirectory)" />
-    <Message Text="AsyncAPI.Build; LocalToolConfigFile: $(LocalToolConfigFile)" />
+    <Message Text="AsyncAPI.Build; LocalToolConfigFile: $(LocalToolConfigFile) --> $(LocalToolConfigFillFullPath)" />
     
-    <Exec Command="dotnet new tool-manifest" Condition=" '$([System.IO.File]::Exists($(LocalToolConfigFile)))' == 'false' " />
-    <Exec Command="dotnet tool install --local AsyncAPI.Saunter.Generator.Cli" />
+    <Exec Command="dotnet new tool-manifest" 
+          Condition=" '$([System.IO.File]::Exists($(LocalToolConfigFillFullPath)))' == 'false' "
+          WorkingDirectory="$(AsyncAPIBuildToolRoot)" />
+    <Exec Command="dotnet tool install --local AsyncAPI.Saunter.Generator.Cli"
+          WorkingDirectory="$(AsyncAPIBuildToolRoot)" />
 
-    <Exec Command="dotnet tool run dotnet-asyncapi tofile --output &quot;$(MSBuildProjectDirectory)/$(AsyncAPIDocumentOutputPath)&quot; --format &quot;$(AsyncAPIDocumentFormats)&quot; --doc &quot;$(AsyncAPIDocumentNames)&quot; --filename &quot;$(AsyncAPIDocumentFilename)&quot; --env &quot;$(AsyncAPIDocumentEnvVars)&quot; &quot;$(MSBuildProjectDirectory)/$(OutputPath)/$(AssemblyTitle).dll&quot;"/>
+    <Exec Command="dotnet tool run dotnet-asyncapi tofile --output &quot;$(MSBuildProjectDirectory)/$(AsyncAPIDocumentOutputPath)&quot; --format &quot;$(AsyncAPIDocumentFormats)&quot; --doc &quot;$(AsyncAPIDocumentNames)&quot; --filename &quot;$(AsyncAPIDocumentFilename)&quot; --env &quot;$(AsyncAPIDocumentEnvVars)&quot; &quot;$(MSBuildProjectDirectory)/$(OutputPath)/$(AssemblyTitle).dll&quot;"
+          WorkingDirectory="$(AsyncAPIBuildToolRoot)" />
   </Target>
 
 </Project>
