@@ -38,19 +38,19 @@ public class PackAndInstallLocalTests(ITestOutputHelper output)
         stdOut.ShouldContain("Successfully created package");
 
         stdOut = this.Run("dotnet", "tool install --global --add-source ./bin/Release AsyncAPI.Saunter.Generator.Cli", "../../../../../src/AsyncAPI.Saunter.Generator.Cli");
-        stdOut.ShouldBeOneOf("You can invoke the tool using the following command: AsyncAPI.NET\r\nTool 'asyncapi.saunter.generator.cli' (version '1.0.0') was successfully installed.",
-                             "Tool 'asyncapi.saunter.generator.cli' was reinstalled with the stable version (version '1.0.0').");
+        stdOut.ShouldBeOneOf("You can invoke the tool using the following command: dotnet-asyncapi\r\nTool 'asyncapi.saunter.generator.cli' (version '1.0.1') was successfully installed.",
+                             "Tool 'asyncapi.saunter.generator.cli' was reinstalled with the stable version (version '1.0.1').");
 
         stdOut = this.Run("dotnet", "tool list -g asyncapi.saunter.generator.cli", "");
-        stdOut.ShouldContain("AsyncAPI.NET");
+        stdOut.ShouldContain("dotnet-asyncapi");
 
-        stdOut = this.Run("asyncapi.cmd", "", "", 1);
+        stdOut = this.Run("dotnet", "asyncapi", "", 1);
         stdOut.ShouldContain("tofile:  retrieves AsyncAPI from a startup assembly, and writes to file");
 
         stdOut = this.Run("dotnet", "tool uninstall -g asyncapi.saunter.generator.cli", "");
         stdOut.ShouldContain(" was successfully uninstalled.");
 
         stdOut = this.Run("dotnet", "tool list -g asyncapi.saunter.generator.cli", "", 1);
-        stdOut.ShouldNotContain("AsyncAPI.NET");
+        stdOut.ShouldNotContain("dotnet-asyncapi");
     }
 }
