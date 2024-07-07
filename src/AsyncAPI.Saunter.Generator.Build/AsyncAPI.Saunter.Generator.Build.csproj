@@ -47,17 +47,7 @@
     <None Include="../../assets/logo.png" Pack="true" PackagePath="/" />
     <None Include="build/*" Pack="true" PackagePath="/build" />
     <None Include="$(OutputPath)/net6.0/*" Pack="true" PackagePath="/tools/net6.0" />
-  </ItemGroup>
-
-  <!--ItemGroup>
-    <Compile Include="../AsyncAPI.Saunter.Generator.Cli/Commands/**/*.cs" />
-    <Compile Include="../AsyncAPI.Saunter.Generator.Cli/Internal/**/*.cs" />
-    <Compile Include="../AsyncAPI.Saunter.Generator.Cli/SwashbuckleImport/**/*.cs" />
-    <Compile Include="../AsyncAPI.Saunter.Generator.Cli/*.cs" />
-  </ItemGroup>-->
-
-  <ItemGroup>
-    <Folder Include="tools\" />
+    <None Include="$(OutputPath)/net8.0/*" Pack="true" PackagePath="/tools/net8.0" />
   </ItemGroup>
 
 </Project>

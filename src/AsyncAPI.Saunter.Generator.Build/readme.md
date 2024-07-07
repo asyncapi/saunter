@@ -23,5 +23,5 @@ If the ```AsyncAPI.Saunter.Generator.Build``` Nuget package is referenced, the d
 - AsyncAPIDocumentOutputPath: Output path for the AsyncAPI spec files, relative to the csproj location. (default is the csproj root path: ./)
 - AsyncAPIDocumentNames: The AsyncAPI documents to generate. (default: generate all known documents)
 - AsyncAPIDocumentFilename: Template of the AsyncAPI spec files (default: "{document}_asyncapi.{extension}")
-- AsyncAPIDocumentEnvVars: Environment variable(s) to set during generation of the AsyncAPI spec files (default: none, Example: "ASPNETCORE_ENVIRONMENT=Development")
-None of these properties are mandatory. By only referencing the [AsyncAPI.Saunter.Generator.Build](https://www.nuget.org/packages/AsyncAPI.Saunter.Generator.Build) Nuget package a json AsyncAPI spec file will be generated for all AsyncAPI documents.
+- AsyncAPIDocumentEnvVars: Environment variable(s) to set during generation of the AsyncAPI spec files (default: none, Example: "ASPNETCORE_ENVIRONMENT=Development")  
+None of these properties are mandatory. Only referencing the [AsyncAPI.Saunter.Generator.Build](https://www.nuget.org/packages/AsyncAPI.Saunter.Generator.Build) Nuget package will generate a json AsyncAPI spec file for all AsyncAPI documents.
