@@ -19,6 +19,7 @@ using Microsoft.Extensions.Hosting;
 using Saunter.AsyncApiSchema.v2;
 using static Program;
 using AsyncApiDocument = Saunter.AsyncApiSchema.v2.AsyncApiDocument;
+using System.IO;
 
 namespace AsyncApi.Saunter.Generator.Cli.Commands;
 

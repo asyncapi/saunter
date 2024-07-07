@@ -11,7 +11,7 @@
     <Authors>AsyncAPI Initiative</Authors>
     <PackAsTool>true</PackAsTool>
     <PackageId>AsyncAPI.Saunter.Generator.Cli</PackageId>
-    <ToolCommandName>AsyncAPI.NET</ToolCommandName>
+    <ToolCommandName>dotnet-asyncapi</ToolCommandName>
     <PackageTags>asyncapi;aspnetcore;openapi;documentation;amqp;generator;cli;tool</PackageTags>
     <PackageReadmeFile>readme.md</PackageReadmeFile>
     <PackageIcon>logo.png</PackageIcon>
@@ -23,6 +23,7 @@
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <Version>1.0.1</Version>
   </PropertyGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' != 'netstandard2.0' ">

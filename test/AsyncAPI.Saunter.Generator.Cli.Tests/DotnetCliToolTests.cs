@@ -35,7 +35,7 @@ public class DotnetCliToolTests(ITestOutputHelper output)
         var stdOut = RunTool("", 1);
 
         stdOut.ShouldBe("""
-                        Usage: dotnet asyncapi.net tofile [options] [startupassembly]
+                        Usage: dotnet asyncapi tofile [options] [startupassembly]
 
                         startupassembly:
                           relative path to the application's startup assembly
