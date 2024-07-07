@@ -14,7 +14,7 @@ public class DotnetCliToolTests(ITestOutputHelper output)
     {
         var process = Process.Start(new ProcessStartInfo("dotnet")
         {
-            Arguments = $"../../../../../src/AsyncAPI.Saunter.Generator.Cli/bin/Debug/net6.0/AsyncAPI.Saunter.Generator.Cli.dll tofile {args}",
+            Arguments = $"../../../../../src/AsyncAPI.Saunter.Generator.Cli/bin/Debug/net8.0/AsyncAPI.Saunter.Generator.Cli.dll tofile {args}",
             RedirectStandardOutput = true,
             RedirectStandardError = true,
         });
@@ -54,7 +54,7 @@ public class DotnetCliToolTests(ITestOutputHelper output)
     {
         var path = Directory.GetCurrentDirectory();
         output.WriteLine($"Output path: {path}");
-        var stdOut = RunTool($"--output {path} --format json,yml,yaml ../../../../../examples/StreetlightsAPI/bin/Debug/net6.0/StreetlightsAPI.dll");
+        var stdOut = RunTool($"--output {path} --format json,yml,yaml ../../../../../examples/StreetlightsAPI/bin/Debug/net8.0/StreetlightsAPI.dll");
 
         stdOut.ShouldNotBeEmpty();
         stdOut.ShouldContain($"AsyncAPI yaml successfully written to {Path.Combine(path, "asyncapi.yaml")}");
