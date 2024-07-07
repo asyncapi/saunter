@@ -32,7 +32,7 @@ jobs:
     - name: Run dotnet build src
       run: dotnet build ./src/Saunter-src.slnf --configuration Debug
     - name: Run dotnet build all
-      run: dotnet build --configuration Debug
+      run: dotnet build -v n --configuration Debug
     - name: Run dotnet test
       run: dotnet test --no-build
 
