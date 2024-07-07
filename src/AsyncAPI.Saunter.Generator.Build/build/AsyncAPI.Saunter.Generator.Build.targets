@@ -19,6 +19,10 @@
     <Message Text="AsyncAPI.Build; MSBuildProjectFullPath: $(MSBuildProjectFullPath)" />
     <Message Text="AsyncAPI.Build; MSBuildProjectDirectory: $(MSBuildProjectDirectory)" />
 
+    <Exec Command="dir ." />
+    <Exec Command="dir $(AsyncAPIBuildToolRoot)" />
+    <Exec Command="dir $(AsyncAPIBuildToolRoot)/tools" />
+
     <Exec Command="dotnet &quot;$(AsyncAPIBuildToolRoot)/tools/net6.0/AsyncAPI.Saunter.Generator.Cli.dll&quot; tofile --output &quot;$(MSBuildProjectDirectory)/$(AsyncAPIDocumentOutputPath)&quot; --format &quot;$(AsyncAPIDocumentFormats)&quot; --doc &quot;$(AsyncAPIDocumentNames)&quot; --filename &quot;$(AsyncAPIDocumentFilename)&quot; --env &quot;$(AsyncAPIDocumentEnvVars)&quot; &quot;$(MSBuildProjectDirectory)/$(OutputPath)/$(AssemblyTitle).dll&quot;"/>
   </Target>
 
