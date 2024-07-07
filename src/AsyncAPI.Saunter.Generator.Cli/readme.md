@@ -21,4 +21,4 @@ dotnet tool install --global AsyncAPI.Saunter.Generator.Cli
 After installing the tool globally, it is available using commands: ```dotnet asyncapi``` or ```dotnet-asyncapi```
 
 Want to learn more about .NET tools? Or want to install it local using a manifest?
-(Check out this Microsoft page on how to manage .NET tools)[https://learn.microsoft.com/en-us/dotnet/core/tools/global-tools]
+[Check out this Microsoft page on how to manage .NET tools](https://learn.microsoft.com/en-us/dotnet/core/tools/global-tools)
