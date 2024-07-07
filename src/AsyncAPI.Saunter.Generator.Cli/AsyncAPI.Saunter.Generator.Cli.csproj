@@ -26,6 +26,12 @@
     <Version>1.0.1</Version>
   </PropertyGroup>
 
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <Version>0.0.999-debug-$([System.DateTime]::Now.ToString('yyyyMMddHHmm'))</Version>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageOutputPath>../../local-nuget-source</PackageOutputPath>
+  </PropertyGroup>
+
   <ItemGroup Condition=" '$(TargetFramework)' != 'netstandard2.0' ">
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>

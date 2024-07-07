@@ -131,7 +131,8 @@ internal class TofileInternal
 
         if (outputPath != null)
         {
-            Console.WriteLine($"AsyncAPI {Path.GetExtension(outputPath)[1..]} successfully written to {outputPath}");
+            var sanitizedPath = Path.GetFullPath(outputPath);
+            Console.WriteLine($"AsyncAPI {Path.GetExtension(outputPath)[1..]} successfully written to {sanitizedPath}");
         }
     }
 

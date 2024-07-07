@@ -2,7 +2,7 @@
 A nuget package to generate AsyncAPI specification files at build time, based on code-first attributes.
 
 # Customizations
-The AsyncAPI spec generation can be configured through properties in the csproj-file (or .props files):
+The AsyncAPI spec generation can be configured through project properties in the csproj-file (or .props files):
 ```
   <PropertyGroup>
     <AsyncAPIGenerateDocumentsOnBuild></AsyncAPIGenerateDocumentsOnBuild>
