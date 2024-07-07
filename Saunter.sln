@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.0.31919.166
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{28D4C365-FDED-49AE-A97D-36202E24A55A}"
+	ProjectSection(SolutionItems) = preProject
+		src\Saunter-src.slnf = src\Saunter-src.slnf
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Saunter", "src\Saunter\Saunter.csproj", "{240F263C-4F9B-40E0-8392-1FDB324153F6}"
 EndProject
@@ -14,9 +17,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "examples", "examples", "{6ABD4842-47AF-49A5-B057-0EBA64416789}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StreetlightsAPI", "examples\StreetlightsAPI\StreetlightsAPI.csproj", "{F188D4A7-BBCB-464F-A370-2BD84D18EA79}"
-	ProjectSection(ProjectDependencies) = postProject
-		{A320E670-5CB0-4815-AF67-D8D09FC92A2A} = {A320E670-5CB0-4815-AF67-D8D09FC92A2A}
-	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E0D34C77-924E-4F6B-9289-5A2F07D125A8}"
 	ProjectSection(SolutionItems) = preProject

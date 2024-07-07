@@ -1,0 +1,10 @@
+{
+  "solution": {
+    "path": "..\\Saunter.sln",
+    "projects": [
+      "src\\AsyncAPI.Saunter.Generator.Build\\AsyncAPI.Saunter.Generator.Build.csproj",
+      "src\\AsyncAPI.Saunter.Generator.Cli\\AsyncAPI.Saunter.Generator.Cli.csproj",
+      "src\\Saunter\\Saunter.csproj"
+    ]
+  }
+}

@@ -29,7 +29,9 @@ jobs:
     - name: Run NPM install
       run: npm ci
       working-directory: ./src/Saunter.UI
-    - name: Run dotnet build
+    - name: Run dotnet build src
+      run: dotnet build ./src/Saunter-src.slnf --configuration Debug
+    - name: Run dotnet build all
       run: dotnet build --configuration Debug
     - name: Run dotnet test
       run: dotnet test --no-build
