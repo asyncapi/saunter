@@ -59,7 +59,7 @@ public class StreetlightsApiBuildTests(ITestOutputHelper output)
         Directory.GetFiles(specDir).Length.ShouldBe(0, $"#Spec files after deleting them all, path: {specDir}");
 
         // Run build
-        var stdOut = this.Run("dotnet", "build", csprojDir);
+        var stdOut = this.Run("dotnet", "build", csprojDir).Replace('/', Path.DirectorySeparatorChar).Replace('\\', Path.DirectorySeparatorChar);
         stdOut.ShouldContain($"AsyncAPI json successfully written to {Path.Combine(specDir, "streetlights.json")}");
         stdOut.ShouldContain($"AsyncAPI yml successfully written to {Path.Combine(specDir, "streetlights.yml")}");
         stdOut.ShouldContain("Build succeeded.");

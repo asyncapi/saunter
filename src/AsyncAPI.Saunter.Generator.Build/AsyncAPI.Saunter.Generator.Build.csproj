@@ -15,14 +15,13 @@
     <RepositoryUrl>https://github.com/asyncapi/saunter</RepositoryUrl>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
-    <IncludeBuildOutput>true</IncludeBuildOutput>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
     <IncludeSymbols>false</IncludeSymbols>
     <PackageProjectUrl>https://github.com/asyncapi/saunter</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <DevelopmentDependency>true</DevelopmentDependency>
     <Version>1.0.0</Version>
-    <OutputPath>bin/</OutputPath>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
@@ -32,18 +31,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AsyncAPI.Saunter.Generator.Cli\AsyncAPI.Saunter.Generator.Cli.csproj" />
-    <ProjectReference Include="..\Saunter\Saunter.csproj" />
-    <ProjectReference Update="@(ProjectReference)" PrivateAssets="All" />
-  </ItemGroup>
-
-  <ItemGroup Condition=" '$(TargetFramework)' != 'netstandard2.0' ">
-    <FrameworkReference Include="Microsoft.AspNetCore.App" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="AsyncAPI.NET.Readers" Version="5.2.1" />
-
     <!-- Development Dependencies -->
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
     <PackageReference Update="@(PackageReference)" PrivateAssets="All" />
@@ -53,8 +40,6 @@
     <None Include="readme.md" Pack="true" PackagePath="/" />
     <None Include="../../assets/logo.png" Pack="true" PackagePath="/" />
     <None Include="build/*" Pack="true" PackagePath="/build" />
-    <None Include="$(OutputPath)net6.0/*" Pack="true" PackagePath="/tools/net6.0/" />
-    <None Include="$(OutputPath)net8.0/*" Pack="true" PackagePath="/tools/net8.0/" />
   </ItemGroup>
 
 </Project>

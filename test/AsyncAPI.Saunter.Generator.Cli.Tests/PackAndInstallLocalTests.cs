@@ -38,6 +38,7 @@ public class PackAndInstallLocalTests(ITestOutputHelper output)
         stdOut.ShouldContain("Successfully created package");
 
         stdOut = this.Run("dotnet", "tool install --global --add-source ./bin/Release AsyncAPI.Saunter.Generator.Cli", "../../../../../src/AsyncAPI.Saunter.Generator.Cli");
+        stdOut = stdOut.Replace("Skipping NuGet package signature verification.", "").Trim();
         stdOut.ShouldBeOneOf("You can invoke the tool using the following command: dotnet-asyncapi\r\nTool 'asyncapi.saunter.generator.cli' (version '1.0.1') was successfully installed.",
                              "Tool 'asyncapi.saunter.generator.cli' was reinstalled with the stable version (version '1.0.1').");
 

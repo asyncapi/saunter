@@ -5,6 +5,7 @@
     <PropertyGroup>
       <AsyncAPIBuildToolBuildDir>$([System.IO.Path]::GetDirectoryName($(MSBuildThisFileDirectory)))</AsyncAPIBuildToolBuildDir>
       <AsyncAPIBuildToolRoot>$([System.IO.Path]::GetDirectoryName($(AsyncAPIBuildToolBuildDir)))</AsyncAPIBuildToolRoot>
+      <LocalToolConfigFile>./.config/dotnet-tools.json</LocalToolConfigFile>
     </PropertyGroup>
 
     <Message Text="AsyncAPI.Build; AsyncAPIDocumentFormats: $(AsyncAPIDocumentFormats)" />
@@ -18,12 +19,12 @@
     <Message Text="AsyncAPI.Build; MSBuildThisFileDirectory: $(MSBuildThisFileDirectory)" />
     <Message Text="AsyncAPI.Build; MSBuildProjectFullPath: $(MSBuildProjectFullPath)" />
     <Message Text="AsyncAPI.Build; MSBuildProjectDirectory: $(MSBuildProjectDirectory)" />
+    <Message Text="AsyncAPI.Build; LocalToolConfigFile: $(LocalToolConfigFile)" />
+    
+    <Exec Command="dotnet new tool-manifest" Condition=" '$([System.IO.File]::Exists($(LocalToolConfigFile)))' == 'false' " />
+    <Exec Command="dotnet tool install --local AsyncAPI.Saunter.Generator.Cli" />
 
-    <Exec Command="dir ." />
-    <Exec Command="dir $(AsyncAPIBuildToolRoot)" />
-    <Exec Command="dir $(AsyncAPIBuildToolRoot)/tools" />
-
-    <Exec Command="dotnet &quot;$(AsyncAPIBuildToolRoot)/tools/net6.0/AsyncAPI.Saunter.Generator.Cli.dll&quot; tofile --output &quot;$(MSBuildProjectDirectory)/$(AsyncAPIDocumentOutputPath)&quot; --format &quot;$(AsyncAPIDocumentFormats)&quot; --doc &quot;$(AsyncAPIDocumentNames)&quot; --filename &quot;$(AsyncAPIDocumentFilename)&quot; --env &quot;$(AsyncAPIDocumentEnvVars)&quot; &quot;$(MSBuildProjectDirectory)/$(OutputPath)/$(AssemblyTitle).dll&quot;"/>
+    <Exec Command="dotnet tool run dotnet-asyncapi tofile --output &quot;$(MSBuildProjectDirectory)/$(AsyncAPIDocumentOutputPath)&quot; --format &quot;$(AsyncAPIDocumentFormats)&quot; --doc &quot;$(AsyncAPIDocumentNames)&quot; --filename &quot;$(AsyncAPIDocumentFilename)&quot; --env &quot;$(AsyncAPIDocumentEnvVars)&quot; &quot;$(MSBuildProjectDirectory)/$(OutputPath)/$(AssemblyTitle).dll&quot;"/>
   </Target>
 
 </Project>
