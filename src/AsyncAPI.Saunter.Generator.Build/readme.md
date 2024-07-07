@@ -35,4 +35,5 @@ If the ```AsyncAPI.Saunter.Generator.Build``` Nuget package is referenced, the d
 - _AsyncAPIDocumentNames_: The AsyncAPI documents to generate. (default: generate all known documents)
 - _AsyncAPIDocumentFilename_: Template of the AsyncAPI spec files (default: "{document}_asyncapi.{extension}")
 - _AsyncAPIDocumentEnvVars_: Environment variable(s) to set during generation of the AsyncAPI spec files (default: none, Example: "ASPNETCORE_ENVIRONMENT=Development")  
+
 None of these properties are mandatory. Only referencing the [AsyncAPI.Saunter.Generator.Build](https://www.nuget.org/packages/AsyncAPI.Saunter.Generator.Build) Nuget package will generate a json AsyncAPI spec file for all AsyncAPI documents.
