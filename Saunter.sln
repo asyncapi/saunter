@@ -19,6 +19,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 		.gitattributes = .gitattributes
+		.gitignore = .gitignore
 		CHANGELOG.md = CHANGELOG.md
 		.github\workflows\ci.yaml = .github\workflows\ci.yaml
 		nuget.config = nuget.config
@@ -36,7 +37,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AsyncAPI.Saunter.Generator.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AsyncAPI.Saunter.Generator.Build", "src\AsyncAPI.Saunter.Generator.Build\AsyncAPI.Saunter.Generator.Build.csproj", "{A320E670-5CB0-4815-AF67-D8D09FC92A2A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AsyncAPI.Saunter.Generator.Build.Tests", "test\AsyncAPI.Saunter.Generator.Build.Tests\AsyncAPI.Saunter.Generator.Build.Tests.csproj", "{61142B10-7B49-436E-AE32-2737658BD1E5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AsyncAPI.Saunter.Generator.Build.Tests", "test\AsyncAPI.Saunter.Generator.Build.Tests\AsyncAPI.Saunter.Generator.Build.Tests.csproj", "{61142B10-7B49-436E-AE32-2737658BD1E5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
