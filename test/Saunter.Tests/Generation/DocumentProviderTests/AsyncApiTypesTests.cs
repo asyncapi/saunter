@@ -32,7 +32,5 @@ namespace Saunter.Tests.Generation.DocumentProviderTests
                 document.ShouldNotBeNull();
             }
         }
-
-
     }
 }
