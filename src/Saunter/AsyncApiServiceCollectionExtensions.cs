@@ -1,11 +1,11 @@
 ﻿using System;
-
+using LEGO.AsyncAPI.Models;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-
-using Saunter.AsyncApiSchema.v2;
-using Saunter.Generation;
-using Saunter.Serialization;
+using Saunter.AttributeProvider;
+using Saunter.Options;
+using Saunter.SharedKernel;
+using Saunter.SharedKernel.Interfaces;
 
 namespace Saunter
 {
@@ -21,9 +21,9 @@ namespace Saunter
         {
             services.AddOptions();
 
-            services.TryAddTransient<IAsyncApiDocumentProvider, AsyncApiDocumentProvider>();
-            services.TryAddTransient<IDocumentGenerator, DocumentGenerator>();
-            services.TryAddTransient<IAsyncApiDocumentSerializer, NewtonsoftAsyncApiDocumentSerializer>();
+            services.TryAddSingleton<IAsyncApiDocumentCloner, AsyncApiDocumentSerializeCloner>();
+            services.TryAddSingleton<IAsyncApiSchemaGenerator, AsyncApiSchemaGenerator>();
+            services.TryAddSingleton<IAsyncApiDocumentProvider, AttributeDocumentProvider>();
 
             if (setupAction != null) services.Configure(setupAction);
 
@@ -34,7 +34,7 @@ namespace Saunter
         /// Add a named AsyncAPI document to the service collection.
         /// </summary>
         /// <param name="services">The collection to add the document to.</param>
-        /// <param name="documentName">The name used to refer to the document. Used in the <see cref="Saunter.Attributes.AsyncApiAttribute"/> and in middleware HTTP paths.</param>
+        /// <param name="documentName">The name used to refer to the document. Used in the <see cref="AttributeProvider.Attributes.AsyncApiAttribute"/> and in middleware HTTP paths.</param>
         /// <param name="setupAction">An action used to configure the named document.</param>
         /// <returns>The service collection so additional calls can be chained.</returns>
         public static IServiceCollection ConfigureNamedAsyncApi(this IServiceCollection services, string documentName, Action<AsyncApiDocument> setupAction)
@@ -50,9 +50,9 @@ namespace Saunter
                     options.Middleware.UiBaseRoute = "/asyncapi/{document}/ui/";
                 }
 
-                var document = options.NamedApis.GetOrAdd(documentName, _ => new AsyncApiDocument() { DocumentName = documentName });
+                //var document = options.NamedApis.GetOrAdd(documentName, _ => new AsyncApiDocument() { DocumentName = documentName });
 
-                setupAction(document);
+                //setupAction(document);
             });
             return services;
         }

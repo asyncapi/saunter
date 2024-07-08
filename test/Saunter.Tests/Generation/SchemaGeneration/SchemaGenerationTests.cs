@@ -9,8 +9,6 @@ using Newtonsoft.Json.Serialization;
 using NJsonSchema;
 using NJsonSchema.Generation;
 using NJsonSchema.NewtonsoftJson.Converters;
-
-using Saunter.AsyncApiSchema.v2;
 using Saunter.Generation.SchemaGeneration;
 using Saunter.Tests.Utils;
 
@@ -24,7 +22,6 @@ namespace Saunter.Tests.Generation.SchemaGeneration
 {
     public class SchemaGenerationTests
     {
-        private readonly AsyncApiSchemaResolver _schemaResolver;
         private readonly JsonSchemaGenerator _schemaGenerator;
 
         public SchemaGenerationTests()
@@ -37,7 +34,6 @@ namespace Saunter.Tests.Generation.SchemaGeneration
                     ContractResolver = new CamelCasePropertyNamesContractResolver()
                 },
             };
-            _schemaResolver = new AsyncApiSchemaResolver(new AsyncApiDocument(), settings);
             _schemaGenerator = new JsonSchemaGenerator(settings);
         }
 

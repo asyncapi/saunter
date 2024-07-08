@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Saunter.Middleware;
+using Saunter.Options;
 using Saunter.UI;
 
 namespace Saunter

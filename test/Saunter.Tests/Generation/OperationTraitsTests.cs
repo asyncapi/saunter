@@ -1,9 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using Saunter.AsyncApiSchema.v2;
-using Saunter.AsyncApiSchema.v2.Traits;
-using Saunter.Generation;
 using Saunter.Generation.Filters;
+using Saunter.Options;
 using Shouldly;
 using Xunit;
 
@@ -47,7 +45,7 @@ namespace Saunter.Tests.Generation
 
         private class TestOperationTraitsFilter : IOperationFilter
         {
-            public void Apply(Operation publishOperation, OperationFilterContext context)
+            public void Apply(AsyncApiOperation publishOperation, OperationFilterContext context)
             {
                 publishOperation.Traits.Add(new OperationTraitReference("exampleTrait"));
             }

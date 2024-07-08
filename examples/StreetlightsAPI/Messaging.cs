@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 using Microsoft.Extensions.Logging;
-using Saunter.Attributes;
+using Saunter.AttributeProvider.Attributes;
 
 namespace StreetlightsAPI
 {

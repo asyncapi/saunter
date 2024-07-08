@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Saunter.Attributes;
+using Saunter.AttributeProvider.Attributes;
 
 namespace StreetlightsAPI
 {

@@ -27,7 +27,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 ## [v0.11.0] - 2022-10-03
 ### Added
-- Message and Operation attributes now allow setting tags
+- Message and AsyncApiOperation attributes now allow setting tags
 
 ## [v0.10.0] - 2022-08-22
 ### Changed
@@ -52,7 +52,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 ### Changed
 - AsyncAPI spec version bumped to 2.2.0
   - New optional property `string[] Servers` available on `ChannelAttribute`
-  - New optional property `List<string> Servers` available on `ChannelItem`
+  - New optional property `List<string> Servers` available on `AsyncApiChannel`
 - Bump UI library to v1.0.0-next.21
 
 ## [v0.8.0] - 2021-09-11

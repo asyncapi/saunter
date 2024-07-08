@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Extensions.DependencyInjection;
-using Saunter.AsyncApiSchema.v2;
-using Saunter.Generation;
 using Shouldly;
 using Xunit;
 

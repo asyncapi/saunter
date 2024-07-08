@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Mime;
@@ -8,17 +7,16 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Routing;
-using Microsoft.AspNetCore.Routing.Template;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Saunter.Utils;
+using Saunter.Middleware;
+using Saunter.Options;
 
 namespace Saunter.UI
 {
-    public class AsyncApiUiMiddleware
+    internal class AsyncApiUiMiddleware
     {
         private readonly AsyncApiOptions _options;
         private readonly StaticFileMiddleware _staticFiles;
@@ -33,7 +31,7 @@ namespace Saunter.UI
                 RequestPath = UiBaseRoute,
                 FileProvider = fileProvider,
             };
-            _staticFiles = new StaticFileMiddleware(next, env, Options.Create(staticFileOptions), loggerFactory);
+            _staticFiles = new StaticFileMiddleware(next, env, Microsoft.Extensions.Options.Options.Create(staticFileOptions), loggerFactory);
             _namedStaticFiles = new Dictionary<string, StaticFileMiddleware>();
 
             foreach (var namedApi in _options.NamedApis)
@@ -43,7 +41,7 @@ namespace Saunter.UI
                     RequestPath = UiBaseRoute.Replace("{document}", namedApi.Key),
                     FileProvider = fileProvider,
                 };
-                _namedStaticFiles.Add(namedApi.Key, new StaticFileMiddleware(next, env, Options.Create(namedStaticFileOptions), loggerFactory));
+                _namedStaticFiles.Add(namedApi.Key, new StaticFileMiddleware(next, env, Microsoft.Extensions.Options.Options.Create(namedStaticFileOptions), loggerFactory));
             }
         }
 

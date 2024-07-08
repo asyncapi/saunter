@@ -1,4 +1,5 @@
-﻿using Saunter.AsyncApiSchema.v2;
+﻿using LEGO.AsyncAPI.Models;
+using Saunter.Options;
 
 namespace Saunter
 {

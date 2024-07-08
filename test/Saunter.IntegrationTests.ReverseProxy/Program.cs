@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using LEGO.AsyncAPI.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Hosting.Server.Features;
@@ -9,7 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Saunter.AsyncApiSchema.v2;
+using Saunter;
 using Saunter.Attributes;
 
 namespace Saunter.IntegrationTests.ReverseProxy
@@ -50,7 +51,7 @@ namespace Saunter.IntegrationTests.ReverseProxy
 
                 options.AsyncApi = new AsyncApiDocument
                 {
-                    Info = new Info(Environment.GetEnvironmentVariable("PATH_BASE"), "1.0.0")
+                    Info = new AsyncApiInfo(Environment.GetEnvironmentVariable("PATH_BASE"), "1.0.0")
                 };
             });
 
