@@ -22,17 +22,30 @@ namespace Saunter.SharedKernel
             {
                 Title = typeInfo.Name,
                 Type = MapJsonTypeToSchemaType(typeInfo),
-                Properties = typeInfo.DeclaredProperties.ToDictionary(
-                    prop => prop.Name,
-                    prop => BuildSchema(prop.PropertyType.GetTypeInfo())
-                )
             };
+
+            if (schema.Type is not SchemaType.Object and not SchemaType.Array)
+            {
+                return schema;
+            }
+
+            schema.Properties = typeInfo.DeclaredProperties.ToDictionary(
+                prop => prop.Name,
+                prop => Generate(prop.PropertyType.GetTypeInfo()));
 
             return schema;
         }
 
-        private static readonly TypeInfo s_stringTypeInfo = typeof(string).GetTypeInfo();
         private static readonly TypeInfo s_boolTypeInfo = typeof(bool).GetTypeInfo();
+
+        private static readonly TypeInfo[] s_stringTypeInfos = new TypeInfo[]
+        {
+            typeof(string).GetTypeInfo(),
+            typeof(DateTime).GetTypeInfo(),
+            typeof(DateTimeOffset).GetTypeInfo(),
+            typeof(TimeSpan).GetTypeInfo(),
+            typeof(Guid).GetTypeInfo(),
+        };
 
         private static readonly TypeInfo[] s_intergerTypeInfos = new TypeInfo[]
         {
@@ -54,14 +67,14 @@ namespace Saunter.SharedKernel
 
         private static SchemaType? MapJsonTypeToSchemaType(TypeInfo typeInfo)
         {
-            if (typeInfo == s_stringTypeInfo)
-            {
-                return SchemaType.String;
-            }
-
             if (typeInfo == s_boolTypeInfo)
             {
                 return SchemaType.Boolean;
+            }
+
+            if (s_stringTypeInfos.Contains(typeInfo))
+            {
+                return SchemaType.String;
             }
 
             if (s_intergerTypeInfos.Contains(typeInfo))
@@ -74,17 +87,12 @@ namespace Saunter.SharedKernel
                 return SchemaType.Number;
             }
 
-            if (typeInfo.IsArray || typeInfo.IsGenericType && typeInfo.GetGenericTypeDefinition() == typeof(IEnumerable<>))
+            if (typeInfo.IsArray || (typeInfo.IsGenericType && typeInfo.GetGenericTypeDefinition() == typeof(IEnumerable<>)))
             {
                 return SchemaType.Array;
             }
 
             return SchemaType.Object;
-        }
-
-        private AsyncApiSchema? BuildSchema(TypeInfo typeInfo)
-        {
-            return Generate(typeInfo);
         }
     }
 }

@@ -32,11 +32,6 @@ namespace Saunter.AttributeProvider
             var apiNamePair = options.NamedApis
                 .FirstOrDefault(c => c.Value.Id == prototype.Id);
 
-            if (apiNamePair.Value is null)
-            {
-                throw new InvalidOperationException($"Not found document with name: {prototype.Id}");
-            }
-
             var asyncApiTypes = GetAsyncApiTypes(options, apiNamePair.Key);
 
             var clone = _cloner.CloneProtype(prototype);
@@ -381,7 +376,7 @@ namespace Saunter.AttributeProvider
         /// <summary>
         /// Get all types with an <see cref="AsyncApiAttribute"/> from assemblies <see cref="AsyncApiOptions.AssemblyMarkerTypes"/>.
         /// </summary>
-        private static TypeInfo[] GetAsyncApiTypes(AsyncApiOptions options, string apiName)
+        private static TypeInfo[] GetAsyncApiTypes(AsyncApiOptions options, string? apiName)
         {
             var assembliesToScan = options
                 .AssemblyMarkerTypes

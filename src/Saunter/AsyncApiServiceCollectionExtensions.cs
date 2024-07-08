@@ -50,9 +50,9 @@ namespace Saunter
                     options.Middleware.UiBaseRoute = "/asyncapi/{document}/ui/";
                 }
 
-                //var document = options.NamedApis.GetOrAdd(documentName, _ => new AsyncApiDocument() { DocumentName = documentName });
+                var document = options.NamedApis.GetOrAdd(documentName, _ => new AsyncApiDocument());
 
-                //setupAction(document);
+                setupAction(document);
             });
             return services;
         }
