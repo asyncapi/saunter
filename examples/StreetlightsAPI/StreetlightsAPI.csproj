@@ -37,7 +37,7 @@
 
   <!-- For release: use a real published nuget package -->
   <ItemGroup Condition=" '$(Configuration)' == 'Release' ">
-    <PackageReference Include="AsyncAPI.Saunter.Generator.Build" Version="*">
+    <PackageReference Include="AsyncAPI.Saunter.Generator.Build" Version="*-*">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
