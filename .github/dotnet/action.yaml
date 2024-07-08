@@ -1,0 +1,10 @@
+name: dotnet setup
+description: "base dotnet setup for project"
+runs:
+  using: composite
+  steps:
+    - name: setup
+      id: setup-dotnet
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: "6.0.x"

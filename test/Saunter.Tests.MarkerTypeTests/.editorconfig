@@ -1,0 +1,7 @@
+# EditorConfig is awesome: https://EditorConfig.org
+
+root=false
+
+[*.{cs,vb}]
+
+dotnet_code_quality_unused_parameters = non_public
