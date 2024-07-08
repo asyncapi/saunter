@@ -16,9 +16,6 @@ namespace Saunter.Generation
 {
     public class DocumentGenerator : IDocumentGenerator
     {
-        public DocumentGenerator()
-        {
-        }
 
         public AsyncApiSchema.v2.AsyncApiDocument GenerateDocument(TypeInfo[] asyncApiTypes, AsyncApiOptions options, AsyncApiDocument prototype, IServiceProvider serviceProvider)
         {
