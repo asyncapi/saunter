@@ -1,7 +1,4 @@
-# Note: ci.yaml and release.yaml have some similar steps
-#       If updating dotnet-version, set in both.
-
-name: CI
+name: ci
 
 on:
   push:
@@ -10,32 +7,35 @@ on:
   pull_request:
 
 jobs:
+
   build:
-
     runs-on: ubuntu-latest
-    
     steps:
-    - uses: actions/checkout@v3
+      - uses: actions/checkout@v2
+      - name: setup build
+        uses: ./.github/npm
+      - name: Run dotnet build
+        run: dotnet build --configuration Debug
 
-    - uses: actions/setup-node@v3
-      with:
-        node-version: 'lts/*' # latest LTS version
-    - uses: actions/setup-dotnet@v2
-      with:
-        dotnet-version: | 
-          6.0.x
-          8.0.x
+  fmt:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: setup dotnet
+        uses: ./.github/dotnet
+      - name: dotnet format check
+        run: dotnet format --verify-no-changes *.sln
+        env:
+          PATH: ${{ github.env.PATH }}:/home/runner/.dotnet/tools
 
-    - name: Run NPM install
-      run: npm ci
-      working-directory: ./src/Saunter.UI
-    - name: Run dotnet build
-      run: dotnet build --configuration Debug
-    - name: Run dotnet test
-      run: dotnet test --no-build
-
-    # Below steps run only on CI, not release
-    - uses: actions/upload-artifact@v2
-      with:
-        name: saunter-bin
-        path: ./src/Saunter/bin
+  unit-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: setup build
+        uses: ./.github/npm
+      - name: unit test
+        run: dotnet test ./test/Saunter.Tests/Saunter.Tests.csproj
+      # TODO: why there are 2 of them....
+      - name: unit mark test
+        run: dotnet test ./test/Saunter.Tests.MarkerTypeTests/Saunter.Tests.MarkerTypeTests.csproj
