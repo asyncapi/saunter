@@ -2,7 +2,7 @@
 
 namespace Saunter.AttributeProvider.Attributes
 {
-    [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class, AllowMultiple = true)]
+    [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class | AttributeTargets.Interface, AllowMultiple = true)]
     public class ChannelParameterAttribute : Attribute
     {
         public ChannelParameterAttribute(string name, Type type)

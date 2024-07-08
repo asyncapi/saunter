@@ -2,7 +2,7 @@
 
 namespace Saunter.AttributeProvider.Attributes
 {
-    [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class)]
+    [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class | AttributeTargets.Interface)]
     public class ChannelAttribute : Attribute
     {
         /// <summary>

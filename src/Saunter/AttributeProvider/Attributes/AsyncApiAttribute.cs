@@ -3,9 +3,9 @@
 namespace Saunter.AttributeProvider.Attributes
 {
     /// <summary>
-    /// Marks a class as containing asyncapi channels.
+    /// Marks a class or interface as containing asyncapi channels.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Class)]
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface)]
     public sealed class AsyncApiAttribute : Attribute
     {
         public string DocumentName { get; }

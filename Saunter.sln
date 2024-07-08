@@ -15,18 +15,32 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "examples", "examples", "{6A
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StreetlightsAPI", "examples\StreetlightsAPI\StreetlightsAPI.csproj", "{F188D4A7-BBCB-464F-A370-2BD84D18EA79}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E0D34C77-924E-4F6B-9289-5A2F07D125A8}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{E0D34C77-924E-4F6B-9289-5A2F07D125A8}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 		CHANGELOG.md = CHANGELOG.md
-		.github\workflows\ci.yaml = .github\workflows\ci.yaml
 		README.md = README.md
-		.github\workflows\release.yaml = .github\workflows\release.yaml
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Saunter.IntegrationTests.ReverseProxy", "test\Saunter.IntegrationTests.ReverseProxy\Saunter.IntegrationTests.ReverseProxy.csproj", "{7CD09B89-130A-41AF-ADAE-2166C4ED695B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Saunter.Tests.MarkerTypeTests", "test\Saunter.Tests.MarkerTypeTests\Saunter.Tests.MarkerTypeTests.csproj", "{02284473-6DE7-4EE0-8433-2AC295045549}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "actions", "actions", "{D8CB9C0D-9605-457B-979F-C8994B20A926}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\ci.yaml = .github\workflows\ci.yaml
+		.github\workflows\release.yaml = .github\workflows\release.yaml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "dotnet", "dotnet", "{69459F9D-DA73-4E84-8BA7-4CE03E2B7664}"
+	ProjectSection(SolutionItems) = preProject
+		.github\dotnet\action.yaml = .github\dotnet\action.yaml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "npm", "npm", "{E8FACA22-CFED-4710-89E4-D55F31BF96B3}"
+	ProjectSection(SolutionItems) = preProject
+		.github\npm\action.yaml = .github\npm\action.yaml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -108,6 +122,8 @@ Global
 		{F188D4A7-BBCB-464F-A370-2BD84D18EA79} = {6ABD4842-47AF-49A5-B057-0EBA64416789}
 		{7CD09B89-130A-41AF-ADAE-2166C4ED695B} = {6491E321-2D02-44AB-9116-D722FE169595}
 		{02284473-6DE7-4EE0-8433-2AC295045549} = {6491E321-2D02-44AB-9116-D722FE169595}
+		{69459F9D-DA73-4E84-8BA7-4CE03E2B7664} = {D8CB9C0D-9605-457B-979F-C8994B20A926}
+		{E8FACA22-CFED-4710-89E4-D55F31BF96B3} = {D8CB9C0D-9605-457B-979F-C8994B20A926}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2F85D9DA-DBCF-4F13-8C42-5719F1469B2E}
