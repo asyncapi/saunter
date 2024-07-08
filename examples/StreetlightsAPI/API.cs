@@ -51,7 +51,6 @@ namespace StreetlightsAPI
     {
         private const string PublishLightMeasuredTopic = "publish/light/measured";
 
-
         // Simulate a database of streetlights
         private static int StreetlightSeq = 2;
         private static readonly List<Streetlight> StreetlightDatabase = new List<Streetlight>

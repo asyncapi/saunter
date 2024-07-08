@@ -6,37 +6,14 @@ using System.Runtime.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
-using NJsonSchema;
-using NJsonSchema.Generation;
-using NJsonSchema.NewtonsoftJson.Converters;
-using Saunter.Generation.SchemaGeneration;
-using Saunter.Tests.Utils;
-
 using Shouldly;
 
 using Xunit;
-
-using JsonInheritanceAttribute = NJsonSchema.NewtonsoftJson.Converters.JsonInheritanceAttribute;
 
 namespace Saunter.Tests.Generation.SchemaGeneration
 {
     public class SchemaGenerationTests
     {
-        private readonly JsonSchemaGenerator _schemaGenerator;
-
-        public SchemaGenerationTests()
-        {
-            var settings = new AsyncApiSchemaOptions()
-            {
-                TypeNameGenerator = new CamelCaseTypeNameGenerator(),
-                SerializerSettings = new JsonSerializerSettings()
-                {
-                    ContractResolver = new CamelCasePropertyNamesContractResolver()
-                },
-            };
-            _schemaGenerator = new JsonSchemaGenerator(settings);
-        }
-
         [Fact]
         public void GenerateSchema_GenerateSchemaFromTypeWithProperties_GeneratesSchemaCorrectly()
         {

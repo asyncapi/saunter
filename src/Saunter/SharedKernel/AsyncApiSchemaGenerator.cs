@@ -29,9 +29,12 @@ namespace Saunter.SharedKernel
                 return schema;
             }
 
-            schema.Properties = typeInfo.DeclaredProperties.ToDictionary(
-                prop => prop.Name,
-                prop => Generate(prop.PropertyType.GetTypeInfo()));
+            schema.Properties = typeInfo
+                .DeclaredProperties
+                .Where(p => p.GetMethod is not null && !p.GetMethod.IsStatic)
+                .ToDictionary(
+                    prop => prop.Name,
+                    prop => Generate(prop.PropertyType.GetTypeInfo()));
 
             return schema;
         }
@@ -45,6 +48,9 @@ namespace Saunter.SharedKernel
             typeof(DateTimeOffset).GetTypeInfo(),
             typeof(TimeSpan).GetTypeInfo(),
             typeof(Guid).GetTypeInfo(),
+            typeof(Uri).GetTypeInfo(),
+            typeof(DateOnly).GetTypeInfo(),
+            typeof(TimeOnly).GetTypeInfo(),
         };
 
         private static readonly TypeInfo[] s_intergerTypeInfos = new TypeInfo[]

@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using Saunter.Generation.Filters;
 using Saunter.Options;
 using Shouldly;
 using Xunit;

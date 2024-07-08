@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
-using Saunter.Generation;
-using Saunter.Generation.Filters;
 using Shouldly;
 using Xunit;
 
