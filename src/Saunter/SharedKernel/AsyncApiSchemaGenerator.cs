@@ -11,6 +11,11 @@ namespace Saunter.SharedKernel
     {
         public AsyncApiSchema? Generate(Type? type)
         {
+            return GenerateBranch(type, new());
+        }
+
+        private AsyncApiSchema? GenerateBranch(Type? type, HashSet<Type> parents)
+        {
             if (type is null)
             {
                 return null;
@@ -18,17 +23,53 @@ namespace Saunter.SharedKernel
 
             var typeInfo = type.GetTypeInfo();
 
-            var name = typeInfo.Name;
-            name = char.ToLowerInvariant(name[0]) + name[1..];
-
             var schema = new AsyncApiSchema
             {
-                Title = name,
-                Type = MapJsonTypeToSchemaType(typeInfo),
+                Nullable = !typeInfo.IsValueType,
             };
+
+            if (typeInfo.IsGenericType)
+            {
+                var nullableType = typeof(Nullable<>).MakeGenericType(typeInfo.GenericTypeArguments);
+
+                if (typeInfo == nullableType)
+                {
+                    schema.Nullable = true;
+                    typeInfo = typeInfo.GenericTypeArguments[0].GetTypeInfo();
+                }
+            }
+
+            var name = ToNameCase(typeInfo.Name);
+
+            if (!parents.Add(type))
+            {
+                schema.Reference = new()
+                {
+                    Id = name,
+                    Type = ReferenceType.Schema,
+                };
+
+                return schema;
+            }
+
+            schema.Title = name;
+            schema.Type = MapJsonTypeToSchemaType(typeInfo);
 
             if (schema.Type is not SchemaType.Object and not SchemaType.Array)
             {
+                if (typeInfo.IsEnum)
+                {
+                    schema.Format = "enum";
+                    schema.Enum = typeInfo
+                        .GetEnumNames()
+                        .Select(e => new AsyncApiAny(e))
+                        .ToList();
+                }
+                else
+                {
+                    schema.Format = schema.Title;
+                }
+
                 return schema;
             }
 
@@ -36,10 +77,15 @@ namespace Saunter.SharedKernel
                 .DeclaredProperties
                 .Where(p => p.GetMethod is not null && !p.GetMethod.IsStatic)
                 .ToDictionary(
-                    prop => prop.Name,
-                    prop => Generate(prop.PropertyType.GetTypeInfo()));
+                    prop => ToNameCase(prop.Name),
+                    prop => GenerateBranch(prop.PropertyType.GetTypeInfo(), parents.ToHashSet()));
 
             return schema;
+        }
+
+        private static string ToNameCase(string name)
+        {
+            return char.ToLowerInvariant(name[0]) + name[1..];
         }
 
         private static readonly TypeInfo s_boolTypeInfo = typeof(bool).GetTypeInfo();
@@ -79,6 +125,11 @@ namespace Saunter.SharedKernel
             if (typeInfo == s_boolTypeInfo)
             {
                 return SchemaType.Boolean;
+            }
+
+            if (typeInfo.IsEnum)
+            {
+                return SchemaType.String;
             }
 
             if (s_stringTypeInfos.Contains(typeInfo))
