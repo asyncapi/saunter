@@ -23,6 +23,8 @@ jobs:
       - uses: actions/checkout@v2
       - name: setup dotnet
         uses: ./.github/dotnet
+      - name: dotnet restore
+        run: dotnet restore *sln
       - name: dotnet format check
         run: dotnet format --verify-no-changes *.sln
         env:
