@@ -1,4 +1,5 @@
-﻿using LEGO.AsyncAPI;
+﻿using System.Collections.Generic;
+using LEGO.AsyncAPI;
 using LEGO.AsyncAPI.Models;
 using LEGO.AsyncAPI.Readers;
 using Microsoft.Extensions.Logging;
@@ -23,11 +24,14 @@ namespace Saunter.SharedKernel
 
             var cloned = reader.Read(jsonView, out var diagnostic);
 
-            if (diagnostic != null)
+            if (diagnostic is not null)
             {
                 foreach (var item in diagnostic.Errors)
                 {
-                    _logger.LogError("Error while clone protype: {Error}", item);
+                    if (!item.Message.Contains("The field 'channels' in 'document' object is REQUIRED"))
+                    {
+                        _logger.LogError("Error while clone protype: {Error}", item);
+                    }
                 }
 
                 foreach (var item in diagnostic.Warnings)

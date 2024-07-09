@@ -18,7 +18,7 @@ namespace Saunter.SharedKernel
 
             if (source.Subscribe is not null && additionaly.Subscribe is not null)
             {
-                throw new InvalidOperationException("Publish operation conflict");
+                throw new InvalidOperationException("Subscribe operation conflict");
             }
 
             if (source.Reference is not null && additionaly.Reference is not null)
@@ -28,6 +28,12 @@ namespace Saunter.SharedKernel
 
             var publishOperation = source.Publish ?? additionaly.Publish;
             var subscribeOperation = source.Subscribe ?? additionaly.Subscribe;
+            var reference = source.Reference ?? additionaly.Reference;
+
+            if (reference is not null && (publishOperation is not null || subscribeOperation is not null))
+            {
+                throw new InvalidOperationException("Reference operation conflict");
+            }
 
             var servers = source.Servers?.Any() == true
                 ? source.Servers
@@ -53,14 +59,13 @@ namespace Saunter.SharedKernel
             {
                 Publish = publishOperation,
                 Subscribe = subscribeOperation,
-                UnresolvedReference = source.UnresolvedReference,
 
                 Servers = servers,
                 Bindings = bindings,
                 Parameters = parameters,
                 Extensions = extensions,
 
-                Reference = source.Reference ?? additionaly.Reference,
+                Reference = reference,
                 Description = source.Description ?? additionaly.Description,
             };
         }
