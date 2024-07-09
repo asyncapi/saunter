@@ -29,8 +29,6 @@ jobs:
         with:
           dotnet-version: "8.0.300"
 
-      - name: dotnet restore
-        run: dotnet restore *sln
       - name: dotnet format check
         run: dotnet format --verify-no-changes *.sln
         env:
