@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Xml.Linq;
 using LEGO.AsyncAPI.Models;
 using Saunter.SharedKernel.Interfaces;
 
@@ -18,9 +19,12 @@ namespace Saunter.SharedKernel
 
             var typeInfo = type.GetTypeInfo();
 
+            var name = typeInfo.Name;
+            name = char.ToLowerInvariant(name[0]) + name[1..];
+
             var schema = new AsyncApiSchema
             {
-                Title = typeInfo.Name,
+                Title = name,
                 Type = MapJsonTypeToSchemaType(typeInfo),
             };
 

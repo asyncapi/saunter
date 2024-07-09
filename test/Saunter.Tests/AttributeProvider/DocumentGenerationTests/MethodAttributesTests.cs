@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
+using Saunter.AttributeProvider.Attributes;
+using Saunter.Options;
 using Shouldly;
 using Xunit;
 
@@ -12,11 +14,10 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
         public void GenerateDocument_GeneratesDocumentWithMultipleMessagesPerChannel()
         {
             // Arrange
-            var options = new AsyncApiOptions();
-            var documentGenerator = new DocumentGenerator();
+            ArrangeAttributesTests.Arrange(out var options, out var documentProvider, typeof(TenantMessagePublisher));
 
             // Act
-            var document = documentGenerator.GenerateDocument(new[] { typeof(TenantMessagePublisher).GetTypeInfo() }, options, options.AsyncApi, ActivatorServiceProvider.Instance);
+            var document = documentProvider.GetDocument(null, options);
 
             // Assert
             document.ShouldNotBeNull();
@@ -31,12 +32,11 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
             publish.OperationId.ShouldBe("TenantMessagePublisher");
             publish.Summary.ShouldBe("Publish domains events about tenants.");
 
-            var messages = publish.Message.ShouldBeOfType<Messages>();
-            messages.OneOf.Count.ShouldBe(3);
+            publish.Message.Count.ShouldBe(3);
 
-            messages.OneOf.OfType<MessageReference>().ShouldContain(m => m.Id == "anyTenantCreated");
-            messages.OneOf.OfType<MessageReference>().ShouldContain(m => m.Id == "anyTenantUpdated");
-            messages.OneOf.OfType<MessageReference>().ShouldContain(m => m.Id == "anyTenantRemoved");
+            publish.Message.ShouldContain(m => m.MessageId == "anyTenantCreated");
+            publish.Message.ShouldContain(m => m.MessageId == "anyTenantUpdated");
+            publish.Message.ShouldContain(m => m.MessageId == "anyTenantRemoved");
         }
 
         [AsyncApi]

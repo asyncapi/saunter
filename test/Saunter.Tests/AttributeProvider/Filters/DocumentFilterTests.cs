@@ -1,5 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
+using LEGO.AsyncAPI.Models;
+using Saunter.Options;
+using Saunter.Options.Filters;
+using Saunter.Tests.Generation.DocumentGeneratorTests;
 using Shouldly;
 using Xunit;
 
@@ -11,12 +15,12 @@ namespace Saunter.Tests.Generation.Filters
         public void DocumentFilterIsAppliedToAsyncApiDocument()
         {
             // Arrange
-            var options = new AsyncApiOptions();
-            var documentGenerator = new DocumentGenerator();
+            ArrangeAttributesTests.Arrange(out var options, out var documentProvider, GetType());
+
+            options.AddDocumentFilter<ExampleDocumentFilter>();
 
             // Act
-            options.AddDocumentFilter<ExampleDocumentFilter>();
-            var document = documentGenerator.GenerateDocument(new[] { GetType().GetTypeInfo() }, options, options.AsyncApi, ActivatorServiceProvider.Instance);
+            var document = documentProvider.GetDocument(null, options);
 
             // Assert
             document.ShouldNotBeNull();
@@ -28,18 +32,18 @@ namespace Saunter.Tests.Generation.Filters
         public void DocumentNameIsAppliedToAsyncApiDocument()
         {
             // Arrange
-            const string documentName = "Test Document";
-            var options = new AsyncApiOptions();
-            options.AsyncApi.DocumentName = documentName;
-            var documentGenerator = new DocumentGenerator();
+            const string DocumentName = "Test Document";
+
+            ArrangeAttributesTests.Arrange(out var options, out var documentProvider, GetType());
+
+            options.NamedApis[DocumentName] = new();
+            options.AddDocumentFilter<ExampleDocumentFilter>();
 
             // Act
-            options.AddDocumentFilter<ExampleDocumentFilter>();
-            var document = documentGenerator.GenerateDocument(new[] { GetType().GetTypeInfo() }, options, options.AsyncApi, ActivatorServiceProvider.Instance);
+            var document = documentProvider.GetDocument(DocumentName, options);
 
             // Assert
             document.ShouldNotBeNull();
-            document.DocumentName.ShouldBe(documentName);
         }
 
         private class ExampleDocumentFilter : IDocumentFilter

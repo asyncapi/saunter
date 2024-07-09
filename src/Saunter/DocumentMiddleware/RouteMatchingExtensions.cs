@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System.Diagnostics.CodeAnalysis;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.Routing.Template;
 
@@ -15,7 +16,7 @@ namespace Saunter.Middleware
             return matcher.TryMatch(path, values);
         }
 
-        public static bool TryGetDocument(this HttpContext context, out string document)
+        public static bool TryGetDocument(this HttpContext context, [MaybeNullWhen(false)] out string document)
         {
             var values = context.Request.RouteValues;
             if (!values.TryGetValue("document", out var value) || value == null)
@@ -24,7 +25,7 @@ namespace Saunter.Middleware
                 return false;
             }
 
-            document = value.ToString();
+            document = value.ToString() ?? string.Empty;
             return true;
         }
     }

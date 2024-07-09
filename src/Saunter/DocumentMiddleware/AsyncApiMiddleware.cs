@@ -28,14 +28,13 @@ namespace Saunter.Middleware
                 return;
             }
 
-            var prototype = _options.AsyncApi;
-            if (context.TryGetDocument(out var documentName) && !_options.NamedApis.TryGetValue(documentName, out prototype))
+            if (context.TryGetDocument(out var documentName) && !_options.NamedApis.TryGetValue(documentName, out _))
             {
                 await _next(context);
                 return;
             }
 
-            var asyncApiSchema = _asyncApiDocumentProvider.GetDocument(_options, prototype);
+            var asyncApiSchema = _asyncApiDocumentProvider.GetDocument(documentName, _options);
 
             await RespondWithAsyncApiSchemaJson(context.Response, asyncApiSchema);
         }

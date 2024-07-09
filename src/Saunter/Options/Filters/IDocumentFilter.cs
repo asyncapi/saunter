@@ -1,6 +1,9 @@
 ﻿using LEGO.AsyncAPI.Models;
 
-public interface IDocumentFilter
+namespace Saunter.Options.Filters
 {
-    void Apply(AsyncApiDocument document, DocumentFilterContext context);
+    public interface IDocumentFilter
+    {
+        void Apply(AsyncApiDocument document, DocumentFilterContext context);
+    }
 }

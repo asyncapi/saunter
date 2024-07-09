@@ -3,26 +3,29 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using LEGO.AsyncAPI.Models;
+using Microsoft.Extensions.DependencyInjection;
 using Namotion.Reflection;
 using Saunter.AttributeProvider.Attributes;
 using Saunter.Options;
-using Saunter.SharedKernel;
+using Saunter.Options.Filters;
 using Saunter.SharedKernel.Interfaces;
 
 namespace Saunter.AttributeProvider
 {
     internal class AttributeDocumentProvider : IAsyncApiDocumentProvider
     {
+        private readonly IServiceProvider _serviceProvider;
         private readonly IAsyncApiSchemaGenerator _schemaGenerator;
         private readonly IAsyncApiDocumentCloner _cloner;
 
-        public AttributeDocumentProvider(IAsyncApiSchemaGenerator asyncApiSchemaGenerator, IAsyncApiDocumentCloner cloner)
+        public AttributeDocumentProvider(IServiceProvider serviceProvider, IAsyncApiSchemaGenerator schemaGenerator, IAsyncApiDocumentCloner cloner)
         {
-            _schemaGenerator = asyncApiSchemaGenerator;
+            _serviceProvider = serviceProvider;
+            _schemaGenerator = schemaGenerator;
             _cloner = cloner;
         }
 
-        public AsyncApiDocument GetDocument(AsyncApiOptions options, AsyncApiDocument prototype)
+        public AsyncApiDocument GetDocument(string? documentName, AsyncApiOptions options)
         {
             if (options == null)
             {
@@ -30,22 +33,22 @@ namespace Saunter.AttributeProvider
             }
 
             var apiNamePair = options.NamedApis
-                .FirstOrDefault(c => c.Value.Id == prototype.Id);
+                .FirstOrDefault(c => c.Value.Id == documentName);
 
             var asyncApiTypes = GetAsyncApiTypes(options, apiNamePair.Key);
 
-            var clone = _cloner.CloneProtype(prototype);
+            var clone = _cloner.CloneProtype(apiNamePair.Value ?? options.AsyncApi);
 
             GenerateChannelsFromMethods(clone, options, asyncApiTypes);
             GenerateChannelsFromClasses(clone, options, asyncApiTypes);
 
-            // TODO: RESTORE
-            // var filterContext = new DocumentFilterContext(asyncApiTypes, schemaResolver, generator);
-            // foreach (var filterType in options.DocumentFilters)
-            // {
-            //     var filter = (IDocumentFilter)serviceProvider.GetRequiredService(filterType);
-            //     filter?.Apply(asyncApiSchema, filterContext);
-            // }
+            var filterContext = new DocumentFilterContext(asyncApiTypes);
+
+            foreach (var filterType in options.DocumentFilters)
+            {
+                var filter = (IDocumentFilter)_serviceProvider.GetRequiredService(filterType);
+                filter?.Apply(clone, filterContext);
+            }
 
             return clone;
         }
@@ -88,14 +91,7 @@ namespace Saunter.AttributeProvider
                 };
 
                 document.Channels.Add(item.Channel.Name, channelItem);
-
-                // TODO: RESTORE
-                //var context = new ChannelItemFilterContext(mc.Method, schemaResolver, jsonSchemaGenerator, mc.Channel);
-                //foreach (var filterType in options.ChannelItemFilters)
-                //{
-                //    var filter = (IChannelItemFilter)serviceProvider.GetRequiredService(filterType);
-                //    filter.Apply(channelItem, context);
-                //}
+                ApplyChannelFilters(options, item.Method, item.Channel, channelItem);
             }
         }
 
@@ -111,7 +107,10 @@ namespace Saunter.AttributeProvider
 
             foreach (var item in classesWithChannelAttribute)
             {
-                if (item.Channel == null) continue;
+                if (item.Channel == null)
+                {
+                    continue;
+                }
 
                 var channelItem = new AsyncApiChannel
                 {
@@ -134,13 +133,18 @@ namespace Saunter.AttributeProvider
 
                 document.Channels.Add(item.Channel.Name, channelItem);
 
-                // TODO: RESTORE
-                //var context = new ChannelItemFilterContext(item.Type, schemaResolver, jsonSchemaGenerator, item.Channel);
-                //foreach (var filterType in options.ChannelItemFilters)
-                //{
-                //    var filter = (IChannelItemFilter)serviceProvider.GetRequiredService(filterType);
-                //    filter.Apply(channelItem, context);
-                //}
+                ApplyChannelFilters(options, item.Type, item.Channel, channelItem);
+            }
+        }
+
+        private void ApplyChannelFilters(AsyncApiOptions options, MemberInfo member, ChannelAttribute channel, AsyncApiChannel channelItem)
+        {
+            var context = new ChannelFilterContext(member, channel);
+
+            foreach (var filterType in options.ChannelFilters)
+            {
+                var filter = (IChannelFilter)_serviceProvider.GetRequiredService(filterType);
+                filter.Apply(channelItem, context);
             }
         }
 
@@ -209,23 +213,16 @@ namespace Saunter.AttributeProvider
                 Bindings = bindings,
             };
 
-            var message = messageAttributes.Any()
+            operation.Message = messageAttributes.Any()
                 ? GenerateMessageFromAttributes(messageAttributes)
                 : GenerateMessageFromType(operationAttribute.MessagePayloadType.GetTypeInfo());
 
-            if (message is not null)
+            var filterContext = new OperationFilterContext(method, operationAttribute);
+            foreach (var filterType in options.OperationFilters)
             {
-                operation.Message.Add(message);
+                var filter = (IOperationFilter)_serviceProvider.GetRequiredService(filterType);
+                filter?.Apply(operation, filterContext);
             }
-
-            // TODO: RESTORE
-            // var filterContext = new OperationFilterContext(method, schemaResolver, jsonSchemaGenerator, operationAttribute);
-
-            // foreach (var filterType in options.OperationFilters)
-            //{
-            //    var filter = (IOperationFilter)serviceProvider.GetRequiredService(filterType);
-            //    filter?.Apply(operation, filterContext);
-            //}
 
             return operation;
         }
@@ -298,14 +295,21 @@ namespace Saunter.AttributeProvider
             };
         }
 
-        private AsyncApiMessage? GenerateMessageFromAttributes(IEnumerable<MessageAttribute> messageAttributes)
+        private List<AsyncApiMessage> GenerateMessageFromAttributes(IEnumerable<MessageAttribute> messageAttributes)
         {
+            List<AsyncApiMessage> messages = new();
+
             if (messageAttributes.Count() == 1)
             {
-                return GenerateMessageFromAttribute(messageAttributes.First());
-            }
+                var message = GenerateMessageFromAttribute(messageAttributes.First());
 
-            var messages = new AsyncApiMessage();
+                if (message is not null)
+                {
+                    messages.Add(message);
+                }
+
+                return messages;
+            }
 
             foreach (var attribute in messageAttributes)
             {
@@ -313,21 +317,15 @@ namespace Saunter.AttributeProvider
 
                 if (message != null)
                 {
-                    // TODO: OneOf? AllOf?
-                    messages.Payload.AnyOf.Add(message.Payload);
+                    messages.Add(message);
                 }
             }
 
             return messages;
         }
 
-        private AsyncApiMessage? GenerateMessageFromType(TypeInfo payloadType)
+        private List<AsyncApiMessage> GenerateMessageFromType(TypeInfo payloadType)
         {
-            if (payloadType == null)
-            {
-                return null;
-            }
-
             var message = new AsyncApiMessage
             {
                 Payload = _schemaGenerator.Generate(payloadType),
@@ -336,7 +334,7 @@ namespace Saunter.AttributeProvider
             message.MessageId = message.Payload?.Title;
             message.Name = message.Payload?.Title;
 
-            return message;
+            return new() { message };
         }
 
         private AsyncApiMessage? GenerateMessageFromAttribute(MessageAttribute messageAttribute)
@@ -350,16 +348,18 @@ namespace Saunter.AttributeProvider
                 .Select(x => new AsyncApiTag { Name = x })
                 .ToList() ?? new List<AsyncApiTag>();
 
+            var asyncApiSchema = _schemaGenerator.Generate(messageAttribute.PayloadType);
+
             var message = new AsyncApiMessage
             {
-                MessageId = messageAttribute.MessageId,
+                MessageId = messageAttribute.MessageId ?? asyncApiSchema?.Title ?? messageAttribute.PayloadType.Name,
                 Title = messageAttribute.Title,
                 Summary = messageAttribute.Summary,
                 Description = messageAttribute.Description,
                 Tags = tags,
-                Payload = _schemaGenerator.Generate(messageAttribute.PayloadType),
+                Payload = asyncApiSchema,
                 Headers = _schemaGenerator.Generate(messageAttribute.HeadersType),
-                Name = messageAttribute.Name ?? messageAttribute.PayloadType.Name,
+                Name = messageAttribute.Name ?? asyncApiSchema?.Title ?? messageAttribute.PayloadType.Name,
                 Bindings = new()
                 {
                     Reference = new()
@@ -378,14 +378,9 @@ namespace Saunter.AttributeProvider
         /// </summary>
         private static TypeInfo[] GetAsyncApiTypes(AsyncApiOptions options, string? apiName)
         {
-            var assembliesToScan = options
-                .AssemblyMarkerTypes
-                .Select(t => t.Assembly)
-                .Distinct();
-
-            var asyncApiTypes = assembliesToScan
-                .SelectMany(a => a.DefinedTypes
-                    .Where(t => t.GetCustomAttribute<AsyncApiAttribute>()?.DocumentName == apiName))
+            var asyncApiTypes = options
+                .AsyncApiSchemaTypes
+                    .Where(t => t.GetCustomAttribute<AsyncApiAttribute>()?.DocumentName == apiName)
                 .ToArray();
 
             return asyncApiTypes;

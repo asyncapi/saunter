@@ -11,7 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Saunter;
-using Saunter.Attributes;
+using Saunter.AttributeProvider.Attributes;
 
 namespace Saunter.IntegrationTests.ReverseProxy
 {
@@ -51,7 +51,11 @@ namespace Saunter.IntegrationTests.ReverseProxy
 
                 options.AsyncApi = new AsyncApiDocument
                 {
-                    Info = new AsyncApiInfo(Environment.GetEnvironmentVariable("PATH_BASE"), "1.0.0")
+                    Info = new AsyncApiInfo
+                    {
+                        Title = Environment.GetEnvironmentVariable("PATH_BASE"),
+                        Version = "1.0.0"
+                    }
                 };
             });
 
@@ -80,7 +84,6 @@ namespace Saunter.IntegrationTests.ReverseProxy
 
                 endpoints.MapControllers();
             });
-
 
             // Print the AsyncAPI doc location
             var logger = app.ApplicationServices.GetService<ILoggerFactory>().CreateLogger<Program>();

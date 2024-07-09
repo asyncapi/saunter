@@ -14,6 +14,8 @@ namespace Saunter.Tests.Generation.DocumentProviderTests
         public void GetDocument_GeneratesDocumentWithMultipleMessagesPerChannel()
         {
             var services = new ServiceCollection() as IServiceCollection;
+
+            services.AddFakeLogging();
             services.AddAsyncApiSchemaGeneration(o =>
             {
                 o.AsyncApi = new AsyncApiDocument
@@ -31,7 +33,7 @@ namespace Saunter.Tests.Generation.DocumentProviderTests
 
             var documentProvider = serviceprovider.GetRequiredService<IAsyncApiDocumentProvider>();
             var options = serviceprovider.GetRequiredService<IOptions<AsyncApiOptions>>().Value;
-            var document = documentProvider.GetDocument(options, options.AsyncApi);
+            var document = documentProvider.GetDocument(null, options);
 
             document.ShouldNotBeNull();
         }

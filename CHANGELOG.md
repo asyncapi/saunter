@@ -5,7 +5,6 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 <!-- Please update the links section at the bottom when adding a new version. -->
 
-
 ## [v0.13.0] - 2024-01-16
 ### Changed
 - [Updated NJsonSchema to v11.0.0](https://github.com/m-wild/saunter/issues/179)
@@ -27,7 +26,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 ## [v0.11.0] - 2022-10-03
 ### Added
-- Message and AsyncApiOperation attributes now allow setting tags
+- Message and Operation attributes now allow setting tags
 
 ## [v0.10.0] - 2022-08-22
 ### Changed
@@ -52,7 +51,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 ### Changed
 - AsyncAPI spec version bumped to 2.2.0
   - New optional property `string[] Servers` available on `ChannelAttribute`
-  - New optional property `List<string> Servers` available on `AsyncApiChannel`
+  - New optional property `List<string> Servers` available on `ChannelItem`
 - Bump UI library to v1.0.0-next.21
 
 ## [v0.8.0] - 2021-09-11

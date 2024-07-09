@@ -1,15 +1,18 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Linq;
+using System.Reflection;
 using LEGO.AsyncAPI.Models;
-using Saunter.Middleware;
+using Saunter.Options.Filters;
 
 namespace Saunter.Options
 {
     public class AsyncApiOptions
     {
         private readonly List<Type> _documentFilters = new();
-        private readonly List<Type> _asyncApiChannelFilters = new();
+        private readonly List<Type> _channelFilters = new();
         private readonly List<Type> _operationFilters = new();
 
         /// <summary>
@@ -23,6 +26,12 @@ namespace Saunter.Options
         /// </summary>
         public IList<Type> AssemblyMarkerTypes { get; set; } = new List<Type>();
 
+        internal virtual IReadOnlyCollection<TypeInfo> AsyncApiSchemaTypes => AssemblyMarkerTypes
+            .Select(t => t.Assembly)
+            .Distinct()
+            .SelectMany(a => a.DefinedTypes)
+            .ToImmutableHashSet();
+
         /// <summary>
         /// A list of filters that will be applied to the generated AsyncAPI document.
         /// </summary>
@@ -31,7 +40,7 @@ namespace Saunter.Options
         /// <summary>
         /// A list of filters that will be applied to any generated channels.
         /// </summary>
-        public IEnumerable<Type> AsyncApiChannelFilters => _asyncApiChannelFilters;
+        public IEnumerable<Type> ChannelFilters => _channelFilters;
 
         /// <summary>
         /// A list of filters that will be applied to any generated Publish/Subscribe operations.
@@ -52,7 +61,7 @@ namespace Saunter.Options
         /// </summary>
         public void AddAsyncApiChannelFilter<T>() where T : IChannelFilter
         {
-            _asyncApiChannelFilters.Add(typeof(T));
+            _channelFilters.Add(typeof(T));
         }
 
         /// <summary>
