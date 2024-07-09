@@ -1,9 +1,17 @@
 # Changelog
+
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 <!-- Please update the links section at the bottom when adding a new version. -->
+
+## [v0.14.0] - ?
+### Changed
+- [Change AsyncApi data structure to LEGO AsyncAPI.NET](https://github.com/m-wild/saunter/issues/188)
+- [Replace NJsonSchema with own implementation](https://github.com/m-wild/saunter/issues/188)
+- [Allow usages of the annotation attributes on interfaces](https://github.com/m-wild/saunter/issues/213)
+- Bump ws from 7.5.3 to 7.5.10 in /src/Saunter.UI
 
 ## [v0.13.0] - 2024-01-16
 ### Changed
