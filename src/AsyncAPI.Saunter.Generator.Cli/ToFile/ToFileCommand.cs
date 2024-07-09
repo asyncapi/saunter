@@ -8,7 +8,7 @@ namespace AsyncAPI.Saunter.Generator.Cli.ToFile;
 internal class ToFileCommand(ILogger<ToFileCommand> logger, EnvironmentBuilder environment, ServiceProviderBuilder builder, AsyncApiDocumentExtractor docExtractor, FileWriter fileWriter)
 {
     private const string DEFAULT_FILENAME = "{document}_asyncapi.{extension}";
-    
+
     /// <summary>
     /// Retrieves AsyncAPI spec from a startup assembly and writes to file.
     /// </summary>

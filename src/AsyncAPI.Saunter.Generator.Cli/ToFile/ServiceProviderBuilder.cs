@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
-using Microsoft.Extensions.Logging;
 using System.Runtime.Loader;
+using Microsoft.Extensions.Logging;
 
 namespace AsyncAPI.Saunter.Generator.Cli.ToFile;
 
