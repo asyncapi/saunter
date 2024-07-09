@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Reflection;
 using LEGO.AsyncAPI.Models;
-using Saunter.Options;
 using Saunter.Options.Filters;
 using Saunter.Tests.Generation.DocumentGeneratorTests;
 using Shouldly;

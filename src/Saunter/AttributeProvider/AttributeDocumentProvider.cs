@@ -116,8 +116,8 @@ namespace Saunter.AttributeProvider
                 {
                     Description = item.Channel.Description,
                     Parameters = GetChannelParametersFromAttributes(item.Type),
-                    Publish = GenerateOperationFromClass(item.Type, OperationType.Publish, options),
-                    Subscribe = GenerateOperationFromClass(item.Type, OperationType.Subscribe, options),
+                    Publish = GenerateOperationFromClass(item.Type, OperationType.Publish),
+                    Subscribe = GenerateOperationFromClass(item.Type, OperationType.Subscribe),
                     Servers = item.Channel.Servers?.ToList(),
                     Bindings = item.Channel.BindingsRef != null
                         ? new()
@@ -227,7 +227,7 @@ namespace Saunter.AttributeProvider
             return operation;
         }
 
-        private AsyncApiOperation? GenerateOperationFromClass(TypeInfo type, OperationType operationType, AsyncApiOptions options)
+        private AsyncApiOperation? GenerateOperationFromClass(TypeInfo type, OperationType operationType)
         {
             var operationAttribute = GetOperationAttribute(type, operationType);
 
@@ -373,9 +373,6 @@ namespace Saunter.AttributeProvider
             return message;
         }
 
-        /// <summary>
-        /// Get all types with an <see cref="AsyncApiAttribute"/> from assemblies <see cref="AsyncApiOptions.AssemblyMarkerTypes"/>.
-        /// </summary>
         private static TypeInfo[] GetAsyncApiTypes(AsyncApiOptions options, string? apiName)
         {
             var asyncApiTypes = options

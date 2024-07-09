@@ -142,7 +142,6 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
             publish.Message.ShouldContain(m => m.MessageId == "tenantRemoved");
         }
 
-
         [Theory]
         [InlineData(typeof(OneTenantMessageConsumer))]
         [InlineData(typeof(IOneTenantMessageConsumer))]

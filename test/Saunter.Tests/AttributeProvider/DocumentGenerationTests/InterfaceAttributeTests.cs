@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Linq;
-using System.Reflection;
 using Saunter.AttributeProvider.Attributes;
-using Saunter.Options;
 using Shouldly;
 using Xunit;
 
