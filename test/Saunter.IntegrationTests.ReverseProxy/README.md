@@ -12,7 +12,6 @@ $ dotnet publish -c Release
 $ docker-compose up
 ```
 
-
 You should be able to access both services UI
 * http://localhost:5000/service-a/asyncapi/ui
 * http://localhost:5000/service-b/asyncapi/ui

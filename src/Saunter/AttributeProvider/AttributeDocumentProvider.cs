@@ -226,9 +226,14 @@ namespace Saunter.AttributeProvider
                 Bindings = bindings,
             };
 
-            operation.Message = messageAttributes.Any()
-                ? GenerateMessageFromAttributes(messageAttributes)
-                : GenerateMessageFromType(operationAttribute.MessagePayloadType.GetTypeInfo());
+            if (messageAttributes.Any())
+            {
+                operation.Message = GenerateMessageFromAttributes(messageAttributes);
+            }
+            else if (operationAttribute.MessagePayloadType is not null)
+            {
+                operation.Message = GenerateMessageFromType(operationAttribute.MessagePayloadType.GetTypeInfo());
+            }
 
             var filterContext = new OperationFilterContext(method, operationAttribute);
             foreach (var filterType in options.OperationFilters)
