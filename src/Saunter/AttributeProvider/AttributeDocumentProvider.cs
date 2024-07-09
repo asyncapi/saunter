@@ -16,12 +16,14 @@ namespace Saunter.AttributeProvider
     {
         private readonly IServiceProvider _serviceProvider;
         private readonly IAsyncApiSchemaGenerator _schemaGenerator;
+        private readonly IAsyncApiChannelUnion _channelUnion;
         private readonly IAsyncApiDocumentCloner _cloner;
 
-        public AttributeDocumentProvider(IServiceProvider serviceProvider, IAsyncApiSchemaGenerator schemaGenerator, IAsyncApiDocumentCloner cloner)
+        public AttributeDocumentProvider(IServiceProvider serviceProvider, IAsyncApiSchemaGenerator schemaGenerator, IAsyncApiChannelUnion channelUnion, IAsyncApiDocumentCloner cloner)
         {
             _serviceProvider = serviceProvider;
             _schemaGenerator = schemaGenerator;
+            _channelUnion = channelUnion;
             _cloner = cloner;
         }
 
@@ -90,7 +92,13 @@ namespace Saunter.AttributeProvider
                         : null,
                 };
 
-                document.Channels.Add(item.Channel.Name, channelItem);
+                if (!document.Channels.TryAdd(item.Channel.Name, channelItem))
+                {
+                    document.Channels[item.Channel.Name] = _channelUnion.Union(
+                        document.Channels[item.Channel.Name],
+                        channelItem);
+                }
+
                 ApplyChannelFilters(options, item.Method, item.Channel, channelItem);
             }
         }
@@ -131,7 +139,12 @@ namespace Saunter.AttributeProvider
                         : null,
                 };
 
-                document.Channels.Add(item.Channel.Name, channelItem);
+                if (!document.Channels.TryAdd(item.Channel.Name, channelItem))
+                {
+                    document.Channels[item.Channel.Name] = _channelUnion.Union(
+                        document.Channels[item.Channel.Name],
+                        channelItem);
+                }
 
                 ApplyChannelFilters(options, item.Type, item.Channel, channelItem);
             }

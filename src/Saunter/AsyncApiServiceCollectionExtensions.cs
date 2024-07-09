@@ -23,6 +23,7 @@ namespace Saunter
 
             services.TryAddSingleton<IAsyncApiDocumentCloner, AsyncApiDocumentSerializeCloner>();
             services.TryAddSingleton<IAsyncApiSchemaGenerator, AsyncApiSchemaGenerator>();
+            services.TryAddSingleton<IAsyncApiChannelUnion, AsyncApiChannelUnion>();
 
             services.TryAddTransient<IAsyncApiDocumentProvider, AttributeDocumentProvider>();
 
