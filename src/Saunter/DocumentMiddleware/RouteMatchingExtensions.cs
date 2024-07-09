@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.Routing.Template;
 
-namespace Saunter.Middleware
+namespace Saunter.DocumentMiddleware
 {
     internal static class RouteMatchingExtensions
     {

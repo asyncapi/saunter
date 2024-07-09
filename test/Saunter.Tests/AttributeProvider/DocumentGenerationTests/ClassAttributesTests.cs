@@ -5,7 +5,7 @@ using Saunter.AttributeProvider.Attributes;
 using Shouldly;
 using Xunit;
 
-namespace Saunter.Tests.Generation.DocumentGeneratorTests
+namespace Saunter.Tests.AttributeProvider.DocumentGenerationTests
 {
     public class ClassAttributesTests
     {

@@ -5,7 +5,7 @@ using Saunter.Options;
 using Shouldly;
 using Xunit;
 
-namespace Saunter.Tests.Generation
+namespace Saunter.Tests.AttributeProvider
 {
     public class OperationTraitsTests
     {

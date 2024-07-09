@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using Saunter.Options;
 
-namespace Saunter.Middleware
+namespace Saunter.DocumentMiddleware
 {
     internal class AsyncApiMiddleware
     {

@@ -7,7 +7,6 @@ using Xunit;
 
 namespace Saunter.Tests.SharedKernel
 {
-
     public class SchemaGeneratorTests
     {
         [Theory]

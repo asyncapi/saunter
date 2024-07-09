@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Saunter.Middleware;
+using Saunter.DocumentMiddleware;
 using Saunter.Options;
 
 namespace Saunter.UI

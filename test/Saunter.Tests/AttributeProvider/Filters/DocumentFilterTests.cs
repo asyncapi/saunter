@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using LEGO.AsyncAPI.Models;
 using Saunter.Options.Filters;
-using Saunter.Tests.Generation.DocumentGeneratorTests;
+using Saunter.Tests.AttributeProvider.DocumentGenerationTests;
 using Shouldly;
 using Xunit;
 
-namespace Saunter.Tests.Generation.Filters
+namespace Saunter.Tests.AttributeProvider.Filters
 {
     public class DocumentFilterTests
     {

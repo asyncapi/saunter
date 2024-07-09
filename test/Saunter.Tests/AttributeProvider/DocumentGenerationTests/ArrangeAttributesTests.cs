@@ -7,7 +7,7 @@ using Saunter.AttributeProvider;
 using Saunter.Options;
 using Saunter.SharedKernel;
 
-namespace Saunter.Tests.Generation.DocumentGeneratorTests
+namespace Saunter.Tests.AttributeProvider.DocumentGenerationTests
 {
     internal static class ArrangeAttributesTests
     {

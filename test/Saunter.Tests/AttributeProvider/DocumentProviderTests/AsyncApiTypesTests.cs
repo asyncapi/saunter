@@ -6,7 +6,7 @@ using Saunter.Tests.MarkerTypeTests;
 using Shouldly;
 using Xunit;
 
-namespace Saunter.Tests.Generation.DocumentProviderTests
+namespace Saunter.Tests.AttributeProvider.DocumentProviderTests
 {
     public class AsyncApiTypesTests
     {

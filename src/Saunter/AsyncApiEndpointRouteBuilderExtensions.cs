@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using Saunter.Middleware;
+using Saunter.DocumentMiddleware;
 using Saunter.Options;
 using Saunter.UI;
 
