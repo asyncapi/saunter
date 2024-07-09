@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Saunter.AsyncApiSchema.v2;
-using Saunter.Attributes;
 using Saunter.Tests.MarkerTypeTests;
 using Shouldly;
 using Xunit;

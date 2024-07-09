@@ -1,24 +1,18 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
-
-using LEGO.AsyncAPI.Readers;
-using Microsoft.Extensions.Options;
-using Saunter.Serialization;
-using Saunter;
+﻿using System.Reflection;
 using System.Runtime.Loader;
-using System.Reflection;
+using AsyncApi.Saunter.Generator.Cli.SwashbuckleImport;
 using LEGO.AsyncAPI;
 using LEGO.AsyncAPI.Models;
-using Microsoft.Extensions.DependencyInjection;
-using AsyncApi.Saunter.Generator.Cli.SwashbuckleImport;
-using Microsoft.AspNetCore.Hosting;
+using LEGO.AsyncAPI.Readers;
 using Microsoft.AspNetCore;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Saunter.AsyncApiSchema.v2;
+using Microsoft.Extensions.Options;
+using Saunter;
+using Saunter.Serialization;
 using static Program;
 using AsyncApiDocument = Saunter.AsyncApiSchema.v2.AsyncApiDocument;
-using System.IO;
 
 namespace AsyncApi.Saunter.Generator.Cli.Commands;
 
@@ -35,13 +29,13 @@ internal class TofileInternal
         var envVars = (namedArgs.TryGetValue(EnvOption, out var x) && !string.IsNullOrWhiteSpace(x)) ? x.Split(',').Select(x => x.Trim()) : Array.Empty<string>();
         foreach (var envVar in envVars.Select(x => x.Split('=').Select(x => x.Trim()).ToList()))
         {
-            if (envVar.Count == 2)
+            if (envVar.Count is 1 or 2)
             {
-                Environment.SetEnvironmentVariable(envVar[0], envVar[1], EnvironmentVariableTarget.Process);
+                Environment.SetEnvironmentVariable(envVar[0], envVar.ElementAtOrDefault(1), EnvironmentVariableTarget.Process);
             }
             else
             {
-                throw new ArgumentOutOfRangeException(EnvOption, namedArgs[EnvOption], "Environment variable should be in the format: env1=value1,env2=value2");
+                throw new ArgumentOutOfRangeException(EnvOption, namedArgs[EnvOption], "Environment variable should be in the format: env1=value1,env2=value2,env3");
             }
         }
         var serviceProvider = GetServiceProvider(startupAssembly);
@@ -51,7 +45,7 @@ internal class TofileInternal
         var asyncapiOptions = serviceProvider.GetService<IOptions<AsyncApiOptions>>().Value;
         var documentSerializer = serviceProvider.GetRequiredService<IAsyncApiDocumentSerializer>();
 
-        var documentNames = (namedArgs.TryGetValue(DocOption, out var doc) && !string.IsNullOrWhiteSpace(doc))  ? [doc] : asyncapiOptions.NamedApis.Keys;
+        var documentNames = (namedArgs.TryGetValue(DocOption, out var doc) && !string.IsNullOrWhiteSpace(doc)) ? [doc] : asyncapiOptions.NamedApis.Keys;
         var fileTemplate = (namedArgs.TryGetValue(FileNameOption, out var template) && !string.IsNullOrWhiteSpace(template)) ? template : "{document}_asyncapi.{extension}";
         if (documentNames.Count == 0)
         {
