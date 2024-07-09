@@ -7,4 +7,4 @@ runs:
       id: setup-dotnet
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: "6.0.0"
+        dotnet-version: "6.0.422"
