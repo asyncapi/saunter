@@ -6,11 +6,11 @@ namespace AsyncAPI.Saunter.Generator.Cli.Tests;
 
 public class DotnetCliToolTests(ITestOutputHelper output)
 {
-    private string RunTool(string args, int expectedExitCode = 0)
+    private string RunTool(string args, int expectedExitCode = 1)
     {
         var process = Process.Start(new ProcessStartInfo("dotnet")
         {
-            Arguments = $"../../../../../src/AsyncAPI.Saunter.Generator.Cli/bin/Debug/net6.0/AsyncAPI.Saunter.Generator.Cli.dll tofile {args}",
+            Arguments = $"../../../../../src/AsyncAPI.Saunter.Generator.Cli/bin/Debug/net8.0/AsyncAPI.Saunter.Generator.Cli.dll tofile {args}",
             RedirectStandardOutput = true,
             RedirectStandardError = true,
         });
@@ -28,20 +28,22 @@ public class DotnetCliToolTests(ITestOutputHelper output)
     [Fact]
     public void DefaultCallPrintsCommandInfo()
     {
-        var stdOut = RunTool("", 1);
+        var stdOut = RunTool("", 0).Trim();
 
         stdOut.ShouldBe("""
-                        Usage: dotnet asyncapi tofile [options] [startupassembly]
-
-                        startupassembly:
-                          relative path to the application's startup assembly
-
-                        options:
-                          --doc:  name(s) of the AsyncAPI documents you want to retrieve, as configured in your startup class [defaults to all documents]
-                          --output:  relative path where the AsyncAPI will be output [defaults to stdout]
-                          --filename:  defines the file name template, {document} and {extension} template variables can be used [defaults to "{document}_asyncapi.{extension}"]
-                          --format:  exports AsyncAPI in json and/or yml format [defaults to json]
-                          --env:  define environment variable(s) for the application during generation of the AsyncAPI files [defaults to empty, can be used to define for example ASPNETCORE_ENVIRONMENT]
+                        Usage: tofile [arguments...] [options...] [-h|--help] [--version]
+                        
+                        Retrieves AsyncAPI spec from a startup assembly and writes to file.
+                        
+                        Arguments:
+                          [0] <string>    relative path to the application's startup assembly
+                        
+                        Options:
+                          -o|--output <string>    relative path where the AsyncAPI will be output [defaults to stdout] (Default: "./")
+                          -d|--doc <string>       name(s) of the AsyncAPI documents you want to retrieve as configured in your startup class [defaults to all documents] (Default: null)
+                          --format <string>       exports AsyncAPI in json and/or yml format [defaults to json] (Default: "json")
+                          --filename <string>     defines the file name template, {document} and {extension} template variables can be used [defaults to "{document}_asyncapi.{extension}\"] (Default: "{document}_asyncapi.{extension}")
+                          --env <string>          define environment variable(s) for the application. Formatted as a comma separated list of key=value pairs or just key for flags (Default: "")
                         """, StringCompareShould.IgnoreLineEndings);
     }
 
@@ -50,7 +52,7 @@ public class DotnetCliToolTests(ITestOutputHelper output)
     {
         var path = Directory.GetCurrentDirectory();
         output.WriteLine($"Output path: {path}");
-        var stdOut = RunTool($"--output {path} --format json,yml,yaml ../../../../../examples/StreetlightsAPI/bin/Debug/net6.0/StreetlightsAPI.dll");
+        var stdOut = RunTool($"../../../../../examples/StreetlightsAPI/bin/Debug/net8.0/StreetlightsAPI.dll --output {path} --format json,yml,yaml");
 
         stdOut.ShouldNotBeEmpty();
         stdOut.ShouldContain($"AsyncAPI yaml successfully written to {Path.Combine(path, "asyncapi.yaml")}");
