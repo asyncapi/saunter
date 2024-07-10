@@ -1,26 +1,29 @@
-﻿using System.Diagnostics;
-using Shouldly;
+﻿using Shouldly;
 using Xunit.Abstractions;
 
 namespace AsyncAPI.Saunter.Generator.Cli.Tests;
 
-public class DotnetCliToolTests(ITestOutputHelper output)
+public class IntegrationTests(ITestOutputHelper output)
 {
     private string RunTool(string args, int expectedExitCode = 1)
     {
-        var process = Process.Start(new ProcessStartInfo("dotnet")
-        {
-            Arguments = $"../../../../../src/AsyncAPI.Saunter.Generator.Cli/bin/Debug/net8.0/AsyncAPI.Saunter.Generator.Cli.dll tofile {args}",
-            RedirectStandardOutput = true,
-            RedirectStandardError = true,
-        });
-        process.WaitForExit();
-        var stdOut = process.StandardOutput.ReadToEnd().Trim();
-        var stdError = process.StandardError.ReadToEnd().Trim();
+        using var outWriter = new StringWriter();
+        using var errorWriter = new StringWriter();
+        Console.SetOut(outWriter);
+        Console.SetError(errorWriter);
+
+        var entryPoint = typeof(Program).Assembly.EntryPoint!;
+        entryPoint.Invoke(null, new object[] { args.Split(' ') });
+
+        var stdOut = outWriter.ToString();
+        var stdError = errorWriter.ToString();
+        output.WriteLine($"RUN: {args}");
+        output.WriteLine("### STD OUT");
         output.WriteLine(stdOut);
+        output.WriteLine("### STD ERROR");
         output.WriteLine(stdError);
 
-        process.ExitCode.ShouldBe(expectedExitCode);
+        Environment.ExitCode.ShouldBe(expectedExitCode);
         //stdError.ShouldBeEmpty(); LEGO lib doesn't like id: "id is not a valid property at #/components/schemas/lightMeasuredEvent""
         return stdOut;
     }
@@ -28,7 +31,7 @@ public class DotnetCliToolTests(ITestOutputHelper output)
     [Fact]
     public void DefaultCallPrintsCommandInfo()
     {
-        var stdOut = RunTool("", 0).Trim();
+        var stdOut = RunTool("tofile", 0).Trim();
 
         stdOut.ShouldBe("""
                         Usage: tofile [arguments...] [options...] [-h|--help] [--version]
@@ -52,7 +55,7 @@ public class DotnetCliToolTests(ITestOutputHelper output)
     {
         var path = Directory.GetCurrentDirectory();
         output.WriteLine($"Output path: {path}");
-        var stdOut = RunTool($"../../../../../examples/StreetlightsAPI/bin/Debug/net8.0/StreetlightsAPI.dll --output {path} --format json,yml,yaml");
+        var stdOut = RunTool($"tofile ../../../../../examples/StreetlightsAPI/bin/Debug/net8.0/StreetlightsAPI.dll --output {path} --format json,yml,yaml");
 
         stdOut.ShouldNotBeEmpty();
         stdOut.ShouldContain($"AsyncAPI yaml successfully written to {Path.Combine(path, "asyncapi.yaml")}");

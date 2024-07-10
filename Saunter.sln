@@ -20,6 +20,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{E0D34C77-9
 		.editorconfig = .editorconfig
 		.gitattributes = .gitattributes
 		CHANGELOG.md = CHANGELOG.md
+		Directory.Build.props = Directory.Build.props
 		README.md = README.md
 	EndProjectSection
 EndProject
@@ -45,7 +46,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "npm", "npm", "{E8FACA22-CFE
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AsyncAPI.Saunter.Generator.Cli", "src\AsyncAPI.Saunter.Generator.Cli\AsyncAPI.Saunter.Generator.Cli.csproj", "{6C102D4D-3DA4-4763-B75E-C15E33E7E94A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AsyncAPI.Saunter.Generator.Cli.Tests", "test\AsyncAPI.Saunter.Generator.Cli.Tests\AsyncAPI.Saunter.Generator.Cli.Tests.csproj", "{18AD0249-0436-4A26-9972-B97BA6905A54}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AsyncAPI.Saunter.Generator.Cli.Tests", "test\AsyncAPI.Saunter.Generator.Cli.Tests\AsyncAPI.Saunter.Generator.Cli.Tests.csproj", "{18AD0249-0436-4A26-9972-B97BA6905A54}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

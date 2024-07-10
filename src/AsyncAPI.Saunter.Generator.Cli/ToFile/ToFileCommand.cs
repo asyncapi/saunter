@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 
 namespace AsyncAPI.Saunter.Generator.Cli.ToFile;
 
-internal class ToFileCommand(ILogger<ToFileCommand> logger, EnvironmentBuilder environment, ServiceProviderBuilder builder, AsyncApiDocumentExtractor docExtractor, FileWriter fileWriter)
+internal class ToFileCommand(ILogger<ToFileCommand> logger, IEnvironmentBuilder environment, IServiceProviderBuilder builder, IAsyncApiDocumentExtractor docExtractor, IFileWriter fileWriter)
 {
     private const string DEFAULT_FILENAME = "{document}_asyncapi.{extension}";
 
@@ -37,11 +37,7 @@ internal class ToFileCommand(ILogger<ToFileCommand> logger, EnvironmentBuilder e
         foreach (var (documentName, asyncApiDocument) in documents)
         {
             // Serialize to specified output location or stdout
-            var outputPath = !string.IsNullOrWhiteSpace(output) ? Path.Combine(Directory.GetCurrentDirectory(), output) : null;
-            if (!string.IsNullOrEmpty(outputPath))
-            {
-                Directory.CreateDirectory(outputPath);
-            }
+            var outputPath = !string.IsNullOrWhiteSpace(output) ? Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), output)) : null;
 
             var exportJson = true;
             var exportYml = false;

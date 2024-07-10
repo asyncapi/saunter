@@ -4,7 +4,12 @@ using Microsoft.Extensions.Logging;
 
 namespace AsyncAPI.Saunter.Generator.Cli.ToFile;
 
-internal class ServiceProviderBuilder(ILogger<ServiceProviderBuilder> logger)
+internal interface IServiceProviderBuilder
+{
+    IServiceProvider BuildServiceProvider(string startupAssembly);
+}
+
+internal class ServiceProviderBuilder(ILogger<ServiceProviderBuilder> logger) : IServiceProviderBuilder
 {
     public IServiceProvider BuildServiceProvider(string startupAssembly)
     {
@@ -17,4 +22,3 @@ internal class ServiceProviderBuilder(ILogger<ServiceProviderBuilder> logger)
         return serviceProvider;
     }
 }
-

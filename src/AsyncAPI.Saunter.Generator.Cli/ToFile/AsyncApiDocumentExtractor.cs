@@ -3,12 +3,17 @@ using LEGO.AsyncAPI.Readers;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Saunter.Serialization;
 using Saunter;
+using Saunter.Serialization;
 
 namespace AsyncAPI.Saunter.Generator.Cli.ToFile;
 
-internal class AsyncApiDocumentExtractor(ILogger<AsyncApiDocumentExtractor> logger)
+internal interface IAsyncApiDocumentExtractor
+{
+    IEnumerable<(string name, AsyncApiDocument document)> GetAsyncApiDocument(IServiceProvider serviceProvider, string[] requestedDocuments);
+}
+
+internal class AsyncApiDocumentExtractor(ILogger<AsyncApiDocumentExtractor> logger) : IAsyncApiDocumentExtractor
 {
     private IEnumerable<string> GetDocumentNames(string[] requestedDocuments, AsyncApiOptions asyncApiOptions)
     {
