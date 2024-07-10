@@ -17,4 +17,3 @@ internal class ServiceProviderBuilder(ILogger<ServiceProviderBuilder> logger)
         return serviceProvider;
     }
 }
-

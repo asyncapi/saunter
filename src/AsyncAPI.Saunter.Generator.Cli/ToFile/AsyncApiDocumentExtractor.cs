@@ -3,8 +3,8 @@ using LEGO.AsyncAPI.Readers;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Saunter.Serialization;
 using Saunter;
+using Saunter.Serialization;
 
 namespace AsyncAPI.Saunter.Generator.Cli.ToFile;
 

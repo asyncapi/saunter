@@ -9,6 +9,7 @@ internal static class ServiceExtensions
         services.AddTransient<EnvironmentBuilder>();
         services.AddTransient<ServiceProviderBuilder>();
         services.AddTransient<AsyncApiDocumentExtractor>();
+        services.AddTransient<IStreamProvider, StreamProvider>();
         services.AddTransient<FileWriter>();
         return services;
     }
