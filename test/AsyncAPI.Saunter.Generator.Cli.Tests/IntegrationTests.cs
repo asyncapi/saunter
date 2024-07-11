@@ -55,7 +55,7 @@ public class IntegrationTests(ITestOutputHelper output)
     {
         var path = Directory.GetCurrentDirectory();
         output.WriteLine($"Output path: {path}");
-        var stdOut = RunTool($"tofile ../../../../../examples/StreetlightsAPI/bin/Debug/net8.0/StreetlightsAPI.dll --output {path} --format json,yml,yaml");
+        var stdOut = RunTool($"tofile ../../../../../examples/StreetlightsAPI/bin/Debug/net6.0/StreetlightsAPI.dll --output {path} --format json,yml,yaml");
 
         stdOut.ShouldNotBeEmpty();
         stdOut.ShouldContain($"AsyncAPI yaml successfully written to {Path.Combine(path, "asyncapi.yaml")}");
