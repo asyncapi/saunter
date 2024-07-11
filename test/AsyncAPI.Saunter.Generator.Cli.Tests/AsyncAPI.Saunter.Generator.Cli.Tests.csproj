@@ -23,6 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\examples\StreetlightsAPI\StreetlightsAPI.csproj" />
     <ProjectReference Include="..\..\src\AsyncAPI.Saunter.Generator.Cli\AsyncAPI.Saunter.Generator.Cli.csproj" />
   </ItemGroup>
 
