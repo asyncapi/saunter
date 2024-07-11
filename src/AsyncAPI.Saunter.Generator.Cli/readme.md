@@ -3,7 +3,7 @@ A dotnet tool to generate AsyncAPI specification files based of a dotnet DLL (Th
 
 ## Tool usage
 ```
-dotnet asyncapi tofile --output [output-path] --format [json,yml,yaml] --doc [asyncapi-document-name] [startup-assembly]
+dotnet asyncapi tofile [startup-assembly] --output [output-path] --format [json,yml,yaml] --doc [asyncapi-document-name]
 ```
 - _startup-assembly_: the file path to the entrypoint dotnet DLL that hosts AsyncAPI document(s).
 
@@ -12,7 +12,7 @@ dotnet asyncapi tofile --output [output-path] --format [json,yml,yaml] --doc [as
 - _--output_: relative path where the AsyncAPI will be output [defaults to stdout]  
 - _--filename_: the template for the outputted file names. Default: "{document}_asyncapi.{extension}"  
 - _--format_: the output formats to generate, can be a combination of json, yml and/or yaml.
-- _--env_: define environment variable(s) for the application. Formatted as a comma separated list of _key=value_ pairs or just _key_ for flags, example: ```ASPNETCORE_ENVIRONMENT=AsyncAPI,CONNECT_TO_DATABASE=false,GENERATOR_FLAG```.  
+- _--env_: define environment variable(s) for the application. Formatted as a comma separated list of _key=value_ pairs, example: ```ASPNETCORE_ENVIRONMENT=AsyncAPI,CONNECT_TO_DATABASE=false```.  
 
 ## Install the Generator.Cli dotnet Tool
 ```
@@ -22,3 +22,6 @@ After installing the tool globally, it is available using commands: ```dotnet as
 
 Want to learn more about .NET tools? Or want to install it local using a manifest?
 [Check out this Microsoft page on how to manage .NET tools](https://learn.microsoft.com/en-us/dotnet/core/tools/global-tools)
+
+## Internals
+How does the tool work internally? It tries to exact an ```IServiceProvider``` from the provided _startup-assembly_ and exports AsyncApiDocument(s) as registered in the services provider.

@@ -99,7 +99,7 @@ public class ToFileCommandTests
     {
         var me = typeof(ToFileCommandTests).Assembly.Location;
         this._output.WriteLine($"Assembly: {me}");
-        this._docExtractor.GetAsyncApiDocument(default, default).ReturnsForAnyArgs([(null, new AsyncApiDocument { Info = new AsyncApiInfo { Title = "a" } } )]);
+        this._docExtractor.GetAsyncApiDocument(default, default).ReturnsForAnyArgs([(null, new AsyncApiDocument { Info = new AsyncApiInfo { Title = "a" } })]);
 
         this._command.ToFile(me);
 
