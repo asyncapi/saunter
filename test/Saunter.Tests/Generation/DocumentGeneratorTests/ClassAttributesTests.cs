@@ -243,13 +243,13 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
         public class TenantMessageConsumer
         {
             [Message(typeof(TenantCreated))]
-            public void SubscribeTenantCreatedEvent(Guid _, TenantCreated __) { }
+            public void SubscribeTenantCreatedEvent(Guid id, TenantCreated created) { }
 
             [Message(typeof(TenantUpdated))]
-            public void SubscribeTenantUpdatedEvent(Guid _, TenantUpdated __) { }
+            public void SubscribeTenantUpdatedEvent(Guid id, TenantUpdated updated) { }
 
             [Message(typeof(TenantRemoved))]
-            public void SubscribeTenantRemovedEvent(Guid _, TenantRemoved __) { }
+            public void SubscribeTenantRemovedEvent(Guid id, TenantRemoved removed) { }
         }
 
         [AsyncApi]
@@ -273,13 +273,13 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
         public class TenantMessagePublisher
         {
             [Message(typeof(TenantCreated))]
-            public void PublishTenantCreatedEvent(Guid _, TenantCreated __) { }
+            public void PublishTenantCreatedEvent(Guid id, TenantCreated created) { }
 
             [Message(typeof(TenantUpdated))]
-            public void PublishTenantUpdatedEvent(Guid _, TenantUpdated __) { }
+            public void PublishTenantUpdatedEvent(Guid id, TenantUpdated updated) { }
 
             [Message(typeof(TenantRemoved))]
-            public void PublishTenantRemovedEvent(Guid _, TenantRemoved __) { }
+            public void PublishTenantRemovedEvent(Guid id, TenantRemoved removed) { }
         }
 
         [AsyncApi]
@@ -305,7 +305,7 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
             [Message(typeof(AnyTenantCreated))]
             [Message(typeof(AnyTenantUpdated))]
             [Message(typeof(AnyTenantRemoved))]
-            public void PublishTenantEvent<TEvent>(Guid _, TEvent __)
+            public void PublishTenantEvent<TEvent>(Guid id, TEvent @event)
                 where TEvent : IEvent
             {
             }
@@ -329,7 +329,7 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
         public class TenantSingleMessagePublisher
         {
             [Message(typeof(AnyTenantCreated))]
-            public void PublishTenantCreated(Guid _, AnyTenantCreated __)
+            public void PublishTenantCreated(Guid id, AnyTenantCreated created)
             {
             }
         }
@@ -351,13 +351,13 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
         public class OneTenantMessageConsumer
         {
             [Message(typeof(TenantCreated))]
-            public void SubscribeTenantCreatedEvent(Guid _, TenantCreated __) { }
+            public void SubscribeTenantCreatedEvent(Guid id, TenantCreated created) { }
 
             [Message(typeof(TenantUpdated))]
-            public void SubscribeTenantUpdatedEvent(Guid _, TenantUpdated __) { }
+            public void SubscribeTenantUpdatedEvent(Guid id, TenantUpdated updated) { }
 
             [Message(typeof(TenantRemoved))]
-            public void SubscribeTenantRemovedEvent(Guid _, TenantRemoved __) { }
+            public void SubscribeTenantRemovedEvent(Guid id, TenantRemoved removed) { }
         }
 
         [AsyncApi]

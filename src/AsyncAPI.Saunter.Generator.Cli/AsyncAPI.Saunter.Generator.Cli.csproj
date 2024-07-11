@@ -2,15 +2,16 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFrameworks>net6.0;net8.0</TargetFrameworks>
+    <TargetFrameworks>net8.0</TargetFrameworks>
     <ImplicitUsings>enable</ImplicitUsings>
     <LangVersion>12</LangVersion>
     <RootNamespace>AsyncAPI.Saunter.Generator.Cli</RootNamespace>
 
-    <Description>AsyncAPI Command Line Tools</Description>
+    <Description>AsyncAPI Command Line Tools: Dotnet tool to generate AsyncAPI spec file from dotnet startup assembly.</Description>
     <Authors>AsyncAPI Initiative</Authors>
     <PackAsTool>true</PackAsTool>
     <PackageId>AsyncAPI.Saunter.Generator.Cli</PackageId>
+    <PackageType>DotnetTool</PackageType>
     <ToolCommandName>dotnet-asyncapi</ToolCommandName>
     <PackageTags>asyncapi;aspnetcore;openapi;documentation;amqp;generator;cli;tool</PackageTags>
     <PackageReadmeFile>readme.md</PackageReadmeFile>
@@ -23,7 +24,10 @@
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    <Version>1.0.1</Version>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
+    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
@@ -38,10 +42,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AsyncAPI.NET.Readers" Version="5.2.1" />
-
-    <!-- Development Dependencies -->
+    <PackageReference Include="AsyncAPI.NET.Readers" Version="5.2.1" PrivateAssets="All" />
+    <PackageReference Include="ConsoleAppFramework" Version="5.2.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
+    <PackageReference Include="NSwag.Commands" Version="14.0.8" />
   </ItemGroup>
 
   <ItemGroup>
@@ -49,7 +56,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="readme.md" Pack="true" PackagePath="\"/>
+    <None Include="readme.md" Pack="true" PackagePath="\" />
     <None Include="../../assets/logo.png" Pack="true" PackagePath="/" />
   </ItemGroup>
 
