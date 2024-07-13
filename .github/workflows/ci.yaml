@@ -18,6 +18,8 @@ jobs:
         run: dotnet build ./src/Saunter-src.slnf --configuration Debug
       - name: Run dotnet build all
         run: dotnet build --configuration Debug
+      - name: unit test
+        run: dotnet test --no-build --configuration Debug
 
   fmt:
     runs-on: ubuntu-latest
@@ -34,8 +36,5 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: setup build
-        uses: ./.github/npm
       - name: unit test
         run: dotnet test --no-build --configuration Debug
