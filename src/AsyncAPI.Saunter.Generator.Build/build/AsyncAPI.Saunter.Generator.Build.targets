@@ -6,16 +6,16 @@
     <PropertyGroup>
       <AsyncAPIBuildToolBuildDir>$([System.IO.Path]::GetDirectoryName($(MSBuildThisFileDirectory)))</AsyncAPIBuildToolBuildDir>
       <AsyncAPIBuildToolRoot>$([System.IO.Path]::GetDirectoryName($(AsyncAPIBuildToolBuildDir)))</AsyncAPIBuildToolRoot>
-      <LocalToolConfigFile>./.config/dotnet-tools.json</LocalToolConfigFile>
-      <LocalToolConfigFillFullPath>$([System.IO.Path]::GetFullPath($([System.IO.Path]::Combine($(AsyncAPIBuildToolRoot), $(LocalToolConfigFile)))))</LocalToolConfigFillFullPath>
-      <!-- Pin the default version of the Generator.Cli tool to use -->
-      <AsyncAPICliToolArgs Condition=" '$(AsyncAPICliToolArgs)' == '' ">--version [1.0.2-beta]</AsyncAPICliToolArgs>
-      <AsyncAPIBuildToolIsInitialized>$([System.IO.File]::Exists($(LocalToolConfigFillFullPath)))</AsyncAPIBuildToolIsInitialized>
+      <AsyncAPICliToolPath>$([System.IO.Path]::Combine($(AsyncAPIBuildToolRoot), tools, net8.0, AsyncAPI.Saunter.Generator.Cli.dll))</AsyncAPICliToolPath>
+      <AsyncAPICliToolStartupAssembly>$([System.IO.Path]::Combine($(MSBuildProjectDirectory), $(OutputPath), $(AssemblyTitle).dll))</AsyncAPICliToolStartupAssembly>
+      <AsyncAPICliToolOutputPath>$([System.IO.Path]::Combine($(MSBuildProjectDirectory), $(AsyncAPIDocumentOutputPath)))</AsyncAPICliToolOutputPath>
     </PropertyGroup>
 
     <!-- Debug output: print some paths, set -v flag (verbosity) at least to [n]ormal to show in build output -->
-    <Message Text="AsyncAPI.Generator.Build; AsyncAPIBuildToolIsInitialized: $(AsyncAPIBuildToolIsInitialized)" />
-    <Message Text="AsyncAPI.Generator.Build; AsyncAPICliToolArgs: $(AsyncAPICliToolArgs)" />
+    <Message Text="AsyncAPI.Generator.Build; AsyncAPICliToolPath: $(AsyncAPICliToolPath)" />
+    <Message Text="AsyncAPI.Generator.Build; AsyncAPICliToolStartupAssembly: $(AsyncAPICliToolStartupAssembly)" />
+    <Message Text="AsyncAPI.Generator.Build; AsyncAPICliToolOutputPath: $(AsyncAPICliToolOutputPath)" />
+
     <Message Text="AsyncAPI.Generator.Build; AsyncAPIDocumentFormats: $(AsyncAPIDocumentFormats)" />
     <Message Text="AsyncAPI.Generator.Build; AsyncAPIDocumentOutputPath: $(AsyncAPIDocumentOutputPath)" />
     <Message Text="AsyncAPI.Generator.Build; AsyncAPIDocumentNames: $(AsyncAPIDocumentNames)" />
@@ -27,17 +27,8 @@
     <Message Text="AsyncAPI.Generator.Build; MSBuildThisFileDirectory: $(MSBuildThisFileDirectory)" />
     <Message Text="AsyncAPI.Generator.Build; MSBuildProjectFullPath: $(MSBuildProjectFullPath)" />
     <Message Text="AsyncAPI.Generator.Build; MSBuildProjectDirectory: $(MSBuildProjectDirectory)" />
-    <Message Text="AsyncAPI.Generator.Build; LocalToolConfigFile: $(LocalToolConfigFile); FullPath: $(LocalToolConfigFillFullPath)" />
 
-    <!-- dotnet-asyncapi is installed locally in the AsyncAPI.Generator.Build .nuget folder, install is only needed once -->
-    <Exec Command="dotnet new tool-manifest --force"
-          Condition=" '$(AsyncAPIBuildToolIsInitialized)' == 'false'"
-          WorkingDirectory="$(AsyncAPIBuildToolRoot)" />
-    <Exec Command="dotnet tool install --local $(AsyncAPICliToolArgs) AsyncAPI.Saunter.Generator.Cli"
-          Condition=" '$(AsyncAPIBuildToolIsInitialized)' == 'false'"
-          WorkingDirectory="$(AsyncAPIBuildToolRoot)" />
-
-    <Exec Command="dotnet tool run dotnet-asyncapi tofile --output &quot;$(MSBuildProjectDirectory)/$(AsyncAPIDocumentOutputPath)&quot; --format &quot;$(AsyncAPIDocumentFormats)&quot; --doc &quot;$(AsyncAPIDocumentNames)&quot; --filename &quot;$(AsyncAPIDocumentFilename)&quot; --env &quot;$(AsyncAPIDocumentEnvVars)&quot; &quot;$(MSBuildProjectDirectory)/$(OutputPath)/$(AssemblyTitle).dll&quot;"
+    <Exec Command="dotnet &quot;$(AsyncAPICliToolPath)&quot; tofile &quot;$(AsyncAPICliToolStartupAssembly)&quot; --output &quot;$(AsyncAPICliToolOutputPath)&quot; --format &quot;$(AsyncAPIDocumentFormats)&quot; --doc &quot;$(AsyncAPIDocumentNames)&quot; --filename &quot;$(AsyncAPIDocumentFilename)&quot; --env &quot;$(AsyncAPIDocumentEnvVars)&quot;"
           WorkingDirectory="$(AsyncAPIBuildToolRoot)" />
   </Target>
 
