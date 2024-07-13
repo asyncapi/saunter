@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using System.Diagnostics;
+using Microsoft.Extensions.Logging;
 
 namespace AsyncAPI.Saunter.Generator.Cli.ToFile;
 
@@ -15,7 +16,21 @@ internal class StreamProvider(ILogger<StreamProvider> logger) : IStreamProvider
 
         if (!string.IsNullOrEmpty(path))
         {
-            Directory.CreateDirectory(Path.GetDirectoryName(path));
+            var directory = Path.GetDirectoryName(path);
+            var sw = Stopwatch.StartNew();
+            do
+            {
+                try
+                {
+                    Directory.CreateDirectory(directory);
+                }
+                catch (Exception e) when (sw.Elapsed < TimeSpan.FromMilliseconds(250))
+                {
+                    logger.LogDebug(e, "Retry...");
+                    Thread.Sleep(100);
+                }
+            }
+            while (!Directory.Exists(directory));
         }
 
         return path != null ? File.Create(path) : Console.OpenStandardOutput();
