@@ -60,26 +60,26 @@ public class IntegrationTests(ITestOutputHelper output)
     [InlineData("StreetlightsAPI.TopLevelStatement", "net8.0")]
     public void Streetlights_ExportSpecTest(string csprojName, string targetFramework)
     {
-        var path = Path.Combine(Directory.GetCurrentDirectory(), csprojName, "specs");
+        var path = Path.Combine(Directory.GetCurrentDirectory());
         output.WriteLine($"Output path: {path}");
-        var stdOut = RunTool($"tofile ../../../../../examples/{csprojName}/bin/Debug/{targetFramework}/{csprojName}.dll --output {path} --format json,yml,yaml");
+        var stdOut = RunTool($"tofile ../../../../../examples/{csprojName}/bin/Debug/{targetFramework}/{csprojName}.dll --output {path} --filename {csprojName}.{{extension}} --format json,yml,yaml");
 
         stdOut.ShouldNotBeEmpty();
-        stdOut.ShouldContain($"AsyncAPI yaml successfully written to {Path.Combine(path, "asyncapi.yaml")}");
-        stdOut.ShouldContain($"AsyncAPI yml successfully written to {Path.Combine(path, "asyncapi.yml")}");
-        stdOut.ShouldContain($"AsyncAPI json successfully written to {Path.Combine(path, "asyncapi.json")}");
+        stdOut.ShouldContain($"AsyncAPI yaml successfully written to {Path.Combine(path, $"{csprojName}.yaml")}");
+        stdOut.ShouldContain($"AsyncAPI yml successfully written to {Path.Combine(path, $"{csprojName}.yml")}");
+        stdOut.ShouldContain($"AsyncAPI json successfully written to {Path.Combine(path, $"{csprojName}.json")}");
 
-        File.Exists(Path.Combine(path, "asyncapi.yml")).ShouldBeTrue("asyncapi.yml");
-        File.Exists(Path.Combine(path, "asyncapi.yaml")).ShouldBeTrue("asyncapi.yaml");
-        File.Exists(Path.Combine(path, "asyncapi.json")).ShouldBeTrue("asyncapi.json");
+        File.Exists(Path.Combine(path, $"{csprojName}.yml")).ShouldBeTrue();
+        File.Exists(Path.Combine(path, $"{csprojName}.yaml")).ShouldBeTrue();
+        File.Exists(Path.Combine(path, $"{csprojName}.json")).ShouldBeTrue();
 
-        var yml = File.ReadAllText(Path.Combine(path, "asyncapi.yml"));
+        var yml = File.ReadAllText(Path.Combine(path, $"{csprojName}.yml"));
         yml.ShouldBe(ExpectedSpecFiles.Yml_v2_6, "yml");
 
-        var yaml = File.ReadAllText(Path.Combine(path, "asyncapi.yaml"));
+        var yaml = File.ReadAllText(Path.Combine(path, $"{csprojName}.yaml"));
         yaml.ShouldBe(yml, "yaml");
 
-        var json = File.ReadAllText(Path.Combine(path, "asyncapi.json"));
+        var json = File.ReadAllText(Path.Combine(path, $"{csprojName}.json"));
         json.ShouldBe(ExpectedSpecFiles.Json_v2_6, "json");
     }
 }
