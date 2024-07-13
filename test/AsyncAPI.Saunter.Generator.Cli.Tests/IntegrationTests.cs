@@ -60,7 +60,7 @@ public class IntegrationTests(ITestOutputHelper output)
     [InlineData("StreetlightsAPI.TopLevelStatement", "net8.0")]
     public void Streetlights_ExportSpecTest(string csprojName, string targetFramework)
     {
-        var path = Path.Combine(Directory.GetCurrentDirectory(), csprojName);
+        var path = Path.Combine(Directory.GetCurrentDirectory(), csprojName, "specs");
         output.WriteLine($"Output path: {path}");
         var stdOut = RunTool($"tofile ../../../../../examples/{csprojName}/bin/Debug/{targetFramework}/{csprojName}.dll --output {path} --format json,yml,yaml");
 
@@ -69,17 +69,17 @@ public class IntegrationTests(ITestOutputHelper output)
         stdOut.ShouldContain($"AsyncAPI yml successfully written to {Path.Combine(path, "asyncapi.yml")}");
         stdOut.ShouldContain($"AsyncAPI json successfully written to {Path.Combine(path, "asyncapi.json")}");
 
-        File.Exists(Path.Combine(csprojName, "asyncapi.yml")).ShouldBeTrue("asyncapi.yml");
-        File.Exists(Path.Combine(csprojName, "asyncapi.yaml")).ShouldBeTrue("asyncapi.yaml");
-        File.Exists(Path.Combine(csprojName, "asyncapi.json")).ShouldBeTrue("asyncapi.json");
+        File.Exists(Path.Combine(path, "asyncapi.yml")).ShouldBeTrue("asyncapi.yml");
+        File.Exists(Path.Combine(path, "asyncapi.yaml")).ShouldBeTrue("asyncapi.yaml");
+        File.Exists(Path.Combine(path, "asyncapi.json")).ShouldBeTrue("asyncapi.json");
 
-        var yml = File.ReadAllText(Path.Combine(csprojName, "asyncapi.yml"));
+        var yml = File.ReadAllText(Path.Combine(path, "asyncapi.yml"));
         yml.ShouldBe(ExpectedSpecFiles.Yml_v2_6, "yml");
 
-        var yaml = File.ReadAllText(Path.Combine(csprojName, "asyncapi.yaml"));
+        var yaml = File.ReadAllText(Path.Combine(path, "asyncapi.yaml"));
         yaml.ShouldBe(yml, "yaml");
 
-        var json = File.ReadAllText(Path.Combine(csprojName, "asyncapi.json"));
+        var json = File.ReadAllText(Path.Combine(path, "asyncapi.json"));
         json.ShouldBe(ExpectedSpecFiles.Json_v2_6, "json");
     }
 }
