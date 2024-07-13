@@ -42,37 +42,44 @@ public class IntegrationTests(ITestOutputHelper output)
                           [0] <string>    relative path to the application's startup assembly
                         
                         Options:
-                          -o|--output <string>    relative path where the AsyncAPI will be output [defaults to stdout] (Default: "./")
-                          -d|--doc <string>       name(s) of the AsyncAPI documents you want to retrieve as configured in your startup class [defaults to all documents] (Default: null)
-                          --format <string>       exports AsyncAPI in json and/or yml format [defaults to json] (Default: "json")
-                          --filename <string>     defines the file name template, {document} and {extension} template variables can be used [defaults to "{document}_asyncapi.{extension}\"] (Default: "{document}_asyncapi.{extension}")
-                          --env <string>          define environment variable(s) for the application. Formatted as a comma separated list of key=value pairs or just key for flags (Default: "")
+                          -o|--output <string>    relative path where the AsyncAPI documents will be exported to (Default: "./")
+                          -d|--doc <string>       name(s) of the AsyncAPI documents you want to export as configured in your startup class. To export all documents using null. (Default: null)
+                          --format <string>       exports AsyncAPI in json and/or yml format (Default: "json")
+                          --filename <string>     defines the file name template, {document} and {extension} template variables can be used (Default: "{document}_asyncapi.{extension}")
+                          --env <string>          define environment variable(s) for the application. Formatted as a comma separated list of _key=value_ pairs (Default: "")
                         """, StringCompareShould.IgnoreLineEndings);
     }
 
-    [Fact]
-    public void StreetlightsAPIExportSpecTest()
+    /// <remarks>
+    /// Both example projects are used to check whether AsyncAPI spec generation is working because they are targeting different .NET versions and are using different hosting strategies.
+    /// - StreetlightsAPI project is targeting NET6 using the 'old school' Startup-class hosting mechanism.
+    /// - StreetlightsAPI.TopLevelStatement project is targeting NET8 using the new Top Level Statement hosting mechanism.
+    /// </remarks>
+    [Theory]
+    [InlineData("StreetlightsAPI", "net6.0")]
+    [InlineData("StreetlightsAPI.TopLevelStatement", "net8.0")]
+    public void Streetlights_ExportSpecTest(string csprojName, string targetFramework)
     {
-        var path = Directory.GetCurrentDirectory();
+        var path = Path.Combine(Directory.GetCurrentDirectory());
         output.WriteLine($"Output path: {path}");
-        var stdOut = RunTool($"tofile ../../../../../examples/StreetlightsAPI/bin/Debug/net8.0/StreetlightsAPI.dll --output {path} --format json,yml,yaml");
+        var stdOut = RunTool($"tofile ../../../../../examples/{csprojName}/bin/Debug/{targetFramework}/{csprojName}.dll --output {path} --filename {csprojName}.{{extension}} --format json,yml,yaml");
 
         stdOut.ShouldNotBeEmpty();
-        stdOut.ShouldContain($"AsyncAPI yaml successfully written to {Path.Combine(path, "asyncapi.yaml")}");
-        stdOut.ShouldContain($"AsyncAPI yml successfully written to {Path.Combine(path, "asyncapi.yml")}");
-        stdOut.ShouldContain($"AsyncAPI json successfully written to {Path.Combine(path, "asyncapi.json")}");
+        stdOut.ShouldContain($"AsyncAPI yaml successfully written to {Path.Combine(path, $"{csprojName}.yaml")}");
+        stdOut.ShouldContain($"AsyncAPI yml successfully written to {Path.Combine(path, $"{csprojName}.yml")}");
+        stdOut.ShouldContain($"AsyncAPI json successfully written to {Path.Combine(path, $"{csprojName}.json")}");
 
-        File.Exists("asyncapi.yml").ShouldBeTrue("asyncapi.yml");
-        File.Exists("asyncapi.yaml").ShouldBeTrue("asyncapi.yaml");
-        File.Exists("asyncapi.json").ShouldBeTrue("asyncapi.json");
+        File.Exists(Path.Combine(path, $"{csprojName}.yml")).ShouldBeTrue();
+        File.Exists(Path.Combine(path, $"{csprojName}.yaml")).ShouldBeTrue();
+        File.Exists(Path.Combine(path, $"{csprojName}.json")).ShouldBeTrue();
 
-        var yml = File.ReadAllText("asyncapi.yml");
-        yml.ShouldBe(ExpectedSpecFiles.Yml_v2_6, "yaml");
+        var yml = File.ReadAllText(Path.Combine(path, $"{csprojName}.yml"));
+        yml.ShouldBe(ExpectedSpecFiles.Yml_v2_6, "yml");
 
-        var yaml = File.ReadAllText("asyncapi.yaml");
-        yaml.ShouldBe(yml, "yml");
+        var yaml = File.ReadAllText(Path.Combine(path, $"{csprojName}.yaml"));
+        yaml.ShouldBe(yml, "yaml");
 
-        var json = File.ReadAllText("asyncapi.json");
+        var json = File.ReadAllText(Path.Combine(path, $"{csprojName}.json"));
         json.ShouldBe(ExpectedSpecFiles.Json_v2_6, "json");
     }
 }

@@ -43,6 +43,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\examples\StreetlightsAPI.TopLevelStatement\StreetlightsAPI.TopLevelStatement.csproj" />
     <ProjectReference Include="..\..\examples\StreetlightsAPI\StreetlightsAPI.csproj" />
     <ProjectReference Include="..\..\src\AsyncAPI.Saunter.Generator.Cli\AsyncAPI.Saunter.Generator.Cli.csproj" />
   </ItemGroup>
@@ -52,6 +53,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Specs\streetlights_v2.6.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Specs\streetlights_v2.6.yml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

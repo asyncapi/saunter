@@ -15,3 +15,5 @@ ConsoleApp.ServiceProvider = serviceProvider;
 var app = ConsoleApp.Create();
 app.Add<ToFileCommand>();
 app.Run(args);
+
+Environment.ExitCode = 0;

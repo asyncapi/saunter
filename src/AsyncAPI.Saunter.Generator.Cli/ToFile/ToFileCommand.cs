@@ -13,11 +13,11 @@ internal class ToFileCommand(ILogger<ToFileCommand> logger, IEnvironmentBuilder 
     /// Retrieves AsyncAPI spec from a startup assembly and writes to file.
     /// </summary>
     /// <param name="startupassembly">relative path to the application's startup assembly</param>
-    /// <param name="output">-o,relative path where the AsyncAPI will be output [defaults to stdout]</param>
-    /// <param name="doc">-d,name(s) of the AsyncAPI documents you want to retrieve, as configured in your startup class [defaults to all documents]</param>
-    /// <param name="format">exports AsyncAPI in json and/or yml format [defaults to json]</param>
-    /// <param name="filename">defines the file name template, {document} and {extension} template variables can be used [defaults to "{document}_asyncapi.{extension}\"]</param>
-    /// <param name="env">define environment variable(s) for the application. Formatted as a comma separated list of key=value pairs or just key for flags</param>
+    /// <param name="output">-o,relative path where the AsyncAPI documents will be exported to</param>
+    /// <param name="doc">-d,name(s) of the AsyncAPI documents you want to export as configured in your startup class. To export all documents using null.</param>
+    /// <param name="format">exports AsyncAPI in json and/or yml format</param>
+    /// <param name="filename">defines the file name template, {document} and {extension} template variables can be used</param>
+    /// <param name="env">define environment variable(s) for the application. Formatted as a comma separated list of _key=value_ pairs</param>
     [Command("tofile")]
     public int ToFile([Argument] string startupassembly, string output = "./", string doc = null, string format = "json", string filename = DEFAULT_FILENAME, string env = "")
     {

@@ -9,7 +9,7 @@ using Xunit.Abstractions;
 
 namespace AsyncAPI.Saunter.Generator.Build.Tests;
 
-public class StreetlightsApiBuildTests(ITestOutputHelper output)
+public class IntegrationTests(ITestOutputHelper output)
 {
     private string Run(string file, string args, string workingDirectory, int expectedExitCode = 0)
     {
@@ -32,18 +32,18 @@ public class StreetlightsApiBuildTests(ITestOutputHelper output)
         return stdOut;
     }
 
-    private const string csprojPath = "../../../../../examples/StreetlightsAPI/StreetlightsAPI.csproj";
-
-    [Fact]
-    public void BuildingCsprojGeneratesSpecFilesTest()
+    [Theory]
+    [InlineData("StreetlightsAPI")]
+    [InlineData("StreetlightsAPI.TopLevelStatement")]
+    public void BuildingCsprojGeneratesSpecFilesTest(string csproj)
     {
         var pwd = Directory.GetCurrentDirectory();
-        var csproj = Path.GetFullPath(Path.Combine(pwd, csprojPath));
+        var csprojFullPath = Path.GetFullPath(Path.Combine(pwd, $"../../../../../examples/{csproj}/{csproj}.csproj"));
         output.WriteLine($"Current working directory: {pwd}");
-        output.WriteLine($"Csproj under test: {csproj}");
-        File.Exists(csproj).ShouldBeTrue();
+        output.WriteLine($"Csproj under test: {csprojFullPath}");
+        File.Exists(csprojFullPath).ShouldBeTrue();
 
-        var csprojDir = Path.GetDirectoryName(csproj);
+        var csprojDir = Path.GetDirectoryName(csprojFullPath);
         var specDir = Path.Combine(csprojDir, "specs");
 
         // Spec files should have been generated during the builds of the solution

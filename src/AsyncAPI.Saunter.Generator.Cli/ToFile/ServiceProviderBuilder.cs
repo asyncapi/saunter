@@ -1,5 +1,6 @@
-﻿using System.Reflection;
-using System.Runtime.Loader;
+﻿using System.Runtime.Loader;
+using Microsoft.EntityFrameworkCore.Design;
+using Microsoft.EntityFrameworkCore.Design.Internal;
 using Microsoft.Extensions.Logging;
 
 namespace AsyncAPI.Saunter.Generator.Cli.ToFile;
@@ -13,12 +14,20 @@ internal class ServiceProviderBuilder(ILogger<ServiceProviderBuilder> logger) : 
 {
     public IServiceProvider BuildServiceProvider(string startupAssembly)
     {
-        var fullPath = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), startupAssembly));
+        var fullPath = Path.GetFullPath(startupAssembly);
+        var basePath = Path.GetDirectoryName(fullPath);
+        DependencyResolver.Init(basePath);
+
         logger.LogInformation($"Loading startup assembly: {fullPath}");
         var assembly = AssemblyLoadContext.Default.LoadFromAssemblyPath(fullPath);
-        var nswagCommandsAssembly = Assembly.LoadFrom(Path.GetFullPath(Path.Combine(Path.GetDirectoryName(typeof(ServiceProviderBuilder).Assembly.Location), "NSwag.Commands.dll")));
-        var nswagServiceProvider = nswagCommandsAssembly.GetType("NSwag.Commands.ServiceProviderResolver");
-        var serviceProvider = (IServiceProvider)nswagServiceProvider.InvokeMember("GetServiceProvider", BindingFlags.InvokeMethod | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static, null, null, [assembly]);
+        var reporter = new OperationReporter(new OperationReportHandler(
+            m => logger.LogError(m),
+            m => logger.LogWarning(m),
+            m => logger.LogInformation(m),
+            m => logger.LogDebug(m)));
+        var appServiceProvider = new AppServiceProviderFactory(assembly, reporter);
+        var serviceProvider = appServiceProvider.Create([]);
+
         return serviceProvider;
     }
 }
