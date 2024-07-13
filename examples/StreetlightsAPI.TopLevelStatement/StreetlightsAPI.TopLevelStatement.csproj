@@ -1,0 +1,46 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <!-- This project is targeting .NET8 intentionally (The 'old school' Startup-class project is .NET6), to prove that
+         the AsyncAPI.Saunter.Generator.Cli tool can generate specs for projects targetting .NET6 and .NET8. -->
+    <TargetFramework>net8.0</TargetFramework>
+    <IsPackable>false</IsPackable>
+
+    <!-- Example settings for "AsyncAPI.Saunter.Generator.Build", they are all option though -->
+    <AsyncAPIGenerateDocumentsOnBuild>true</AsyncAPIGenerateDocumentsOnBuild>
+    <AsyncAPIDocumentFormats>json,yml</AsyncAPIDocumentFormats>
+    <AsyncAPIDocumentFilename>streetlights.{extension}</AsyncAPIDocumentFilename>
+    <AsyncAPIDocumentOutputPath>specs</AsyncAPIDocumentOutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DocumentationFile>bin\Debug\StreetlightsAPI.TopLevelStatement.xml</DocumentationFile>
+    <NoWarn>1701;1702;1591</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DocumentationFile>bin\Release\StreetlightsAPI.TopLevelStatement.xml</DocumentationFile>
+    <NoWarn>1701;1702;1591</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Saunter\Saunter.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="specs\" />
+
+    <Compile Include="../StreetlightsAPI/API.cs" />
+    <Compile Include="../StreetlightsAPI/Messaging.cs" />
+
+    <None Include="../StreetlightsAPI/nlog.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NLog" Version="5.3.2" />
+    <PackageReference Include="NLog.Web.AspNetCore" Version="5.3.11" />
+  </ItemGroup>
+  
+</Project>

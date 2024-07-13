@@ -14,10 +14,12 @@ spelling_exclusion_path = SpellingExclusions.dic
 indent_size = 4
 insert_final_newline = true
 charset = utf-8-bom
+end_of_line = lf
 
 # XML project files
 [*.{csproj,vbproj,vcxproj,vcxproj.filters,proj,projitems,shproj}]
-indent_size = 4
+indent_size = 2
+end_of_line = lf
 
 # XML config files
 [*.{props,targets,ruleset,config,nuspec,resx,vsixmanifest,vsct}]
@@ -141,8 +143,6 @@ dotnet_naming_rule.members_should_be_pascal_case.style = non_private_static_fiel
 dotnet_naming_symbols.all_members.applicable_kinds = *
 
 dotnet_naming_style.pascal_case_style.capitalization = pascal_case
-
-file_header_template = Licensed to the .NET Foundation under one or more agreements.\nThe .NET Foundation licenses this file to you under the MIT license.\nSee the LICENSE file in the project root for more information.
 
 # RS0016: Only enable if API files are present
 dotnet_public_api_analyzer.require_api_files = true
