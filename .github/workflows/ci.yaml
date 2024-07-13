@@ -18,8 +18,6 @@ jobs:
         run: dotnet build ./src/Saunter-src.slnf --configuration Debug
       - name: Run dotnet build all
         run: dotnet build --configuration Debug
-      - name: unit test
-        run: dotnet test --no-build --configuration Debug
 
   fmt:
     runs-on: ubuntu-latest
@@ -31,3 +29,13 @@ jobs:
         run: dotnet format --verify-no-changes --no-restore *.sln
         env:
           PATH: ${{ github.env.PATH }}:/home/runner/.dotnet/tools
+
+  unit-test:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: setup build
+        uses: ./.github/npm
+      - name: unit test
+        run: dotnet test --no-build --configuration Debug
