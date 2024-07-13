@@ -7,7 +7,7 @@
     <LangVersion>12</LangVersion>
     <RootNamespace>AsyncAPI.Saunter.Generator.Cli</RootNamespace>
 
-    <Description>AsyncAPI Command Line Tools: Dotnet tool to generate AsyncAPI spec file from dotnet startup assembly.</Description>
+    <Description>AsyncAPI Command Line Tools: Dotnet tool to generate AsyncAPI spec file(s) from dotnet startup assembly.</Description>
     <Authors>AsyncAPI Initiative</Authors>
     <PackAsTool>true</PackAsTool>
     <PackageId>AsyncAPI.Saunter.Generator.Cli</PackageId>

@@ -1,5 +1,5 @@
 # AsyncApi Generator.Build Nuget Package
-A nuget package to generate AsyncAPI specification files at build time, based on code-first attributes.
+A nuget package to generate AsyncAPI specification files at build time, based on code-first attributes. This nuget package requires .NET8.0 runtime in order to work. The consuming csproj doesn't need to target .NET8.0.
 
 This nuget packages can help to better control API changes by commiting the AsyncAPI spec to source control. By always generating spec files at build, it will be clear when the api changes. 
 
