@@ -14,7 +14,7 @@ using StreetlightsAPI;
 LogManager.Setup().LoadConfigurationFromAppSettings();
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Host.ConfigureLogging(logging => logging.AddSimpleConsole(console => console.SingleLine = true));
+builder.Logging.AddSimpleConsole(console => console.SingleLine = true);
 builder.Host.UseNLog();
 
 // Add Saunter to the application services. 
