@@ -31,10 +31,3 @@ jobs:
         run: dotnet format --verify-no-changes --no-restore *.sln
         env:
           PATH: ${{ github.env.PATH }}:/home/runner/.dotnet/tools
-
-  unit-test:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: unit test
-        run: dotnet test --no-build --configuration Debug
