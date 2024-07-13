@@ -6,6 +6,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using NLog;
+using NLog.Web;
 using Saunter;
 using Saunter.AsyncApiSchema.v2;
 
@@ -15,6 +17,8 @@ namespace StreetlightsAPI
     {
         public static void Main(string[] args)
         {
+            LogManager.Setup().LoadConfigurationFromAppSettings();
+
             CreateHostBuilder(args).Build().Run();
         }
 
@@ -22,10 +26,11 @@ namespace StreetlightsAPI
         {
             return Host.CreateDefaultBuilder(args)
                 .ConfigureLogging(logging => logging.AddSimpleConsole(console => console.SingleLine = true))
+                .UseNLog()
                 .ConfigureWebHostDefaults(web =>
                 {
                     web.UseStartup<Startup>();
-                    web.UseUrls("http://localhost:5000");
+                    web.UseUrls("http://localhost:5001");
                 });
         }
     }

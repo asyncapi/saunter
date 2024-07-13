@@ -6,6 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <LangVersion>12</LangVersion>
     <RootNamespace>AsyncAPI.Saunter.Generator.Cli</RootNamespace>
+    <NoWarn>$(NoWarn);EF1001</NoWarn>
 
     <Description>AsyncAPI Command Line Tools: Dotnet tool to generate AsyncAPI spec file from dotnet startup assembly.</Description>
     <Authors>AsyncAPI Initiative</Authors>
@@ -40,8 +41,8 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.7" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
-    <PackageReference Include="NSwag.Commands" Version="14.0.8" />
   </ItemGroup>
 
   <ItemGroup>

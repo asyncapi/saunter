@@ -50,186 +50,36 @@ public class IntegrationTests(ITestOutputHelper output)
                         """, StringCompareShould.IgnoreLineEndings);
     }
 
-    [Fact]
-    public void StreetlightsAPIExportSpecTest()
+    /// <remarks>
+    /// Both example projects are used to check whether AsyncAPI spec generation is working because they are targeting different .NET versions and are using different hosting strategies.
+    /// - StreetlightsAPI project is targeting NET6 using the 'old school' Startup-class hosting mechanism.
+    /// - StreetlightsAPI.TopLevelStatement project is targeting NET8 using the new Top Level Statement hosting mechanism.
+    /// </remarks>
+    [Theory]
+    [InlineData("StreetlightsAPI", "net6.0")]
+    [InlineData("StreetlightsAPI.TopLevelStatement", "net8.0")]
+    public void Streetlights_ExportSpecTest(string csprojName, string targetFramework)
     {
-        var path = Directory.GetCurrentDirectory();
+        var path = Path.Combine(Directory.GetCurrentDirectory(), csprojName);
         output.WriteLine($"Output path: {path}");
-        var stdOut = RunTool($"tofile ../../../../../examples/StreetlightsAPI/bin/Debug/net6.0/StreetlightsAPI.dll --output {path} --format json,yml,yaml");
+        var stdOut = RunTool($"tofile ../../../../../examples/{csprojName}/bin/Debug/{targetFramework}/{csprojName}.dll --output {path} --format json,yml,yaml");
 
         stdOut.ShouldNotBeEmpty();
         stdOut.ShouldContain($"AsyncAPI yaml successfully written to {Path.Combine(path, "asyncapi.yaml")}");
         stdOut.ShouldContain($"AsyncAPI yml successfully written to {Path.Combine(path, "asyncapi.yml")}");
         stdOut.ShouldContain($"AsyncAPI json successfully written to {Path.Combine(path, "asyncapi.json")}");
 
-        File.Exists("asyncapi.yml").ShouldBeTrue("asyncapi.yml");
-        File.Exists("asyncapi.yaml").ShouldBeTrue("asyncapi.yaml");
-        File.Exists("asyncapi.json").ShouldBeTrue("asyncapi.json");
+        File.Exists(Path.Combine(csprojName, "asyncapi.yml")).ShouldBeTrue("asyncapi.yml");
+        File.Exists(Path.Combine(csprojName, "asyncapi.yaml")).ShouldBeTrue("asyncapi.yaml");
+        File.Exists(Path.Combine(csprojName, "asyncapi.json")).ShouldBeTrue("asyncapi.json");
 
-        var yml = File.ReadAllText("asyncapi.yml");
-        yml.ShouldBe("""
-                     asyncapi: 2.6.0
-                     info:
-                       title: Streetlights API
-                       version: 1.0.0
-                       description: The Smartylighting Streetlights API allows you to remotely manage the city lights.
-                       license:
-                         name: Apache 2.0
-                         url: https://www.apache.org/licenses/LICENSE-2.0
-                     servers:
-                       mosquitto:
-                         url: test.mosquitto.org
-                         protocol: mqtt
-                       webapi:
-                         url: localhost:5000
-                         protocol: http
-                     defaultContentType: application/json
-                     channels:
-                       publish/light/measured:
-                         servers:
-                           - webapi
-                         publish:
-                           operationId: MeasureLight
-                           summary: Inform about environmental lighting conditions for a particular streetlight.
-                           tags:
-                             - name: Light
-                           message:
-                             $ref: '#/components/messages/lightMeasuredEvent'
-                       subscribe/light/measured:
-                         servers:
-                           - mosquitto
-                         subscribe:
-                           operationId: PublishLightMeasurement
-                           summary: Subscribe to environmental lighting conditions for a particular streetlight.
-                           tags:
-                             - name: Light
-                           message:
-                             payload:
-                               $ref: '#/components/schemas/lightMeasuredEvent'
-                     components:
-                       schemas:
-                         lightMeasuredEvent:
-                           type: object
-                           properties:
-                             id:
-                               type: integer
-                               format: int32
-                               description: Id of the streetlight.
-                             lumens:
-                               type: integer
-                               format: int32
-                               description: Light intensity measured in lumens.
-                             sentAt:
-                               type: string
-                               format: date-time
-                               description: Light intensity measured in lumens.
-                           additionalProperties: false
-                       messages:
-                         lightMeasuredEvent:
-                           payload:
-                             $ref: '#/components/schemas/lightMeasuredEvent'
-                           name: lightMeasuredEvent
-                     """, "yaml");
+        var yml = File.ReadAllText(Path.Combine(csprojName, "asyncapi.yml"));
+        yml.ShouldBe(ExpectedSpecFiles.Yml_v2_6, "yml");
 
-        var yaml = File.ReadAllText("asyncapi.yaml");
-        yaml.ShouldBe(yml, "yml");
+        var yaml = File.ReadAllText(Path.Combine(csprojName, "asyncapi.yaml"));
+        yaml.ShouldBe(yml, "yaml");
 
-        var json = File.ReadAllText("asyncapi.json");
-        json.ShouldBe("""
-                      {
-                        "asyncapi": "2.6.0",
-                        "info": {
-                          "title": "Streetlights API",
-                          "version": "1.0.0",
-                          "description": "The Smartylighting Streetlights API allows you to remotely manage the city lights.",
-                          "license": {
-                            "name": "Apache 2.0",
-                            "url": "https://www.apache.org/licenses/LICENSE-2.0"
-                          }
-                        },
-                        "servers": {
-                          "mosquitto": {
-                            "url": "test.mosquitto.org",
-                            "protocol": "mqtt"
-                          },
-                          "webapi": {
-                            "url": "localhost:5000",
-                            "protocol": "http"
-                          }
-                        },
-                        "defaultContentType": "application/json",
-                        "channels": {
-                          "publish/light/measured": {
-                            "servers": [
-                              "webapi"
-                            ],
-                            "publish": {
-                              "operationId": "MeasureLight",
-                              "summary": "Inform about environmental lighting conditions for a particular streetlight.",
-                              "tags": [
-                                {
-                                  "name": "Light"
-                                }
-                              ],
-                              "message": {
-                                "$ref": "#/components/messages/lightMeasuredEvent"
-                              }
-                            }
-                          },
-                          "subscribe/light/measured": {
-                            "servers": [
-                              "mosquitto"
-                            ],
-                            "subscribe": {
-                              "operationId": "PublishLightMeasurement",
-                              "summary": "Subscribe to environmental lighting conditions for a particular streetlight.",
-                              "tags": [
-                                {
-                                  "name": "Light"
-                                }
-                              ],
-                              "message": {
-                                "payload": {
-                                  "$ref": "#/components/schemas/lightMeasuredEvent"
-                                }
-                              }
-                            }
-                          }
-                        },
-                        "components": {
-                          "schemas": {
-                            "lightMeasuredEvent": {
-                              "type": "object",
-                              "properties": {
-                                "id": {
-                                  "type": "integer",
-                                  "format": "int32",
-                                  "description": "Id of the streetlight."
-                                },
-                                "lumens": {
-                                  "type": "integer",
-                                  "format": "int32",
-                                  "description": "Light intensity measured in lumens."
-                                },
-                                "sentAt": {
-                                  "type": "string",
-                                  "format": "date-time",
-                                  "description": "Light intensity measured in lumens."
-                                }
-                              },
-                              "additionalProperties": false
-                            }
-                          },
-                          "messages": {
-                            "lightMeasuredEvent": {
-                              "payload": {
-                                "$ref": "#/components/schemas/lightMeasuredEvent"
-                              },
-                              "name": "lightMeasuredEvent"
-                            }
-                          }
-                        }
-                      }
-                      """, "json");
+        var json = File.ReadAllText(Path.Combine(csprojName, "asyncapi.json"));
+        json.ShouldBe(ExpectedSpecFiles.Json_v2_6, "json");
     }
 }
