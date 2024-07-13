@@ -5,7 +5,7 @@ namespace AsyncAPI.Saunter.Generator.Cli.Tests;
 
 public class IntegrationTests(ITestOutputHelper output)
 {
-    private string RunTool(string args, int expectedExitCode = 1)
+    private string RunTool(string args, int expectedExitCode = 0)
     {
         using var outWriter = new StringWriter();
         using var errorWriter = new StringWriter();
@@ -31,7 +31,7 @@ public class IntegrationTests(ITestOutputHelper output)
     [Fact]
     public void DefaultCallPrintsCommandInfo()
     {
-        var stdOut = RunTool("tofile", 0).Trim();
+        var stdOut = RunTool("tofile").Trim();
 
         stdOut.ShouldBe("""
                         Usage: tofile [arguments...] [options...] [-h|--help] [--version]
@@ -42,11 +42,11 @@ public class IntegrationTests(ITestOutputHelper output)
                           [0] <string>    relative path to the application's startup assembly
                         
                         Options:
-                          -o|--output <string>    relative path where the AsyncAPI will be output [defaults to stdout] (Default: "./")
-                          -d|--doc <string>       name(s) of the AsyncAPI documents you want to retrieve as configured in your startup class [defaults to all documents] (Default: null)
-                          --format <string>       exports AsyncAPI in json and/or yml format [defaults to json] (Default: "json")
-                          --filename <string>     defines the file name template, {document} and {extension} template variables can be used [defaults to "{document}_asyncapi.{extension}\"] (Default: "{document}_asyncapi.{extension}")
-                          --env <string>          define environment variable(s) for the application. Formatted as a comma separated list of key=value pairs or just key for flags (Default: "")
+                          -o|--output <string>    relative path where the AsyncAPI documents will be exported to (Default: "./")
+                          -d|--doc <string>       name(s) of the AsyncAPI documents you want to export as configured in your startup class. To export all documents using null. (Default: null)
+                          --format <string>       exports AsyncAPI in json and/or yml format (Default: "json")
+                          --filename <string>     defines the file name template, {document} and {extension} template variables can be used (Default: "{document}_asyncapi.{extension}")
+                          --env <string>          define environment variable(s) for the application. Formatted as a comma separated list of _key=value_ pairs (Default: "")
                         """, StringCompareShould.IgnoreLineEndings);
     }
 
