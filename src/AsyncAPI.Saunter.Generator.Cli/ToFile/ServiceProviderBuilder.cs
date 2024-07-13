@@ -16,7 +16,7 @@ internal class ServiceProviderBuilder(ILogger<ServiceProviderBuilder> logger) : 
         var fullPath = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), startupAssembly));
         logger.LogInformation($"Loading startup assembly: {fullPath}");
         var assembly = AssemblyLoadContext.Default.LoadFromAssemblyPath(fullPath);
-        var nswagCommandsAssembly = Assembly.LoadFrom("NSwag.Commands.dll");
+        var nswagCommandsAssembly = Assembly.LoadFrom(Path.GetFullPath(Path.Combine(Path.GetDirectoryName(typeof(ServiceProviderBuilder).Assembly.Location), "NSwag.Commands.dll")));
         var nswagServiceProvider = nswagCommandsAssembly.GetType("NSwag.Commands.ServiceProviderResolver");
         var serviceProvider = (IServiceProvider)nswagServiceProvider.InvokeMember("GetServiceProvider", BindingFlags.InvokeMethod | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static, null, null, [assembly]);
         return serviceProvider;

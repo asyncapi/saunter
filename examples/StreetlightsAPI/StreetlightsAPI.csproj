@@ -29,11 +29,6 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
   </ItemGroup>
-  <!-- Special args for the AsyncAPI.Generator.Cli tool used by local build AsyncAPI.Generator.Build nuget package, 
-       do not use in normal usage scenarios, this is to use a local build version -->
-  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-    <AsyncAPICliToolArgs>--version "999.*" --add-source "$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)../../local-nuget-source))"</AsyncAPICliToolArgs>
-  </PropertyGroup>
 
   <!-- For release: use a real published nuget package -->
   <ItemGroup Condition=" '$(Configuration)' == 'Release' ">

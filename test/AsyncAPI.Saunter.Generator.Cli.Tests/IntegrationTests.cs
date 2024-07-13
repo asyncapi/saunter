@@ -5,7 +5,7 @@ namespace AsyncAPI.Saunter.Generator.Cli.Tests;
 
 public class IntegrationTests(ITestOutputHelper output)
 {
-    private string RunTool(string args, int expectedExitCode = 1)
+    private string RunTool(string args, int expectedExitCode = 0)
     {
         using var outWriter = new StringWriter();
         using var errorWriter = new StringWriter();
@@ -31,7 +31,7 @@ public class IntegrationTests(ITestOutputHelper output)
     [Fact]
     public void DefaultCallPrintsCommandInfo()
     {
-        var stdOut = RunTool("tofile", 0).Trim();
+        var stdOut = RunTool("tofile").Trim();
 
         stdOut.ShouldBe("""
                         Usage: tofile [arguments...] [options...] [-h|--help] [--version]
@@ -55,7 +55,7 @@ public class IntegrationTests(ITestOutputHelper output)
     {
         var path = Directory.GetCurrentDirectory();
         output.WriteLine($"Output path: {path}");
-        var stdOut = RunTool($"tofile ../../../../../examples/StreetlightsAPI/bin/Debug/net6.0/StreetlightsAPI.dll --output {path} --format json,yml,yaml");
+        var stdOut = RunTool($"tofile ../../../../../examples/StreetlightsAPI/bin/Debug/net8.0/StreetlightsAPI.dll --output {path} --format json,yml,yaml");
 
         stdOut.ShouldNotBeEmpty();
         stdOut.ShouldContain($"AsyncAPI yaml successfully written to {Path.Combine(path, "asyncapi.yaml")}");
@@ -67,169 +67,12 @@ public class IntegrationTests(ITestOutputHelper output)
         File.Exists("asyncapi.json").ShouldBeTrue("asyncapi.json");
 
         var yml = File.ReadAllText("asyncapi.yml");
-        yml.ShouldBe("""
-                     asyncapi: 2.6.0
-                     info:
-                       title: Streetlights API
-                       version: 1.0.0
-                       description: The Smartylighting Streetlights API allows you to remotely manage the city lights.
-                       license:
-                         name: Apache 2.0
-                         url: https://www.apache.org/licenses/LICENSE-2.0
-                     servers:
-                       mosquitto:
-                         url: test.mosquitto.org
-                         protocol: mqtt
-                       webapi:
-                         url: localhost:5000
-                         protocol: http
-                     defaultContentType: application/json
-                     channels:
-                       publish/light/measured:
-                         servers:
-                           - webapi
-                         publish:
-                           operationId: MeasureLight
-                           summary: Inform about environmental lighting conditions for a particular streetlight.
-                           tags:
-                             - name: Light
-                           message:
-                             $ref: '#/components/messages/lightMeasuredEvent'
-                       subscribe/light/measured:
-                         servers:
-                           - mosquitto
-                         subscribe:
-                           operationId: PublishLightMeasurement
-                           summary: Subscribe to environmental lighting conditions for a particular streetlight.
-                           tags:
-                             - name: Light
-                           message:
-                             payload:
-                               $ref: '#/components/schemas/lightMeasuredEvent'
-                     components:
-                       schemas:
-                         lightMeasuredEvent:
-                           type: object
-                           properties:
-                             id:
-                               type: integer
-                               format: int32
-                               description: Id of the streetlight.
-                             lumens:
-                               type: integer
-                               format: int32
-                               description: Light intensity measured in lumens.
-                             sentAt:
-                               type: string
-                               format: date-time
-                               description: Light intensity measured in lumens.
-                           additionalProperties: false
-                       messages:
-                         lightMeasuredEvent:
-                           payload:
-                             $ref: '#/components/schemas/lightMeasuredEvent'
-                           name: lightMeasuredEvent
-                     """, "yaml");
+        yml.ShouldBe(ExpectedSpecFiles.Yml_v2_6, "yaml");
 
         var yaml = File.ReadAllText("asyncapi.yaml");
         yaml.ShouldBe(yml, "yml");
 
         var json = File.ReadAllText("asyncapi.json");
-        json.ShouldBe("""
-                      {
-                        "asyncapi": "2.6.0",
-                        "info": {
-                          "title": "Streetlights API",
-                          "version": "1.0.0",
-                          "description": "The Smartylighting Streetlights API allows you to remotely manage the city lights.",
-                          "license": {
-                            "name": "Apache 2.0",
-                            "url": "https://www.apache.org/licenses/LICENSE-2.0"
-                          }
-                        },
-                        "servers": {
-                          "mosquitto": {
-                            "url": "test.mosquitto.org",
-                            "protocol": "mqtt"
-                          },
-                          "webapi": {
-                            "url": "localhost:5000",
-                            "protocol": "http"
-                          }
-                        },
-                        "defaultContentType": "application/json",
-                        "channels": {
-                          "publish/light/measured": {
-                            "servers": [
-                              "webapi"
-                            ],
-                            "publish": {
-                              "operationId": "MeasureLight",
-                              "summary": "Inform about environmental lighting conditions for a particular streetlight.",
-                              "tags": [
-                                {
-                                  "name": "Light"
-                                }
-                              ],
-                              "message": {
-                                "$ref": "#/components/messages/lightMeasuredEvent"
-                              }
-                            }
-                          },
-                          "subscribe/light/measured": {
-                            "servers": [
-                              "mosquitto"
-                            ],
-                            "subscribe": {
-                              "operationId": "PublishLightMeasurement",
-                              "summary": "Subscribe to environmental lighting conditions for a particular streetlight.",
-                              "tags": [
-                                {
-                                  "name": "Light"
-                                }
-                              ],
-                              "message": {
-                                "payload": {
-                                  "$ref": "#/components/schemas/lightMeasuredEvent"
-                                }
-                              }
-                            }
-                          }
-                        },
-                        "components": {
-                          "schemas": {
-                            "lightMeasuredEvent": {
-                              "type": "object",
-                              "properties": {
-                                "id": {
-                                  "type": "integer",
-                                  "format": "int32",
-                                  "description": "Id of the streetlight."
-                                },
-                                "lumens": {
-                                  "type": "integer",
-                                  "format": "int32",
-                                  "description": "Light intensity measured in lumens."
-                                },
-                                "sentAt": {
-                                  "type": "string",
-                                  "format": "date-time",
-                                  "description": "Light intensity measured in lumens."
-                                }
-                              },
-                              "additionalProperties": false
-                            }
-                          },
-                          "messages": {
-                            "lightMeasuredEvent": {
-                              "payload": {
-                                "$ref": "#/components/schemas/lightMeasuredEvent"
-                              },
-                              "name": "lightMeasuredEvent"
-                            }
-                          }
-                        }
-                      }
-                      """, "json");
+        json.ShouldBe(ExpectedSpecFiles.Json_v2_6, "json");
     }
 }

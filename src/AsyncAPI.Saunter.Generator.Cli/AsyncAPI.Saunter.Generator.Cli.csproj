@@ -42,7 +42,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AsyncAPI.NET.Readers" Version="5.2.1" PrivateAssets="All" />
+    <PackageReference Include="AsyncAPI.NET.Readers" Version="5.2.1" />
     <PackageReference Include="ConsoleAppFramework" Version="5.2.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -56,7 +56,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="readme.md" Pack="true" PackagePath="\" />
+    <None Include="readme.md" Pack="true" PackagePath="/" />
     <None Include="../../assets/logo.png" Pack="true" PackagePath="/" />
   </ItemGroup>
 

@@ -68,6 +68,6 @@ internal class ToFileCommand(ILogger<ToFileCommand> logger, IEnvironmentBuilder 
             }
         }
 
-        return 1;
+        return 0;
     }
 }
