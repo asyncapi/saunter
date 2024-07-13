@@ -52,6 +52,8 @@ app.UseDeveloperExceptionPage();
 app.UseRouting();
 app.UseCors(configure => configure.AllowAnyOrigin().AllowAnyMethod());
 
+// to be fixed with issue #173
+#pragma warning disable ASP0014 // Suggest using top level route registrations instead of UseEndpoints
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapAsyncApiDocuments();
@@ -59,6 +61,7 @@ app.UseEndpoints(endpoints =>
 
     endpoints.MapControllers();
 });
+#pragma warning restore ASP0014 // Suggest using top level route registrations instead of UseEndpoints
 
 await app.StartAsync();
 
