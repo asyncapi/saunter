@@ -14,8 +14,12 @@ jobs:
       - uses: actions/checkout@v2
       - name: setup build
         uses: ./.github/npm
-      - name: Run dotnet build
+      - name: Run dotnet build src
+        run: dotnet build ./src/Saunter-src.slnf --configuration Debug
+      - name: Run dotnet build all
         run: dotnet build --configuration Debug
+      - name: unit test
+        run: dotnet test --no-build --configuration Debug
 
   fmt:
     runs-on: ubuntu-latest
@@ -24,18 +28,6 @@ jobs:
       - name: setup dotnet
         uses: ./.github/dotnet
       - name: dotnet format check
-        run: dotnet format --verify-no-changes *.sln
+        run: dotnet format --verify-no-changes --no-restore *.sln
         env:
           PATH: ${{ github.env.PATH }}:/home/runner/.dotnet/tools
-
-  unit-test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: setup build
-        uses: ./.github/npm
-      - name: unit test
-        run: dotnet test ./test/Saunter.Tests/Saunter.Tests.csproj
-      # TODO: why there are 2 of them....
-      - name: unit mark test
-        run: dotnet test ./test/Saunter.Tests.MarkerTypeTests/Saunter.Tests.MarkerTypeTests.csproj

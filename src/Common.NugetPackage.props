@@ -1,0 +1,10 @@
+<Project>
+  
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <!-- 999.* are local builds numbers, they must be unique each build to bypass all nuget caching -->
+    <Version>999.$([System.DateTime]::Now.ToString("yy"))$([System.DateTime]::Now.DayOfYear).$([System.DateTime]::Now.ToString("HHmm"))</Version>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageOutputPath>../../local-nuget-source</PackageOutputPath>
+  </PropertyGroup>
+
+</Project>

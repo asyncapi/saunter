@@ -1,0 +1,9 @@
+<Project>
+  <ItemGroup>
+    <!-- Make it possible for NSubstitube to make substitues of internal classes -->
+    <InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
+
+    <!-- Make project internals visible to their respective .Tests project -->  
+    <InternalsVisibleTo Include="$(AssemblyName).Tests" />
+  </ItemGroup>  
+</Project>

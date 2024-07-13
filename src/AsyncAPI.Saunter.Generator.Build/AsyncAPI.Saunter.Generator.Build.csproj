@@ -1,0 +1,51 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="../Common.NugetPackage.props" />
+
+  <PropertyGroup>
+    <TargetFrameworks>net8.0</TargetFrameworks>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>12</LangVersion>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <NoWarn>$(NoWarn);NU5128</NoWarn>
+
+    <Description>AsyncAPI Build Tools: Generate AsyncAPI spec file(s) during build from a startup project.</Description>
+    <Authors>AsyncAPI Initiative</Authors>
+    <IsTool>true</IsTool>
+    <PackageId>AsyncAPI.Saunter.Generator.Build</PackageId>
+    <PackageTags>asyncapi;aspnetcore;openapi;documentation;amqp;generator;build;tool</PackageTags>
+    <PackageReadmeFile>readme.md</PackageReadmeFile>
+    <PackageIcon>logo.png</PackageIcon>
+    <RepositoryUrl>https://github.com/asyncapi/saunter</RepositoryUrl>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <IncludeSymbols>false</IncludeSymbols>
+    <PackageProjectUrl>https://github.com/asyncapi/saunter</PackageProjectUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <DevelopmentDependency>true</DevelopmentDependency>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
+    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Development Dependencies -->
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
+    <PackageReference Update="@(PackageReference)" PrivateAssets="All" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="readme.md" Pack="true" PackagePath="/" />
+    <None Include="../../assets/logo.png" Pack="true" PackagePath="/" />
+    <None Include="build/*" Pack="true" PackagePath="/build" />
+    <None Include="bin/$(Configuration)/$(TargetFramework)" Pack="true" PackagePath="/tools" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AsyncAPI.Saunter.Generator.Cli\AsyncAPI.Saunter.Generator.Cli.csproj" PrivateAssets="All" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,59 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="../Common.NugetPackage.props" />
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFrameworks>net8.0</TargetFrameworks>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>12</LangVersion>
+    <RootNamespace>AsyncAPI.Saunter.Generator.Cli</RootNamespace>
+    <NoWarn>$(NoWarn);EF1001</NoWarn>
+
+    <Description>AsyncAPI Command Line Tools: Dotnet tool to generate AsyncAPI spec file(s) from dotnet startup assembly.</Description>
+    <Authors>AsyncAPI Initiative</Authors>
+    <PackAsTool>true</PackAsTool>
+    <PackageId>AsyncAPI.Saunter.Generator.Cli</PackageId>
+    <PackageType>DotnetTool</PackageType>
+    <ToolCommandName>dotnet-asyncapi</ToolCommandName>
+    <PackageTags>asyncapi;aspnetcore;openapi;documentation;amqp;generator;cli;tool</PackageTags>
+    <PackageReadmeFile>readme.md</PackageReadmeFile>
+    <PackageIcon>logo.png</PackageIcon>
+    <RepositoryUrl>https://github.com/asyncapi/saunter</RepositoryUrl>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <PackageProjectUrl>https://github.com/asyncapi/saunter</PackageProjectUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
+    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+  </PropertyGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' != 'netstandard2.0' ">
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AsyncAPI.NET.Readers" Version="5.2.1" />
+    <PackageReference Include="ConsoleAppFramework" Version="5.2.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.7" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Saunter\Saunter.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="readme.md" Pack="true" PackagePath="/" />
+    <None Include="../../assets/logo.png" Pack="true" PackagePath="/" />
+  </ItemGroup>
+
+</Project>

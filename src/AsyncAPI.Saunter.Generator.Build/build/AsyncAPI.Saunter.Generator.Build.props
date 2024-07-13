@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<Project>
+
+  <!-- List all available properties to customize the AsyncAPI.Generator.Build package -->
+  <PropertyGroup>
+    <AsyncAPIGenerateDocumentsOnBuild Condition=" '$(AsyncAPIGenerateDocumentsOnBuild)' == '' ">true</AsyncAPIGenerateDocumentsOnBuild>
+    <AsyncAPIDocumentFormats Condition=" '$(AsyncAPIDocumentFormats)' == '' ">json</AsyncAPIDocumentFormats>
+    <AsyncAPIDocumentOutputPath Condition=" '$(AsyncAPIDocumentOutputPath)' == '' ">./</AsyncAPIDocumentOutputPath>
+    <AsyncAPIDocumentFilename Condition=" '$(AsyncAPIDocumentFilename)' == '' "></AsyncAPIDocumentFilename>
+    <AsyncAPIDocumentNames Condition=" '$(AsyncAPIDocumentNames)' == '' "></AsyncAPIDocumentNames>
+    <AsyncAPIDocumentEnvVars Condition=" '$(AsyncAPIDocumentEnvVars)' == '' "></AsyncAPIDocumentEnvVars>
+  </PropertyGroup>
+
+</Project>

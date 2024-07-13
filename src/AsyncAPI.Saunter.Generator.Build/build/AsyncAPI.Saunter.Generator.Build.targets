@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<Project>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition=" '$(AsyncAPIGenerateDocumentsOnBuild)' == 'true' ">
+    <!-- Calculate some paths -->
+    <PropertyGroup>
+      <AsyncAPIBuildToolBuildDir>$([System.IO.Path]::GetDirectoryName($(MSBuildThisFileDirectory)))</AsyncAPIBuildToolBuildDir>
+      <AsyncAPIBuildToolRoot>$([System.IO.Path]::GetDirectoryName($(AsyncAPIBuildToolBuildDir)))</AsyncAPIBuildToolRoot>
+      <AsyncAPICliToolPath>$([System.IO.Path]::Combine($(AsyncAPIBuildToolRoot), tools, net8.0, AsyncAPI.Saunter.Generator.Cli.dll))</AsyncAPICliToolPath>
+      <AsyncAPICliToolStartupAssembly>$([System.IO.Path]::Combine($(MSBuildProjectDirectory), $(OutputPath), $(AssemblyTitle).dll))</AsyncAPICliToolStartupAssembly>
+      <AsyncAPICliToolOutputPath>$([System.IO.Path]::Combine($(MSBuildProjectDirectory), $(AsyncAPIDocumentOutputPath)))</AsyncAPICliToolOutputPath>
+    </PropertyGroup>
+
+    <!-- Debug output: print some paths, set -v flag (verbosity) at least to [n]ormal to show in build output -->
+    <Message Text="AsyncAPI.Generator.Build; AsyncAPICliToolPath: $(AsyncAPICliToolPath)" />
+    <Message Text="AsyncAPI.Generator.Build; AsyncAPICliToolStartupAssembly: $(AsyncAPICliToolStartupAssembly)" />
+    <Message Text="AsyncAPI.Generator.Build; AsyncAPICliToolOutputPath: $(AsyncAPICliToolOutputPath)" />
+
+    <Message Text="AsyncAPI.Generator.Build; AsyncAPIDocumentFormats: $(AsyncAPIDocumentFormats)" />
+    <Message Text="AsyncAPI.Generator.Build; AsyncAPIDocumentOutputPath: $(AsyncAPIDocumentOutputPath)" />
+    <Message Text="AsyncAPI.Generator.Build; AsyncAPIDocumentNames: $(AsyncAPIDocumentNames)" />
+    <Message Text="AsyncAPI.Generator.Build; AsyncAPIDocumentFilename: $(AsyncAPIDocumentFilename)" />
+    <Message Text="AsyncAPI.Generator.Build; AsyncAPIDocumentEnvVars: $(AsyncAPIDocumentEnvVars)" />
+    <Message Text="AsyncAPI.Generator.Build; AsyncAPIBuildToolBuildDir: $(AsyncAPIBuildToolBuildDir)" />
+    <Message Text="AsyncAPI.Generator.Build; AsyncAPIBuildToolRoot: $(AsyncAPIBuildToolRoot)" />
+    <Message Text="AsyncAPI.Generator.Build; MSBuildThisFile: $(MSBuildThisFile)" />
+    <Message Text="AsyncAPI.Generator.Build; MSBuildThisFileDirectory: $(MSBuildThisFileDirectory)" />
+    <Message Text="AsyncAPI.Generator.Build; MSBuildProjectFullPath: $(MSBuildProjectFullPath)" />
+    <Message Text="AsyncAPI.Generator.Build; MSBuildProjectDirectory: $(MSBuildProjectDirectory)" />
+
+    <Exec Command="dotnet &quot;$(AsyncAPICliToolPath)&quot; tofile &quot;$(AsyncAPICliToolStartupAssembly)&quot; --output &quot;$(AsyncAPICliToolOutputPath)&quot; --format &quot;$(AsyncAPIDocumentFormats)&quot; --doc &quot;$(AsyncAPIDocumentNames)&quot; --filename &quot;$(AsyncAPIDocumentFilename)&quot; --env &quot;$(AsyncAPIDocumentEnvVars)&quot;"
+          WorkingDirectory="$(AsyncAPIBuildToolRoot)" />
+  </Target>
+
+</Project>
