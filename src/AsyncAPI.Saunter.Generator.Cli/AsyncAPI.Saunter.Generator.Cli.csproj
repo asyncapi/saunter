@@ -1,5 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+  <Import Project="../Common.NugetPackage.props" />
+
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFrameworks>net8.0</TargetFrameworks>
@@ -28,13 +30,6 @@
 
   <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
     <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
-  </PropertyGroup>
-
-  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-    <!-- 999.* are local builds numbers, they must be unique each build to bypass all nuget caching -->
-    <Version>999.$([System.DateTime]::Now.ToString("yy"))$([System.DateTime]::Now.DayOfYear).$([System.DateTime]::Now.ToString("HHmm"))</Version>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageOutputPath>../../local-nuget-source</PackageOutputPath>
   </PropertyGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' != 'netstandard2.0' ">
