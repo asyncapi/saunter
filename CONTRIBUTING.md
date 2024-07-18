@@ -10,10 +10,9 @@ Builds and releases managed with github actions.
 ### Build
 
 * Local builds are as simple as `dotnet build && dotnet test`
-* CI builds on every push
+* CI builds,fmt,unit on every push
 * [.github/workflows/ci.yaml](./.github/workflows/ci.yaml)
 * Build and tests MUST pass before merging to master
-
 
 ### Release
 

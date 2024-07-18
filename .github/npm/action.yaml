@@ -1,0 +1,14 @@
+name: npm setup
+description: "base npm setup for project"
+runs:
+  using: composite
+  steps:
+    - name: setup dotnet
+      uses: ./.github/dotnet
+    - uses: actions/setup-node@v3
+      with:
+        node-version: "lts/*"
+    - name: Run NPM install
+      shell: sh
+      run: npm ci
+      working-directory: ./src/Saunter.UI

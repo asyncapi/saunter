@@ -12,15 +12,17 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
 {
     public class ClassAttributesTests
     {
-        [Fact]
-        public void GetDocument_GeneratesDocumentWithMultipleMessagesPerChannel()
+        [Theory]
+        [InlineData(typeof(TenantMessageConsumer))]
+        [InlineData(typeof(ITenantMessageConsumer))]
+        public void GetDocument_GeneratesDocumentWithMultipleMessagesPerChannel(Type type)
         {
             // Arrange
             var options = new AsyncApiOptions();
             var documentGenerator = new DocumentGenerator();
 
             // Act
-            var document = documentGenerator.GenerateDocument(new[] { typeof(TenantMessageConsumer).GetTypeInfo() }, options, options.AsyncApi, ActivatorServiceProvider.Instance);
+            var document = documentGenerator.GenerateDocument(new[] { type.GetTypeInfo() }, options, options.AsyncApi, ActivatorServiceProvider.Instance);
 
             // Assert
             document.ShouldNotBeNull();
@@ -44,15 +46,17 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
         }
 
 
-        [Fact]
-        public void GenerateDocument_GeneratesDocumentWithMultipleMessagesPerChannelInTheSameMethod()
+        [Theory]
+        [InlineData(typeof(TenantGenericMessagePublisher))]
+        [InlineData(typeof(ITenantGenericMessagePublisher))]
+        public void GenerateDocument_GeneratesDocumentWithMultipleMessagesPerChannelInTheSameMethod(Type type)
         {
             // Arrange
             var options = new AsyncApiOptions();
             var documentGenerator = new DocumentGenerator();
 
             // Act
-            var document = documentGenerator.GenerateDocument(new[] { typeof(TenantGenericMessagePublisher).GetTypeInfo() }, options, options.AsyncApi, ActivatorServiceProvider.Instance);
+            var document = documentGenerator.GenerateDocument(new[] { type.GetTypeInfo() }, options, options.AsyncApi, ActivatorServiceProvider.Instance);
 
             // Assert
             document.ShouldNotBeNull();
@@ -76,15 +80,17 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
         }
 
 
-        [Fact]
-        public void GenerateDocument_GeneratesDocumentWithSingleMessage()
+        [Theory]
+        [InlineData(typeof(TenantSingleMessagePublisher))]
+        [InlineData(typeof(ITenantSingleMessagePublisher))]
+        public void GenerateDocument_GeneratesDocumentWithSingleMessage(Type type)
         {
             // Arrange
             var options = new AsyncApiOptions();
             var documentGenerator = new DocumentGenerator();
 
             // Act
-            var document = documentGenerator.GenerateDocument(new[] { typeof(TenantSingleMessagePublisher).GetTypeInfo() }, options, options.AsyncApi, ActivatorServiceProvider.Instance);
+            var document = documentGenerator.GenerateDocument(new[] { type.GetTypeInfo() }, options, options.AsyncApi, ActivatorServiceProvider.Instance);
 
             // Assert
             document.ShouldNotBeNull();
@@ -104,8 +110,10 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
         }
 
 
-        [Fact]
-        public void GetDocument_WhenMultipleClassesUseSameChannelKey_GeneratesDocumentWithMultipleMessagesPerChannel()
+        [Theory]
+        [InlineData(typeof(TenantMessageConsumer), typeof(TenantMessagePublisher))]
+        [InlineData(typeof(ITenantMessageConsumer), typeof(ITenantMessagePublisher))]
+        public void GetDocument_WhenMultipleClassesUseSameChannelKey_GeneratesDocumentWithMultipleMessagesPerChannel(Type type1, Type type2)
         {
             // Arrange
             var options = new AsyncApiOptions();
@@ -114,8 +122,8 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
             // Act
             var document = documentGenerator.GenerateDocument(new[]
             {
-                typeof(TenantMessageConsumer).GetTypeInfo(),
-                typeof(TenantMessagePublisher).GetTypeInfo()
+                type1.GetTypeInfo(),
+                type2.GetTypeInfo()
             }, options, options.AsyncApi, ActivatorServiceProvider.Instance);
 
             // Assert
@@ -153,15 +161,17 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
         }
 
 
-        [Fact]
-        public void GenerateDocument_GeneratesDocumentWithChannelParameters()
+        [Theory]
+        [InlineData(typeof(OneTenantMessageConsumer))]
+        [InlineData(typeof(IOneTenantMessageConsumer))]
+        public void GenerateDocument_GeneratesDocumentWithChannelParameters(Type type)
         {
             // Arrange
             var options = new AsyncApiOptions();
             var documentGenerator = new DocumentGenerator();
 
             // Act
-            var document = documentGenerator.GenerateDocument(new[] { typeof(OneTenantMessageConsumer).GetTypeInfo() }, options, options.AsyncApi, ActivatorServiceProvider.Instance);
+            var document = documentGenerator.GenerateDocument(new[] { type.GetTypeInfo() }, options, options.AsyncApi, ActivatorServiceProvider.Instance);
 
             // Assert
             document.ShouldNotBeNull();
@@ -188,15 +198,17 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
         }
 
 
-        [Fact]
-        public void GenerateDocument_GeneratesDocumentWithMessageHeader()
+        [Theory]
+        [InlineData(typeof(MyMessagePublisher))]
+        [InlineData(typeof(IMyMessagePublisher))]
+        public void GenerateDocument_GeneratesDocumentWithMessageHeader(Type type)
         {
             // Arrange
             var options = new AsyncApiOptions();
             var documentGenerator = new DocumentGenerator();
 
             // Act
-            var document = documentGenerator.GenerateDocument(new[] { typeof(MyMessagePublisher).GetTypeInfo() }, options, options.AsyncApi, ActivatorServiceProvider.Instance);
+            var document = documentGenerator.GenerateDocument(new[] { type.GetTypeInfo() }, options, options.AsyncApi, ActivatorServiceProvider.Instance);
 
             // Assert
             document.ShouldNotBeNull();
@@ -217,18 +229,42 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
         }
 
         [AsyncApi]
+        [Channel("channel.my.message")]
+        [PublishOperation]
+        public interface IMyMessagePublisher
+        {
+            [Message(typeof(MyMessage), HeadersType = typeof(MyMessageHeader))]
+            void PublishMyMessage();
+        }
+
+        [AsyncApi]
         [Channel("asw.tenant_service.tenants_history", Description = "Tenant events.")]
         [SubscribeOperation(OperationId = "TenantMessageConsumer", Summary = "Subscribe to domains events about tenants.")]
         public class TenantMessageConsumer
         {
             [Message(typeof(TenantCreated))]
-            public void SubscribeTenantCreatedEvent(Guid _, TenantCreated __) { }
+            public void SubscribeTenantCreatedEvent(Guid id, TenantCreated created) { }
 
             [Message(typeof(TenantUpdated))]
-            public void SubscribeTenantUpdatedEvent(Guid _, TenantUpdated __) { }
+            public void SubscribeTenantUpdatedEvent(Guid id, TenantUpdated updated) { }
 
             [Message(typeof(TenantRemoved))]
-            public void SubscribeTenantRemovedEvent(Guid _, TenantRemoved __) { }
+            public void SubscribeTenantRemovedEvent(Guid id, TenantRemoved removed) { }
+        }
+
+        [AsyncApi]
+        [Channel("asw.tenant_service.tenants_history", Description = "Tenant events.")]
+        [SubscribeOperation(OperationId = "TenantMessageConsumer", Summary = "Subscribe to domains events about tenants.")]
+        public interface ITenantMessageConsumer
+        {
+            [Message(typeof(TenantCreated))]
+            void SubscribeTenantCreatedEvent(Guid _, TenantCreated __);
+
+            [Message(typeof(TenantUpdated))]
+            void SubscribeTenantUpdatedEvent(Guid _, TenantUpdated __);
+
+            [Message(typeof(TenantRemoved))]
+            void SubscribeTenantRemovedEvent(Guid _, TenantRemoved __);
         }
 
         [AsyncApi]
@@ -237,13 +273,28 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
         public class TenantMessagePublisher
         {
             [Message(typeof(TenantCreated))]
-            public void PublishTenantCreatedEvent(Guid _, TenantCreated __) { }
+            public void PublishTenantCreatedEvent(Guid id, TenantCreated created) { }
 
             [Message(typeof(TenantUpdated))]
-            public void PublishTenantUpdatedEvent(Guid _, TenantUpdated __) { }
+            public void PublishTenantUpdatedEvent(Guid id, TenantUpdated updated) { }
 
             [Message(typeof(TenantRemoved))]
-            public void PublishTenantRemovedEvent(Guid _, TenantRemoved __) { }
+            public void PublishTenantRemovedEvent(Guid id, TenantRemoved removed) { }
+        }
+
+        [AsyncApi]
+        [Channel("asw.tenant_service.tenants_history", Description = "Tenant events.")]
+        [PublishOperation(OperationId = "TenantMessagePublisher", Summary = "Publish domains events about tenants.")]
+        public interface ITenantMessagePublisher
+        {
+            [Message(typeof(TenantCreated))]
+            void PublishTenantCreatedEvent(Guid _, TenantCreated __);
+
+            [Message(typeof(TenantUpdated))]
+            void PublishTenantUpdatedEvent(Guid _, TenantUpdated __);
+
+            [Message(typeof(TenantRemoved))]
+            void PublishTenantRemovedEvent(Guid _, TenantRemoved __);
         }
 
         [AsyncApi]
@@ -254,10 +305,22 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
             [Message(typeof(AnyTenantCreated))]
             [Message(typeof(AnyTenantUpdated))]
             [Message(typeof(AnyTenantRemoved))]
-            public void PublishTenantEvent<TEvent>(Guid _, TEvent __)
+            public void PublishTenantEvent<TEvent>(Guid id, TEvent @event)
                 where TEvent : IEvent
             {
             }
+        }
+
+        [AsyncApi]
+        [Channel("asw.tenant_service.tenants_history", Description = "Tenant events.")]
+        [PublishOperation(OperationId = "TenantMessagePublisher", Summary = "Publish domains events about tenants.")]
+        public interface ITenantGenericMessagePublisher
+        {
+            [Message(typeof(AnyTenantCreated))]
+            [Message(typeof(AnyTenantUpdated))]
+            [Message(typeof(AnyTenantRemoved))]
+            void PublishTenantEvent<TEvent>(Guid _, TEvent __)
+                where TEvent : IEvent;
         }
 
         [AsyncApi]
@@ -266,9 +329,18 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
         public class TenantSingleMessagePublisher
         {
             [Message(typeof(AnyTenantCreated))]
-            public void PublishTenantCreated(Guid _, AnyTenantCreated __)
+            public void PublishTenantCreated(Guid id, AnyTenantCreated created)
             {
             }
+        }
+
+        [AsyncApi]
+        [Channel("asw.tenant_service.tenants_history", Description = "Tenant events.")]
+        [PublishOperation(OperationId = "TenantSingleMessagePublisher", Summary = "Publish single domain event about tenants.")]
+        public interface ITenantSingleMessagePublisher
+        {
+            [Message(typeof(AnyTenantCreated))]
+            public void PublishTenantCreated(Guid _, AnyTenantCreated __);
         }
 
         [AsyncApi]
@@ -279,13 +351,30 @@ namespace Saunter.Tests.Generation.DocumentGeneratorTests
         public class OneTenantMessageConsumer
         {
             [Message(typeof(TenantCreated))]
-            public void SubscribeTenantCreatedEvent(Guid _, TenantCreated __) { }
+            public void SubscribeTenantCreatedEvent(Guid id, TenantCreated created) { }
 
             [Message(typeof(TenantUpdated))]
-            public void SubscribeTenantUpdatedEvent(Guid _, TenantUpdated __) { }
+            public void SubscribeTenantUpdatedEvent(Guid id, TenantUpdated updated) { }
 
             [Message(typeof(TenantRemoved))]
-            public void SubscribeTenantRemovedEvent(Guid _, TenantRemoved __) { }
+            public void SubscribeTenantRemovedEvent(Guid id, TenantRemoved removed) { }
+        }
+
+        [AsyncApi]
+        [Channel("asw.tenant_service.{tenant_id}.{tenant_status}", Description = "A tenant events.")]
+        [ChannelParameter("tenant_id", typeof(long), Description = "The tenant identifier.")]
+        [ChannelParameter("tenant_status", typeof(string), Description = "The tenant status.")]
+        [SubscribeOperation(OperationId = "OneTenantMessageConsumer", Summary = "Subscribe to domains events about a tenant.")]
+        public interface IOneTenantMessageConsumer
+        {
+            [Message(typeof(TenantCreated))]
+            void SubscribeTenantCreatedEvent(Guid _, TenantCreated __);
+
+            [Message(typeof(TenantUpdated))]
+            void SubscribeTenantUpdatedEvent(Guid _, TenantUpdated __);
+
+            [Message(typeof(TenantRemoved))]
+            void SubscribeTenantRemovedEvent(Guid _, TenantRemoved __);
         }
     }
 

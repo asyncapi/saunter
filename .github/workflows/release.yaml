@@ -1,45 +1,23 @@
-# Note: ci.yaml and release.yaml have some similar steps
-#       If updating dotnet-version, set in both.
-
 name: Release
 
 on:
   push:
     tags:
-      - 'v*.*.*' # e.g. v0.1.0
+      - "v*.*.*" # e.g. v0.1.0
 
 jobs:
   release:
-
     runs-on: ubuntu-latest
-    
     steps:
-    - uses: actions/checkout@v3
-
-    - uses: actions/setup-node@v3
-      with:
-        node-version: 'lts/*' # latest LTS version
-    - uses: actions/setup-dotnet@v2
-      with:
-        dotnet-version: '6.0.x' # SDK Version to use; x will use the latest version of the channel
-
-    - name: Run NPM install
-      run: npm ci
-      working-directory: ./src/Saunter.UI
-    - name: Run dotnet build
-      run: dotnet build --configuration Debug
-    - name: Run dotnet test
-      run: dotnet test --no-build
-
-    # Below steps are only on release, not CI.
-    - name: Set version
-      # Gets the numeric version from a tag (e.g. v1.2.3 -> 1.2.3)
-      run: echo "RELEASE_VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
-    - name: Create Nuget package
-      run: dotnet pack ./src/Saunter/Saunter.csproj --configuration Release -p:Version="$RELEASE_VERSION" --output ./build
-    - name: Push Nuget package to Nuget.org
-      env:
-        NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }} 
-      run: dotnet nuget push ./build/*.nupkg --api-key $NUGET_API_KEY --source "https://api.nuget.org/v3/index.json"
-      
-      
+      - uses: actions/checkout@v2
+      - name: setup build
+        uses: ./.github/npm
+      - name: Set version
+        # Gets the numeric version from a tag (e.g. v1.2.3 -> 1.2.3)
+        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
+      - name: Create Nuget package
+        run: dotnet pack ./src/Saunter/Saunter.csproj --configuration Release -p:Version="$RELEASE_VERSION" --output ./build
+      - name: Push Nuget package to Nuget.org
+        env:
+          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+        run: dotnet nuget push ./build/*.nupkg --api-key $NUGET_API_KEY --source "https://api.nuget.org/v3/index.json"
