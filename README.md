@@ -234,6 +234,24 @@ Each document can be accessed by specifying the name in the URL
 }
 ```
 
+## Migration to LEGO AsyncApi.Net
+
+When switching to the LEGO AsyncApi.Net, we broke the public API.
+
+To simplify the transition to new versions of the library, this note was created.
+
+What was broken:
+
+* Namespaces have changed:
+    * Saunter.AsyncApiSchema.v2 -> LEGO.AsyncAPI.Models
+    * Saunter.Attributes; -> Saunter.AttributeProvider.Attributes
+* Change the name of the data structures, add prefix 'AsyncApi' (example 'class Info' -> 'class AsyncApiInfo')
+* All data structure constructors are now with the parameterless constructor
+
+There was no more significant changes on public API.
+
+Keep this in mind when planning the migration process.
+
 ## Contributing
 
 See our [contributing guide](https://github.com/asyncapi/saunter/blob/main/CONTRIBUTING.md/CONTRIBUTING.md).
