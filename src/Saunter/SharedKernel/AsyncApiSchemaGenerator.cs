@@ -14,7 +14,7 @@ namespace Saunter.SharedKernel
             return GenerateBranch(type, new());
         }
 
-        private AsyncApiSchema? GenerateBranch(Type? type, HashSet<Type> parents)
+        private static AsyncApiSchema? GenerateBranch(Type? type, HashSet<Type> parents)
         {
             if (type is null)
             {
