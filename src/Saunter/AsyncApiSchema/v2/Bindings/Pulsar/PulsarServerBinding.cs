@@ -4,6 +4,7 @@ namespace Saunter.AsyncApiSchema.v2.Bindings.Pulsar
 {
     /// <remarks>
     /// See: https://github.com/asyncapi/bindings/tree/master/pulsar#server-binding-object
+    /// </remarks>
     public class PulsarServerBinding
     {
         /// <summary>
