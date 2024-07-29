@@ -1,9 +1,11 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Reflection.Metadata;
 using Saunter.AttributeProvider.Attributes;
 using Shouldly;
 using Xunit;
+using YamlDotNet.Core.Tokens;
 
 namespace Saunter.Tests.AttributeProvider.DocumentGenerationTests
 {
@@ -16,28 +18,21 @@ namespace Saunter.Tests.AttributeProvider.DocumentGenerationTests
         {
             // Arrange
             ArrangeAttributesTests.Arrange(out var options, out var documentProvider, type);
+            const string Key = "asw.tenant_service.tenants_history";
 
             // Act
             var document = documentProvider.GetDocument(null, options);
 
             // Assert
             document.ShouldNotBeNull();
-            document.Channels.Count.ShouldBe(1);
+            var channel = document.AssertAndGetChannel(Key, "Tenant events.");
 
-            var channel = document.Channels.First();
-            channel.Key.ShouldBe("asw.tenant_service.tenants_history");
-            channel.Value.Description.ShouldBe("Tenant events.");
-
-            var subscribe = channel.Value.Subscribe;
+            var subscribe = channel.Subscribe;
             subscribe.ShouldNotBeNull();
             subscribe.OperationId.ShouldBe("TenantMessageConsumer");
             subscribe.Summary.ShouldBe("Subscribe to domains events about tenants.");
 
-            subscribe.Message.Count.ShouldBe(3);
-
-            subscribe.Message.ShouldContain(m => m.MessageId == "tenantUpdated");
-            subscribe.Message.ShouldContain(m => m.MessageId == "tenantCreated");
-            subscribe.Message.ShouldContain(m => m.MessageId == "tenantRemoved");
+            document.AssertByMessage(subscribe, "tenantCreated", "tenantUpdated", "tenantRemoved");
         }
 
         [Theory]
@@ -47,28 +42,22 @@ namespace Saunter.Tests.AttributeProvider.DocumentGenerationTests
         {
             // Arrange
             ArrangeAttributesTests.Arrange(out var options, out var documentProvider, type);
+            const string Key = "asw.tenant_service.tenants_history";
 
             // Act
             var document = documentProvider.GetDocument(null, options);
 
             // Assert
             document.ShouldNotBeNull();
-            document.Channels.Count.ShouldBe(1);
 
-            var channel = document.Channels.First();
-            channel.Key.ShouldBe("asw.tenant_service.tenants_history");
-            channel.Value.Description.ShouldBe("Tenant events.");
+            var channel = document.AssertAndGetChannel(Key, "Tenant events.");
 
-            var publish = channel.Value.Publish;
+            var publish = channel.Publish;
             publish.ShouldNotBeNull();
             publish.OperationId.ShouldBe("TenantMessagePublisher");
             publish.Summary.ShouldBe("Publish domains events about tenants.");
 
-            publish.Message.Count.ShouldBe(3);
-
-            publish.Message.ShouldContain(m => m.MessageId == "anyTenantCreated");
-            publish.Message.ShouldContain(m => m.MessageId == "anyTenantUpdated");
-            publish.Message.ShouldContain(m => m.MessageId == "anyTenantRemoved");
+            document.AssertByMessage(publish, "anyTenantCreated", "anyTenantUpdated", "anyTenantRemoved");
         }
 
         [Theory]
@@ -78,25 +67,22 @@ namespace Saunter.Tests.AttributeProvider.DocumentGenerationTests
         {
             // Arrange
             ArrangeAttributesTests.Arrange(out var options, out var documentProvider, type);
+            const string Key = "asw.tenant_service.tenants_history";
 
             // Act
             var document = documentProvider.GetDocument(null, options);
 
             // Assert
             document.ShouldNotBeNull();
-            document.Channels.Count.ShouldBe(1);
 
-            var channel = document.Channels.First();
-            channel.Key.ShouldBe("asw.tenant_service.tenants_history");
-            channel.Value.Description.ShouldBe("Tenant events.");
+            var channel = document.AssertAndGetChannel(Key, "Tenant events.");
 
-            var publish = channel.Value.Publish;
+            var publish = channel.Publish;
             publish.ShouldNotBeNull();
             publish.OperationId.ShouldBe("TenantSingleMessagePublisher");
             publish.Summary.ShouldBe("Publish single domain event about tenants.");
 
-            publish.Message.Count.ShouldBe(1);
-            publish.Message[0].MessageId.ShouldBe("anyTenantCreated");
+            document.AssertByMessage(publish, "anyTenantCreated");
         }
 
 
@@ -107,39 +93,28 @@ namespace Saunter.Tests.AttributeProvider.DocumentGenerationTests
         {
             // Arrange
             ArrangeAttributesTests.Arrange(out var options, out var documentProvider, type1, type2);
+            const string Key = "asw.tenant_service.tenants_history";
 
             // Act
             var document = documentProvider.GetDocument(null, options);
 
             // Assert
             document.ShouldNotBeNull();
-            document.Channels.Count.ShouldBe(1);
 
-            var channel = document.Channels.First();
-            channel.Key.ShouldBe("asw.tenant_service.tenants_history");
-            channel.Value.Description.ShouldBe("Tenant events.");
+            var channel = document.AssertAndGetChannel(Key, "Tenant events.");
 
-            var subscribe = channel.Value.Subscribe;
+            var subscribe = channel.Subscribe;
             subscribe.ShouldNotBeNull();
             subscribe.OperationId.ShouldBe("TenantMessageConsumer");
             subscribe.Summary.ShouldBe("Subscribe to domains events about tenants.");
 
-            var publish = channel.Value.Publish;
+            var publish = channel.Publish;
             publish.ShouldNotBeNull();
             publish.OperationId.ShouldBe("TenantMessagePublisher");
             publish.Summary.ShouldBe("Publish domains events about tenants.");
 
-            subscribe.Message.Count.ShouldBe(3);
-
-            subscribe.Message.ShouldContain(m => m.MessageId == "tenantCreated");
-            subscribe.Message.ShouldContain(m => m.MessageId == "tenantUpdated");
-            subscribe.Message.ShouldContain(m => m.MessageId == "tenantRemoved");
-
-            publish.Message.Count.ShouldBe(3);
-
-            publish.Message.ShouldContain(m => m.MessageId == "tenantCreated");
-            publish.Message.ShouldContain(m => m.MessageId == "tenantUpdated");
-            publish.Message.ShouldContain(m => m.MessageId == "tenantRemoved");
+            document.AssertByMessage(subscribe, "tenantCreated", "tenantUpdated", "tenantRemoved");
+            document.AssertByMessage(publish, "tenantCreated", "tenantUpdated", "tenantRemoved");
         }
 
         [Theory]
@@ -149,6 +124,7 @@ namespace Saunter.Tests.AttributeProvider.DocumentGenerationTests
         {
             // Arrange
             ArrangeAttributesTests.Arrange(out var options, out var documentProvider, type);
+            const string Key = "asw.tenant_service.{tenant_id}.{tenant_status}";
 
             // Act
             var document = documentProvider.GetDocument(null, options);
@@ -156,25 +132,26 @@ namespace Saunter.Tests.AttributeProvider.DocumentGenerationTests
             // Assert
             document.ShouldNotBeNull();
             document.Channels.Count.ShouldBe(1);
+            document.Channels.ShouldContainKey(Key);
 
-            var channel = document.Channels.First();
-            channel.Key.ShouldBe("asw.tenant_service.{tenant_id}.{tenant_status}");
-            channel.Value.Description.ShouldBe("A tenant events.");
+            var channel = document.Channels[Key];
 
-            channel.Value.Parameters.Count.ShouldBe(2);
-            channel.Value.Parameters.ShouldContain(p => p.Key == "tenant_id" && p.Value.Schema != null && p.Value.Description == "The tenant identifier.");
-            channel.Value.Parameters.ShouldContain(p => p.Key == "tenant_status" && p.Value.Schema != null && p.Value.Description == "The tenant status.");
+            channel.Description.ShouldBe("A tenant events.");
 
-            var subscribe = channel.Value.Subscribe;
+            channel.Parameters.Count.ShouldBe(2);
+            channel.Parameters.ContainsKey("tenant_id");
+            channel.Parameters.ContainsKey("tenant_status");
+
+            document.Components.Parameters.Count.ShouldBe(2);
+            document.Components.Parameters.ShouldContain(p => p.Key == "tenant_id" && p.Value.Schema != null && p.Value.Description == "The tenant identifier.");
+            document.Components.Parameters.ShouldContain(p => p.Key == "tenant_status" && p.Value.Schema != null && p.Value.Description == "The tenant status.");
+
+            var subscribe = channel.Subscribe;
             subscribe.ShouldNotBeNull();
             subscribe.OperationId.ShouldBe("OneTenantMessageConsumer");
             subscribe.Summary.ShouldBe("Subscribe to domains events about a tenant.");
 
-            subscribe.Message.Count.ShouldBe(3);
-
-            subscribe.Message.ShouldContain(m => m.MessageId == "tenantCreated");
-            subscribe.Message.ShouldContain(m => m.MessageId == "tenantUpdated");
-            subscribe.Message.ShouldContain(m => m.MessageId == "tenantRemoved");
+            document.AssertByMessage(subscribe, "tenantCreated", "tenantUpdated", "tenantRemoved");
         }
 
         [Theory]
@@ -190,11 +167,23 @@ namespace Saunter.Tests.AttributeProvider.DocumentGenerationTests
 
             // Assert
             document.ShouldNotBeNull();
-            document.Channels.Count.ShouldBe(1);
+            document.Channels.Count.ShouldBe(expected: 1);
 
-            var messages = document.Channels.First().Value.Publish.Message;
+            var channel = document.Channels.First().Value;
+            var messages = channel.Publish.Message;
+
             messages.Count.ShouldBe(1);
-            messages[0].Headers.Title.ShouldBe("myMessageHeader");
+
+            var message = messages[0];
+
+            document.Components.Messages.ContainsKey(message.Reference.Id);
+
+            var messageFromRef = document.Components.Messages[message.Reference.Id];
+
+            document.Components.Schemas.ContainsKey(messageFromRef.Payload.Reference.Id);
+            document.Components.Schemas.ContainsKey(messageFromRef.Headers.Reference.Id);
+
+            document.Components.Schemas[messageFromRef.Headers.Reference.Id].Title.ShouldBe("myMessageHeader");
         }
 
         [AsyncApi]

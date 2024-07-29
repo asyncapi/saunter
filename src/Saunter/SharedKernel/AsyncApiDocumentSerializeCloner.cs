@@ -40,6 +40,8 @@ namespace Saunter.SharedKernel
                 }
             }
 
+            cloned.Components ??= new();
+
             return cloned;
         }
     }

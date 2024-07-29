@@ -53,8 +53,8 @@ namespace Saunter.IntegrationTests.ReverseProxy
                     Info = new AsyncApiInfo
                     {
                         Title = Environment.GetEnvironmentVariable("PATH_BASE"),
-                        Version = "1.0.0"
-                    }
+                        Version = "1.0.0",
+                    },
                 };
             });
 
@@ -92,7 +92,6 @@ namespace Saunter.IntegrationTests.ReverseProxy
             logger.LogInformation("AsyncAPI UI available at: {URL}", $"{addresses.FirstOrDefault()}/asyncapi/ui/");
         }
     }
-
 
     public class LightMeasuredEvent
     {

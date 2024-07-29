@@ -41,19 +41,15 @@ namespace Saunter.Tests.AttributeProvider.DocumentGenerationTests
 
             // Assert
             document.ShouldNotBeNull();
-            document.Channels.Count.ShouldBe(1);
 
-            var channel = document.Channels.First();
-            channel.Key.ShouldBe(channelName);
-            channel.Value.Description.ShouldBeNull();
+            var channel = document.AssertAndGetChannel(channelName, null);
 
-            var publish = channel.Value.Publish;
+            var publish = channel.Publish;
             publish.ShouldNotBeNull();
             publish.OperationId.ShouldBe("PublishEvent");
             publish.Description.ShouldBe($"({channelName}) Subscribe to domains events about a tenant.");
 
-            publish.Message.Count.ShouldBe(1);
-            publish.Message[0].MessageId.ShouldBe("tenantEvent");
+            document.AssertByMessage(publish, "tenantEvent");
         }
 
         [AsyncApi]

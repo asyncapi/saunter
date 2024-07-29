@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using LEGO.AsyncAPI.Bindings;
 using LEGO.AsyncAPI.Models;
 using Saunter.SharedKernel.Interfaces;
 
@@ -9,12 +10,12 @@ namespace Saunter.SharedKernel
 {
     internal class AsyncApiSchemaGenerator : IAsyncApiSchemaGenerator
     {
-        public AsyncApiSchema? Generate(Type? type)
+        public GeneratedSchemas? Generate(Type? type)
         {
             return GenerateBranch(type, new());
         }
 
-        private static AsyncApiSchema? GenerateBranch(Type? type, HashSet<Type> parents)
+        private static GeneratedSchemas? GenerateBranch(Type? type, HashSet<Type> parents)
         {
             if (type is null)
             {
@@ -26,6 +27,11 @@ namespace Saunter.SharedKernel
             var schema = new AsyncApiSchema
             {
                 Nullable = !typeInfo.IsValueType,
+            };
+
+            var nestedShemas = new List<AsyncApiSchema>()
+            {
+                schema
             };
 
             if (typeInfo.IsGenericType)
@@ -40,17 +46,6 @@ namespace Saunter.SharedKernel
             }
 
             var name = ToNameCase(typeInfo.Name);
-
-            if (!parents.Add(type))
-            {
-                schema.Reference = new()
-                {
-                    Id = name,
-                    Type = ReferenceType.Schema,
-                };
-
-                return schema;
-            }
 
             schema.Title = name;
             schema.Type = MapJsonTypeToSchemaType(typeInfo);
@@ -70,17 +65,45 @@ namespace Saunter.SharedKernel
                     schema.Format = schema.Title;
                 }
 
-                return schema;
+                return new(schema, nestedShemas);
             }
 
-            schema.Properties = typeInfo
-                .DeclaredProperties
-                .Where(p => p.GetMethod is not null && !p.GetMethod.IsStatic)
-                .ToDictionary(
-                    prop => ToNameCase(prop.Name),
-                    prop => GenerateBranch(prop.PropertyType.GetTypeInfo(), parents.ToHashSet()));
+            if (!parents.Add(type))
+            {
+                schema = new()
+                {
+                    Title = name,
+                    Reference = new()
+                    {
+                        Id = name,
+                        Type = ReferenceType.Schema,
+                    }
+                };
 
-            return schema;
+                // No new types have been created, so empty
+                return new(schema, Array.Empty<AsyncApiSchema>());
+            }
+
+            var properties = typeInfo
+                .DeclaredProperties
+                .Where(p => p.GetMethod is not null && !p.GetMethod.IsStatic);
+
+            foreach (var prop in properties)
+            {
+                var generatedSchemas = GenerateBranch(prop.PropertyType.GetTypeInfo(), parents);
+                if (generatedSchemas is null)
+                {
+                    continue;
+                }
+
+                var key = ToNameCase(prop.Name);
+
+                schema.Properties[key] = generatedSchemas.Value.Root;
+
+                nestedShemas.AddRange(generatedSchemas.Value.All);
+            }
+
+            return new(schema, nestedShemas.DistinctBy(n => n.Title).ToArray());
         }
 
         private static string ToNameCase(string name)

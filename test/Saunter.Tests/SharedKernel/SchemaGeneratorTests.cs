@@ -59,10 +59,11 @@ namespace Saunter.Tests.SharedKernel
 
             // Assert
             schema.ShouldNotBeNull();
-            schema.Properties.ShouldBeEmpty();
-            schema.Format.ShouldBe(format);
-            schema.Type.ShouldBe(schemaType);
-            schema.Nullable.ShouldBe(nullable);
+            schema.Value.All.Count.ShouldBe(1);
+            schema.Value.Root.Properties.ShouldBeEmpty();
+            schema.Value.Root.Format.ShouldBe(format);
+            schema.Value.Root.Type.ShouldBe(schemaType);
+            schema.Value.Root.Nullable.ShouldBe(nullable);
         }
 
         [Fact]
@@ -77,24 +78,25 @@ namespace Saunter.Tests.SharedKernel
 
             // Assert
             schema.ShouldNotBeNull();
-            schema.Properties.Count.ShouldBe(6);
+            schema.Value.All.Count.ShouldBe(8);
+            schema.Value.Root.Properties.Count.ShouldBe(7);
 
-            schema.Properties.ShouldContainKey("id");
-            var id = schema.Properties["id"];
+            schema.Value.Root.Properties.ShouldContainKey("id");
+            var id = schema.Value.Root.Properties["id"];
             id.Type.ShouldBe(SchemaType.String);
             id.Format.ShouldBe("guid");
             id.Title.ShouldBe("guid");
             id.Nullable.ShouldBeFalse();
 
-            schema.Properties.ShouldContainKey("myUri");
-            var myUri = schema.Properties["myUri"];
+            schema.Value.Root.Properties.ShouldContainKey("myUri");
+            var myUri = schema.Value.Root.Properties["myUri"];
             myUri.Type.ShouldBe(SchemaType.String);
             myUri.Format.ShouldBe("uri");
             myUri.Title.ShouldBe("uri");
             myUri.Nullable.ShouldBeTrue();
 
-            schema.Properties.ShouldContainKey("bar");
-            var bar = schema.Properties["bar"];
+            schema.Value.Root.Properties.ShouldContainKey("bar");
+            var bar = schema.Value.Root.Properties["bar"];
             bar.Type.ShouldBe(SchemaType.Object);
             bar.Title.ShouldBe("bar");
             bar.Format.ShouldBeNull();
@@ -113,22 +115,29 @@ namespace Saunter.Tests.SharedKernel
             barCost.Format.ShouldBe("decimal");
             barCost.Nullable.ShouldBeTrue();
 
-            schema.Properties.ShouldContainKey("helloWorld");
-            var helloWorld = schema.Properties["helloWorld"];
+            schema.Value.Root.Properties.ShouldContainKey("helloWorld");
+            var helloWorld = schema.Value.Root.Properties["helloWorld"];
             helloWorld.Type.ShouldBe(SchemaType.String);
             helloWorld.Title.ShouldBe("string");
             helloWorld.Format.ShouldBe("string");
             helloWorld.Nullable.ShouldBeTrue();
 
-            schema.Properties.ShouldContainKey("timestamp");
-            var timestamp = schema.Properties["timestamp"];
+            schema.Value.Root.Properties.ShouldContainKey("helloWorld2");
+            var helloWorld2 = schema.Value.Root.Properties["helloWorld2"];
+            helloWorld2.Type.ShouldBe(SchemaType.String);
+            helloWorld2.Title.ShouldBe("string");
+            helloWorld2.Format.ShouldBe("string");
+            helloWorld2.Nullable.ShouldBeTrue();
+
+            schema.Value.Root.Properties.ShouldContainKey("timestamp");
+            var timestamp = schema.Value.Root.Properties["timestamp"];
             timestamp.Type.ShouldBe(SchemaType.String);
             timestamp.Title.ShouldBe("dateTimeOffset");
             timestamp.Format.ShouldBe("dateTimeOffset");
             timestamp.Nullable.ShouldBeFalse();
 
-            schema.Properties.ShouldContainKey("fooType");
-            var fooType = schema.Properties["fooType"];
+            schema.Value.Root.Properties.ShouldContainKey("fooType");
+            var fooType = schema.Value.Root.Properties["fooType"];
             fooType.Type.ShouldBe(SchemaType.String);
             fooType.Title.ShouldBe("fooType");
             fooType.Format.ShouldBe("enum");
@@ -152,12 +161,22 @@ namespace Saunter.Tests.SharedKernel
 
             // Assert
             schema.ShouldNotBeNull();
-            schema.Properties.ShouldContainKey("ultraLoop");
 
-            var loop = schema.Properties["ultraLoop"];
+            schema.Value.All.Count.ShouldBe(1);
+            schema.Value.Root.Properties.Count.ShouldBe(2);
+
+            schema.Value.Root.Properties.ShouldContainKey("ultraLoop");
+            schema.Value.Root.Properties.ShouldContainKey("ultraLoop2");
+
+            var loop = schema.Value.Root.Properties["ultraLoop"];
             loop.Reference.ShouldNotBeNull();
             loop.Reference.Id.ShouldBe("loop");
             loop.Reference.Type.ShouldBe(ReferenceType.Schema);
+
+            var loop2 = schema.Value.Root.Properties["ultraLoop2"];
+            loop2.Reference.ShouldNotBeNull();
+            loop2.Reference.Id.ShouldBe("loop");
+            loop2.Reference.Type.ShouldBe(ReferenceType.Schema);
         }
     }
 
@@ -167,6 +186,7 @@ namespace Saunter.Tests.SharedKernel
         public Uri MyUri { get; set; }
         public Bar Bar { get; set; }
         public string HelloWorld { get; set; }
+        public string HelloWorld2 { get; set; }
         public DateTimeOffset Timestamp { get; set; }
         public FooType FooType { get; set; }
     }
@@ -182,5 +202,6 @@ namespace Saunter.Tests.SharedKernel
     public class Loop
     {
         public Loop UltraLoop { get; set; }
+        public Loop UltraLoop2 { get; set; }
     }
 }

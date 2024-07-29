@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Saunter.Options;
+using Saunter.Options.Filters;
 using Shouldly;
 using Xunit;
 

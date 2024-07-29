@@ -1,15 +1,18 @@
 ﻿using System.Reflection;
 using Saunter.AttributeProvider.Attributes;
 
-public class OperationFilterContext
+namespace Saunter.Options.Filters
 {
-    public OperationFilterContext(MethodInfo method, OperationAttribute operation)
+    public class OperationFilterContext
     {
-        Method = method;
-        Operation = operation;
+        public OperationFilterContext(MethodInfo method, OperationAttribute operation)
+        {
+            Method = method;
+            Operation = operation;
+        }
+
+        public MethodInfo Method { get; }
+
+        public OperationAttribute Operation { get; }
     }
-
-    public MethodInfo Method { get; }
-
-    public OperationAttribute Operation { get; }
 }

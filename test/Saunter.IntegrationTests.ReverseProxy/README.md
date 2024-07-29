@@ -5,11 +5,10 @@ The [docker-compose.yml](./docker-compose.yml) file sets up 3 containers
 2. service-b
 3. nginx reverse proxy
 
+Running the test (from root project location):
 
-Running the test:
-```
-$ dotnet publish -c Release
-$ docker-compose up
+```bash
+docker-compose --file ./test/Saunter.IntegrationTests.ReverseProxy/docker-compose.yml up --build
 ```
 
 You should be able to access both services UI

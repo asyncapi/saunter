@@ -19,22 +19,15 @@ namespace Saunter.Tests.AttributeProvider.DocumentGenerationTests
 
             // Assert
             document.ShouldNotBeNull();
-            document.Channels.Count.ShouldBe(1);
 
-            var channel = document.Channels.First();
-            channel.Key.ShouldBe("asw.tenant_service.tenants_history");
-            channel.Value.Description.ShouldBe("Tenant events.");
+            var channel = document.AssertAndGetChannel("asw.tenant_service.tenants_history", "Tenant events.");
 
-            var publish = channel.Value.Publish;
+            var publish = channel.Publish;
             publish.ShouldNotBeNull();
             publish.OperationId.ShouldBe("TenantMessagePublisher");
             publish.Summary.ShouldBe("Publish domains events about tenants.");
 
-            publish.Message.Count.ShouldBe(3);
-
-            publish.Message.ShouldContain(m => m.MessageId == "anyTenantCreated");
-            publish.Message.ShouldContain(m => m.MessageId == "anyTenantUpdated");
-            publish.Message.ShouldContain(m => m.MessageId == "anyTenantRemoved");
+            document.AssertByMessage(publish, "anyTenantCreated", "anyTenantUpdated", "anyTenantRemoved");
         }
 
         [AsyncApi]
