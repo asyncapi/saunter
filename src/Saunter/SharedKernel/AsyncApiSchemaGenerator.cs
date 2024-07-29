@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using LEGO.AsyncAPI.Bindings;
 using LEGO.AsyncAPI.Models;
 using Saunter.SharedKernel.Interfaces;
 

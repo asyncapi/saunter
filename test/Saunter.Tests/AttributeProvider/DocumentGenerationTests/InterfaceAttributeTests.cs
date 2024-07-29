@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using Saunter.AttributeProvider.Attributes;
 using Shouldly;
 using Xunit;

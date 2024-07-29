@@ -5,7 +5,6 @@ using System.Collections.Immutable;
 using System.Linq;
 using System.Reflection;
 using LEGO.AsyncAPI.Models;
-using Microsoft.Extensions.Options;
 using Saunter.Options.Filters;
 
 namespace Saunter.Options
@@ -78,6 +77,6 @@ namespace Saunter.Options
         /// </summary>
         public AsyncApiMiddlewareOptions Middleware { get; } = new AsyncApiMiddlewareOptions();
 
-        public ConcurrentDictionary<string, AsyncApiDocument> NamedApis { get; private set; } = new();
+        public ConcurrentDictionary<string, AsyncApiDocument> NamedApis { get; set; } = new();
     }
 }

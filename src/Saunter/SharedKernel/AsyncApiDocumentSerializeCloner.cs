@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using LEGO.AsyncAPI;
+﻿using LEGO.AsyncAPI;
 using LEGO.AsyncAPI.Models;
 using LEGO.AsyncAPI.Readers;
 using Microsoft.Extensions.Logging;

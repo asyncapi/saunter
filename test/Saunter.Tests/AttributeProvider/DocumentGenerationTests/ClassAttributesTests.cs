@@ -1,11 +1,9 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Reflection.Metadata;
 using Saunter.AttributeProvider.Attributes;
 using Shouldly;
 using Xunit;
-using YamlDotNet.Core.Tokens;
 
 namespace Saunter.Tests.AttributeProvider.DocumentGenerationTests
 {
