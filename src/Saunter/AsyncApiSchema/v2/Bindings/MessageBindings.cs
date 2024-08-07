@@ -3,6 +3,7 @@ using Saunter.AsyncApiSchema.v2.Bindings.Amqp;
 using Saunter.AsyncApiSchema.v2.Bindings.Http;
 using Saunter.AsyncApiSchema.v2.Bindings.Kafka;
 using Saunter.AsyncApiSchema.v2.Bindings.Mqtt;
+using Saunter.AsyncApiSchema.v2.Bindings.Pulsar;
 
 namespace Saunter.AsyncApiSchema.v2.Bindings
 {
@@ -32,5 +33,9 @@ namespace Saunter.AsyncApiSchema.v2.Bindings
 
         [JsonProperty("mqtt", NullValueHandling = NullValueHandling.Ignore)]
         public MqttMessageBinding Mqtt { get; set; }
+
+        [JsonProperty("pulsar", NullValueHandling = NullValueHandling.Ignore)]
+        public PulsarMessageBinding Pulsar { get; set; }
+
     }
 }
