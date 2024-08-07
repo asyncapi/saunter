@@ -60,5 +60,9 @@
       <Link>UI\package.json</Link>
     </None>
   </ItemGroup>
-  
+
+  <ItemGroup>
+    <ProjectReference Include="..\AsyncAPI.Saunter.Attributes\AsyncAPI.Saunter.Attributes.csproj" />
+  </ItemGroup>
+
 </Project>
