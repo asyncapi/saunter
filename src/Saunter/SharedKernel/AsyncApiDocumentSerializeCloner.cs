@@ -6,6 +6,7 @@ using Saunter.SharedKernel.Interfaces;
 
 namespace Saunter.SharedKernel
 {
+    // This whole class is one huge crutch, it would be necessary to do manual mapping..
     internal class AsyncApiDocumentSerializeCloner : IAsyncApiDocumentCloner
     {
         private readonly ILogger<AsyncApiDocumentSerializeCloner> _logger;
