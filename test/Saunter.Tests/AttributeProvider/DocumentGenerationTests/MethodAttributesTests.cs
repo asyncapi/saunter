@@ -85,6 +85,14 @@ namespace Saunter.Tests.AttributeProvider.DocumentGenerationTests
             publish.Bindings.Reference.Reference.ShouldBe("#/components/operationBindings/sample_kaffka");
 
             document.AssertByMessage(publish, "anyTenantCreated");
+
+            document.Components.OperationBindings.ShouldContainKey("sample_kaffka");
+            var bindMap = document.Components.OperationBindings["sample_kaffka"];
+            var operationBinding = bindMap["kafka"];
+            var kafkaOperationBinding = operationBinding.ShouldBeOfType<KafkaOperationBinding>();
+
+            kafkaOperationBinding.ClientId.ShouldNotBeNull();
+            kafkaOperationBinding.ClientId.Type.ShouldBe(LEGO.AsyncAPI.Models.SchemaType.Integer);
         }
 
         [AsyncApi]

@@ -1,4 +1,5 @@
 ﻿using LEGO.AsyncAPI;
+using LEGO.AsyncAPI.Bindings;
 using LEGO.AsyncAPI.Models;
 using LEGO.AsyncAPI.Readers;
 using Microsoft.Extensions.Logging;
@@ -6,7 +7,6 @@ using Saunter.SharedKernel.Interfaces;
 
 namespace Saunter.SharedKernel
 {
-    // This whole class is one huge crutch, it would be necessary to do manual mapping..
     internal class AsyncApiDocumentSerializeCloner : IAsyncApiDocumentCloner
     {
         private readonly ILogger<AsyncApiDocumentSerializeCloner> _logger;
@@ -20,25 +20,20 @@ namespace Saunter.SharedKernel
         {
             var jsonView = prototype.Serialize(AsyncApiVersion.AsyncApi2_0, AsyncApiFormat.Json);
 
-            var reader = new AsyncApiStringReader();
+            var settings = new AsyncApiReaderSettings
+            {
+                Bindings = BindingsCollection.All,
+            };
+
+            var reader = new AsyncApiStringReader(settings);
 
             var cloned = reader.Read(jsonView, out var diagnostic);
-
-            if (prototype.Components is not null)
-            {
-                cloned.Components.ChannelBindings = prototype.Components.ChannelBindings;
-                cloned.Components.MessageBindings = prototype.Components.MessageBindings;
-                cloned.Components.OperationBindings = prototype.Components.OperationBindings;
-                cloned.Components.ServerBindings = prototype.Components.ServerBindings;
-            }
 
             if (diagnostic is not null)
             {
                 foreach (var item in diagnostic.Errors)
                 {
-                    var ignore =
-                        !item.Message.Contains("The field 'channels' in 'document' object is REQUIRED") &&
-                        !(item.Message.Contains("Binding") && item.Message.Contains("is not found"));
+                    var ignore = !item.Message.Contains("The field 'channels' in 'document' object is REQUIRED");
 
                     if (ignore)
                     {
