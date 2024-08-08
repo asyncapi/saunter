@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using LEGO.AsyncAPI.Bindings.AMQP;
 using LEGO.AsyncAPI.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -69,6 +70,21 @@ namespace StreetlightsAPI
                     },
                     Components = new()
                     {
+                        ChannelBindings =
+                        {
+                            ["amqpDev"] = new()
+                            {
+                                new AMQPChannelBinding
+                                {
+                                    Is = ChannelType.Queue,
+                                    Exchange = new()
+                                    {
+                                        Name = "example-exchange",
+                                        Vhost = "/development"
+                                    }
+                                }
+                            }
+                        },
                         OperationBindings =
                         {
                             {
@@ -78,6 +94,7 @@ namespace StreetlightsAPI
                                     new LEGO.AsyncAPI.Bindings.Http.HttpOperationBinding
                                     {
                                         Method = "POST",
+                                        Type = LEGO.AsyncAPI.Bindings.Http.HttpOperationBinding.HttpOperationType.Response,
                                     }
                                 }
                             }

@@ -140,17 +140,31 @@ services.AddAsyncApiSchemaGeneration(options =>
     {
         Components = 
         {
-            ChannelBindings = 
+            ChannelBindings =
             {
-                ["my-amqp-binding"] = new ChannelBindings
+                ["amqpDev"] = new()
                 {
-                    Amqp = new AmqpChannelBinding
+                    new AMQPChannelBinding
                     {
-                        Is = AmqpChannelBindingIs.RoutingKey,
-                        Exchange = new AmqpChannelBindingExchange
+                        Is = ChannelType.Queue,
+                        Exchange = new()
                         {
                             Name = "example-exchange",
-                            VirtualHost = "/development"
+                            Vhost = "/development"
+                        }
+                    }
+                }
+            },
+            OperationBindings =
+            {
+                {
+                    "postBind",
+                    new()
+                    {
+                        new HttpOperationBinding
+                        {
+                            Method = "POST",
+                            Type = HttpOperationType.Response,
                         }
                     }
                 }
@@ -161,15 +175,16 @@ services.AddAsyncApiSchemaGeneration(options =>
 ```
 
 ```csharp
-[Channel("light.measured", BindingsRef = "my-amqp-binding")] // Set the BindingsRef property
+[Channel("light.measured", BindingsRef = "amqpDev")] // Set the BindingsRef property
 public void PublishLightMeasuredEvent(Streetlight streetlight, int lumens) {}
 ```
 
-Available bindings:
-* [AMQP](https://github.com/asyncapi/saunter/tree/main/src/Saunter/AsyncApiSchema/v2/Bindings/Amqp)
-* [HTTP](https://github.com/asyncapi/saunter/tree/main/src/Saunter/AsyncApiSchema/v2/Bindings/Http)
-* [Kafka](https://github.com/asyncapi/saunter/tree/main/src/Saunter/AsyncApiSchema/v2/Bindings/Kafka)
-* [MQTT](https://github.com/asyncapi/saunter/tree/main/src/Saunter/AsyncApiSchema/v2/Bindings/Mqtt)
+```csharp
+[PublishOperation(typeof(LightMeasuredEvent), "Light", BindingsRef = "postBind")]
+public void MeasureLight([FromBody] LightMeasuredEvent lightMeasuredEvent)
+```
+
+Available bindings: https://www.nuget.org/packages/AsyncAPI.NET.Bindings/
 
 ## Multiple AsyncAPI documents
 

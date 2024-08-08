@@ -21,7 +21,7 @@ namespace StreetlightsAPI
             _logger = logger.CreateLogger("Streetlight");
         }
 
-        [Channel(SubscribeLightMeasuredTopic, Servers = new[] { "mosquitto" })]
+        [Channel(SubscribeLightMeasuredTopic, Servers = new[] { "mosquitto" }, BindingsRef = "amqpDev")]
         [SubscribeOperation(typeof(LightMeasuredEvent), "Light", Summary = "Subscribe to environmental lighting conditions for a particular streetlight.")]
         public void PublishLightMeasurement(LightMeasuredEvent lightMeasuredEvent)
         {
