@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using LEGO.AsyncAPI.Models;
-using LEGO.AsyncAPI.Models.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Hosting.Server.Features;
