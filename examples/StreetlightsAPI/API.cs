@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Saunter.Attributes;
+using Saunter.AttributeProvider.Attributes;
 
 namespace StreetlightsAPI
 {
@@ -51,10 +51,9 @@ namespace StreetlightsAPI
     {
         private const string PublishLightMeasuredTopic = "publish/light/measured";
 
-
         // Simulate a database of streetlights
-        private static int StreetlightSeq = 2;
-        private static readonly List<Streetlight> StreetlightDatabase = new List<Streetlight>
+        private static int s_streetlightSeq = 2;
+        private static readonly List<Streetlight> s_streetlightDatabase = new()
         {
             new Streetlight { Id = 1, Position = new [] { -36.320320, 175.485986 }, LightIntensity = new() },
         };
@@ -73,7 +72,7 @@ namespace StreetlightsAPI
         /// </summary>
         [HttpGet]
         [Route("api/streetlights")]
-        public IEnumerable<Streetlight> Get() => StreetlightDatabase;
+        public IEnumerable<Streetlight> Get() => s_streetlightDatabase;
 
         /// <summary>
         /// Add a new streetlight
@@ -82,8 +81,8 @@ namespace StreetlightsAPI
         [Route("api/streetlights")]
         public Streetlight Add([FromBody] Streetlight streetlight)
         {
-            streetlight.Id = StreetlightSeq++;
-            StreetlightDatabase.Add(streetlight);
+            streetlight.Id = s_streetlightSeq++;
+            s_streetlightDatabase.Add(streetlight);
             return streetlight;
         }
 
@@ -91,7 +90,7 @@ namespace StreetlightsAPI
         /// Inform about environmental lighting conditions for a particular streetlight.
         /// </summary>
         [Channel(PublishLightMeasuredTopic, Servers = new[] { "webapi" })]
-        [PublishOperation(typeof(LightMeasuredEvent), "Light")]
+        [PublishOperation(typeof(LightMeasuredEvent), "Light", BindingsRef = "postBind")]
         [HttpPost]
         [Route(PublishLightMeasuredTopic)]
         public void MeasureLight([FromBody] LightMeasuredEvent lightMeasuredEvent)
@@ -102,7 +101,7 @@ namespace StreetlightsAPI
 
             _logger.LogInformation("Received message on {Topic} with payload {Payload} ", PublishLightMeasuredTopic, payload);
 
-            var streetlight = StreetlightDatabase.SingleOrDefault(s => s.Id == lightMeasuredEvent.Id);
+            var streetlight = s_streetlightDatabase.SingleOrDefault(s => s.Id == lightMeasuredEvent.Id);
             if (streetlight != null)
             {
                 streetlight.LightIntensity.Add(new(lightMeasuredEvent.SentAt, lightMeasuredEvent.Lumens));

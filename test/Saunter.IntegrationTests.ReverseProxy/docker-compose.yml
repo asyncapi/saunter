@@ -1,17 +1,16 @@
 version: '3.7'
 
 services:
-  service-a:
+  service-a: &service
     build:
-      context: .
+      context: ../..
+      dockerfile: test/Saunter.IntegrationTests.ReverseProxy/Dockerfile
     restart: always
     environment:
       - PATH_BASE=/service-a
 
   service-b:
-    build:
-      context: .
-    restart: always
+    <<: *service
     environment:
       - PATH_BASE=/service-b
 

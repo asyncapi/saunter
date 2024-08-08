@@ -1,47 +1,6 @@
 # Streetlights API Example
 
-This is an example implementation of the [Streetlights API from the asyncapi tutorial](https://www.asyncapi.com/docs/tutorials/streetlights/).
-
-The generated AsyncAPI documentation should look like this:
-
-```yml
-asyncapi: '2.1.0'
-info:
-  title: Streetlights API
-  version: '1.0.0'
-  description: |
-    The Smartylighting Streetlights API allows you
-    to remotely manage the city lights.
-  license:
-    name: Apache 2.0
-    url: 'https://www.apache.org/licenses/LICENSE-2.0'
-servers:
-  mosquitto:
-    url: mqtt://test.mosquitto.org
-    protocol: mqtt
-channels:
-  light/measured:
-    publish:
-      summary: Inform about environmental lighting conditions for a particular streetlight.
-      operationId: onLightMeasured
-      message:
-        name: LightMeasured
-        payload:
-          type: object
-          properties:
-            id:
-              type: integer
-              minimum: 0
-              description: Id of the streetlight.
-            lumens:
-              type: integer
-              minimum: 0
-              description: Light intensity measured in lumens.
-            sentAt:
-              type: string
-              format: date-time
-              description: Date and time when the message was sent.
-```
+This is an example implementation (with minor additions) of the [Streetlights API from the asyncapi tutorial](https://www.asyncapi.com/docs/tutorials/streetlights/).
 
 ## Running
 
@@ -107,7 +66,7 @@ The generated asyncapi document is not identical to the AsyncAPI example above a
 
 ```json
 {
-  "asyncapi": "2.1.0",
+  "asyncapi": "2.6.0",
   "info": {
     "title": "Streetlights API",
     "version": "1.0.0",
@@ -130,49 +89,79 @@ The generated asyncapi document is not identical to the AsyncAPI example above a
   "defaultContentType": "application/json",
   "channels": {
     "publish/light/measured": {
+      "servers": [
+        "webapi"
+      ],
       "publish": {
         "operationId": "MeasureLight",
         "summary": "Inform about environmental lighting conditions for a particular streetlight.",
+        "tags": [
+          {
+            "name": "Light"
+          }
+        ],
+        "bindings": {
+          "$ref": "#/components/operationBindings/postBind"
+        },
         "message": {
           "$ref": "#/components/messages/lightMeasuredEvent"
         }
       }
     },
     "subscribe/light/measured": {
+      "servers": [
+        "mosquitto"
+      ],
       "subscribe": {
         "operationId": "PublishLightMeasurement",
         "summary": "Subscribe to environmental lighting conditions for a particular streetlight.",
-        "message": {
-          "payload": {
-            "$ref": "#/components/schemas/lightMeasuredEvent"
+        "tags": [
+          {
+            "name": "Light"
           }
+        ],
+        "message": {
+          "$ref": "#/components/messages/lightMeasuredEvent"
         }
+      },
+      "bindings": {
+        "$ref": "#/components/channelBindings/amqpDev"
       }
     }
   },
   "components": {
     "schemas": {
       "lightMeasuredEvent": {
-        "id": "lightMeasuredEvent",
+        "title": "lightMeasuredEvent",
         "type": "object",
-        "additionalProperties": false,
         "properties": {
           "id": {
+            "title": "int32",
             "type": "integer",
-            "description": "Id of the streetlight.",
             "format": "int32"
           },
           "lumens": {
+            "title": "int32",
             "type": "integer",
-            "description": "Light intensity measured in lumens.",
             "format": "int32"
           },
           "sentAt": {
+            "title": "dateTime",
             "type": "string",
-            "description": "Light intensity measured in lumens.",
-            "format": "date-time"
+            "format": "dateTime"
           }
-        }
+        },
+        "nullable": true
+      },
+      "int32": {
+        "title": "int32",
+        "type": "integer",
+        "format": "int32"
+      },
+      "dateTime": {
+        "title": "dateTime",
+        "type": "string",
+        "format": "dateTime"
       }
     },
     "messages": {
@@ -180,7 +169,23 @@ The generated asyncapi document is not identical to the AsyncAPI example above a
         "payload": {
           "$ref": "#/components/schemas/lightMeasuredEvent"
         },
-        "name": "lightMeasuredEvent"
+        "name": "lightMeasuredEvent",
+        "title": "lightMeasuredEvent"
+      }
+    },
+    "channelBindings": {
+      "amqpDev": {
+        "amqp": {
+          "is": "queue"
+        }
+      }
+    },
+    "operationBindings": {
+      "postBind": {
+        "http": {
+          "type": "response",
+          "method": "POST"
+        }
       }
     }
   }

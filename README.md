@@ -1,6 +1,6 @@
 # Saunter
 
-![CI](https://github.com/tehmantra/saunter/workflows/CI/badge.svg)
+![CI](https://github.com/asyncapi/saunter/workflows/CI/badge.svg)
 [![NuGet Badge](https://buildstats.info/nuget/saunter?includePreReleases=true)](https://www.nuget.org/packages/Saunter/)
 
 Saunter is an [AsyncAPI](https://github.com/asyncapi/asyncapi) documentation generator for dotnet.
@@ -11,7 +11,7 @@ Saunter is an [AsyncAPI](https://github.com/asyncapi/asyncapi) documentation gen
 
 ## Getting Started
 
-See [examples/StreetlightsAPI](https://github.com/tehmantra/saunter/blob/main/examples/StreetlightsAPI).
+See [examples/StreetlightsAPI](https://github.com/asyncapi/saunter/tree/main/examples/StreetlightsAPI).
 
 
 1. Install the Saunter package
@@ -27,25 +27,30 @@ See [examples/StreetlightsAPI](https://github.com/tehmantra/saunter/blob/main/ex
     services.AddAsyncApiSchemaGeneration(options =>
     {
         // Specify example type(s) from assemblies to scan.
-        options.AssemblyMarkerTypes = new[] {typeof(StreetlightMessageBus)};
-
+        options.AssemblyMarkerTypes = new[] { typeof(StreetlightMessageBus) };
+        
         // Build as much (or as little) of the AsyncApi document as you like.
         // Saunter will generate Channels, Operations, Messages, etc, but you
         // may want to specify Info here.
+        options.Middleware.UiTitle = "Streetlights API";
         options.AsyncApi = new AsyncApiDocument
         {
-            Info = new Info("Streetlights API", "1.0.0")
+            Info = new AsyncApiInfo()
             {
-                Description = "The Smartylighting Streetlights API allows you\nto remotely manage the city lights.",
-                License = new License("Apache 2.0")
+                Title = "Streetlights API",
+                Version = "1.0.0",
+                Description = "The Smartylighting Streetlights API allows you to remotely manage the city lights.",
+                License = new AsyncApiLicense()
                 {
-                    Url = "https://www.apache.org/licenses/LICENSE-2.0"
+                    Name = "Apache 2.0",
+                    Url = new("https://www.apache.org/licenses/LICENSE-2.0"),
                 }
             },
             Servers =
             {
-                { "mosquitto", new Server("test.mosquitto.org", "mqtt") }
-            }
+                ["mosquitto"] = new AsyncApiServer(){ Url = "test.mosquitto.org",  Protocol = "mqtt"},
+                ["webapi"] = new AsyncApiServer(){ Url = "localhost:5000",  Protocol = "http"},
+            },
         };
     });
     ```
@@ -56,9 +61,11 @@ See [examples/StreetlightsAPI](https://github.com/tehmantra/saunter/blob/main/ex
     [AsyncApi] // Tells Saunter to scan this class.
     public class StreetlightMessageBus : IStreetlightMessageBus
     {
-        [Channel("publish/light/measured")] // Creates a Channel
-        [PublishOperation(typeof(LightMeasuredEvent), Summary = "Inform about environmental lighting conditions for a particular streetlight.")] // A simple Publish operation.
-        public void PublishLightMeasuredEvent(Streetlight streetlight, int lumens) {}
+        private const string SubscribeLightMeasuredTopic = "subscribe/light/measured";
+        
+        [Channel(SubscribeLightMeasuredTopic, Servers = new[] { "mosquitto" })]
+        [SubscribeOperation(typeof(LightMeasuredEvent), "Light", Summary = "Subscribe to environmental lighting conditions for a particular streetlight.")]
+         public void PublishLightMeasuredEvent(Streetlight streetlight, int lumens) {}
     ```
 
 4. Add saunter middleware to host the AsyncApi json document. In the `Configure` method of `Startup.cs`:
@@ -68,6 +75,8 @@ See [examples/StreetlightsAPI](https://github.com/tehmantra/saunter/blob/main/ex
     {
         endpoints.MapAsyncApiDocuments();
         endpoints.MapAsyncApiUi();
+
+        endpoints.MapControllers();
     });
     ```
 
@@ -96,11 +105,11 @@ See [examples/StreetlightsAPI](https://github.com/tehmantra/saunter/blob/main/ex
    
 6. Use the published AsyncAPI UI:
 
-    ![AsyncAPI UI](https://raw.githubusercontent.com/tehmantra/saunter/main/assets/asyncapi-ui-screenshot.png)
+    ![AsyncAPI UI](https://raw.githubusercontent.com/asyncapi/saunter/main/assets/asyncapi-ui-screenshot.png)
 
 ## Configuration
 
-See [the options source code](https://github.com/tehmantra/saunter/blob/main/src/Saunter/AsyncApiOptions.cs) for detailed info.
+See [the options source code](https://github.com/asyncapi/saunter/blob/main/src/Saunter/AsyncApiOptions.cs) for detailed info.
 
 Common options are below:
 
@@ -109,7 +118,7 @@ services.AddAsyncApiSchemaGeneration(options =>
 {
     options.AssemblyMarkerTypes = new[] { typeof(Startup) };   // Tell Saunter where to scan for your classes.
     
-    options.AddChannelItemFilter<MyChannelItemFilter>();       // Dynamically update ChanelItems
+    options.AddChannelFilter<MyAsyncApiChannelFilter>();       // Dynamically update ChanelItems
     options.AddOperationFilter<MyOperationFilter>();           // Dynamically update Operations
     
     options.Middleware.Route = "/asyncapi/asyncapi.json";      // AsyncAPI JSON document URL
@@ -117,30 +126,6 @@ services.AddAsyncApiSchemaGeneration(options =>
     options.Middleware.UiTitle = "My AsyncAPI Documentation";  // AsyncAPI UI page title
 }
 ```
-
-
-## JSON Schema Settings
-
-The JSON schema generation can be customized using the `options.JsonSchemaGeneratorSettings`. Saunter defaults to the popular `camelCase` naming strategy for both properties and types.
-
-For example, setting to use PascalCase:
-
-```c#
-services.AddAsyncApiSchemaGeneration(options =>
-{
-    options.JsonSchemaGeneratorSettings.TypeNameGenerator = new DefaultTypeNameGenerator();
-
-    // Note: need to assign a new JsonSerializerSettings, not just set the properties within it.
-    options.JsonSchemaGeneratorSettings.SerializerSettings = new JsonSerializerSettings 
-    {
-        ContractResolver = new DefaultContractResolver(),
-        Formatting = Formatting.Indented;
-    };
-}
-```
-
-You have access to the full range of both [NJsonSchema](https://github.com/RicoSuter/NJsonSchema) and [JSON.NET](https://github.com/JamesNK/Newtonsoft.Json) settings to configure the JSON schema generation, including custom ContractResolvers.
-
 
 ## Bindings
 
@@ -155,17 +140,31 @@ services.AddAsyncApiSchemaGeneration(options =>
     {
         Components = 
         {
-            ChannelBindings = 
+            ChannelBindings =
             {
-                ["my-amqp-binding"] = new ChannelBindings
+                ["amqpDev"] = new()
                 {
-                    Amqp = new AmqpChannelBinding
+                    new AMQPChannelBinding
                     {
-                        Is = AmqpChannelBindingIs.RoutingKey,
-                        Exchange = new AmqpChannelBindingExchange
+                        Is = ChannelType.Queue,
+                        Exchange = new()
                         {
                             Name = "example-exchange",
-                            VirtualHost = "/development"
+                            Vhost = "/development"
+                        }
+                    }
+                }
+            },
+            OperationBindings =
+            {
+                {
+                    "postBind",
+                    new()
+                    {
+                        new HttpOperationBinding
+                        {
+                            Method = "POST",
+                            Type = HttpOperationType.Response,
                         }
                     }
                 }
@@ -176,16 +175,16 @@ services.AddAsyncApiSchemaGeneration(options =>
 ```
 
 ```csharp
-[Channel("light.measured", BindingsRef = "my-amqp-binding")] // Set the BindingsRef property
+[Channel("light.measured", BindingsRef = "amqpDev")] // Set the BindingsRef property
 public void PublishLightMeasuredEvent(Streetlight streetlight, int lumens) {}
 ```
 
-Available bindings:
-* [AMQP](https://github.com/tehmantra/saunter/tree/main/src/Saunter/AsyncApiSchema/v2/Bindings/Amqp)
-* [HTTP](https://github.com/tehmantra/saunter/tree/main/src/Saunter/AsyncApiSchema/v2/Bindings/Http)
-* [Kafka](https://github.com/tehmantra/saunter/tree/main/src/Saunter/AsyncApiSchema/v2/Bindings/Kafka)
-* [MQTT](https://github.com/tehmantra/saunter/tree/main/src/Saunter/AsyncApiSchema/v2/Bindings/Mqtt)
+```csharp
+[PublishOperation(typeof(LightMeasuredEvent), "Light", BindingsRef = "postBind")]
+public void MeasureLight([FromBody] LightMeasuredEvent lightMeasuredEvent)
+```
 
+Available bindings: https://www.nuget.org/packages/AsyncAPI.NET.Bindings/
 
 ## Multiple AsyncAPI documents
 
@@ -250,10 +249,27 @@ Each document can be accessed by specifying the name in the URL
 }
 ```
 
+## Migration to LEGO AsyncApi.Net
+
+When switching to the LEGO AsyncApi.Net, we broke the public API.
+
+To simplify the transition to new versions of the library, this note was created.
+
+What was broken:
+
+* Namespaces have changed:
+    * Saunter.AsyncApiSchema.v2 -> LEGO.AsyncAPI.Models
+    * Saunter.Attributes; -> Saunter.AttributeProvider.Attributes
+* Change the name of the data structures, add prefix 'AsyncApi' (example 'class Info' -> 'class AsyncApiInfo')
+* All data structure constructors are now with the parameterless constructor
+
+There was no more significant changes on public API.
+
+Keep this in mind when planning the migration process.
 
 ## Contributing
 
-See our [contributing guide](https://github.com/tehmantra/saunter/blob/main/CONTRIBUTING.md/CONTRIBUTING.md).
+See our [contributing guide](https://github.com/asyncapi/saunter/blob/main/CONTRIBUTING.md/CONTRIBUTING.md).
 
 Feel free to get involved in the project by opening issues, or submitting pull requests.
 
@@ -262,5 +278,4 @@ You can also find me on the [AsyncAPI community slack](https://asyncapi.com/slac
 ## Thanks
 
 * This project is heavily inspired by [Swashbuckle](https://github.com/domaindrivendev/Swashbuckle.AspNetCore).
-* We use [NJsonSchema](https://github.com/RicoSuter/NJsonSchema) for the JSON schema heavy lifting, 
-
+* We use [LEGO AsyncAPI.NET](https://github.com/LEGO/AsyncAPI.NET) schema and serializing.

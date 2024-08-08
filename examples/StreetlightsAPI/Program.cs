@@ -1,4 +1,6 @@
 ﻿using System.Linq;
+using LEGO.AsyncAPI.Bindings.AMQP;
+using LEGO.AsyncAPI.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Hosting.Server.Features;
@@ -7,7 +9,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Saunter;
-using Saunter.AsyncApiSchema.v2;
 
 namespace StreetlightsAPI
 {
@@ -51,19 +52,54 @@ namespace StreetlightsAPI
 
                 options.AsyncApi = new AsyncApiDocument
                 {
-                    Info = new Info("Streetlights API", "1.0.0")
+                    Info = new AsyncApiInfo()
                     {
+                        Title = "Streetlights API",
+                        Version = "1.0.0",
                         Description = "The Smartylighting Streetlights API allows you to remotely manage the city lights.",
-                        License = new License("Apache 2.0")
+                        License = new AsyncApiLicense()
                         {
-                            Url = "https://www.apache.org/licenses/LICENSE-2.0"
+                            Name = "Apache 2.0",
+                            Url = new("https://www.apache.org/licenses/LICENSE-2.0"),
                         }
                     },
                     Servers =
                     {
-                        ["mosquitto"] = new Server("test.mosquitto.org", "mqtt"),
-                        ["webapi"] = new Server("localhost:5000", "http"),
+                        ["mosquitto"] = new AsyncApiServer(){ Url = "test.mosquitto.org",  Protocol = "mqtt"},
+                        ["webapi"] = new AsyncApiServer(){ Url = "localhost:5000",  Protocol = "http"},
                     },
+                    Components = new()
+                    {
+                        ChannelBindings =
+                        {
+                            ["amqpDev"] = new()
+                            {
+                                new AMQPChannelBinding
+                                {
+                                    Is = ChannelType.Queue,
+                                    Exchange = new()
+                                    {
+                                        Name = "example-exchange",
+                                        Vhost = "/development"
+                                    }
+                                }
+                            }
+                        },
+                        OperationBindings =
+                        {
+                            {
+                                "postBind",
+                                new()
+                                {
+                                    new LEGO.AsyncAPI.Bindings.Http.HttpOperationBinding
+                                    {
+                                        Method = "POST",
+                                        Type = LEGO.AsyncAPI.Bindings.Http.HttpOperationBinding.HttpOperationType.Response,
+                                    }
+                                }
+                            }
+                        }
+                    }
                 };
             });
 

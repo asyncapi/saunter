@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
+using LEGO.AsyncAPI.Models;
 using Microsoft.Extensions.DependencyInjection;
-using Saunter.AsyncApiSchema.v2;
-using Saunter.Generation;
+using Saunter.Options;
 using Shouldly;
 using Xunit;
 
@@ -12,44 +12,62 @@ namespace Saunter.Tests
     /// </remarks>
     public class ServiceCollectionTests
     {
-
         [Fact]
         public void TestAddAsyncApiSchemaGeneration()
         {
             var services = new ServiceCollection() as IServiceCollection;
+
+            services.AddFakeLogging();
             services.AddAsyncApiSchemaGeneration(options =>
                 {
-                    options.AsyncApi = new AsyncApiSchema.v2.AsyncApiDocument
+                    options.AsyncApi = new AsyncApiDocument
                     {
                         Id = "urn:com:example:example-events",
-                        Info = new Info("Example API", "2019.01.12345")
+                        Info = new()
                         {
+                            Title = "Example API",
+                            Version = "2019.01.12345",
                             Description = "An example API with events",
-                            Contact = new Contact
+                            Contact = new AsyncApiContact()
                             {
                                 Email = "michael@mwild.me",
                                 Name = "Michael Wildman",
-                                Url = "https://mwild.me/",
+                                Url = new("https://mwild.me/"),
                             },
-                            License = new License("MIT"),
-                            TermsOfService = "https://mwild.me/tos",
+                            License = new AsyncApiLicense()
+                            {
+                                Name = "MIT",
+                            },
+                            TermsOfService = new("https://mwild.me/tos"),
                         },
-                        Tags = { "example", "event" },
+                        Tags =
+                        {
+                            new() { Name = "example" },
+                            new() { Name = "event" }
+                        },
                         Servers =
                         {
                             {
                                 "development",
-                                new Server("rabbitmq.dev.mwild.me", "amqp")
+                                new AsyncApiServer
                                 {
-                                    Security = new List<Dictionary<string, List<string>>> { new Dictionary<string, List<string>> { { "user-password", new List<string>() } }}
+                                    Protocol = "amqp",
+                                    Url = "rabbitmq.dev.mwild.me",
+                                    Security = new List<AsyncApiSecurityRequirement>
+                                    {
+                                        new()
+                                        {
+                                            { new AsyncApiSecurityScheme() { Type= SecuritySchemeType.UserPassword }, new List<string>() }
+                                        }
+                                    }
                                 }
                             }
                         },
                         Components =
                         {
-                            SecuritySchemes = new Dictionary<string, SecurityScheme>
+                            SecuritySchemes = new Dictionary<string, AsyncApiSecurityScheme>
                             {
-                                { "user-password", new SecurityScheme(SecuritySchemeType.Http) }
+                                { "user-password", new AsyncApiSecurityScheme(){ Type = SecuritySchemeType.Http } }
                             }
                         }
                     };
@@ -59,7 +77,7 @@ namespace Saunter.Tests
 
             var provider = sp.GetRequiredService<IAsyncApiDocumentProvider>();
 
-            var document = provider.GetDocument(new AsyncApiOptions(), new AsyncApiDocument());
+            var document = provider.GetDocument(null, new AsyncApiOptions());
 
             document.ShouldNotBeNull();
         }
