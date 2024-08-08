@@ -26,6 +26,7 @@ namespace Saunter.Tests.AttributeProvider.DocumentGenerationTests
         public static void Arrange(out AsyncApiOptions options, out AttributeDocumentProvider documentProvider, params Type[] targetTypes)
         {
             options = new FakeAsyncApiOptions(targetTypes);
+
             documentProvider = new AttributeDocumentProvider(
                 ActivatorServiceProvider.Instance,
                 new AsyncApiSchemaGenerator(),
