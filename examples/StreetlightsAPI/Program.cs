@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using LEGO.AsyncAPI.Models;
+using LEGO.AsyncAPI.Models.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Hosting.Server.Features;
@@ -67,6 +68,22 @@ namespace StreetlightsAPI
                         ["mosquitto"] = new AsyncApiServer(){ Url = "test.mosquitto.org",  Protocol = "mqtt"},
                         ["webapi"] = new AsyncApiServer(){ Url = "localhost:5000",  Protocol = "http"},
                     },
+                    Components = new()
+                    {
+                        OperationBindings =
+                        {
+                            {
+                                "postBind",
+                                new()
+                                {
+                                    new LEGO.AsyncAPI.Bindings.Http.HttpOperationBinding
+                                    {
+                                        Method = "POST",
+                                    }
+                                }
+                            }
+                        }
+                    }
                 };
             });
 

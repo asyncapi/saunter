@@ -1,4 +1,5 @@
-﻿using LEGO.AsyncAPI;
+﻿using System.Linq;
+using LEGO.AsyncAPI;
 using LEGO.AsyncAPI.Models;
 using LEGO.AsyncAPI.Readers;
 using Microsoft.Extensions.Logging;
@@ -23,11 +24,23 @@ namespace Saunter.SharedKernel
 
             var cloned = reader.Read(jsonView, out var diagnostic);
 
+            if (prototype.Components is not null)
+            {
+                cloned.Components.ChannelBindings = prototype.Components.ChannelBindings;
+                cloned.Components.MessageBindings = prototype.Components.MessageBindings;
+                cloned.Components.OperationBindings = prototype.Components.OperationBindings;
+                cloned.Components.ServerBindings = prototype.Components.ServerBindings;
+            }
+
             if (diagnostic is not null)
             {
                 foreach (var item in diagnostic.Errors)
                 {
-                    if (!item.Message.Contains("The field 'channels' in 'document' object is REQUIRED"))
+                    var ignore =
+                        !item.Message.Contains("The field 'channels' in 'document' object is REQUIRED") &&
+                        !(item.Message.Contains("Binding") && item.Message.Contains("is not found"));
+
+                    if (ignore)
                     {
                         _logger.LogError("Error while clone protype: {Error}", item);
                     }
