@@ -1,6 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Mime;
 using System.Text;
@@ -8,17 +8,16 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Routing;
-using Microsoft.AspNetCore.Routing.Template;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Saunter.Utils;
+using Saunter.DocumentMiddleware;
+using Saunter.Options;
 
 namespace Saunter.UI
 {
-    public class AsyncApiUiMiddleware
+    internal class AsyncApiUiMiddleware
     {
         private readonly AsyncApiOptions _options;
         private readonly StaticFileMiddleware _staticFiles;
@@ -33,17 +32,28 @@ namespace Saunter.UI
                 RequestPath = UiBaseRoute,
                 FileProvider = fileProvider,
             };
-            _staticFiles = new StaticFileMiddleware(next, env, Options.Create(staticFileOptions), loggerFactory);
+
+            _staticFiles = new StaticFileMiddleware(
+                next,
+                env,
+                Microsoft.Extensions.Options.Options.Create(staticFileOptions),
+                loggerFactory);
+
             _namedStaticFiles = new Dictionary<string, StaticFileMiddleware>();
 
-            foreach (var namedApi in _options.NamedApis)
+            foreach (var namedApi in _options.NamedApis.Select(c => c.Key))
             {
                 var namedStaticFileOptions = new StaticFileOptions
                 {
-                    RequestPath = UiBaseRoute.Replace("{document}", namedApi.Key),
+                    RequestPath = UiBaseRoute.Replace("{document}", namedApi),
                     FileProvider = fileProvider,
                 };
-                _namedStaticFiles.Add(namedApi.Key, new StaticFileMiddleware(next, env, Options.Create(namedStaticFileOptions), loggerFactory));
+
+                _namedStaticFiles.Add(namedApi, new StaticFileMiddleware(
+                    next,
+                    env,
+                    Microsoft.Extensions.Options.Options.Create(namedStaticFileOptions),
+                    loggerFactory));
             }
         }
 
@@ -96,25 +106,28 @@ namespace Saunter.UI
 
         private async Task RespondWithAsyncApiHtml(HttpResponse response, string route)
         {
-            using (var stream = GetType().Assembly.GetManifestResourceStream($"{GetType().Namespace}.index.html"))
-            using (var reader = new StreamReader(stream))
+            var name = $"{GetType().Namespace}.index.html";
+
+            using var stream = GetType().Assembly.GetManifestResourceStream(name)
+                ?? throw new FileNotFoundException($"Not found html file {name}");
+
+            using var reader = new StreamReader(stream);
+
+            var indexHtml = new StringBuilder(await reader.ReadToEndAsync());
+
+            // Replace dynamic content such as the AsyncAPI document url
+            foreach (var replacement in new Dictionary<string, string>
             {
-                var indexHtml = new StringBuilder(await reader.ReadToEndAsync());
-
-                // Replace dynamic content such as the AsyncAPI document url
-                foreach (var replacement in new Dictionary<string, string>
-                {
-                    ["{{title}}"] = _options.Middleware.UiTitle,
-                    ["{{asyncApiDocumentUrl}}"] = route,
-                })
-                {
-                    indexHtml.Replace(replacement.Key, replacement.Value);
-                }
-
-                response.StatusCode = (int)HttpStatusCode.OK;
-                response.ContentType = MediaTypeNames.Text.Html;
-                await response.WriteAsync(indexHtml.ToString(), Encoding.UTF8);
+                ["{{title}}"] = _options.Middleware.UiTitle,
+                ["{{asyncApiDocumentUrl}}"] = route,
+            })
+            {
+                indexHtml.Replace(replacement.Key, replacement.Value);
             }
+
+            response.StatusCode = (int)HttpStatusCode.OK;
+            response.ContentType = MediaTypeNames.Text.Html;
+            await response.WriteAsync(indexHtml.ToString(), Encoding.UTF8);
         }
 
         private bool IsRequestingUiBase(HttpRequest request)

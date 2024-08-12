@@ -5,13 +5,11 @@ The [docker-compose.yml](./docker-compose.yml) file sets up 3 containers
 2. service-b
 3. nginx reverse proxy
 
+Running the test (from root project location):
 
-Running the test:
+```bash
+docker-compose --file ./test/Saunter.IntegrationTests.ReverseProxy/docker-compose.yml up --build
 ```
-$ dotnet publish -c Release
-$ docker-compose up
-```
-
 
 You should be able to access both services UI
 * http://localhost:5000/service-a/asyncapi/ui

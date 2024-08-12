@@ -1,7 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
+    <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
     <IsPackable>true</IsPackable>
     <PackageId>Saunter</PackageId>
     <Title>Saunter</Title>
@@ -31,7 +32,6 @@
 
   <ItemGroup>
     <EmbeddedResource Include="UI/index.html" />
-
     <!-- Note: `npm install` must be run from the src/Saunter.UI directory before building the project to correctly include the UI resources -->
     <!--       this is done automatically in the CI pipeline, but may be skipped when running locally to allow debugging without nodejs      -->
     <EmbeddedResource Include="../Saunter.UI/node_modules/@asyncapi/react-component/browser/standalone/index.js" LogicalName="Saunter.UI.index.js" Condition="Exists('../Saunter.UI/node_modules')" />
@@ -44,21 +44,23 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="NJsonSchema" Version="11.0.0" />
-
-    <!-- Development Dependencies -->
+    <PackageReference Include="AsyncAPI.NET.Bindings" Version="5.2.1" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
-    <PackageReference Include="NJsonSchema.NewtonsoftJson" Version="11.0.0" />
+    <PackageReference Include="Namotion.Reflection" Version="3.1.1" />
   </ItemGroup>
 
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
-
+    
   <ItemGroup>
     <None Include="..\Saunter.UI\package.json" CopyToOutputDirectory="Never" CopyToPublishDirectory="Never">
       <Link>UI\package.json</Link>
     </None>
   </ItemGroup>
-  
+
+    <ItemGroup>
+        <InternalsVisibleTo Include="Saunter.Tests"/>
+    </ItemGroup>
+    
 </Project>

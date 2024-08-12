@@ -1,1 +1,0 @@
-https://github.com/asyncapi/bindings/blob/master/http/README.md
