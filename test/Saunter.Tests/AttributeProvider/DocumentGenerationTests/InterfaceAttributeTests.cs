@@ -22,7 +22,7 @@ namespace Saunter.Tests.AttributeProvider.DocumentGenerationTests
 
             // Assert
             document.ShouldNotBeNull();
-            document.Channels.Count.ShouldBe(0);
+            document.Channels.Count.ShouldBe(1);
         }
 
         [Theory]
