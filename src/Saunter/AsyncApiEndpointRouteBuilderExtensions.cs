@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Saunter.DocumentMiddleware;
+using Saunter.Options;
 using Saunter.UI;
 
 namespace Saunter
@@ -19,7 +21,7 @@ namespace Saunter
                 .UseMiddleware<AsyncApiMiddleware>()
                 .Build();
 
-            var options = endpoints.ServiceProvider.GetService<IOptions<AsyncApiOptions>>();
+            var options = endpoints.ServiceProvider.GetRequiredService<IOptions<AsyncApiOptions>>();
             var route = options.Value.Middleware.Route;
 
             return endpoints.MapGet(route, pipeline);
@@ -42,7 +44,7 @@ namespace Saunter
                 .UseMiddleware<AsyncApiUiMiddleware>()
                 .Build();
 
-            var options = endpoints.ServiceProvider.GetService<IOptions<AsyncApiOptions>>();
+            var options = endpoints.ServiceProvider.GetRequiredService<IOptions<AsyncApiOptions>>();
             var route = options.Value.Middleware.UiBaseRoute + "{*wildcard}";
 
             return endpoints.MapGet(route, pipeline);

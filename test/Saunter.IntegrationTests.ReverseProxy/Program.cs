@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using LEGO.AsyncAPI.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Hosting.Server.Features;
@@ -9,8 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Saunter.AsyncApiSchema.v2;
-using Saunter.Attributes;
+using Saunter.AttributeProvider.Attributes;
 
 namespace Saunter.IntegrationTests.ReverseProxy
 {
@@ -50,7 +50,11 @@ namespace Saunter.IntegrationTests.ReverseProxy
 
                 options.AsyncApi = new AsyncApiDocument
                 {
-                    Info = new Info(Environment.GetEnvironmentVariable("PATH_BASE"), "1.0.0")
+                    Info = new AsyncApiInfo
+                    {
+                        Title = Environment.GetEnvironmentVariable("PATH_BASE"),
+                        Version = "1.0.0",
+                    },
                 };
             });
 
@@ -80,7 +84,6 @@ namespace Saunter.IntegrationTests.ReverseProxy
                 endpoints.MapControllers();
             });
 
-
             // Print the AsyncAPI doc location
             var logger = app.ApplicationServices.GetService<ILoggerFactory>().CreateLogger<Program>();
             var addresses = app.ServerFeatures.Get<IServerAddressesFeature>().Addresses;
@@ -89,7 +92,6 @@ namespace Saunter.IntegrationTests.ReverseProxy
             logger.LogInformation("AsyncAPI UI available at: {URL}", $"{addresses.FirstOrDefault()}/asyncapi/ui/");
         }
     }
-
 
     public class LightMeasuredEvent
     {

@@ -1,9 +1,10 @@
-﻿using Saunter.AsyncApiSchema.v2;
+﻿using LEGO.AsyncAPI.Models;
+using Saunter.Options;
 
 namespace Saunter
 {
     public interface IAsyncApiDocumentProvider
     {
-        AsyncApiDocument GetDocument(AsyncApiOptions options, AsyncApiDocument prototype);
+        AsyncApiDocument GetDocument(string? documentName, AsyncApiOptions options);
     }
 }
