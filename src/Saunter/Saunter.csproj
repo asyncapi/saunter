@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <PackageId>Saunter</PackageId>
@@ -22,8 +22,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="NJsonSchema" />
-    <PackageReference Include="NJsonSchema.NewtonsoftJson" />
+    <PackageReference Include="AsyncAPI.NET.Bindings" />
+    <PackageReference Include="Namotion.Reflection" />
   </ItemGroup>
 
   <ItemGroup>

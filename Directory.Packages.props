@@ -4,12 +4,12 @@
     <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
   </PropertyGroup>
   <ItemGroup>
-    <PackageVersion Include="NJsonSchema" Version="11.0.0" />
-    <PackageVersion Include="NJsonSchema.NewtonsoftJson" Version="11.0.0" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageVersion Include="NSubstitute" Version="5.0.0" />
+    <PackageVersion Include="AsyncAPI.NET.Bindings" Version="5.2.1" />
+    <PackageVersion Include="Microsoft.Extensions.Diagnostics.Testing" Version="8.6.0" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.6.2" />
+    <PackageVersion Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.20.1" />
+    <PackageVersion Include="Namotion.Reflection" Version="3.1.1" />
+    <PackageVersion Include="NSubstitute" Version="5.0.0" />
     <PackageVersion Include="Shouldly" Version="4.2.1" />
     <PackageVersion Include="xunit" Version="2.4.2" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="2.4.5" />
