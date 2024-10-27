@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
-    "@asyncapi/react-component": "^1.2.11"
+    "@asyncapi/react-component": "^1.2.11",
+    "saunter": "file:"
   }
 }
