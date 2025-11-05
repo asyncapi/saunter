@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using Saunter.AttributeProvider;
 using Saunter.AttributeProvider.Attributes;
 using Shouldly;
 using Xunit;
@@ -184,6 +185,48 @@ namespace Saunter.Tests.AttributeProvider.DocumentGenerationTests
             document.Components.Schemas[messageFromRef.Headers.Reference.Id].Title.ShouldBe("myMessageHeader");
         }
 
+
+        [Theory]
+        [InlineData(typeof(MyMessagePublisherWithChannelResolver))]
+        [InlineData(typeof(IMyMessagePublisher))]
+        public void GenerateDocument_GeneratesDocumentWithMessageHeaderAndResolver(Type type)
+        {
+            // Arrange
+            ArrangeAttributesTests.Arrange(out var options, out var documentProvider, type);
+
+            // Act
+            var document = documentProvider.GetDocument(null, options);
+
+            // Assert
+            document.ShouldNotBeNull();
+            document.Channels.Count.ShouldBe(expected: 1);
+
+            var channel = document.Channels.First().Value;
+            var messages = channel.Publish.Message;
+
+            messages.Count.ShouldBe(1);
+
+            var message = messages[0];
+
+            document.Components.Messages.ContainsKey(message.Reference.Id);
+
+            var messageFromRef = document.Components.Messages[message.Reference.Id];
+
+            document.Components.Schemas.ContainsKey(messageFromRef.Payload.Reference.Id);
+            document.Components.Schemas.ContainsKey(messageFromRef.Headers.Reference.Id);
+
+            document.Components.Schemas[messageFromRef.Headers.Reference.Id].Title.ShouldBe("myMessageHeader");
+        }
+
+        [AsyncApi]
+        [Channel(typeof(TestChannelResolver), typeof(MyMessage))]
+        [PublishOperation]
+        public class MyMessagePublisherWithChannelResolver
+        {
+            [Message(typeof(MyMessage), HeadersType = typeof(MyMessageHeader))]
+            public void PublishMyMessage() { }
+        }
+
         [AsyncApi]
         [Channel("channel.my.message")]
         [PublishOperation]
@@ -356,5 +399,20 @@ namespace Saunter.Tests.AttributeProvider.DocumentGenerationTests
         [Required]
         public string StringHeader { get; set; }
         public int? NullableIntHeader { get; set; }
+    }
+
+    public class TestChannelResolver : IChannelResolver
+    {
+        private readonly Type _messageContractType;
+
+        public TestChannelResolver(Type messageContractType)
+        {
+            _messageContractType = messageContractType;
+        }
+
+        public string ResolveChannelName()
+        {
+            return $"Test.ResolvedChannelName.{_messageContractType.Name}";
+        }
     }
 }
