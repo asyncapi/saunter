@@ -127,6 +127,22 @@ services.AddAsyncApiSchemaGeneration(options =>
 }
 ```
 
+To choose which types are included from the scanned assemblies in code, configure
+a selector:
+
+```csharp
+services.AddAsyncApiSchemaGeneration(options =>
+{
+    options.AssemblyMarkerTypes = new[] { typeof(Startup) };
+    options.AsyncApiTypeSelector = (type, documentName) =>
+        type.Namespace == "MyApplication.Messaging";
+});
+```
+
+The `documentName` argument is `null` for the default document and contains the
+requested name for named documents, so the same selector can route types to
+different documents.
+
 ## Bindings
 
 Bindings are used to describe protocol specific information. These can be added to the AsyncAPI document and then applied to different components by setting the `BindingsRef` property in the relevant attributes `[OperationAttribute]`, `[MessageAttribute]`, `[ChannelAttribute]`

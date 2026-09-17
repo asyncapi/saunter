@@ -489,7 +489,7 @@ namespace Saunter.AttributeProvider
         {
             var asyncApiTypes = options
                 .AsyncApiSchemaTypes
-                    .Where(t => t.GetCustomAttribute<AsyncApiAttribute>()?.DocumentName == apiName)
+                    .Where(t => options.AsyncApiTypeSelector(t, apiName))
                 .ToArray();
 
             return asyncApiTypes;

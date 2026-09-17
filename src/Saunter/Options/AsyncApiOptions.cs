@@ -5,6 +5,7 @@ using System.Collections.Immutable;
 using System.Linq;
 using System.Reflection;
 using LEGO.AsyncAPI.Models;
+using Saunter.AttributeProvider.Attributes;
 using Saunter.Options.Filters;
 
 namespace Saunter.Options
@@ -25,6 +26,19 @@ namespace Saunter.Options
         /// A list of marker types from assemblies to scan for Saunter attributes.
         /// </summary>
         public IList<Type> AssemblyMarkerTypes { get; set; } = new List<Type>();
+
+        /// <summary>
+        /// Selects the types that will be used to generate an AsyncAPI document.
+        /// The second argument is the requested document name, or <see langword="null"/>
+        /// for the default document.
+        /// </summary>
+        /// <remarks>
+        /// By default, types are selected using the <see cref="AsyncApiAttribute"/> and
+        /// its document name. Replace this predicate to select types without applying
+        /// <see cref="AsyncApiAttribute"/> to application classes.
+        /// </remarks>
+        public Func<Type, string?, bool> AsyncApiTypeSelector { get; set; } =
+            (type, documentName) => type.GetCustomAttribute<AsyncApiAttribute>()?.DocumentName == documentName;
 
         internal virtual IReadOnlyCollection<TypeInfo> AsyncApiSchemaTypes => AssemblyMarkerTypes
             .Select(t => t.Assembly)
